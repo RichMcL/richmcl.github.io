@@ -128,37 +128,44 @@ class Game extends HTMLElement {
         if (pos.includes(2) && this.getPieceAt(row - 1, col)) {
             neighbors.push(this.getPieceAt(row - 1, col));
         }
-        if (pos.includes(3) && this.getPieceAt(row - 1, 1 + col)) {
-            neighbors.push(this.getPieceAt(row - 1, 1 + col));
+        if (pos.includes(3) && this.getPieceAt(row - 1, parseInt(col) + 1)) {
+            neighbors.push(this.getPieceAt(row - 1, parseInt(col) + 1));
         }
-
         if (pos.includes(4) && this.getPieceAt(row, col - 1)) {
             neighbors.push(this.getPieceAt(row, col - 1));
         }
         if (pos.includes(5) && this.getPieceAt(row, col)) {
             neighbors.push(this.getPieceAt(row, col));
         }
-        if (pos.includes(6) && this.getPieceAt(row, 1 + col)) {
-            neighbors.push(this.getPieceAt(row, 1 + col));
+        if (pos.includes(6) && this.getPieceAt(row, parseInt(col) + 1)) {
+            neighbors.push(this.getPieceAt(row, parseInt(col) + 1));
+        }
+        if (pos.includes(7) && this.getPieceAt(parseInt(row) + 1, col - 1)) {
+            neighbors.push(this.getPieceAt(parseInt(row) + 1, col - 1));
+        }
+        if (pos.includes(8) && this.getPieceAt(parseInt(row) + 1, col)) {
+            neighbors.push(this.getPieceAt(parseInt(row) + 1, col));
+        }
+        if (pos.includes(9) && this.getPieceAt(parseInt(row) + 1, parseInt(col) + 1)) {
+            neighbors.push(this.getPieceAt(parseInt(row) + 1, parseInt(col) + 1));
         }
 
-        if (pos.includes(7) && this.getPieceAt(1 + row, col - 1)) {
-            neighbors.push(this.getPieceAt(1 + row, col - 1));
-        }
-        if (pos.includes(8) && this.getPieceAt(1 + row, col)) {
-            neighbors.push(this.getPieceAt(1 + row, col));
-        }
-        if (pos.includes(9) && this.getPieceAt(1 + row, 1 + col)) {
-            neighbors.push(this.getPieceAt(1 + row, 1 + col));
-        }
+        return neighbors;
 
-        console.log('neighbors', neighbors);
+        // console.log('neighbors', neighbors);
     }
 
     tick() {
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
-                this.getPieceAt(i, j).tick();
+                const piece = this.getPieceAt(i, j);
+                piece.tick();                                
+
+                if (piece.trigger) {
+                    const neighbors = this.getNeighborsAt(piece.row, piece.col, [2, 4, 6, 8]);
+                    neighbors.forEach(n => n.active = !n.active);
+                    piece.trigger = false;                
+                }
             }
         }
     }
@@ -178,17 +185,7 @@ function printBoard() {
 var frameCount = 0;
 
 function gameLoop() {
-    frameCount++;
-
-    if (frameCount > 2) {
-        // console.log(new Date());
-        // printBoard();
-        frameCount = 0;
-
-        game.tick();
-    }
-
-
+    game.tick();
     requestAnimationFrame(gameLoop);
 }
 
