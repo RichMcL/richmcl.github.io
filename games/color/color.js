@@ -89,3 +89,22 @@ const game = new Game();
 function printBoard() {
     game.printBoard();
 }
+
+//GAME LOOP 
+
+var frameCount = 0;
+
+function gameLoop() {
+    frameCount++;
+
+    if (frameCount > 60) {
+        console.log(new Date());
+        // printBoard();
+        frameCount = 0;
+    }
+
+
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
