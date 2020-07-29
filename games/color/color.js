@@ -31,20 +31,46 @@ class Game {
         })
     }
 
-    getNeighborsOf(row, col) {
+    /**
+     * 1-2-3
+     * 4-5-6
+     * 7-8-9
+     * 
+     * 5 is self
+     */
+    getNeighborsAt(row, col, pos){
         let neighbors = [];
 
-        if (this.getPieceAt(row - 1, col)) {
+        console.log('pos', pos);
+
+        if (pos.includes(1) && this.getPieceAt(row - 1, col - 1)) {
+            neighbors.push(this.getPieceAt(row - 1, col - 1));
+        }
+        if (pos.includes(2) && this.getPieceAt(row - 1, col)) {
             neighbors.push(this.getPieceAt(row - 1, col));
         }
-        if (this.getPieceAt(row, col - 1)) {
+        if (pos.includes(3) && this.getPieceAt(row - 1, col + 1)) {
+            neighbors.push(this.getPieceAt(row - 1, col + 1));
+        }
+
+        if (pos.includes(4) && this.getPieceAt(row, col - 1)) {
             neighbors.push(this.getPieceAt(row, col - 1));
         }
-        if (this.getPieceAt(row, col + 1)) {
+        if (pos.includes(5) && this.getPieceAt(row, col)) {
+            neighbors.push(this.getPieceAt(row, col));
+        }
+        if (pos.includes(6) && this.getPieceAt(row, col + 1)) {
             neighbors.push(this.getPieceAt(row, col + 1));
         }
-        if (this.getPieceAt(row + 1, col)) {
+
+        if (pos.includes(7) && this.getPieceAt(row + 1, col - 1)) {
+            neighbors.push(this.getPieceAt(row + 1, col - 1));
+        }
+        if (pos.includes(8) && this.getPieceAt(row + 1, col)) {
             neighbors.push(this.getPieceAt(row + 1, col));
+        }
+        if (pos.includes(9) && this.getPieceAt(row + 1, col + 1)) {
+            neighbors.push(this.getPieceAt(row + 1, col + 1));
         }
 
         console.log('neighbors', neighbors);
