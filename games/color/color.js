@@ -17,6 +17,7 @@ class Piece extends HTMLElement {
                 -webkit-appearance: none;
                 border: none;
                 outline: 1px solid black;
+                // border: 1px solid black;
                 background-color: white;
             }
         </style>
@@ -34,7 +35,7 @@ class Piece extends HTMLElement {
         const template = document.createElement('template');
         template.innerHTML = `
             ${this.styles}
-            <button id="button">${this.count}</button>
+            <button id="button">&nbsp;</button>
         `;
 
         this.attachShadow({ mode: 'open' })
@@ -110,6 +111,20 @@ class Game extends HTMLElement {
         })
     }
 
+    isWin() {
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const piece = this.getPieceAt(i, j);
+
+                if (piece.active) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      * 1-2-3
      * 4-5-6
@@ -156,6 +171,11 @@ class Game extends HTMLElement {
     }
 
     tick() {
+        if (this.isWin()) {
+            cancelAnimationFrame(window.loop);
+            window.stop = true;            
+        }
+
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 const piece = this.getPieceAt(i, j);
@@ -175,6 +195,11 @@ customElements.define('app-game', Game);
 
 const game = document.getElementsByTagName('app-game')[0];
 window.game = game;
+game.getPieceAt(2,2).active = true;
+game.getPieceAt(2,2).trigger = true;
+window.loop = null;
+window.stop = null;
+
 
 function printBoard() {
     game.printBoard();
@@ -185,8 +210,12 @@ function printBoard() {
 var frameCount = 0;
 
 function gameLoop() {
-    game.tick();
-    requestAnimationFrame(gameLoop);
+    if (!window.stop) {
+        game.tick();
+        window.loop = requestAnimationFrame(gameLoop);
+    } else {
+        alert('you win');
+    }
 }
 
 gameLoop();
