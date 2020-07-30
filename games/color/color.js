@@ -15,23 +15,32 @@ class Piece  {
     }
 
     tick() {
+        this.getEl().setAttribute('type', this.type)
+        
         if (this.active) {
-            document.querySelector(`[row="${this.row}"][col="${this.col}"]`).classList.add('active');
+            this.getEl().setAttribute('active', true)
         } else {
-            document.querySelector(`[row="${this.row}"][col="${this.col}"]`).classList.remove('active');
+            this.getEl().removeAttribute('active')
         }
     }
 
     click() {
-        // this.active = !this.active;
         this.trigger = true;
     }
 
     getNeighborSet() {
         switch (this.type) {
+            case 'A':
+                return [2, 4, 5, 6, 8]
+            case 'B':
+                return [1, 3, 5, 7, 9]
             default: 
                 return [2, 4, 5, 6, 8]
         }
+    }
+
+    getEl() {
+        return document.querySelector(`[row="${this.row}"][col="${this.col}"]`)
     }
 }
 
@@ -57,9 +66,16 @@ class Game {
     initGame() {
         let piece;
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 1; i++) {
             piece = this.getPieceAt(this.getRandom(), this.getRandom())
             piece.type = 'A';
+            piece.click();
+        }
+
+
+        for (let i = 0; i < 1; i++) {
+            piece = this.getPieceAt(this.getRandom(), this.getRandom())
+            piece.type = 'B';
             piece.click();
         }
     }
@@ -150,15 +166,16 @@ class Game {
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 const piece = this.getPieceAt(i, j);
-                // piece.tick();                                
-
                 if (piece.trigger) {
                     const neighbors = this.getNeighborsAt(piece.row, piece.col, piece.getNeighborSet());
+                    
                     for (const n of neighbors) {
+                        if (!n.active) {
+                            n.type = piece.type;    
+                        }
                         n.active = !n.active;
-                        n.type = piece.type;
-                        
                     }
+
                     piece.trigger = false;                
                 }
             }

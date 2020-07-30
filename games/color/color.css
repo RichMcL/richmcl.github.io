@@ -27,8 +27,12 @@
     transition: background-color 0.2s ease;
 }
 
-.piece.active {
-    background: radial-gradient(white, violet);
+[type="A"][active] {
+    background: radial-gradient(white, violet);    
+}
+
+[type="B"][active] {
+    background: radial-gradient(white, blue);    
 }
 
 .piece:active, .piece:focus {
