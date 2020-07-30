@@ -1,11 +1,13 @@
 class Piece  {
-    clean = true;
-
     constructor(count, row, col) {
         this.count = count;
         this.row = row;
         this.col = col;
         
+    }
+
+    initialDraw() {
+        return `<button class="piece" row="${this.row}" col="${this.col}">&nbsp;</button>`;
     }
 
     tick() {
@@ -28,6 +30,7 @@ class Game {
 
     constructor() {
         this.init();
+        this.initGame();
     }
 
     init() {
@@ -41,11 +44,11 @@ class Game {
     }
 
     initGame() {
-        game.getPieceAt(this.getRandom(), this.getRandom()).click();
-        game.getPieceAt(this.getRandom(), this.getRandom()).click();
-        game.getPieceAt(this.getRandom(), this.getRandom()).click();
-        game.getPieceAt(this.getRandom(), this.getRandom()).click();
-        game.getPieceAt(this.getRandom(), this.getRandom()).click();
+        this.getPieceAt(this.getRandom(), this.getRandom()).click();
+        this.getPieceAt(this.getRandom(), this.getRandom()).click();
+        this.getPieceAt(this.getRandom(), this.getRandom()).click();
+        this.getPieceAt(this.getRandom(), this.getRandom()).click();
+        this.getPieceAt(this.getRandom(), this.getRandom()).click();
     }
 
     getRandom() {
@@ -67,31 +70,14 @@ class Game {
         })
     }
 
-    isWin() {
-        for (let i = 0; i < this.size; i++) {
-            for (let j = 0; j < this.size; j++) {
-                const piece = this.getPieceAt(i, j);
-
-                if (!piece.clean) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     drawInit() {
         let html = '';
         for (let i = 0; i < this.size; i++) {
             html += '<div class="row">'
             for (let j = 0; j < this.size; j++) {
-                const piece = this.getPieceAt(i, j);
-                
-                // html += `<button class="piece" row="${i}" col="${j}">${i},${j}</button>`;
-                html += `<button class="piece" row="${i}" col="${j}">&nbsp;</button>`;
+                const piece = this.getPieceAt(i, j);                
+                html += piece.initialDraw();
             }
-            // html += '<br>';
             html += '</div>';
         }
 
@@ -155,16 +141,10 @@ class Game {
                 }
             }
         }
-
-        // if (this.isWin()) {
-        //     cancelAnimationFrame(window.loop);
-        //     window.stop = true;            
-        // }
     }
 }
 
 window.game = new Game();
-window.game.initGame();
 
 window.loop = null;
 window.stop = null;
