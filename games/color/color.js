@@ -3,24 +3,23 @@ class Piece  {
         this.count = count;
         this.row = row;
         this.col = col;
-        this.type = 'A'
+        this.type = 'A';
+        this.element = null;
     }
 
     initialDraw() {
         return `<button class="piece" row="${this.row}" col="${this.col}">&nbsp;</button>`;
     }
 
-    update() {
-
-    }
-
     tick() {
-        this.getEl().setAttribute('type', this.type)
+        this.element.setAttribute('type', this.type);
         
         if (this.active) {
-            this.getEl().setAttribute('active', true)
+            this.element.setAttribute('active', true);
         } else {
-            this.getEl().removeAttribute('active')
+            this.element.removeAttribute('active');
+            this.element.setAttribute('type', 'A');            
+            this.type = 'A';
         }
     }
 
@@ -34,6 +33,8 @@ class Piece  {
                 return [2, 4, 5, 6, 8]
             case 'B':
                 return [1, 3, 5, 7, 9]
+            case 'Z':
+                return [5]
             default: 
                 return [2, 4, 5, 6, 8]
         }
@@ -72,10 +73,15 @@ class Game {
             piece.click();
         }
 
-
         for (let i = 0; i < 1; i++) {
             piece = this.getPieceAt(this.getRandom(), this.getRandom())
             piece.type = 'B';
+            piece.click();
+        }
+
+        for (let i = 0; i < 1; i++) {
+            piece = this.getPieceAt(this.getRandom(), this.getRandom())
+            piece.type = 'Z';
             piece.click();
         }
     }
@@ -111,6 +117,13 @@ class Game {
         }
 
         document.getElementById('game').innerHTML = html;
+
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const piece = this.getPieceAt(i, j);
+                piece.element = document.querySelector(`[row="${i}"][col="${j}"]`);               
+            }
+        }
     }
 
     /**

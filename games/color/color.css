@@ -35,6 +35,10 @@
     background: radial-gradient(white, blue);    
 }
 
+[type="Z"][active] {
+    background: radial-gradient(white, green);    
+}
+
 .piece:active, .piece:focus {
     outline: none;
 }
