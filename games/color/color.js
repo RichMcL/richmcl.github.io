@@ -43,6 +43,9 @@ class Game {
     initGame() {
         game.getPieceAt(this.getRandom(), this.getRandom()).click();
         game.getPieceAt(this.getRandom(), this.getRandom()).click();
+        game.getPieceAt(this.getRandom(), this.getRandom()).click();
+        game.getPieceAt(this.getRandom(), this.getRandom()).click();
+        game.getPieceAt(this.getRandom(), this.getRandom()).click();
     }
 
     getRandom() {
