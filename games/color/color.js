@@ -1,56 +1,16 @@
-class Piece extends HTMLElement {
-    styles = `
-        <style>
-            :host {
-                display: inline-block;
-                width: 30px;
-                height: 30px;
-            }
-
-            button.active {
-                background-color: red;
-            }
-
-            button {
-                width: 100%;
-                height: 100%;
-                -webkit-appearance: none;
-                border: none;
-                outline: 1px solid black;
-                // border: 1px solid black;
-                background-color: white;
-            }
-        </style>
-    `
-
-    constructor() {
-        super();
-    }
-
-    connectedCallback() {
-        this.count = this.getAttribute('count');
-        this.row = this.getAttribute('row');
-        this.col = this.getAttribute('col');
-
-        const template = document.createElement('template');
-        template.innerHTML = `
-            ${this.styles}
-            <button id="button">&nbsp;</button>
-        `;
-
-        this.attachShadow({ mode: 'open' })
-            .appendChild(template.content.cloneNode(true));
-
-            this.shadowRoot.addEventListener('click', () => {
-                this.click();
-            });
+class Piece  {
+    constructor(count, row, col) {
+        this.count = count;
+        this.row = row;
+        this.col = col;
+        
     }
 
     tick() {
         if (this.active) {
-            this.shadowRoot.getElementById('button').classList.add('active')
+            document.querySelector(`[row="${this.row}"][col="${this.col}"]`).classList.add('active');
         } else {
-            this.shadowRoot.getElementById('button').classList.remove('active')
+            document.querySelector(`[row="${this.row}"][col="${this.col}"]`).classList.remove('active');
         }
     }
 
@@ -60,23 +20,11 @@ class Piece extends HTMLElement {
     }
 }
 
-customElements.define('app-piece', Piece);
-
-
-class Game extends HTMLElement {
+class Game {
     size = 5;
     board = [];
 
     constructor() {
-        super();
-        const template = document.createElement('template');
-        template.innerHTML = `
-            <h1>Game</h1>
-        `;
-
-        this.attachShadow({ mode: 'open' })
-            .appendChild(template.content.cloneNode(true));
-
         this.init();
     }
 
@@ -85,14 +33,8 @@ class Game extends HTMLElement {
         for (let i = 0; i < this.size; i++) {
             this.board[i] = [];
             for (let j = 0; j < this.size; j++) {
-                let piece = document.createElement('app-piece');
-                piece.setAttribute('row', i);
-                piece.setAttribute('col', j);
-                piece.setAttribute('count', count++);
-                this.shadowRoot.appendChild(piece);
-                this.board[i][j] = piece;
+                this.board[i][j] = new Piece(count++, i, j);
             }
-            this.shadowRoot.appendChild(document.createElement('br'));
         }
     }
 
@@ -123,6 +65,20 @@ class Game extends HTMLElement {
         }
 
         return true;
+    }
+
+    drawInit() {
+        let html = '';
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const piece = this.getPieceAt(i, j);
+                
+                html += `<button class="piece" row="${i}" col="${j}">${i},${j}</button>`;
+            }
+            html += '<br>';
+        }
+
+        document.getElementById('game').innerHTML = html;
     }
 
     /**
@@ -191,19 +147,29 @@ class Game extends HTMLElement {
     }
 }
 
-customElements.define('app-game', Game);
-
-const game = document.getElementsByTagName('app-game')[0];
-window.game = game;
+window.game = new Game();
 game.getPieceAt(2,2).active = true;
 game.getPieceAt(2,2).trigger = true;
 window.loop = null;
 window.stop = null;
 
+window.game.drawInit();
+
+document.querySelectorAll('.piece').forEach(b => {
+    b.addEventListener('click', () => {
+        let row = b.getAttribute('row');
+        let col = b.getAttribute('col');
+        
+        console.log('click', row, col);
+
+        game.getPieceAt(row, col).click();
+    })
+});
 
 function printBoard() {
     game.printBoard();
 }
+
 
 //GAME LOOP 
 

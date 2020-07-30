@@ -1,0 +1,17 @@
+.piece {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    -webkit-appearance: none;
+    border: none;
+    background-color: white;
+    outline: 1px solid black;
+}
+
+.piece.active {
+    background-color: red;
+}
+
+.piece:hover, .piece:active {
+    background-color: gray;
+}
