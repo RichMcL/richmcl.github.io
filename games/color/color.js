@@ -3,11 +3,15 @@ class Piece  {
         this.count = count;
         this.row = row;
         this.col = col;
-        
+        this.type = 'A'
     }
 
     initialDraw() {
         return `<button class="piece" row="${this.row}" col="${this.col}">&nbsp;</button>`;
+    }
+
+    update() {
+
     }
 
     tick() {
@@ -19,8 +23,15 @@ class Piece  {
     }
 
     click() {
-        this.active = !this.active;
+        // this.active = !this.active;
         this.trigger = true;
+    }
+
+    getNeighborSet() {
+        switch (this.type) {
+            default: 
+                return [2, 4, 5, 6, 8]
+        }
     }
 }
 
@@ -44,11 +55,13 @@ class Game {
     }
 
     initGame() {
-        this.getPieceAt(this.getRandom(), this.getRandom()).click();
-        this.getPieceAt(this.getRandom(), this.getRandom()).click();
-        this.getPieceAt(this.getRandom(), this.getRandom()).click();
-        this.getPieceAt(this.getRandom(), this.getRandom()).click();
-        this.getPieceAt(this.getRandom(), this.getRandom()).click();
+        let piece;
+
+        for (let i = 0; i < 5; i++) {
+            piece = this.getPieceAt(this.getRandom(), this.getRandom())
+            piece.type = 'A';
+            piece.click();
+        }
     }
 
     getRandom() {
@@ -128,17 +141,33 @@ class Game {
         return neighbors;
     }
 
+    /**
+     * 1 - Update all states
+     * 2 - Redraw 
+     * 3 - Check for win
+     */
     tick() {
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 const piece = this.getPieceAt(i, j);
-                piece.tick();                                
+                // piece.tick();                                
 
                 if (piece.trigger) {
-                    const neighbors = this.getNeighborsAt(piece.row, piece.col, [2, 4, 6, 8]);
-                    neighbors.forEach(n => n.active = !n.active);
+                    const neighbors = this.getNeighborsAt(piece.row, piece.col, piece.getNeighborSet());
+                    for (const n of neighbors) {
+                        n.active = !n.active;
+                        n.type = piece.type;
+                        
+                    }
                     piece.trigger = false;                
                 }
+            }
+        }
+
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const piece = this.getPieceAt(i, j);
+                piece.tick();
             }
         }
     }
