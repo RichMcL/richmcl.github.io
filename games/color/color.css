@@ -11,7 +11,3 @@
 .piece.active {
     background-color: red;
 }
-
-.piece:hover, .piece:active {
-    background-color: gray;
-}

@@ -73,7 +73,8 @@ class Game {
             for (let j = 0; j < this.size; j++) {
                 const piece = this.getPieceAt(i, j);
                 
-                html += `<button class="piece" row="${i}" col="${j}">${i},${j}</button>`;
+                // html += `<button class="piece" row="${i}" col="${j}">${i},${j}</button>`;
+                html += `<button class="piece" row="${i}" col="${j}">&nbsp;</button>`;
             }
             html += '<br>';
         }
