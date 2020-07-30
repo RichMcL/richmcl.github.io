@@ -1,4 +1,6 @@
 class Piece  {
+    clean = true;
+
     constructor(count, row, col) {
         this.count = count;
         this.row = row;
@@ -21,7 +23,7 @@ class Piece  {
 }
 
 class Game {
-    size = 5;
+    size = 8;
     board = [];
 
     constructor() {
@@ -36,6 +38,15 @@ class Game {
                 this.board[i][j] = new Piece(count++, i, j);
             }
         }
+    }
+
+    initGame() {
+        game.getPieceAt(this.getRandom(), this.getRandom()).click();
+        game.getPieceAt(this.getRandom(), this.getRandom()).click();
+    }
+
+    getRandom() {
+        return Math.floor(Math.random() * this.size);
     }
 
     getPieceAt(row, col) {
@@ -58,7 +69,7 @@ class Game {
             for (let j = 0; j < this.size; j++) {
                 const piece = this.getPieceAt(i, j);
 
-                if (piece.active) {
+                if (!piece.clean) {
                     return false;
                 }
             }
@@ -70,13 +81,15 @@ class Game {
     drawInit() {
         let html = '';
         for (let i = 0; i < this.size; i++) {
+            html += '<div class="row">'
             for (let j = 0; j < this.size; j++) {
                 const piece = this.getPieceAt(i, j);
                 
                 // html += `<button class="piece" row="${i}" col="${j}">${i},${j}</button>`;
                 html += `<button class="piece" row="${i}" col="${j}">&nbsp;</button>`;
             }
-            html += '<br>';
+            // html += '<br>';
+            html += '</div>';
         }
 
         document.getElementById('game').innerHTML = html;
@@ -91,8 +104,6 @@ class Game {
      */
     getNeighborsAt(row, col, pos){
         let neighbors = [];
-
-        console.log('pos', pos);
 
         if (pos.includes(1) && this.getPieceAt(row - 1, col - 1)) {
             neighbors.push(this.getPieceAt(row - 1, col - 1));
@@ -122,17 +133,13 @@ class Game {
             neighbors.push(this.getPieceAt(parseInt(row) + 1, parseInt(col) + 1));
         }
 
-        return neighbors;
+        console.log('neighbor positions', pos);
+        console.log('neighbor', neighbors);
 
-        // console.log('neighbors', neighbors);
+        return neighbors;
     }
 
     tick() {
-        if (this.isWin()) {
-            cancelAnimationFrame(window.loop);
-            window.stop = true;            
-        }
-
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 const piece = this.getPieceAt(i, j);
@@ -145,14 +152,17 @@ class Game {
                 }
             }
         }
+
+        // if (this.isWin()) {
+        //     cancelAnimationFrame(window.loop);
+        //     window.stop = true;            
+        // }
     }
 }
 
 window.game = new Game();
-game.getPieceAt(2,2).active = true;
-game.getPieceAt(2,2).trigger = true;
-game.getPieceAt(4,4).active = true;
-game.getPieceAt(4,4).trigger = true;
+window.game.initGame();
+
 window.loop = null;
 window.stop = null;
 
