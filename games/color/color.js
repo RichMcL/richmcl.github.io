@@ -151,6 +151,8 @@ class Game {
 window.game = new Game();
 game.getPieceAt(2,2).active = true;
 game.getPieceAt(2,2).trigger = true;
+game.getPieceAt(4,4).active = true;
+game.getPieceAt(4,4).trigger = true;
 window.loop = null;
 window.stop = null;
 
