@@ -1,5 +1,5 @@
 #game {
-    background-color: #d2d2d2;
+    background-color: white;
     display: inline-block;
     padding: 3px;
     border-radius: 5px;
@@ -22,20 +22,24 @@
     background-color: white;
     border: 1px solid black;
     border-radius: 3px;
-    box-shadow: inset 0 0 5px black;
+    /* box-shadow: inset 0 0 5px black; */
     margin: 3px;
     transition: background-color 0.2s ease;
 }
 
-[type="A"][active] {
+.piece:not([active]) {
+    opacity: 25%;
+}
+
+[type="A"] {
     background: radial-gradient(white, violet);    
 }
 
-[type="B"][active] {
+[type="B"] {
     background: radial-gradient(white, blue);    
 }
 
-[type="Z"][active] {
+[type="Z"]{
     background: radial-gradient(white, green);    
 }
 

@@ -14,12 +14,18 @@ class Piece  {
     tick() {
         this.element.setAttribute('type', this.type);
         
+        if (this.element.innerText !== this.type) {
+            this.element.innerText = this.type;
+        }
+        
         if (this.active) {
             this.element.setAttribute('active', true);
         } else {
             this.element.removeAttribute('active');
-            this.element.setAttribute('type', 'A');            
-            this.type = 'A';
+
+            // This resets a piece back to type A when it is deactivated
+            // this.element.setAttribute('type', 'A');            
+            // this.type = 'A';
         }
     }
 
