@@ -13,7 +13,7 @@ class Piece  {
 
     tick() {
         this.element.setAttribute('type', this.type);
-        
+
         if (this.element.innerText !== this.type) {
             this.element.innerText = this.type;
         }
@@ -39,6 +39,8 @@ class Piece  {
                 return [2, 4, 5, 6, 8]
             case 'B':
                 return [1, 3, 5, 7, 9]
+            case 'C':
+                return [1, 2, 3, 4, 5, 6, 7, 8, 9]
             case 'Z':
                 return [5]
             default: 
@@ -57,7 +59,6 @@ class Game {
 
     constructor() {
         this.init();
-        this.initGame();
     }
 
     init() {
@@ -70,25 +71,18 @@ class Game {
         }
     }
 
-    initGame() {
-        let piece;
+    buildLevel(levelNum) {
+        for (const [i, row] of LEVELS[levelNum].rows.entries()) {
+            for (const [j, type] of row.entries()) {
+                const piece = this.getPieceAt(i, j);
+                const pieceType = type.toUpperCase();
+                const isActive = type === type.toUpperCase();
 
-        for (let i = 0; i < 2; i++) {
-            piece = this.getPieceAt(this.getRandom(), this.getRandom())
-            piece.type = 'A';
-            piece.click();
-        }
-
-        for (let i = 0; i < 2; i++) {
-            piece = this.getPieceAt(this.getRandom(), this.getRandom())
-            piece.type = 'B';
-            piece.click();
-        }
-
-        for (let i = 0; i < 2; i++) {
-            piece = this.getPieceAt(this.getRandom(), this.getRandom())
-            piece.type = 'Z';
-            piece.click();
+                piece.type = pieceType;
+                piece.element.setAttribute('type', pieceType);
+                piece.active = isActive;
+                piece.element.setAttribute('active', isActive);                    
+            }
         }
     }
 
@@ -226,6 +220,7 @@ window.game = new Game();
 
 window.loop = null;
 window.game.drawInit();
+window.game.buildLevel(1);
 
 document.querySelectorAll('.piece').forEach(b => {
     b.addEventListener('click', () => {
@@ -252,10 +247,10 @@ function gameLoop() {
     game.tick();
     window.loop = requestAnimationFrame(gameLoop);
 
-    if (game.isWin() && window.showWin) {
-        alert('You Win!')
-        window.showWin = false;        
-    }
+    // if (game.isWin() && window.showWin) {
+    //     alert('You Win!')
+    //     window.showWin = false;        
+    // }
 }
 
 gameLoop();

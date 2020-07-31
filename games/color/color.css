@@ -40,6 +40,10 @@
     background: radial-gradient(white, blue);    
 }
 
+[type="C"] {
+    background: radial-gradient(white, yellow);    
+}
+
 [type="Z"]{
     background: radial-gradient(white, green);    
 }
