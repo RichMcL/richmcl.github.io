@@ -201,13 +201,24 @@ class Game {
             }
         }
     }
+
+    isWin() {
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const piece = this.getPieceAt(i, j);
+                if (piece.active) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }
 
 window.game = new Game();
 
 window.loop = null;
-window.stop = null;
-
 window.game.drawInit();
 
 document.querySelectorAll('.piece').forEach(b => {
@@ -229,13 +240,15 @@ function printBoard() {
 //GAME LOOP 
 
 var frameCount = 0;
+window.showWin = true;
 
 function gameLoop() {
-    if (!window.stop) {
-        game.tick();
-        window.loop = requestAnimationFrame(gameLoop);
-    } else {
-        alert('you win');
+    game.tick();
+    window.loop = requestAnimationFrame(gameLoop);
+
+    if (game.isWin() && window.showWin) {
+        alert('You Win!')
+        window.showWin = false;        
     }
 }
 
