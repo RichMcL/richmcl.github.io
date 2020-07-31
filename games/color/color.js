@@ -67,19 +67,19 @@ class Game {
     initGame() {
         let piece;
 
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 2; i++) {
             piece = this.getPieceAt(this.getRandom(), this.getRandom())
             piece.type = 'A';
             piece.click();
         }
 
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 2; i++) {
             piece = this.getPieceAt(this.getRandom(), this.getRandom())
             piece.type = 'B';
             piece.click();
         }
 
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 2; i++) {
             piece = this.getPieceAt(this.getRandom(), this.getRandom())
             piece.type = 'Z';
             piece.click();
