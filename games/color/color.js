@@ -254,6 +254,12 @@ function printBoard() {
     game.printBoard();
 }
 
+for (const i in LEVELS) {
+    var option = document.createElement("option");
+    option.text = i;
+    document.getElementById('level-select').add(option);
+}
+
 document.getElementById('level-select').addEventListener('change', (e) => {
     game.buildLevel(e.target.value);
 })
