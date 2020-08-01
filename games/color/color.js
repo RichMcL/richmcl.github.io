@@ -237,7 +237,7 @@ window.game = new Game();
 
 window.loop = null;
 window.game.drawInit();
-window.game.buildLevel(1);
+window.game.buildLevel('a-empty');
 
 document.querySelectorAll('.piece').forEach(b => {
     b.addEventListener('click', () => {
