@@ -262,7 +262,17 @@ for (const i in LEVELS) {
 
 document.getElementById('level-select').addEventListener('change', (e) => {
     game.buildLevel(e.target.value);
-})
+});
+
+document.getElementById('random-level').addEventListener('change', (e) => {
+    if (e.target.value) {
+        game.buildLevel(e.target.value);
+    }
+
+    for (let i = 0; i< 5; i++) {
+        game.getPieceAt(game.getRandom(), game.getRandom()).click();
+    }
+});
 
 
 //GAME LOOP 
