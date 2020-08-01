@@ -86,6 +86,23 @@ class Game {
         }
     }
 
+    getLevel() {
+        var current = {rows: []};        
+        for (let i = 0; i < this.size; i++) {
+            current.rows[i] = [];
+            for (let j = 0; j < this.size; j++) {
+                const piece = this.getPieceAt(i, j);
+                var type = piece.type;
+                if (!piece.active) {
+                    type = type.toLowerCase();
+                }
+                current.rows[i][j] = type;               
+            }
+        }
+
+        return current;
+    }
+
     getRandom() {
         return Math.floor(Math.random() * this.size);
     }
@@ -236,6 +253,10 @@ document.querySelectorAll('.piece').forEach(b => {
 function printBoard() {
     game.printBoard();
 }
+
+document.getElementById('level-select').addEventListener('change', (e) => {
+    game.buildLevel(e.target.value);
+})
 
 
 //GAME LOOP 
