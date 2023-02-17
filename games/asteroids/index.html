@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Asteroids</title>
     <script src="/lib/jquery/jquery.min.js"></script>
     <script src="/lib/jquery/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="asteroids.js"></script>
-</head>
-<body>
-<style>
-    * {
+  </head>
+  <body>
+    <style>
+      * {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         -khtml-user-select: none;
@@ -19,48 +19,62 @@
         -webkit-user-modify: none;
         -webkit-highlight: none;
         outline: none;
-    }
+      }
 
-    body {
+      body {
         height: 602px;
         width: 602px;
-        margin: 0;
-        padding: 0;
-    }
+        overflow: hidden;
+        /* margin: 0; */
+        /* padding: 0; */
+      }
 
-    html {
+      html {
         background-color: black;
-        width: 600px;
-    }
+        /* width: 600px; */
+      }
 
-    #asteroids {
+      #asteroids {
         background-color: black;
         border: 1pt solid white;
-    }
+      }
 
-    .text {
+      .text {
         color: white;
-        font-family: 'Press Start 2P', cursive;
+        font-family: "Press Start 2P", cursive;
         font-size: 16px;
         text-align: center;
-    }
+      }
 
-        /* jQuery Mobile Overrides*/
-    .ui-loader {
+      /* jQuery Mobile Overrides*/
+      .ui-loader {
         display: none;
-    }
+      }
 
-    .ui-page[style] {
-        height: 602px !important;
-        min-height: 602px !important;
+      .ui-page[style] {
+        /* height: 602px !important; */
+        /* min-height: 602px !important; */
         overflow: hidden;
         outline: none;
-    }
-</style>
-<canvas id="asteroids" width="600" height="600"></canvas>
-<img id="ship" src="ship.png" style="display: none;"/>
-<img id="ship-move" src="ship_move.png" style="display: none;"/>
-<img id="asteroid-16" src="asteroid_16.png" style="display: none;"/>
-<img id="asteroid-32" src="asteroid_32.png" style="display: none;"/>
-</body>
+      }
+
+      #stats {
+        color: white;
+
+        font-family: "Courier New", Courier, monospace;
+      }
+    </style>
+    <canvas id="asteroids" width="600" height="600"></canvas>
+    <div id="stats">
+      POS = X: <span id="stats-x-pos"></span> Y: <span id="stats-y-pos"></span
+      ><br />
+      ROT = ∠:<span id="stats-angle"></span> | DELTA_PER_FRAME: 5.00<br />
+      VEL = X: <span id="stats-x-vel"></span> Y:
+      <span id="stats-y-vel"></span> | MAX: 2.00 | DELTA_PER_FRAME: 0.05
+    </div>
+    <img id="ship" src="ship.png" style="display: none" />
+    <img id="ship-move" src="ship_move.png" style="display: none" />
+    <img id="asteroid-16" src="asteroid_16.png" style="display: none" />
+    <img id="asteroid-32" src="asteroid_32.png" style="display: none" />
+  </body>
 </html>

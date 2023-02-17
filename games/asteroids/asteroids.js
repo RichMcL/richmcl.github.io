@@ -30,7 +30,7 @@ var rotateAngle = 0;
         // Create the bodies array to hold the player and balls.
         this.bodies = [];
 
-        this.bodies = this.bodies.concat(createAsteroids(this));
+        // this.bodies = this.bodies.concat(createAsteroids(this));
 
 
         // Add the player to the bodies array.
@@ -53,6 +53,8 @@ var rotateAngle = 0;
             // Draw game bodies.
             self.draw(screen, gameSize);
 
+            self.stats(self.player)
+
             // Queue up the next call to tick with the browser.
             requestAnimationFrame(tick);
         };
@@ -63,6 +65,15 @@ var rotateAngle = 0;
     };
 
     Game.prototype = {
+
+        stats: function (player) {
+            document.getElementById('stats-x-pos').innerText = Number(player.center.x).toFixed(2);
+            document.getElementById('stats-y-pos').innerText = Number(player.center.y).toFixed(2);
+            document.getElementById('stats-x-vel').innerText = Number(player.velocity.x).toFixed(2);
+            document.getElementById('stats-y-vel').innerText = Number(player.velocity.y).toFixed(2);
+            document.getElementById('stats-angle').innerText = Number(rotateAngle).toFixed(2);
+
+        },
 
         // **update()** runs the main game logic.
         update: function () {
@@ -213,7 +224,6 @@ var rotateAngle = 0;
                 if (rotateAngle < 0) {
                     rotateAngle += 360;
                 }
-                console.log("angle", rotateAngle);
                 screen.save();
                 screen.translate(x, y);
                 screen.rotate(rotateAngle * Math.PI / 180);
@@ -222,7 +232,6 @@ var rotateAngle = 0;
                 if (rotateAngle > 360) {
                     rotateAngle -= 360;
                 }
-                console.log("angle", rotateAngle);
 
                 screen.save();
                 screen.translate(x, y);
