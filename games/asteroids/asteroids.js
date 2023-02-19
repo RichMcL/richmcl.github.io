@@ -1,5 +1,6 @@
 var fingerDown = false;
-var fingerX = 300;
+var fingerX = 0;
+var fingerY = 0;
 
 var rotateDirection = "";
 var rotateAngle = 0;
@@ -81,6 +82,8 @@ var SHOT_MAX_VELOCITY = 2.5;
             document.getElementById('stats-recharge').innerText = SHOT_RECHARGE;
             document.getElementById('stats-shot-ttl').innerText = SHOT_TTL;
             document.getElementById('stats-shot-vel').innerText = SHOT_MAX_VELOCITY;
+            document.getElementById('stats-touch-x').innerText = Number(fingerX).toFixed(2);
+            document.getElementById('stats-touch-y').innerText = Number(fingerY).toFixed(2);
 
         },
 
@@ -269,11 +272,17 @@ var SHOT_MAX_VELOCITY = 2.5;
                 rotateDirection = "left";
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
                 rotateDirection = "right";
+            } else if (!!fingerX && (fingerY > 100 && fingerY < 500)) {
+                if (fingerX > 300) {
+                    rotateDirection = "right";
+                } else {
+                    rotateDirection = "left";
+                }
             } else {
                 rotateDirection = "";
             }
 
-            if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
+            if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) || ((fingerX > 100 && fingerX < 500) && (fingerY > 500 || (fingerY > 0 && fingerY < 100)))) {
                 if (rotateAngle === 0 || rotateAngle === 360) {
                     this.velocity.x += 0;
                 } else if (rotateAngle > 0 && rotateAngle < 90) {
@@ -580,5 +589,18 @@ var SHOT_MAX_VELOCITY = 2.5;
     // When the DOM is ready, create (and start) the game.
     window.addEventListener('load', function () {
         new Game();
+
+        $(document).on("vmousedown", function(e){
+            fingerX = e.clientX;
+            fingerY = e.clientY;
+            fingerDown = true;
+
+        });
+
+        $(document).on("vmouseup", function(e){
+            fingerDown = false;
+            fingerX = 0;
+            fingerY = 0;
+        });
     });
 })();
