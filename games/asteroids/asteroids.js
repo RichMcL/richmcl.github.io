@@ -4,6 +4,11 @@ var fingerX = 300;
 var rotateDirection = "";
 var rotateAngle = 0;
 
+var SHOT_TTL = 200;
+var SHOT_RECHARGE = 100;
+var MAX_SHOTS = 3;
+var SHOT_MAX_VELOCITY = 2.5;
+
 (function () {
 
     // Main game object
@@ -72,6 +77,10 @@ var rotateAngle = 0;
             document.getElementById('stats-x-vel').innerText = Number(player.velocity.x).toFixed(2);
             document.getElementById('stats-y-vel').innerText = Number(player.velocity.y).toFixed(2);
             document.getElementById('stats-angle').innerText = Number(rotateAngle).toFixed(2);
+            document.getElementById('stats-shots').innerText = this.getBallCount();
+            document.getElementById('stats-recharge').innerText = SHOT_RECHARGE;
+            document.getElementById('stats-shot-ttl').innerText = SHOT_TTL;
+            document.getElementById('stats-shot-vel').innerText = SHOT_MAX_VELOCITY;
 
         },
 
@@ -93,56 +102,56 @@ var rotateAngle = 0;
 
             var hitAsteroids = [];
 
-            // `notCollidingWithAnything` returns true if passed body
-            // is not colliding with anything.
-            var notCollidingWithAnything = function (b1) {
-                return self.bodies.filter(function (b2) {
-                    if ((b1 instanceof Ball && b2 instanceof Player) ||(b2 instanceof Ball && b1 instanceof Player)) {
-                        return false;
-                    }
-                    if (b1 instanceof Asteroid && b2 instanceof Asteroid) {
-                        return false;
-                    }
-                    var isColliding = colliding(b1, b2);
+            // // `notCollidingWithAnything` returns true if passed body
+            // // is not colliding with anything.
+            // var notCollidingWithAnything = function (b1) {
+            //     return self.bodies.filter(function (b2) {
+            //         if ((b1 instanceof Ball && b2 instanceof Player) ||(b2 instanceof Ball && b1 instanceof Player)) {
+            //             return false;
+            //         }
+            //         if (b1 instanceof Asteroid && b2 instanceof Asteroid) {
+            //             return false;
+            //         }
+            //         var isColliding = colliding(b1, b2);
 
-                    if (isColliding) {
-                        var hasAsteroid = false;
-                        for (var i = 0; i < hitAsteroids.length; i ++) {
-                            if (hitAsteroids[i] == b1 || hitAsteroids[i] == b2) {
-                                hasAsteroid = true;
-                            }
-                        }
+            //         if (isColliding) {
+            //             var hasAsteroid = false;
+            //             for (var i = 0; i < hitAsteroids.length; i ++) {
+            //                 if (hitAsteroids[i] == b1 || hitAsteroids[i] == b2) {
+            //                     hasAsteroid = true;
+            //                 }
+            //             }
 
-                        if (!hasAsteroid) {
-                            console.log("asteroid hit");
+            //             if (!hasAsteroid) {
+            //                 console.log("asteroid hit");
 
-                            if (b1 instanceof Asteroid) {
-                                hitAsteroids.push(b1);
-                            }
+            //                 if (b1 instanceof Asteroid) {
+            //                     hitAsteroids.push(b1);
+            //                 }
 
-                            if (b2 instanceof Asteroid) {
-                                hitAsteroids.push(b2);
-                            }
-                        }
-                    }
+            //                 if (b2 instanceof Asteroid) {
+            //                     hitAsteroids.push(b2);
+            //                 }
+            //             }
+            //         }
 
-                    return isColliding;
-                }).length === 0;
-            };
+            //         return isColliding;
+            //     }).length === 0;
+            // };
 
             // Throw away bodies that are colliding with something. They
             // will never be updated or draw again.
-            this.bodies = this.bodies.filter(notCollidingWithAnything);
+            // this.bodies = this.bodies.filter(notCollidingWithAnything);
 
-            if (hitAsteroids.length) {
-                for (var i = 0; i < hitAsteroids.length; i++) {
-                    if (hitAsteroids[i].size.x === 32) {
-                        console.log("new Asteroids built");
-                        self.bodies.push(new Asteroid(self, 16, { x: hitAsteroids[i].center.x, y: hitAsteroids[i].center.y}, { x: -hitAsteroids[i].velocity.x * 2, y: -hitAsteroids[i].velocity.y * 2}));
-                        self.bodies.push(new Asteroid(self, 16, { x: hitAsteroids[i].center.x, y: hitAsteroids[i].center.y}, { x: hitAsteroids[i].velocity.x * 2, y: hitAsteroids[i].velocity.y * 2}));
-                    }
-                }
-            }
+            // if (hitAsteroids.length) {
+            //     for (var i = 0; i < hitAsteroids.length; i++) {
+            //         if (hitAsteroids[i].size.x === 32) {
+            //             console.log("new Asteroids built");
+            //             self.bodies.push(new Asteroid(self, 16, { x: hitAsteroids[i].center.x, y: hitAsteroids[i].center.y}, { x: -hitAsteroids[i].velocity.x * 2, y: -hitAsteroids[i].velocity.y * 2}));
+            //             self.bodies.push(new Asteroid(self, 16, { x: hitAsteroids[i].center.x, y: hitAsteroids[i].center.y}, { x: hitAsteroids[i].velocity.x * 2, y: hitAsteroids[i].velocity.y * 2}));
+            //         }
+            //     }
+            // }
         },
 
         // **draw()** draws the game.
@@ -189,7 +198,7 @@ var rotateAngle = 0;
         },
 
         resetShotRecharge: function () {
-            this.shotRecharge = 60;
+            this.shotRecharge = SHOT_RECHARGE;
         }
 
     };
@@ -343,15 +352,15 @@ var rotateAngle = 0;
             }
 
             // If Space key is down...
-            if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE) || fingerDown) {
-                if (this.game.canShoot() && this.game.getBallCount() < 5) {
+            // if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE) || fingerDown) {
+                if (this.game.canShoot() && this.game.getBallCount() < MAX_SHOTS) {
                     var ball = new Ball(this);
 
                     this.game.ball = ball;
                     this.game.addBody(ball);
                     this.game.resetShotRecharge();
                 }
-            }
+            // }
         }
     };
 
@@ -416,12 +425,12 @@ var rotateAngle = 0;
 
     // **new Ball()** creates a new ball.
     var Ball = function (ship) {
-        var MAX_VELOCITY = 5.0;
+        var MAX_VELOCITY = SHOT_MAX_VELOCITY;
         var delta = 0;
 
         this.center = {x: ship.center.x - ship.size.x / 2, y: ship.center.y - ship.size.y / 2};
         this.size = { x: 2, y: 2 };
-        this.framesRemaining = 200;
+        this.framesRemaining = SHOT_TTL;
 
         this.velocity = { x: 0, y: 0 };
 
