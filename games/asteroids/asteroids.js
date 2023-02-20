@@ -2,7 +2,7 @@ var fingerDown = false;
 var fingerX = 0;
 var fingerY = 0;
 
-var rotateDirection = "";
+var rotateDirection = '';
 var rotateAngle = 0;
 
 var SHOT_TTL = 200;
@@ -11,96 +11,82 @@ var MAX_SHOTS = 3;
 var SHOT_MAX_VELOCITY = 2.5;
 
 (function () {
+    class Game {
+        canvas = document.getElementById('asteroids');
+        screen = this.canvas.getContext('2d');
+        gameSize = { x: this.canvas.width, y: this.canvas.height };
 
-    // Main game object
-    // ----------------
-
-    // **new Game()** Creates the game object with the game state and logic.
-    var Game = function () {
-
-        // In index.html, there is a canvas tag that the game will be drawn in.
-        // Grab that canvas out of the DOM.
-        var canvas = document.getElementById("asteroids");
-
-        // Get the drawing context.  This contains functions that let you draw to the canvas.
-        var screen = canvas.getContext('2d');
-
-        // Note down the dimensions of the canvas.  These are used to
-        // place game bodies.
-        var gameSize = { x: canvas.width, y: canvas.height };
-
-        this.lives = 3;
-
-        this.score = 0;
+        lives = 3;
+        score = 0;
 
         // Create the bodies array to hold the player and balls.
-        this.bodies = [];
+        bodies = [];
 
         // this.bodies = this.bodies.concat(createAsteroids(this));
 
-
         // Add the player to the bodies array.
-        this.player = new Player(this, gameSize);
+        player = new Player(this, this.gameSize);
 
-        this.ball = null;
+        ball = null;
 
-        this.shotRecharge = 0;
+        shotRecharge = 0;
 
-        this.bodies = this.bodies.concat(this.player);
+        bodies = this.bodies.concat(this.player);
 
-        var self = this;
+        constructor() {
+            this.tick();
+        }
 
         // Main game tick function.  Loops forever, running 60ish times a second.
-        var tick = function () {
-
+        tick = () => {
             // Update game state.
-            self.update();
+            this.update();
 
             // Draw game bodies.
-            self.draw(screen, gameSize);
+            this.draw(this.screen, this.gameSize);
 
-            self.stats(self.player)
+            this.stats(self.player);
 
             // Queue up the next call to tick with the browser.
-            requestAnimationFrame(tick);
+            requestAnimationFrame(this.tick);
         };
 
-        // Run the first game tick.  All future calls will be scheduled by
-        // the tick() function itself.
-        tick();
-    };
-
-    Game.prototype = {
-
-        stats: function (player) {
-            document.getElementById('stats-x-pos').innerText = Number(player.center.x).toFixed(2);
-            document.getElementById('stats-y-pos').innerText = Number(player.center.y).toFixed(2);
-            document.getElementById('stats-x-vel').innerText = Number(player.velocity.x).toFixed(2);
-            document.getElementById('stats-y-vel').innerText = Number(player.velocity.y).toFixed(2);
+        stats(player) {
+            document.getElementById('stats-x-pos').innerText = Number(this.player.center.x).toFixed(
+                2
+            );
+            document.getElementById('stats-y-pos').innerText = Number(this.player.center.y).toFixed(
+                2
+            );
+            document.getElementById('stats-x-vel').innerText = Number(
+                this.player.velocity.x
+            ).toFixed(2);
+            document.getElementById('stats-y-vel').innerText = Number(
+                this.player.velocity.y
+            ).toFixed(2);
             document.getElementById('stats-angle').innerText = Number(rotateAngle).toFixed(2);
             document.getElementById('stats-shots').innerText = this.getBallCount();
-            document.getElementById('stats-recharge').innerText = `${this.shotRecharge}/${SHOT_RECHARGE}`;
+            document.getElementById(
+                'stats-recharge'
+            ).innerText = `${this.shotRecharge}/${SHOT_RECHARGE}`;
             document.getElementById('stats-shot-ttl').innerText = SHOT_TTL;
             document.getElementById('stats-shot-vel').innerText = SHOT_MAX_VELOCITY;
             document.getElementById('stats-touch-x').innerText = Number(fingerX).toFixed(2);
             document.getElementById('stats-touch-y').innerText = Number(fingerY).toFixed(2);
-
-        },
+        }
 
         // **update()** runs the main game logic.
-        update: function () {
-            var self = this;
-
-            self.bodies = self.bodies.filter(function (b1) {
+        update() {
+            this.bodies = this.bodies.filter(function (b1) {
                 return !(b1 instanceof Ball && b1.framesRemaining === 0);
             });
 
-            for (var i = 0; i < self.bodies.length; i++) {
-                self.bodies[i].update();
+            for (var i = 0; i < this.bodies.length; i++) {
+                this.bodies[i].update();
             }
 
-            if (self.shotRecharge > 0) {
-                self.shotRecharge--;
+            if (this.shotRecharge > 0) {
+                this.shotRecharge--;
             }
 
             var hitAsteroids = [];
@@ -155,10 +141,10 @@ var SHOT_MAX_VELOCITY = 2.5;
             //         }
             //     }
             // }
-        },
+        }
 
         // **draw()** draws the game.
-        draw: function (screen, gameSize) {
+        draw(screen, gameSize) {
             // Clear away the drawing from the previous tick.
             screen.clearRect(0, 0, gameSize.x, gameSize.y);
 
@@ -172,19 +158,19 @@ var SHOT_MAX_VELOCITY = 2.5;
                 if (this.bodies[i].color) {
                     screen.fillStyle = this.bodies[i].color;
                 } else {
-                    screen.fillStyle = "#FFFFFF";
+                    screen.fillStyle = '#FFFFFF';
                 }
 
                 this.bodies[i].draw(screen);
             }
-        },
+        }
 
         // **addBody()** adds a body to the bodies array.
-        addBody: function (body) {
+        addBody(body) {
             this.bodies.push(body);
-        },
+        }
 
-        getBallCount: function () {
+        getBallCount() {
             var ballCount = 0;
 
             for (var i = 0; i < this.bodies.length; i++) {
@@ -194,17 +180,16 @@ var SHOT_MAX_VELOCITY = 2.5;
             }
 
             return ballCount;
-        },
-
-        canShoot: function () {
-            return this.shotRecharge === 0;
-        },
-
-        resetShotRecharge: function () {
-            this.shotRecharge = SHOT_RECHARGE;
         }
 
-    };
+        canShoot() {
+            return this.shotRecharge === 0;
+        }
+
+        resetShotRecharge() {
+            this.shotRecharge = SHOT_RECHARGE;
+        }
+    }
 
     // Player
     // ------
@@ -213,33 +198,32 @@ var SHOT_MAX_VELOCITY = 2.5;
     var Player = function (game, gameSize) {
         this.game = game;
         this.size = { x: 5, y: 5 };
-//        this.size = { x: 19, y: 25 };
-        this.color = "white";
+        //        this.size = { x: 19, y: 25 };
+        this.color = 'white';
         this.center = { x: gameSize.x / 2, y: gameSize.y / 2 };
         this.velocity = { x: 0, y: 0 };
-        this.id = "ship";
+        this.id = 'ship';
 
         // Create a keyboard object to track button presses.
         this.keyboarder = new Keyboarder();
     };
 
     Player.prototype = {
-
         draw: function (screen) {
             var x = this.center.x - this.size.x / 2;
             var y = this.center.y - this.size.y / 2;
 
             var img = document.getElementById(this.id);
 
-            if (rotateDirection === "left") {
+            if (rotateDirection === 'left') {
                 rotateAngle -= 5;
                 if (rotateAngle < 0) {
                     rotateAngle += 360;
                 }
                 screen.save();
                 screen.translate(x, y);
-                screen.rotate(rotateAngle * Math.PI / 180);
-            } else if (rotateDirection === "right") {
+                screen.rotate((rotateAngle * Math.PI) / 180);
+            } else if (rotateDirection === 'right') {
                 rotateAngle += 5;
                 if (rotateAngle > 360) {
                     rotateAngle -= 360;
@@ -247,11 +231,11 @@ var SHOT_MAX_VELOCITY = 2.5;
 
                 screen.save();
                 screen.translate(x, y);
-                screen.rotate(rotateAngle * Math.PI / 180);
+                screen.rotate((rotateAngle * Math.PI) / 180);
             } else {
                 screen.save();
                 screen.translate(x, y);
-                screen.rotate(rotateAngle * Math.PI / 180);
+                screen.rotate((rotateAngle * Math.PI) / 180);
             }
 
             screen.drawImage(img, -img.width / 2, -img.height / 2);
@@ -269,61 +253,66 @@ var SHOT_MAX_VELOCITY = 2.5;
 
             // If left cursor key is down...
             if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
-                rotateDirection = "left";
+                rotateDirection = 'left';
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
-                rotateDirection = "right";
-            } else if (!!fingerX && (fingerY > 100 && fingerY < 500)) {
+                rotateDirection = 'right';
+            } else if (!!fingerX && fingerY > 100 && fingerY < 500) {
                 if (fingerX > 300) {
-                    rotateDirection = "right";
+                    rotateDirection = 'right';
                 } else {
-                    rotateDirection = "left";
+                    rotateDirection = 'left';
                 }
             } else {
-                rotateDirection = "";
+                rotateDirection = '';
             }
 
-            if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) || ((fingerX > 100 && fingerX < 500) && (fingerY > 500 || (fingerY > 0 && fingerY < 100)))) {
+            if (
+                this.keyboarder.isDown(this.keyboarder.KEYS.UP) ||
+                (fingerX > 100 &&
+                    fingerX < 500 &&
+                    (fingerY > 500 || (fingerY > 0 && fingerY < 100)))
+            ) {
                 if (rotateAngle === 0 || rotateAngle === 360) {
                     this.velocity.x += 0;
                 } else if (rotateAngle > 0 && rotateAngle < 90) {
-                    delta = parseFloat(rotateAngle / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat((rotateAngle / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.x += delta;
                 } else if (rotateAngle === 90) {
                     this.velocity.x += BASE_VELOCITY_DELTA;
                 } else if (rotateAngle > 90 && rotateAngle < 180) {
-                    delta = parseFloat((90 - (rotateAngle - 90)) / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat(((90 - (rotateAngle - 90)) / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.x += delta;
                 } else if (rotateAngle === 180) {
                     this.velocity.x += 0;
                 } else if (rotateAngle > 180 && rotateAngle < 270) {
-                    delta = parseFloat((rotateAngle - 180) / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat(((rotateAngle - 180) / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.x -= delta;
                 } else if (rotateAngle === 270) {
                     this.velocity.x -= BASE_VELOCITY_DELTA;
                 } else {
-                    delta = parseFloat((180 - (rotateAngle - 180)) / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat(((180 - (rotateAngle - 180)) / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.x -= delta;
                 }
 
                 if (rotateAngle === 0 || rotateAngle === 360) {
                     this.velocity.y -= BASE_VELOCITY_DELTA;
                 } else if (rotateAngle > 0 && rotateAngle < 90) {
-                    delta = parseFloat((90 - rotateAngle) / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat(((90 - rotateAngle) / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.y -= delta;
                 } else if (rotateAngle === 90) {
                     this.velocity.y -= 0;
                 } else if (rotateAngle > 90 && rotateAngle < 180) {
-                    delta = parseFloat((rotateAngle - 90) / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat(((rotateAngle - 90) / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.y += delta;
                 } else if (rotateAngle === 180) {
                     this.velocity.y += BASE_VELOCITY_DELTA;
                 } else if (rotateAngle > 180 && rotateAngle < 270) {
-                    delta = parseFloat((90 - (rotateAngle - 180)) / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat(((90 - (rotateAngle - 180)) / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.y += delta;
                 } else if (rotateAngle === 270) {
                     this.velocity.y -= 0;
                 } else {
-                    delta = parseFloat((rotateAngle - 270) / 90 * BASE_VELOCITY_DELTA);
+                    delta = parseFloat(((rotateAngle - 270) / 90) * BASE_VELOCITY_DELTA);
                     this.velocity.y -= delta;
                 }
 
@@ -339,9 +328,9 @@ var SHOT_MAX_VELOCITY = 2.5;
                     this.velocity.y = -MAX_VELOCITY;
                 }
 
-                this.id = "ship-move";
+                this.id = 'ship-move';
             } else {
-                this.id = "ship";
+                this.id = 'ship';
             }
 
             this.center.x += this.velocity.x;
@@ -362,13 +351,13 @@ var SHOT_MAX_VELOCITY = 2.5;
 
             // If Space key is down...
             // if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE) || fingerDown) {
-                if (this.game.canShoot() && this.game.getBallCount() < MAX_SHOTS) {
-                    var ball = new Ball(this);
+            if (this.game.canShoot() && this.game.getBallCount() < MAX_SHOTS) {
+                var ball = new Ball(this);
 
-                    this.game.ball = ball;
-                    this.game.addBody(ball);
-                    this.game.resetShotRecharge();
-                }
+                this.game.ball = ball;
+                this.game.addBody(ball);
+                this.game.resetShotRecharge();
+            }
             // }
         }
     };
@@ -380,13 +369,12 @@ var SHOT_MAX_VELOCITY = 2.5;
     var Asteroid = function (game, size, center, velocity) {
         this.game = game;
         this.center = center;
-        this.id = "asteroid-" + size;
+        this.id = 'asteroid-' + size;
         this.size = { x: size, y: size };
         this.velocity = velocity;
     };
 
     Asteroid.prototype = {
-
         draw: function (screen) {
             var x = this.center.x - this.size.x / 2;
             var y = this.center.y - this.size.y / 2;
@@ -394,7 +382,6 @@ var SHOT_MAX_VELOCITY = 2.5;
             var img = document.getElementById(this.id);
 
             screen.drawImage(img, x, y);
-
         },
 
         // **update()** updates the state of the brick for a single tick.
@@ -414,17 +401,16 @@ var SHOT_MAX_VELOCITY = 2.5;
             } else if (this.center.y <= 2) {
                 this.center.y = 598;
             }
-
         }
     };
 
     var createAsteroids = function (game) {
         var asteroids = [];
 
-        asteroids.push(new Asteroid(game, 32, { x: 50, y: 200}, { x: 0.2, y: 0.2}));
-        asteroids.push(new Asteroid(game, 32, { x: 300, y: 50}, { x: -0.2, y: 0.2}));
-        asteroids.push(new Asteroid(game, 32, { x: 50, y: 550}, { x: 0.2, y: -0.2}));
-        asteroids.push(new Asteroid(game, 32, { x: 400, y: 400}, { x: 0.2, y: -0.2}));
+        asteroids.push(new Asteroid(game, 32, { x: 50, y: 200 }, { x: 0.2, y: 0.2 }));
+        asteroids.push(new Asteroid(game, 32, { x: 300, y: 50 }, { x: -0.2, y: 0.2 }));
+        asteroids.push(new Asteroid(game, 32, { x: 50, y: 550 }, { x: 0.2, y: -0.2 }));
+        asteroids.push(new Asteroid(game, 32, { x: 400, y: 400 }, { x: 0.2, y: -0.2 }));
 
         return asteroids;
     };
@@ -437,7 +423,7 @@ var SHOT_MAX_VELOCITY = 2.5;
         var MAX_VELOCITY = SHOT_MAX_VELOCITY;
         var delta = 0;
 
-        this.center = {x: ship.center.x - ship.size.x / 2, y: ship.center.y - ship.size.y / 2};
+        this.center = { x: ship.center.x - ship.size.x / 2, y: ship.center.y - ship.size.y / 2 };
         this.size = { x: 2, y: 2 };
         this.framesRemaining = SHOT_TTL;
 
@@ -446,59 +432,60 @@ var SHOT_MAX_VELOCITY = 2.5;
         if (rotateAngle === 0 || rotateAngle === 360) {
             this.velocity.x += 0;
         } else if (rotateAngle > 0 && rotateAngle < 90) {
-            delta = parseFloat(rotateAngle / 90 * MAX_VELOCITY);
+            delta = parseFloat((rotateAngle / 90) * MAX_VELOCITY);
             this.velocity.x += delta;
         } else if (rotateAngle === 90) {
             this.velocity.x += MAX_VELOCITY;
         } else if (rotateAngle > 90 && rotateAngle < 180) {
-            delta = parseFloat((90 - (rotateAngle - 90)) / 90 * MAX_VELOCITY);
+            delta = parseFloat(((90 - (rotateAngle - 90)) / 90) * MAX_VELOCITY);
             this.velocity.x += delta;
         } else if (rotateAngle === 180) {
             this.velocity.x += 0;
         } else if (rotateAngle > 180 && rotateAngle < 270) {
-            delta = parseFloat((rotateAngle - 180) / 90 * MAX_VELOCITY);
+            delta = parseFloat(((rotateAngle - 180) / 90) * MAX_VELOCITY);
             this.velocity.x -= delta;
         } else if (rotateAngle === 270) {
             this.velocity.x -= MAX_VELOCITY;
         } else {
-            delta = parseFloat((180 - (rotateAngle - 180)) / 90 * MAX_VELOCITY);
+            delta = parseFloat(((180 - (rotateAngle - 180)) / 90) * MAX_VELOCITY);
             this.velocity.x -= delta;
         }
 
         if (rotateAngle === 0 || rotateAngle === 360) {
             this.velocity.y -= MAX_VELOCITY;
         } else if (rotateAngle > 0 && rotateAngle < 90) {
-            delta = parseFloat((90 - rotateAngle) / 90 * MAX_VELOCITY);
+            delta = parseFloat(((90 - rotateAngle) / 90) * MAX_VELOCITY);
             this.velocity.y -= delta;
         } else if (rotateAngle === 90) {
             this.velocity.y -= 0;
         } else if (rotateAngle > 90 && rotateAngle < 180) {
-            delta = parseFloat((rotateAngle - 90) / 90 * MAX_VELOCITY);
+            delta = parseFloat(((rotateAngle - 90) / 90) * MAX_VELOCITY);
             this.velocity.y += delta;
         } else if (rotateAngle === 180) {
             this.velocity.y += MAX_VELOCITY;
         } else if (rotateAngle > 180 && rotateAngle < 270) {
-            delta = parseFloat((90 - (rotateAngle - 180)) / 90 * MAX_VELOCITY);
+            delta = parseFloat(((90 - (rotateAngle - 180)) / 90) * MAX_VELOCITY);
             this.velocity.y += delta;
         } else if (rotateAngle === 270) {
             this.velocity.y -= 0;
         } else {
-            delta = parseFloat((rotateAngle - 270) / 90 * MAX_VELOCITY);
+            delta = parseFloat(((rotateAngle - 270) / 90) * MAX_VELOCITY);
             this.velocity.y -= delta;
         }
-
     };
 
     Ball.prototype = {
-
         draw: function (screen) {
-            screen.fillRect(this.center.x - this.size.x / 2, this.center.y - this.size.y / 2,
-                this.size.x, this.size.y);
+            screen.fillRect(
+                this.center.x - this.size.x / 2,
+                this.center.y - this.size.y / 2,
+                this.size.x,
+                this.size.y
+            );
         },
 
         // **update()** updates the state of the ball for a single tick.
         update: function () {
-
             // Add velocity to center to move ball.
             this.center.x += this.velocity.x;
 
@@ -521,12 +508,12 @@ var SHOT_MAX_VELOCITY = 2.5;
 
         flipX: function () {
             var oldVelocity = this.velocity;
-            this.velocity = { x: -1 * oldVelocity.x, y: oldVelocity.y }
+            this.velocity = { x: -1 * oldVelocity.x, y: oldVelocity.y };
         },
 
         flipY: function () {
             var oldVelocity = this.velocity;
-            this.velocity = { x: oldVelocity.x, y: -1 * oldVelocity.y }
+            this.velocity = { x: oldVelocity.x, y: -1 * oldVelocity.y };
         }
     };
 
@@ -535,7 +522,6 @@ var SHOT_MAX_VELOCITY = 2.5;
 
     // **new Keyboarder()** creates a new keyboard input tracking object.
     var Keyboarder = function () {
-
         // Records up/down state of each key that has ever been pressed.
         var keyState = {};
 
@@ -574,11 +560,11 @@ var SHOT_MAX_VELOCITY = 2.5;
     var colliding = function (b1, b2) {
         var isColliding = !(
             b1 === b2 ||
-                b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
-                b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
-                b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
-                b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
-            );
+            b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
+            b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
+            b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
+            b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
+        );
 
         return isColliding;
     };
@@ -590,14 +576,13 @@ var SHOT_MAX_VELOCITY = 2.5;
     window.addEventListener('load', function () {
         new Game();
 
-        $(document).on("vmousedown", function(e){
+        $(document).on('vmousedown', function (e) {
             fingerX = e.clientX;
             fingerY = e.clientY;
             fingerDown = true;
-
         });
 
-        $(document).on("vmouseup", function(e){
+        $(document).on('vmouseup', function (e) {
             fingerDown = false;
             fingerX = 0;
             fingerY = 0;
