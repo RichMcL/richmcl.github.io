@@ -414,73 +414,82 @@ var SHOT_MAX_VELOCITY = 2.5;
     // ------
 
     // **new Ball()** creates a new ball.
-    var Ball = function (ship) {
-        var MAX_VELOCITY = SHOT_MAX_VELOCITY;
-        var delta = 0;
+    class Ball {
+        ship;
 
-        this.center = { x: ship.center.x - ship.size.x / 2, y: ship.center.y - ship.size.y / 2 };
-        this.size = { x: 2, y: 2 };
-        this.framesRemaining = SHOT_TTL;
+        constructor(ship) {
+            this.ship = ship;
 
-        this.velocity = { x: 0, y: 0 };
+            this.center = {
+                x: ship.center.x - ship.size.x / 2,
+                y: ship.center.y - ship.size.y / 2
+            };
+            this.size = { x: 2, y: 2 };
+            this.framesRemaining = SHOT_TTL;
+            this.velocity = { x: 0, y: 0 };
 
-        if (rotateAngle === 0 || rotateAngle === 360) {
-            this.velocity.x += 0;
-        } else if (rotateAngle > 0 && rotateAngle < 90) {
-            delta = parseFloat((rotateAngle / 90) * MAX_VELOCITY);
-            this.velocity.x += delta;
-        } else if (rotateAngle === 90) {
-            this.velocity.x += MAX_VELOCITY;
-        } else if (rotateAngle > 90 && rotateAngle < 180) {
-            delta = parseFloat(((90 - (rotateAngle - 90)) / 90) * MAX_VELOCITY);
-            this.velocity.x += delta;
-        } else if (rotateAngle === 180) {
-            this.velocity.x += 0;
-        } else if (rotateAngle > 180 && rotateAngle < 270) {
-            delta = parseFloat(((rotateAngle - 180) / 90) * MAX_VELOCITY);
-            this.velocity.x -= delta;
-        } else if (rotateAngle === 270) {
-            this.velocity.x -= MAX_VELOCITY;
-        } else {
-            delta = parseFloat(((180 - (rotateAngle - 180)) / 90) * MAX_VELOCITY);
-            this.velocity.x -= delta;
+            this.init();
         }
 
-        if (rotateAngle === 0 || rotateAngle === 360) {
-            this.velocity.y -= MAX_VELOCITY;
-        } else if (rotateAngle > 0 && rotateAngle < 90) {
-            delta = parseFloat(((90 - rotateAngle) / 90) * MAX_VELOCITY);
-            this.velocity.y -= delta;
-        } else if (rotateAngle === 90) {
-            this.velocity.y -= 0;
-        } else if (rotateAngle > 90 && rotateAngle < 180) {
-            delta = parseFloat(((rotateAngle - 90) / 90) * MAX_VELOCITY);
-            this.velocity.y += delta;
-        } else if (rotateAngle === 180) {
-            this.velocity.y += MAX_VELOCITY;
-        } else if (rotateAngle > 180 && rotateAngle < 270) {
-            delta = parseFloat(((90 - (rotateAngle - 180)) / 90) * MAX_VELOCITY);
-            this.velocity.y += delta;
-        } else if (rotateAngle === 270) {
-            this.velocity.y -= 0;
-        } else {
-            delta = parseFloat(((rotateAngle - 270) / 90) * MAX_VELOCITY);
-            this.velocity.y -= delta;
-        }
-    };
+        init() {
+            var MAX_VELOCITY = SHOT_MAX_VELOCITY;
+            var delta = 0;
 
-    Ball.prototype = {
-        draw: function (screen) {
+            if (rotateAngle === 0 || rotateAngle === 360) {
+                this.velocity.x += 0;
+            } else if (rotateAngle > 0 && rotateAngle < 90) {
+                delta = parseFloat((rotateAngle / 90) * MAX_VELOCITY);
+                this.velocity.x += delta;
+            } else if (rotateAngle === 90) {
+                this.velocity.x += MAX_VELOCITY;
+            } else if (rotateAngle > 90 && rotateAngle < 180) {
+                delta = parseFloat(((90 - (rotateAngle - 90)) / 90) * MAX_VELOCITY);
+                this.velocity.x += delta;
+            } else if (rotateAngle === 180) {
+                this.velocity.x += 0;
+            } else if (rotateAngle > 180 && rotateAngle < 270) {
+                delta = parseFloat(((rotateAngle - 180) / 90) * MAX_VELOCITY);
+                this.velocity.x -= delta;
+            } else if (rotateAngle === 270) {
+                this.velocity.x -= MAX_VELOCITY;
+            } else {
+                delta = parseFloat(((180 - (rotateAngle - 180)) / 90) * MAX_VELOCITY);
+                this.velocity.x -= delta;
+            }
+
+            if (rotateAngle === 0 || rotateAngle === 360) {
+                this.velocity.y -= MAX_VELOCITY;
+            } else if (rotateAngle > 0 && rotateAngle < 90) {
+                delta = parseFloat(((90 - rotateAngle) / 90) * MAX_VELOCITY);
+                this.velocity.y -= delta;
+            } else if (rotateAngle === 90) {
+                this.velocity.y -= 0;
+            } else if (rotateAngle > 90 && rotateAngle < 180) {
+                delta = parseFloat(((rotateAngle - 90) / 90) * MAX_VELOCITY);
+                this.velocity.y += delta;
+            } else if (rotateAngle === 180) {
+                this.velocity.y += MAX_VELOCITY;
+            } else if (rotateAngle > 180 && rotateAngle < 270) {
+                delta = parseFloat(((90 - (rotateAngle - 180)) / 90) * MAX_VELOCITY);
+                this.velocity.y += delta;
+            } else if (rotateAngle === 270) {
+                this.velocity.y -= 0;
+            } else {
+                delta = parseFloat(((rotateAngle - 270) / 90) * MAX_VELOCITY);
+                this.velocity.y -= delta;
+            }
+        }
+
+        draw(screen) {
             screen.fillRect(
                 this.center.x - this.size.x / 2,
                 this.center.y - this.size.y / 2,
                 this.size.x,
                 this.size.y
             );
-        },
+        }
 
-        // **update()** updates the state of the ball for a single tick.
-        update: function () {
+        update() {
             // Add velocity to center to move ball.
             this.center.x += this.velocity.x;
 
@@ -499,18 +508,18 @@ var SHOT_MAX_VELOCITY = 2.5;
             }
 
             this.framesRemaining--;
-        },
+        }
 
-        flipX: function () {
+        flipX() {
             var oldVelocity = this.velocity;
             this.velocity = { x: -1 * oldVelocity.x, y: oldVelocity.y };
-        },
+        }
 
-        flipY: function () {
+        flipY() {
             var oldVelocity = this.velocity;
             this.velocity = { x: oldVelocity.x, y: -1 * oldVelocity.y };
         }
-    };
+    }
 
     // Keyboard input tracking
     // -----------------------
