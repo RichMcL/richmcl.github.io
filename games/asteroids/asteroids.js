@@ -38,7 +38,7 @@ var SHOT_MAX_VELOCITY = 2.5;
         }
 
         // Main game tick function.  Loops forever, running 60ish times a second.
-        tick = () => {
+        tick() {
             // Update game state.
             this.update();
 
@@ -48,10 +48,10 @@ var SHOT_MAX_VELOCITY = 2.5;
             this.stats(self.player);
 
             // Queue up the next call to tick with the browser.
-            requestAnimationFrame(this.tick);
-        };
+            requestAnimationFrame(this.tick.bind(this));
+        }
 
-        stats(player) {
+        stats() {
             document.getElementById('stats-x-pos').innerText = Number(this.player.center.x).toFixed(
                 2
             );
@@ -191,25 +191,22 @@ var SHOT_MAX_VELOCITY = 2.5;
         }
     }
 
-    // Player
-    // ------
-
-    // **new Player()** creates a player.
-    var Player = function (game, gameSize) {
-        this.game = game;
-        this.size = { x: 5, y: 5 };
-        //        this.size = { x: 19, y: 25 };
-        this.color = 'white';
-        this.center = { x: gameSize.x / 2, y: gameSize.y / 2 };
-        this.velocity = { x: 0, y: 0 };
-        this.id = 'ship';
+    class Player {
+        size = { x: 5, y: 5 };
+        color = 'white';
+        center;
+        velocity = { x: 0, y: 0 };
+        id = 'ship';
 
         // Create a keyboard object to track button presses.
-        this.keyboarder = new Keyboarder();
-    };
+        keyboarder = new Keyboarder();
 
-    Player.prototype = {
-        draw: function (screen) {
+        constructor(game, gameSize) {
+            this.game = game;
+            this.center = { x: gameSize.x / 2, y: gameSize.y / 2 };
+        }
+
+        draw(screen) {
             var x = this.center.x - this.size.x / 2;
             var y = this.center.y - this.size.y / 2;
 
@@ -243,10 +240,9 @@ var SHOT_MAX_VELOCITY = 2.5;
             screen.restore();
 
             screen.fill();
-        },
+        }
 
-        // **update()** updates the state of the player for a single tick.
-        update: function () {
+        update() {
             var MAX_VELOCITY = 2.0;
             var BASE_VELOCITY_DELTA = 0.05;
             var delta = 0;
@@ -358,9 +354,8 @@ var SHOT_MAX_VELOCITY = 2.5;
                 this.game.addBody(ball);
                 this.game.resetShotRecharge();
             }
-            // }
         }
-    };
+    }
 
     // Asteroids
     // --------
