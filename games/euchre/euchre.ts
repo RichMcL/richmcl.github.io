@@ -5,6 +5,13 @@ enum Suit {
     Hearts = 'Hearts'
 }
 
+enum SuitIcon {
+    Spades = '♠',
+    Clubs = '♣',
+    Diamonds = '♦',
+    Hearts = '♥'
+}
+
 enum CardValue {
     Nine = '9',
     Ten = '10',
@@ -76,8 +83,10 @@ class Game {
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
 
-        logger('trump', this.trump);
-        logger('players', this.players);
+        // logger('trump', this.trump);
+        // logger('players', this.players);
+
+        this.printGameBoard();
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -203,6 +212,17 @@ class Game {
         });
 
         logger('playerTeams', playerTeams);
+    }
+
+    public printGameBoard() {
+        console.log('\n');
+        console.log('---------------------------------\n\n');
+        console.log('EUCHRE v0.1\n');
+
+        console.log('Trump: ', this.trump + ' ' + SuitIcon[this.trump]);
+
+        console.log('\n\n---------------------------------');
+        console.log('\n');
     }
 }
 
