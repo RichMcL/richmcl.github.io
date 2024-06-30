@@ -139,11 +139,24 @@ class Game {
 
                 this.printGameBoard();
             } else {
-                await this.sleep(1000);
+                await this.sleep(3000);
                 this.playNpcCard(this.currentPlayer);
                 this.printGameBoard();
             }
         }
+
+        //after each player has played a card, determine the winner of the trick
+        const winningCard = this.getWinningCard();
+
+        console.log('WINNING CARD: ', this.getCardPrint(winningCard));
+
+        //get the index of the winning card in the current trick
+        const winningIndex = this.currentTrick.findIndex(card => card === winningCard);
+
+        //get the player who played the winning card
+        const winningPlayer = this.players.find(player => player.playIndex === winningIndex)!;
+
+        console.log('WINNING PLAYER: ', winningPlayer.playerNum);
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -329,6 +342,60 @@ class Game {
         player.hand.splice(player.hand.indexOf(playedCard), 1);
     }
 
+    public getWinningCard(): Card {
+        const ledSuit = this.getLedSuit();
+        const ledTrump = this.getLedTrump();
+        let winningCard = this.currentTrick[0];
+
+        for (let i = 1; i < this.currentTrick.length; i++) {
+            const card = this.currentTrick[i];
+
+            if (this.isCardTrump(card, this.trump) && !this.isCardTrump(winningCard, this.trump)) {
+                // if new card is trump and winning card is not, new card wins
+                winningCard = card;
+            } else if (
+                this.isCardTrump(card, this.trump) &&
+                this.isCardTrump(winningCard, this.trump)
+            ) {
+                // if both cards are trump, compare values but right bower beats left bower beats other trump
+                if (card.value === CardValue.Jack && card.suit === this.trump) {
+                    // if new card is the right bower
+                    winningCard = card;
+                } else if (
+                    winningCard.value === CardValue.Jack &&
+                    winningCard.suit === this.trump
+                ) {
+                    // if current winning card is the right bower
+                    continue;
+                } else if (card.value === CardValue.Jack && this.isCardTrump(card, this.trump)) {
+                    // if new card is the left bower
+                    winningCard = card;
+                } else if (
+                    winningCard.value === CardValue.Jack &&
+                    this.isCardTrump(card, this.trump)
+                ) {
+                    // if winning card is the left bower
+                    continue;
+                } else if (card.value > winningCard.value) {
+                    // else compare the natural trump values
+                    winningCard = card;
+                }
+            } else {
+                // if new card is led suit and winning card is not, new card wins
+                if (card.suit === ledSuit && winningCard.suit !== ledSuit) {
+                    winningCard = card;
+                } else if (card.suit === ledSuit && winningCard.suit === ledSuit) {
+                    // if both cards are led suit, compare values
+                    if (card.value > winningCard.value) {
+                        winningCard = card;
+                    }
+                }
+            }
+        }
+
+        return winningCard;
+    }
+
     public getLedSuit() {
         if (this.currentTrick.length === 0) {
             return null;
@@ -338,7 +405,11 @@ class Game {
     }
 
     public getLedTrump(): boolean {
-        return this.getLedSuit() === this.trump;
+        if (this.currentTrick.length === 0) {
+            return false;
+        }
+
+        return this.currentTrick[0].isTrump!;
     }
 
     public getDealOrder() {
