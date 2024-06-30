@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Asteroids</title>
+    <script src="/lib/jquery/jquery.min.js"></script>
+    <script src="/lib/jquery/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="asteroids.js"></script>
+  </head>
+  <body>
+    <style>
+      * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-modify: none;
+        -webkit-highlight: none;
+        outline: none;
+      }
+
+      body {
+        height: 602px;
+        width: 602px;
+        overflow: hidden;
+        /* margin: 0; */
+        /* padding: 0; */
+      }
+
+      html {
+        background-color: black;
+        /* width: 600px; */
+      }
+
+      #asteroids {
+        background-color: black;
+        border: 1pt solid white;
+      }
+
+      .text {
+        color: white;
+        font-family: "Press Start 2P", cursive;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      /* jQuery Mobile Overrides*/
+      .ui-loader {
+        display: none;
+      }
+
+      .ui-page[style] {
+        /* height: 602px !important; */
+        /* min-height: 602px !important; */
+        overflow: hidden;
+        outline: none;
+      }
+
+      #stats {
+        color: white;
+
+        font-family: "Courier New", Courier, monospace;
+      }
+    </style>
+    <canvas id="asteroids" width="600" height="600"></canvas>
+    <div id="stats">
+      SHIP:<br />
+      POS = X: <span id="stats-x-pos"></span> Y: <span id="stats-y-pos"></span
+      ><br />
+      ROT = ∠:<span id="stats-angle"></span> | DELTA_PER_FRAME: 5.00<br />
+      VEL = X: <span id="stats-x-vel"></span> Y:
+      <span id="stats-y-vel"></span> | MAX: 2.00 | DELTA_PER_FRAME: 0.05<br />
+      <br /><br />
+      SHOOT: <br />
+      SHOTS = <span id="stats-shots"></span> | RECHARGE:
+      <span id="stats-recharge"></span> | SHOT TTL:
+      <span id="stats-shot-ttl"></span> | MAX_VEL:
+      <span id="stats-shot-vel"></span><br /><br />
+      TOUCH:<br />
+      POS = X: <span id="stats-touch-x"></span> Y:
+      <span id="stats-touch-y"></span><br /><br />
+      // TODO - max velocity needs to scale to angle of ship <br />// TODO -
+      touch needs to scale based on position of ship and touch
+    </div>
+    <img id="ship" src="ship.png" style="display: none" />
+    <img id="ship-move" src="ship_move.png" style="display: none" />
+    <img id="asteroid-16" src="asteroid_16.png" style="display: none" />
+    <img id="asteroid-32" src="asteroid_32.png" style="display: none" />
+  </body>
+</html>

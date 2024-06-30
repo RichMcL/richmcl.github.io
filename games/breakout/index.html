@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/jpg" href="cartridge.jpg">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>Breakout</title>
+    <script src="/lib/jquery/jquery.min.js"></script>
+    <script src="/lib/jquery/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="breakout.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<style>
+    * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-modify: none;
+        -webkit-highlight: none;
+        outline: none;
+    }
+    body {
+        height: 600px;
+        width: 600px;
+    }
+    html {
+        background-color: #1A1A1A;
+        width: 600px;
+    }
+    #breakout {
+        background-color: #1A1A1A;
+    }
+    .text {
+        color: white;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 16px;
+        text-align: center;
+    }
+    /* jQuery Mobile Overrides*/
+    .ui-loader {
+        display: none;
+    }
+    .ui-page[style] {
+        height: 600px !important;
+        min-height: 600px !important;
+        overflow: hidden;
+        outline: none;
+    }
+</style>
+<div class="text">
+    SCORE: <span id="score"></span>
+    LIVES: <span id="lives"></span>
+</div>
+<canvas id="breakout" width="600" height="600"></canvas>
+</body>
+</html>
