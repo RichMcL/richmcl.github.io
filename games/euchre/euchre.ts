@@ -1,3 +1,18 @@
+const readline = require('readline');
+
+// Function to initialize the readline interface and capture keypress events
+function setupReadlineInterface() {
+    readline.emitKeypressEvents(process.stdin);
+    process.stdin.setRawMode(true);
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    return rl;
+}
+
 enum Suit {
     Spades = 'Spades',
     Clubs = 'Clubs',
@@ -111,14 +126,24 @@ class Game {
             this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
             this.printGameBoard();
 
-            await this.sleep(1000);
-            this.playCard(this.currentPlayer);
-        }
-    }
+            if (this.currentPlayer.isPlayer) {
+                this.printGameBoard();
 
-    public playCard(player: Player) {
-        this.playNpcCard(player);
-        this.printGameBoard();
+                const hand: string[] = this.currentPlayer.hand.map(card => this.getCardPrint(card));
+                const cardIndex = await this.selectCardWithArrows(hand);
+
+                const playedCard = this.currentPlayer.hand[cardIndex as number];
+
+                this.currentTrick.push(playedCard);
+                this.currentPlayer.hand.splice(this.currentPlayer.hand.indexOf(playedCard), 1);
+
+                this.printGameBoard();
+            } else {
+                await this.sleep(1000);
+                this.playNpcCard(this.currentPlayer);
+                this.printGameBoard();
+            }
+        }
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -231,6 +256,45 @@ class Game {
         }
 
         return false;
+    }
+
+    // Main function to prompt the player to select a card using arrow keys
+    public async selectCardWithArrows(hand: string[]) {
+        let cursorPosition = 0; // Start with the first card selected
+        const rl = setupReadlineInterface();
+
+        return new Promise<number>(resolve => {
+            this.printHandWithCursor(hand, cursorPosition);
+
+            process.stdin.on('keypress', (str, key) => {
+                if (key.name === 'up' && cursorPosition > 0) {
+                    cursorPosition--; // Move cursor up
+                } else if (key.name === 'down' && cursorPosition < hand.length - 1) {
+                    cursorPosition++; // Move cursor down
+                } else if (key.name === 'return') {
+                    // User has made a selection
+                    rl.close();
+                    process.stdin.setRawMode(false);
+                    resolve(cursorPosition);
+                    return;
+                }
+
+                console.clear(); // Clear the console for redrawing
+                this.printGameBoard();
+                this.printHandWithCursor(hand, cursorPosition); // Reprint the hand with the new cursor position
+            });
+        });
+    }
+
+    // Function to print the user's hand with a cursor
+    public printHandWithCursor(hand: string[], cursorPosition: number) {
+        hand.forEach((card, index) => {
+            if (index === cursorPosition) {
+                console.log(`> ${card}`); // Highlight the selected card
+            } else {
+                console.log(`  ${card}`);
+            }
+        });
     }
 
     public playNpcCard(player: Player) {
@@ -347,7 +411,7 @@ class Game {
             'Player 4: ',
             this.getHandPrint(this.players[3].hand)
         );
-        console.log('Kitty:    ', this.getHandPrint(this.kitty));
+        console.log('Kitty:      ', this.getHandPrint(this.kitty));
 
         console.log('\n');
 
@@ -361,7 +425,7 @@ class Game {
         console.log('\n\n---------------------------------');
         console.log('\n');
 
-        this.printPlayerTeams(this.players);
+        // this.printPlayerTeams(this.players);
     }
 
     public getDealer(): Player {
@@ -381,7 +445,7 @@ class Game {
             return ' *** WAITING FOR CPU *** ';
         }
 
-        return 'Your Hand: ' + this.getHandPrint(player.hand);
+        return this.getHandPrint(player.hand);
     }
 
     public isCurrentPlayerMarker(player: Player): string {
