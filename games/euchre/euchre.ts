@@ -74,6 +74,7 @@ class Game {
     public kitty: Card[];
     public trump: Suit;
 
+    public trickCount = 0;
     public currentTrick: Card[] = [];
     public currentPlayer?: Player;
 
@@ -121,42 +122,68 @@ class Game {
     public async playGame() {
         const playerOrder = this.getPlayOrder();
 
-        //for each player in playerOrder, play a card
-        for (let playerNum of playerOrder) {
-            this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
-            this.printGameBoard();
-
-            if (this.currentPlayer.isPlayer) {
+        while (this.trickCount < 5) {
+            //for each player in playerOrder, play a card
+            for (let playerNum of playerOrder) {
+                this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
                 this.printGameBoard();
 
-                const hand: string[] = this.currentPlayer.hand.map(card => this.getCardPrint(card));
-                const cardIndex = await this.selectCardWithArrows(hand);
+                if (this.currentPlayer.isPlayer) {
+                    this.printGameBoard();
 
-                const playedCard = this.currentPlayer.hand[cardIndex as number];
+                    const hand: string[] = this.currentPlayer.hand.map(card =>
+                        this.getCardPrint(card)
+                    );
+                    const cardIndex = await this.selectCardWithArrows(hand);
 
-                this.currentTrick.push(playedCard);
-                this.currentPlayer.hand.splice(this.currentPlayer.hand.indexOf(playedCard), 1);
+                    const playedCard = this.currentPlayer.hand[cardIndex as number];
 
-                this.printGameBoard();
-            } else {
-                await this.sleep(3000);
-                this.playNpcCard(this.currentPlayer);
-                this.printGameBoard();
+                    this.currentTrick.push(playedCard);
+                    this.currentPlayer.hand.splice(this.currentPlayer.hand.indexOf(playedCard), 1);
+
+                    this.printGameBoard();
+                } else {
+                    await this.sleep(1000);
+                    this.playNpcCard(this.currentPlayer);
+                    this.printGameBoard();
+                }
             }
+
+            //after each player has played a card, determine the winner of the trick
+            const winningCard = this.getWinningCard();
+
+            console.log('WINNING CARD: ', this.getCardPrint(winningCard));
+
+            //get the index of the winning card in the current trick
+            const winningIndex = this.currentTrick.findIndex(card => card === winningCard);
+
+            //get the player who played the winning card
+            const winningPlayer = this.players.find(player => player.playIndex === winningIndex)!;
+
+            console.log('WINNING PLAYER: ', winningPlayer.playerNum);
+
+            //increment the tricksTaken for the winning player's team
+            const winningTeam = this.teams.find(team => team.players.includes(winningPlayer))!;
+            winningTeam.tricksTaken++;
+
+            this.trickCount++;
+
+            this.currentTrick = [];
+
+            console.log(
+                'WINNING TEAM: ',
+                winningTeam.players.map(player => player.playerNum)
+            );
+
+            this.sleep(1000);
         }
 
-        //after each player has played a card, determine the winner of the trick
-        const winningCard = this.getWinningCard();
-
-        console.log('WINNING CARD: ', this.getCardPrint(winningCard));
-
-        //get the index of the winning card in the current trick
-        const winningIndex = this.currentTrick.findIndex(card => card === winningCard);
-
-        //get the player who played the winning card
-        const winningPlayer = this.players.find(player => player.playIndex === winningIndex)!;
-
-        console.log('WINNING PLAYER: ', winningPlayer.playerNum);
+        //print the winning team
+        const winningTeam = this.teams.find(team => team.tricksTaken >= 3)!;
+        console.log(
+            'FINAL WINNING TEAM: ',
+            winningTeam.players.map(player => player.playerNum)
+        );
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -452,8 +479,11 @@ class Game {
         console.log('---------------------------------\n\n');
         console.log('EUCHRE v0.1\n');
 
+        console.log('Trick Number: ', this.trickCount);
         console.log('Team 1: ', ...this.teams[0].players.map(player => player.playerNum));
+        console.log('Team 1 Tricks: ', this.teams[0].tricksTaken);
         console.log('Team 2: ', ...this.teams[1].players.map(player => player.playerNum));
+        console.log('Team 2 Tricks: ', this.teams[1].tricksTaken);
         console.log('Dealer: ', this.getDealer().playerNum);
         console.log('Current: ', this.currentPlayer?.playerNum);
         console.log('Deal Order: ', ...this.getDealOrder());
