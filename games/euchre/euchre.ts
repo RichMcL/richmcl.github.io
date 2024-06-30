@@ -38,6 +38,7 @@ interface Player {
     isDealer: boolean;
     isPlayerTeammate: boolean;
     dealIndex?: number;
+    playIndex?: number;
 }
 
 interface Team {
@@ -58,6 +59,8 @@ class Game {
     public kitty: Card[];
     public trump: Suit;
 
+    public currentTrick: Card[] = [];
+
     constructor() {
         this.deck = this.buildAndShuffleDeck();
         this.players = this.createPlayers();
@@ -68,6 +71,8 @@ class Game {
         this.trump = this.kitty[0].suit;
 
         this.startGame();
+
+        this.printGameBoard();
     }
 
     public startGame() {
@@ -80,13 +85,19 @@ class Game {
             this.players[(dealerIndex + i) % 4].dealIndex = i;
         }
 
+        // set the playIndex for each player starting left of the dealer
+        for (let p of this.players) {
+            let playIndex = p.dealIndex! - 1;
+
+            if (playIndex < 0) {
+                playIndex = 3;
+            }
+
+            p.playIndex = playIndex;
+        }
+
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
-
-        // logger('trump', this.trump);
-        // logger('players', this.players);
-
-        this.printGameBoard();
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -201,6 +212,66 @@ class Game {
         return false;
     }
 
+    public playNpcCard(player: Player) {
+        const ledSuit = this.getLedSuit();
+        const ledTrump = this.getLedTrump();
+        let playedCard: Card;
+
+        // if trump was led, the player must play a trump card if they have one
+        if (ledTrump) {
+            const trumpCard = player.hand.find(card => card.isTrump);
+            if (trumpCard) {
+                playedCard = trumpCard;
+            } else {
+                // if the player doesn't have a trump card, they can play any card
+                playedCard = player.hand[0];
+            }
+        } else if (ledSuit) {
+            // if the player has a card in the led suit, they must play it
+            const ledSuitCard = player.hand.find(card => card.suit === ledSuit);
+            if (ledSuitCard) {
+                playedCard = ledSuitCard;
+            } else {
+                // if the player doesn't have a card in the led suit, they can play any card
+                playedCard = player.hand[0];
+            }
+        } else {
+            // else the player can play any card
+            playedCard = player.hand[0];
+        }
+
+        this.currentTrick.push(playedCard);
+        player.hand.splice(player.hand.indexOf(playedCard), 1);
+    }
+
+    public getLedSuit() {
+        if (this.currentTrick.length === 0) {
+            return null;
+        }
+
+        return this.currentTrick[0].suit;
+    }
+
+    public getLedTrump() {
+        if (this.currentTrick.length === 0) {
+            return null;
+        }
+
+        return this.currentTrick.find(card => card.isTrump);
+    }
+
+    public getDealOrder() {
+        return this.players
+            .sort((a, b) => a.dealIndex! - b.dealIndex!)
+            .map(player => player.playerNum);
+    }
+
+    public getPlayOrder() {
+        return this.players
+            .sort((a, b) => a.playIndex! - b.playIndex!)
+            .map(player => player.playerNum);
+    }
+
     public printPlayerTeams(players: Player[]) {
         const playerTeams = players.map(player => {
             return {
@@ -221,15 +292,24 @@ class Game {
 
         console.log('Team 1: ', ...this.teams[0].players.map(player => player.playerNum));
         console.log('Team 2: ', ...this.teams[1].players.map(player => player.playerNum));
+        console.log('Dealer: ', this.getDealer().playerNum);
+        console.log('Deal Order: ', ...this.getDealOrder());
+        console.log('Play Order: ', ...this.getPlayOrder());
+
         console.log('Trump: ', this.trump + ' ' + SuitIcon[this.trump]);
         console.log('Kitty Top: ', this.getCardPrint(this.kitty[0]));
-        console.log('Dealer: ', this.getDealer().playerNum);
 
         console.log('Player 1: ', this.getHandPrint(this.players[0].hand));
         console.log('Player 2: ', this.getHandPrint(this.players[1].hand));
         console.log('Player 3: ', this.getHandPrint(this.players[2].hand));
         console.log('Player 4: ', this.getHandPrint(this.players[3].hand));
         console.log('Kitty:    ', this.getHandPrint(this.kitty));
+
+        console.log('\n');
+
+        console.log('Current Trick: ', this.getHandPrint(this.currentTrick));
+        console.log('Led Suit: ', this.getLedSuit());
+        console.log('Led Trump: ', this.getLedTrump());
 
         console.log('\n\n---------------------------------');
         console.log('\n');
