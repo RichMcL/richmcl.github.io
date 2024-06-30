@@ -53,7 +53,7 @@ const logger = (label = '', obj: any): void => {
 
 class Game {
     public deck: Card[];
-    public players: Player[];
+    public players!: Player[];
     public teams: Team[];
     public kitty: Card[];
     public trump: Suit;
@@ -219,10 +219,32 @@ class Game {
         console.log('---------------------------------\n\n');
         console.log('EUCHRE v0.1\n');
 
+        console.log('Team 1: ', ...this.teams[0].players.map(player => player.playerNum));
+        console.log('Team 2: ', ...this.teams[1].players.map(player => player.playerNum));
         console.log('Trump: ', this.trump + ' ' + SuitIcon[this.trump]);
+        console.log('Kitty Top: ', this.getCardPrint(this.kitty[0]));
+        console.log('Dealer: ', this.getDealer().playerNum);
+
+        console.log('Player 1: ', this.getHandPrint(this.players[0].hand));
+        console.log('Player 2: ', this.getHandPrint(this.players[1].hand));
+        console.log('Player 3: ', this.getHandPrint(this.players[2].hand));
+        console.log('Player 4: ', this.getHandPrint(this.players[3].hand));
+        console.log('Kitty:    ', this.getHandPrint(this.kitty));
 
         console.log('\n\n---------------------------------');
         console.log('\n');
+    }
+
+    public getDealer(): Player {
+        return this.players.find(player => player.isDealer)!;
+    }
+
+    public getCardPrint(card: Card): string {
+        return card.value + ' ' + SuitIcon[card.suit];
+    }
+
+    public getHandPrint(hand: Card[]): string {
+        return hand.map(card => this.getCardPrint(card)).join(' - ');
     }
 }
 
