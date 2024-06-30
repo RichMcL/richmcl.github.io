@@ -274,11 +274,7 @@ class Game {
     }
 
     public getLedTrump(): boolean {
-        if (this.currentTrick.length === 0) {
-            return false;
-        }
-
-        return this.currentTrick.find(card => card.isTrump) ? true : false;
+        return this.getLedSuit() === this.trump;
     }
 
     public getDealOrder() {
