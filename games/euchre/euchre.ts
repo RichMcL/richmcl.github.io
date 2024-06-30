@@ -60,6 +60,7 @@ class Game {
     public trump: Suit;
 
     public currentTrick: Card[] = [];
+    public currentPlayer?: Player;
 
     constructor() {
         this.deck = this.buildAndShuffleDeck();
@@ -73,6 +74,8 @@ class Game {
         this.startGame();
 
         this.printGameBoard();
+
+        this.playGame();
     }
 
     public startGame() {
@@ -98,6 +101,24 @@ class Game {
 
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
+    }
+
+    public async playGame() {
+        const playerOrder = this.getPlayOrder();
+
+        //for each player in playerOrder, play a card
+        for (let playerNum of playerOrder) {
+            this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
+            this.printGameBoard();
+
+            await this.sleep(1000);
+            this.playCard(this.currentPlayer);
+        }
+    }
+
+    public playCard(player: Player) {
+        this.playNpcCard(player);
+        this.printGameBoard();
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -252,33 +273,43 @@ class Game {
         return this.currentTrick[0].suit;
     }
 
-    public getLedTrump() {
+    public getLedTrump(): boolean {
         if (this.currentTrick.length === 0) {
-            return null;
+            return false;
         }
 
-        return this.currentTrick.find(card => card.isTrump);
+        return this.currentTrick.find(card => card.isTrump) ? true : false;
     }
 
     public getDealOrder() {
-        return this.players
-            .sort((a, b) => a.dealIndex! - b.dealIndex!)
-            .map(player => player.playerNum);
+        const clone = [...this.players];
+        return [
+            ...clone.sort((a, b) => a.dealIndex! - b.dealIndex!).map(player => player.playerNum)
+        ];
     }
 
     public getPlayOrder() {
-        return this.players
-            .sort((a, b) => a.playIndex! - b.playIndex!)
-            .map(player => player.playerNum);
+        const clone = [...this.players];
+
+        return [
+            ...clone.sort((a, b) => a.playIndex! - b.playIndex!).map(player => player.playerNum)
+        ];
+    }
+
+    public getPlayerByPlayerNum(playerNum: number): Player {
+        return this.players.find(player => player.playerNum === playerNum)!;
     }
 
     public printPlayerTeams(players: Player[]) {
         const playerTeams = players.map(player => {
             return {
+                playerNum: player.playerNum,
                 team: player.team,
                 isPlayer: player.isPlayer,
                 isDealer: player.isDealer,
-                isPlayerTeammate: player.isPlayerTeammate
+                isPlayerTeammate: player.isPlayerTeammate,
+                playIndex: player.playIndex,
+                dealIndex: player.dealIndex
             };
         });
 
@@ -286,23 +317,40 @@ class Game {
     }
 
     public printGameBoard() {
-        console.log('\n');
+        console.log('\x1Bc'); // Clears the screen in most terminal emulators
         console.log('---------------------------------\n\n');
         console.log('EUCHRE v0.1\n');
 
         console.log('Team 1: ', ...this.teams[0].players.map(player => player.playerNum));
         console.log('Team 2: ', ...this.teams[1].players.map(player => player.playerNum));
         console.log('Dealer: ', this.getDealer().playerNum);
+        console.log('Current: ', this.currentPlayer?.playerNum);
         console.log('Deal Order: ', ...this.getDealOrder());
         console.log('Play Order: ', ...this.getPlayOrder());
 
         console.log('Trump: ', this.trump + ' ' + SuitIcon[this.trump]);
         console.log('Kitty Top: ', this.getCardPrint(this.kitty[0]));
 
-        console.log('Player 1: ', this.getHandPrint(this.players[0].hand));
-        console.log('Player 2: ', this.getHandPrint(this.players[1].hand));
-        console.log('Player 3: ', this.getHandPrint(this.players[2].hand));
-        console.log('Player 4: ', this.getHandPrint(this.players[3].hand));
+        console.log(
+            this.isCurrentPlayerMarker(this.players[0]),
+            'Player 1: ',
+            this.getHandPrint(this.players[0].hand)
+        );
+        console.log(
+            this.isCurrentPlayerMarker(this.players[1]),
+            'Player 2: ',
+            this.getHandPrint(this.players[1].hand)
+        );
+        console.log(
+            this.isCurrentPlayerMarker(this.players[2]),
+            'Player 3: ',
+            this.getHandPrint(this.players[2].hand)
+        );
+        console.log(
+            this.isCurrentPlayerMarker(this.players[3]),
+            'Player 4: ',
+            this.getHandPrint(this.players[3].hand)
+        );
         console.log('Kitty:    ', this.getHandPrint(this.kitty));
 
         console.log('\n');
@@ -311,8 +359,13 @@ class Game {
         console.log('Led Suit: ', this.getLedSuit());
         console.log('Led Trump: ', this.getLedTrump());
 
+        console.log('\n');
+        console.log('PLAYER HAND: ', this.getPlayerHandPrint(this.currentPlayer!));
+
         console.log('\n\n---------------------------------');
         console.log('\n');
+
+        this.printPlayerTeams(this.players);
     }
 
     public getDealer(): Player {
@@ -325,6 +378,23 @@ class Game {
 
     public getHandPrint(hand: Card[]): string {
         return hand.map(card => this.getCardPrint(card)).join(' - ');
+    }
+
+    public getPlayerHandPrint(player: Player): string {
+        if (!this.currentPlayer?.isPlayer) {
+            return ' *** WAITING FOR CPU *** ';
+        }
+
+        return 'Your Hand: ' + this.getHandPrint(player.hand);
+    }
+
+    public isCurrentPlayerMarker(player: Player): string {
+        return player.playerNum === this.currentPlayer?.playerNum ? '>' : ' ';
+    }
+
+    // Sleep function using Promise and async/await
+    public sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 
