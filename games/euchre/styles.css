@@ -1,0 +1,24 @@
+.card {
+    width: 72px;
+    height: 95px;
+    border: 1px solid #d9d9d9;
+    margin-bottom: 5px;
+}
+.two-hearts {
+    background: url('img/deck-sprite-sheet.png') 0 0px;
+}
+.two-clubs {
+    background: url('img/deck-sprite-sheet.png') 0 -95px;
+}
+.two-diamonds {
+    background: url('img/deck-sprite-sheet.png') 0 -190px;
+}
+.two-spades {
+    background: url('img/deck-sprite-sheet.png') 0 -285px;
+}
+.three-hearts {
+    background: url('img/deck-sprite-sheet.png') 0 0;
+}
+.four-hearts {
+    background: url('img/deck-sprite-sheet.png') 0 0;
+}
