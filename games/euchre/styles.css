@@ -3,6 +3,11 @@ html {
     background-color: green;
 }
 
+h1 {
+    font-family: monospace; 
+    color: white;
+}
+
 .card-face {
     display: inline-block;
     width: 71px;
@@ -268,4 +273,19 @@ html {
 .ace-spades {
     background-image: url('img/deck-sprite-sheet.png');
     background-position: -852px -285px;
+}
+
+
+/* Animations */
+@keyframes rotating {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+.rotate {
+    animation: rotating 2s linear infinite;
 }
