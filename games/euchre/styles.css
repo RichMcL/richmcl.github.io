@@ -15,8 +15,43 @@ html {
     background-image: url(img/card-backs-seals.png);
     background-position: -71px 0px;
     width: 71px;
-    height: 95px;
+    height: 94px;
     display: inline-block;
+}
+
+.card-wrapper.glass {
+    background-position: -355px -96px;
+    background-color: #878f96;
+    border-radius: 4px;
+}
+
+.card-wrapper.wild {
+    background-position: -213px -96px;
+    border-radius: 4px;
+}
+
+.card-wrapper.bonus {
+    background-position: -71px -96px;
+    border-radius: 4px;
+}
+
+.card-wrapper.mult {
+    background-position: -142px -96px;
+    border-radius: 4px;
+}
+
+.card-wrapper.steel {
+    background-position: -426px -96px;
+    border-radius: 4px;
+}
+
+.card-wrapper.gold {
+    background-position: -426px -1px;
+    border-radius: 4px;
+}
+.card-wrapper.lucky {
+    background-position: -284px -96px;
+    border-radius: 4px;
 }
 
 /* Hearts */
