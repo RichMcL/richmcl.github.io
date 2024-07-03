@@ -1,171 +1,232 @@
+html {
+    height: 100%;
+    background-color: green;
+}
+
 .card {
     display: inline-block;
+    background-color: white;
     width: 71px;
     height: 95px;
     border: 1px solid #d9d9d9;
+    border-radius: 3px;
     margin-bottom: 5px;
+    margin-right: 5px;
+    box-shadow: 1px 3px 3px 0 #2c2c2c;
 }
 
 /* Hearts */
 .two-hearts {
-    background: url('img/deck-sprite-sheet.png') 0 0px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 0px;
 }
 .three-hearts {
-    background: url('img/deck-sprite-sheet.png') -71px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px 0;
 }
 .four-hearts {
-    background: url('img/deck-sprite-sheet.png') -142px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px 0;
 }
 .five-hearts {
-    background: url('img/deck-sprite-sheet.png') -213px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px 0;
 }
 .six-hearts {
-    background: url('img/deck-sprite-sheet.png') -284px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px 0;
 }
 .seven-hearts {
-    background: url('img/deck-sprite-sheet.png') -355px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px 0;
 }
 .eight-hearts {
-    background: url('img/deck-sprite-sheet.png') -426px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px 0;
 }
 .nine-hearts {
-    background: url('img/deck-sprite-sheet.png') -497px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px 0;
 }
 .ten-hearts {
-    background: url('img/deck-sprite-sheet.png') -568px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px 0;
 }
 .jack-hearts {
-    background: url('img/deck-sprite-sheet.png') -639px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px 0;
 }
 .queen-hearts {
-    background: url('img/deck-sprite-sheet.png') -710px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px 0;
 }
 .king-hearts {
-    background: url('img/deck-sprite-sheet.png') -781px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px 0;
 }
 .ace-hearts {
-    background: url('img/deck-sprite-sheet.png') -852px 0;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px 0;
 }
 
 /* Clubs */
 .two-clubs {
-    background: url('img/deck-sprite-sheet.png') 0 -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 -95px;
 }
 .three-clubs {
-    background: url('img/deck-sprite-sheet.png') -71px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px -95px;
 }
 .four-clubs {
-    background: url('img/deck-sprite-sheet.png') -142px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px -95px;
 }
 .five-clubs {
-    background: url('img/deck-sprite-sheet.png') -213px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px -95px;
 }
 .six-clubs {
-    background: url('img/deck-sprite-sheet.png') -284px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px -95px;
 }
 .seven-clubs {
-    background: url('img/deck-sprite-sheet.png') -355px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px -95px;
 }
 .eight-clubs {
-    background: url('img/deck-sprite-sheet.png') -426px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px -95px;
 }
 .nine-clubs {
-    background: url('img/deck-sprite-sheet.png') -497px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px -95px;
 }
 .ten-clubs {
-    background: url('img/deck-sprite-sheet.png') -568px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px -95px;
 }
 .jack-clubs {
-    background: url('img/deck-sprite-sheet.png') -639px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px -95px;
 }
 .queen-clubs {
-    background: url('img/deck-sprite-sheet.png') -710px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px -95px;
 }
 .king-clubs {
-    background: url('img/deck-sprite-sheet.png') -781px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px -95px;
 }
 .ace-clubs {
-    background: url('img/deck-sprite-sheet.png') -852px -95px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px -95px;
 }
 
 /* Diamonds */
 .two-diamonds {
-    background: url('img/deck-sprite-sheet.png') 0 -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 -190px;
 }
 .three-diamonds {
-    background: url('img/deck-sprite-sheet.png') -71px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px -190px;
 }
 .four-diamonds {
-    background: url('img/deck-sprite-sheet.png') -142px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px -190px;
 }
 .five-diamonds {
-    background: url('img/deck-sprite-sheet.png') -213px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px -190px;
 }
 .six-diamonds {
-    background: url('img/deck-sprite-sheet.png') -284px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px -190px;
 }
 .seven-diamonds {
-    background: url('img/deck-sprite-sheet.png') -355px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px -190px;
 }
 .eight-diamonds {
-    background: url('img/deck-sprite-sheet.png') -426px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px -190px;
 }
 .nine-diamonds {
-    background: url('img/deck-sprite-sheet.png') -497px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px -190px;
 }
 .ten-diamonds {
-    background: url('img/deck-sprite-sheet.png') -568px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px -190px;
 }
 .jack-diamonds {
-    background: url('img/deck-sprite-sheet.png') -639px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px -190px;
 }
 .queen-diamonds {
-    background: url('img/deck-sprite-sheet.png') -710px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px -190px;
 }
 .king-diamonds {
-    background: url('img/deck-sprite-sheet.png') -781px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px -190px;
 }
 .ace-diamonds {
-    background: url('img/deck-sprite-sheet.png') -852px -190px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px -190px;
 }
 
 /* Spades */
 .two-spades {
-    background: url('img/deck-sprite-sheet.png') 0 -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 -285px;
 }
 .three-spades {
-    background: url('img/deck-sprite-sheet.png') -71px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px -285px;
 }
 .four-spades {
-    background: url('img/deck-sprite-sheet.png') -142px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px -285px;
 }
 .five-spades {
-    background: url('img/deck-sprite-sheet.png') -213px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px -285px;
 }
 .six-spades {
-    background: url('img/deck-sprite-sheet.png') -284px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px -285px;
 }
 .seven-spades {
-    background: url('img/deck-sprite-sheet.png') -355px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px -285px;
 }
 .eight-spades {
-    background: url('img/deck-sprite-sheet.png') -426px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px -285px;
 }
 .nine-spades {
-    background: url('img/deck-sprite-sheet.png') -497px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px -285px;
 }
 .ten-spades {
-    background: url('img/deck-sprite-sheet.png') -568px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px -285px;
 }
 .jack-spades {
-    background: url('img/deck-sprite-sheet.png') -639px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px -285px;
 }
 .queen-spades {
-    background: url('img/deck-sprite-sheet.png') -710px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px -285px;
 }
 .king-spades {
-    background: url('img/deck-sprite-sheet.png') -781px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px -285px;
 }
 .ace-spades {
-    background: url('img/deck-sprite-sheet.png') -852px -285px;
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px -285px;
 }
