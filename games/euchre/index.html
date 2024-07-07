@@ -3,197 +3,202 @@
     <head>
         <title>Euchre</title>
         <link rel="stylesheet" type="text/css" href="styles.css" />
+        <script src="scripts/layout-grid.js"></script>
     </head>
     <body>
-        <h1>Full Deck</h1>
-        <div class="card-wrapper">
-            <div class="card-face two-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face three-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face four-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face five-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face six-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face seven-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face eight-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face nine-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ten-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face jack-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face queen-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face king-hearts"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ace-hearts"></div>
-        </div>
-        <br />
-        <div class="card-wrapper">
-            <div class="card-face two-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face three-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face four-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face five-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face six-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face seven-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face eight-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face nine-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ten-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face jack-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face queen-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face king-clubs"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ace-clubs"></div>
-        </div>
-        <br />
-        <div class="card-wrapper">
-            <div class="card-face two-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face three-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face four-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face five-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face six-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face seven-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face eight-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face nine-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ten-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face jack-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face queen-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face king-diamonds"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ace-diamonds"></div>
-        </div>
-        <br />
-        <div class="card-wrapper">
-            <div class="card-face two-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face three-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face four-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face five-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face six-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face seven-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face eight-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face nine-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ten-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face jack-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face queen-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face king-spades"></div>
-        </div>
-        <div class="card-wrapper">
-            <div class="card-face ace-spades"></div>
-        </div>
-        <br />
+        <div id="layout-grid"></div>
 
-        <h1>Card Modifiers</h1>
+        <div>
+            <h1>Full Deck</h1>
+            <div class="card-wrapper">
+                <div class="card-face two-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-hearts"></div>
+            </div>
+            <br />
+            <div class="card-wrapper">
+                <div class="card-face two-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-clubs"></div>
+            </div>
+            <br />
+            <div class="card-wrapper">
+                <div class="card-face two-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-diamonds"></div>
+            </div>
+            <br />
+            <div class="card-wrapper">
+                <div class="card-face two-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <br />
 
-        <div class="card-wrapper glass">
-            <div class="card-face ace-spades"></div>
-        </div>
-        <div class="card-wrapper wild">
-            <div class="card-face ace-spades"></div>
-        </div>
-        <div class="card-wrapper bonus">
-            <div class="card-face ace-spades"></div>
-        </div>
-        <div class="card-wrapper mult">
-            <div class="card-face ace-spades"></div>
-        </div>
-        <div class="card-wrapper steel">
-            <div class="card-face ace-spades"></div>
-        </div>
-        <div class="card-wrapper gold">
-            <div class="card-face ace-spades"></div>
-        </div>
-        <div class="card-wrapper lucky">
-            <div class="card-face ace-spades"></div>
-        </div>
+            <h1>Card Modifiers</h1>
 
-        <h1>Animations</h1>
-        <div class="card-wrapper rotate" style="margin-left: 20px">
-            <div class="card-face ace-spades"></div>
+            <div class="card-wrapper glass">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper wild">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper bonus">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper mult">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper steel">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper gold">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper lucky">
+                <div class="card-face ace-spades"></div>
+            </div>
+
+            <h1>Animations</h1>
+            <div class="card-wrapper rotate" style="margin-left: 20px">
+                <div class="card-face ace-spades"></div>
+            </div>
         </div>
     </body>
 </html>
