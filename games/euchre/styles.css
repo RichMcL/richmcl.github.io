@@ -8,7 +8,7 @@ body {
     padding: 0;
     height: 800px;
     width: 1280px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 h1 {
@@ -169,6 +169,30 @@ h1 {
 .card-wrapper.red-deck {
     background-position: 0 -1px;
     border-radius: 4px;
+}
+
+.kitty-wrapper .card-wrapper {
+    display: inline-block;
+    position: absolute;
+}
+
+.kitty-wrapper .card-wrapper:nth-child(1) {
+    margin-top: 9px;
+    margin-left: 9px;
+}
+.kitty-wrapper .card-wrapper:nth-child(2) {
+    margin-top: 6px;
+    margin-left: 6px;
+}
+.kitty-wrapper .card-wrapper:nth-child(3) {
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+#game-board .kitty-wrapper {
+    position: absolute;
+    top: 450px;
+    left: 670px;
 }
 
 /* Hearts */
