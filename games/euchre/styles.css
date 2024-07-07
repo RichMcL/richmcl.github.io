@@ -24,16 +24,12 @@ h1 {
 }
 
 .reload-button {
-    position: fixed;
     padding: 5px; 
     font-family: monospace;
-    right: 0;
 }
 .scroll-button {
-    position: fixed;
     padding: 5px; 
     font-family: monospace;
-    right: 0;
     top: 40px;
 }
 
@@ -86,30 +82,37 @@ h1 {
     width: 1280px;
 }
 
+.score-section {
+    width: 250px;
+    height: 100%;
+    border-right: 2px solid white;
+}
+
 .player-deck {
     position: absolute;
-    bottom: 0;
+    bottom: 25px;
     left: 440px;
 }
 
 .player-2-deck {
     position: absolute;
-    top: 360px;
+    top: 330px;
     transform: rotate(90deg);
-    left: -110px;
+    left: 60px;
 }
 
 .player-3-deck {
     position: absolute;
     left: 440px;
+    top: 30px;
 }
 
 .player-4-deck {
     position: absolute;
-    top: 360px;
+    top: 330px;
     right: 0;
     transform: rotate(270deg);
-    right: -110px;
+    right: -90px;
 }
 
 
@@ -118,8 +121,6 @@ h1 {
     display: inline-block;
     width: 71px;
     height: 95px;
-    /* margin-bottom: 5px; */
-    /* margin-right: 5px; */
 }
 
 .card-wrapper {
