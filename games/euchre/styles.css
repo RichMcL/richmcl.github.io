@@ -9,8 +9,12 @@ body {
 }
 
 h1 {
+    font-family: monospace; 
+    color: white;
     margin-top: 0;
 }
+
+/* DEBUG SECTION */
 
 #layout-grid {
     position: absolute;
@@ -33,17 +37,66 @@ h1 {
     background-color: rgb(255 255 255 / 17%);
 }
 
-h1 {
-    font-family: monospace; 
+#layout-grid .layout-grid-vlabel {
+    position: absolute;
     color: white;
+    font-size: 12px;
+    font-family: monospace;
+    background-color: rgb(255 255 255 / 17%);
+    padding: 2px;
+
 }
+
+#layout-grid .layout-grid-hlabel {
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-family: monospace;
+    background-color: rgb(255 255 255 / 17%);
+    padding: 2px;
+}
+
+/* GAME BOARD */
+
+#game-board {
+    height: 800px;
+    width: 1280px;
+}
+
+.player-deck {
+    position: absolute;
+    bottom: 0;
+    left: 440px;
+}
+
+.player-2-deck {
+    position: absolute;
+    top: 360px;
+    transform: rotate(90deg);
+    left: -110px;
+}
+
+.player-3-deck {
+    position: absolute;
+    left: 440px;
+}
+
+.player-4-deck {
+    position: absolute;
+    top: 360px;
+    right: 0;
+    transform: rotate(270deg);
+    right: -110px;
+}
+
+
 
 .card-face {
     display: inline-block;
     width: 71px;
     height: 95px;
-    margin-bottom: 5px;
-    margin-right: 5px;
+    /* margin-bottom: 5px; */
+    /* margin-right: 5px; */
 }
 
 .card-wrapper {
@@ -86,6 +139,10 @@ h1 {
 }
 .card-wrapper.lucky {
     background-position: -284px -96px;
+    border-radius: 4px;
+}
+.card-wrapper.red-deck {
+    background-position: 0 -1px;
     border-radius: 4px;
 }
 
