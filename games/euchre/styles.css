@@ -88,6 +88,13 @@ h1 {
     border-right: 2px solid white;
 }
 
+.score-section button {
+    display: block;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 200px;
+}
+
 .player-deck {
     position: absolute;
     bottom: 25px;

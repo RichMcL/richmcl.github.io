@@ -21,10 +21,22 @@
                     SCROLL
                 </button>
                 <button
+                    onclick="javascript:document.querySelector('body').style.overflow = 'hidden'"
+                    class="scroll-button"
+                >
+                    UNSCROLL
+                </button>
+                <button
                     onclick="javascript:document.querySelector('#layout-grid').style.display = 'none'"
                     class="scroll-button"
                 >
                     HIDE GRID
+                </button>
+                <button
+                    onclick="javascript:document.querySelector('#layout-grid').style.display = 'block'"
+                    class="scroll-button"
+                >
+                    SHOW GRID
                 </button>
             </div>
 
