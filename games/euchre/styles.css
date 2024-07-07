@@ -34,7 +34,6 @@ h1 {
 .scroll-button {
     padding: 5px; 
     font-family: monospace;
-    top: 40px;
 }
 
 /* DEBUG SECTION */
@@ -98,6 +97,23 @@ h1 {
     margin-bottom: 10px;
     padding: 10px;
     width: 100%;
+}
+
+.score-box {
+    display: inline-block;
+    color: #35664d;
+    border: 2px solid white;
+    font-family: monospace;
+    padding: 5px;
+    width: 110px;
+    text-align: center;
+    margin-bottom: 10px;
+    background: white;
+}
+
+.score-box-value {
+    display: block;
+    font-size: 40px;
 }
 
 .player-deck {
