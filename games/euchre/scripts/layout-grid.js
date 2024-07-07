@@ -42,7 +42,7 @@
             }
         }
 
-        for (let i = 0; i <= 720; i += 10) {
+        for (let i = 0; i <= 800; i += 10) {
             const hLineElement = createHLineElement(i);
             container.appendChild(hLineElement);
 
