@@ -105,6 +105,7 @@ h1 {
     width: 71px;
     height: 94px;
     display: inline-block;
+    zoom: 1.5;
 }
 
 .card-wrapper.glass {
