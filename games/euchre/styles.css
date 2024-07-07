@@ -106,16 +106,19 @@ h1 {
     left: 485px;
 }
 
-.player-played {
+.played-card-zone {
     position: absolute;
-    border: 3px solid white;
+    border: 4px solid #cacaca;
     height: 155px;
     width: 120px;
+    border-radius: 9px;
+    padding-top: 2px;
+    padding-left: 2px;
+}
+
+.player-played {
     top: 442px;
     left: 700px;
-    border-radius: 4px;
-    padding-top: 3px;
-    padding-left: 3px;
 }
 
 .player-2-deck {
@@ -125,20 +128,14 @@ h1 {
     left: 190px;
 }
 
-.player-2-played {
-    position: absolute;
-    border: 3px solid white;
-    height: 155px;
-    width: 120px;
-    top: 203px;
-    left: 700px;
-    border-radius: 4px;
-    padding-top: 3px;
-    padding-left: 3px;
-}
-
 .player-2-deck .card-wrapper {
     margin-left: -30px;
+}
+
+.player-2-played {
+    top: 320px;
+    left: 480px;
+    /* transform: rotate(90deg); */
 }
 
 .player-3-deck {
@@ -151,6 +148,11 @@ h1 {
     margin-left: -30px;
 }
 
+.player-3-played {
+    top: 203px;
+    left: 700px;
+}
+
 .player-4-deck {
     position: absolute;
     top: 305px;
@@ -160,6 +162,12 @@ h1 {
 
 .player-4-deck .card-wrapper {
     margin-left: -30px;
+}
+
+.player-4-played {
+    top: 320px;
+    left: 930px;
+    /* transform: rotate(270deg); */
 }
 
 .card-face {
@@ -236,8 +244,8 @@ h1 {
 
 #game-board .kitty-wrapper {
     position: absolute;
-    top: 450px;
-    left: 485px;
+    top: 620px;
+    left: 295px;
 }
 
 /* Hearts */
