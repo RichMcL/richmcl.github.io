@@ -8,7 +8,11 @@ body {
     padding: 0;
     height: 800px;
     width: 1280px;
-    /* overflow: hidden; */
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 h1 {
@@ -85,6 +89,7 @@ h1 {
 .score-section {
     width: 250px;
     height: 100%;
+    padding: 5px;
     border-right: 2px solid white;
 }
 
@@ -92,13 +97,13 @@ h1 {
     display: block;
     margin-bottom: 10px;
     padding: 10px;
-    width: 200px;
+    width: 100%;
 }
 
 .player-deck {
     position: absolute;
     bottom: 25px;
-    left: 440px;
+    left: 485px;
 }
 
 .player-2-deck {
@@ -110,7 +115,7 @@ h1 {
 
 .player-3-deck {
     position: absolute;
-    left: 440px;
+    left: 485px;
     top: 30px;
 }
 
@@ -119,10 +124,8 @@ h1 {
     top: 330px;
     right: 0;
     transform: rotate(270deg);
-    right: -90px;
+    right: -180px;
 }
-
-
 
 .card-face {
     display: inline-block;
@@ -199,7 +202,7 @@ h1 {
 #game-board .kitty-wrapper {
     position: absolute;
     top: 450px;
-    left: 670px;
+    left: 485px;
 }
 
 /* Hearts */
