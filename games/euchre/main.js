@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcRenderer } = require('electron');
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -7,6 +7,8 @@ const createWindow = () => {
     });
 
     win.loadFile('index.html');
+
+    win.setAspectRatio(16 / 10);
 };
 
 app.whenReady().then(() => {
