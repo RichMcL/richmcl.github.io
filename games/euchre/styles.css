@@ -113,9 +113,13 @@ h1 {
 }
 
 .player-deck {
-    position: absolute;
     bottom: 25px;
-    left: 485px;
+    left: 571px;
+    position: absolute;
+    width: 375px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .played-card-zone {
@@ -135,25 +139,32 @@ h1 {
 
 .player-2-deck {
     position: absolute;
-    top: 350px;
-    transform: rotate(90deg);
-    left: 190px;
+    top: 245px;
+    left: 305px;
+    height: 375px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .player-2-deck .card-wrapper {
-    margin-left: -30px;
+    margin-top: -45px;
+    transform: rotate(90deg);
 }
 
 .player-2-played {
     top: 320px;
     left: 480px;
-    /* transform: rotate(90deg); */
 }
 
 .player-3-deck {
-    position: absolute;
-    left: 620px;
+    left: 590px;
     top: 30px;
+    position: absolute;
+    width: 375px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .player-3-deck .card-wrapper {
@@ -167,13 +178,17 @@ h1 {
 
 .player-4-deck {
     position: absolute;
-    top: 305px;
-    transform: rotate(270deg);
-    right: -60px;
+    top: 245px;
+    right: 50px;
+    height: 375px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .player-4-deck .card-wrapper {
-    margin-left: -30px;
+    margin-top: -45px;
+    transform: rotate(270deg);
 }
 
 .player-4-played {
