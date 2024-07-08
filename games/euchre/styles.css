@@ -112,18 +112,25 @@ h1 {
 }
 
 .score-box {
-    color: #35664d;
-    border: 2px solid white;
-    padding: 5px;
-    width: 110px;
+    display: flex;
+    align-items: center;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    gap: 10px;
     text-align: center;
     margin-bottom: 10px;
-    background: white;
+    background: #53a57b;
+    text-shadow: 1px 1px 2px black;
+    width: 100%;
 }
 
 .score-box-value {
-    display: block;
     font-size: 40px;
+    flex: 1;
+    background: rgb(0 0 0 / 35%);
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .player-deck {
