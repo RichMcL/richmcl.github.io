@@ -52,6 +52,25 @@ const logger = (label = '', obj: any): void => {
     console.dir(obj, { depth: null, colors: true });
 };
 
+const cardValueToKey = (value: CardValue): string => {
+    switch (value) {
+        case CardValue.Nine:
+            return 'nine';
+        case CardValue.Ten:
+            return 'ten';
+        case CardValue.Jack:
+            return 'jack';
+        case CardValue.Queen:
+            return 'queen';
+        case CardValue.King:
+            return 'king';
+        case CardValue.Ace:
+            return 'ace';
+    }
+
+    return '';
+};
+
 class Game {
     public deck: Card[];
     public players!: Player[];
@@ -98,6 +117,78 @@ class Game {
 
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
+
+        console.log('Game started', this);
+
+        const player1DeckNode = document.querySelectorAll('.player-deck')[0];
+
+        this.players[0].hand.forEach(card => {
+            const cardHtml = `
+                <div class="card-wrapper">
+                    <div class="card-face ${cardValueToKey(
+                        card.value
+                    )}-${card.suit.toLowerCase()}"></div>
+                </div>
+            `;
+
+            player1DeckNode.innerHTML += cardHtml;
+        });
+
+        const player2DeckNode = document.querySelectorAll('.player-2-deck')[0];
+
+        this.players[1].hand.forEach(card => {
+            const cardHtml = `
+                <div class="card-wrapper">
+                    <div class="card-face ${cardValueToKey(
+                        card.value
+                    )}-${card.suit.toLowerCase()}"></div>
+                </div>
+            `;
+
+            player2DeckNode.innerHTML += cardHtml;
+        });
+
+        const player3DeckNode = document.querySelectorAll('.player-3-deck')[0];
+
+        this.players[2].hand.forEach(card => {
+            const cardHtml = `
+                <div class="card-wrapper">
+                    <div class="card-face ${cardValueToKey(
+                        card.value
+                    )}-${card.suit.toLowerCase()}"></div>
+                </div>
+            `;
+
+            player3DeckNode.innerHTML += cardHtml;
+        });
+
+        const player4DeckNode = document.querySelectorAll('.player-4-deck')[0];
+
+        this.players[3].hand.forEach(card => {
+            const cardHtml = `
+                <div class="card-wrapper">
+                    <div class="card-face ${cardValueToKey(
+                        card.value
+                    )}-${card.suit.toLowerCase()}"></div>
+                </div>
+            `;
+
+            player4DeckNode.innerHTML += cardHtml;
+        });
+
+        const kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
+
+        this.kitty.forEach(card => {
+            const cardHtml = `
+                <div class="card-wrapper">
+                    <div class="card-face ${cardValueToKey(
+                        card.value
+                    )}-${card.suit.toLowerCase()}"></div>
+                </div>
+            `;
+
+            kittyDeckNode.innerHTML += cardHtml;
+        });
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -380,6 +471,8 @@ class Game {
 }
 
 (() => {
-    const game = new Game();
-    (window as any).game = game;
+    setTimeout(() => {
+        const game = new Game();
+        (window as any).game = game;
+    }, 100);
 })();
