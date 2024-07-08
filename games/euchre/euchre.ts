@@ -121,6 +121,7 @@ class Game {
         console.log('Game started', this);
 
         const player1DeckNode = document.querySelectorAll('.player-deck')[0];
+        player1DeckNode.innerHTML = '';
 
         this.players[0].hand.forEach(card => {
             const cardHtml = `
@@ -135,6 +136,7 @@ class Game {
         });
 
         const player2DeckNode = document.querySelectorAll('.player-2-deck')[0];
+        player2DeckNode.innerHTML = '';
 
         this.players[1].hand.forEach(card => {
             const cardHtml = `
@@ -149,6 +151,7 @@ class Game {
         });
 
         const player3DeckNode = document.querySelectorAll('.player-3-deck')[0];
+        player3DeckNode.innerHTML = '';
 
         this.players[2].hand.forEach(card => {
             const cardHtml = `
@@ -163,6 +166,7 @@ class Game {
         });
 
         const player4DeckNode = document.querySelectorAll('.player-4-deck')[0];
+        player4DeckNode.innerHTML = '';
 
         this.players[3].hand.forEach(card => {
             const cardHtml = `

@@ -27,7 +27,7 @@ h1 {
     font-style: normal;
 }
 
-.reload-button, .scroll-button, .grid-button {
+.reload-button, .scroll-button, .grid-button, .deal-button {
     padding: 5px; 
     font-family: monospace;
 }
@@ -148,7 +148,7 @@ h1 {
 }
 
 .player-2-deck .card-wrapper {
-    margin-top: -45px;
+    margin-top: -60px;
     transform: rotate(90deg);
 }
 
@@ -168,7 +168,7 @@ h1 {
 }
 
 .player-3-deck .card-wrapper {
-    margin-left: -30px;
+    margin-left: -37px;
 }
 
 .player-3-played {
@@ -182,12 +182,12 @@ h1 {
     right: 50px;
     height: 375px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: center;
 }
 
 .player-4-deck .card-wrapper {
-    margin-top: -45px;
+    margin-top: -60px;
     transform: rotate(270deg);
 }
 

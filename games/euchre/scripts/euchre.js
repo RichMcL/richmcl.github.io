@@ -92,6 +92,7 @@ var Game = /** @class */ (function () {
         this.setTrumpOnDeck();
         console.log('Game started', this);
         var player1DeckNode = document.querySelectorAll('.player-deck')[0];
+        player1DeckNode.innerHTML = '';
         this.players[0].hand.forEach(function (card) {
             var cardHtml =
                 '\n                <div class="card-wrapper">\n                    <div class="card-face '
@@ -103,6 +104,7 @@ var Game = /** @class */ (function () {
             player1DeckNode.innerHTML += cardHtml;
         });
         var player2DeckNode = document.querySelectorAll('.player-2-deck')[0];
+        player2DeckNode.innerHTML = '';
         this.players[1].hand.forEach(function (card) {
             var cardHtml =
                 '\n                <div class="card-wrapper">\n                    <div class="card-face '
@@ -114,6 +116,7 @@ var Game = /** @class */ (function () {
             player2DeckNode.innerHTML += cardHtml;
         });
         var player3DeckNode = document.querySelectorAll('.player-3-deck')[0];
+        player3DeckNode.innerHTML = '';
         this.players[2].hand.forEach(function (card) {
             var cardHtml =
                 '\n                <div class="card-wrapper">\n                    <div class="card-face '
@@ -125,6 +128,7 @@ var Game = /** @class */ (function () {
             player3DeckNode.innerHTML += cardHtml;
         });
         var player4DeckNode = document.querySelectorAll('.player-4-deck')[0];
+        player4DeckNode.innerHTML = '';
         this.players[3].hand.forEach(function (card) {
             var cardHtml =
                 '\n                <div class="card-wrapper">\n                    <div class="card-face '

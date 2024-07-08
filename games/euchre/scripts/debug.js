@@ -20,6 +20,11 @@ function toggleGrid() {
     document.querySelector('#layout-grid').style.display = 'none';
 }
 
+function reDeal() {
+    const game = new Game();
+    window.game = game;
+}
+
 (() => {
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.reload-button').forEach(button => {
@@ -32,6 +37,10 @@ function toggleGrid() {
 
         document.querySelectorAll('.grid-button').forEach(button => {
             button.addEventListener('click', toggleGrid);
+        });
+
+        document.querySelectorAll('.deal-button').forEach(button => {
+            button.addEventListener('click', reDeal);
         });
     });
 })();
