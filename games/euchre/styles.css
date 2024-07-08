@@ -27,11 +27,7 @@ h1 {
     font-style: normal;
 }
 
-.reload-button {
-    padding: 5px; 
-    font-family: monospace;
-}
-.scroll-button {
+.reload-button, .scroll-button, .grid-button {
     padding: 5px; 
     font-family: monospace;
 }

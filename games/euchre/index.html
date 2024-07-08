@@ -5,6 +5,7 @@
         <link href="fonts/PressStart2P-Regular.ttf" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="styles.css" />
         <script src="scripts/layout-grid.js"></script>
+        <script src="scripts/euchre.js"></script>
     </head>
     <body>
         <div id="layout-grid"></div>
@@ -20,33 +21,9 @@
                     <span class="score-box-value">&heartsuit;</span>
                 </div>
 
-                <button onclick="javascript:window.location.reload();" class="reload-button">
-                    RELOAD
-                </button>
-                <button
-                    onclick="javascript:document.querySelector('body').style.overflow = 'auto'"
-                    class="scroll-button"
-                >
-                    SCROLL
-                </button>
-                <button
-                    onclick="javascript:document.querySelector('body').style.overflow = 'hidden'"
-                    class="scroll-button"
-                >
-                    UNSCROLL
-                </button>
-                <button
-                    onclick="javascript:document.querySelector('#layout-grid').style.display = 'none'"
-                    class="scroll-button"
-                >
-                    HIDE GRID
-                </button>
-                <button
-                    onclick="javascript:document.querySelector('#layout-grid').style.display = 'block'"
-                    class="scroll-button"
-                >
-                    SHOW GRID
-                </button>
+                <button class="reload-button">RELOAD</button>
+                <button class="scroll-button">TOGGLE SCROLL</button>
+                <button class="grid-button">TOGGLE GRID</button>
             </div>
 
             <div class="player-deck">
