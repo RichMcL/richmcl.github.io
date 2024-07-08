@@ -1,18 +1,3 @@
-const readline = require('readline');
-
-// Function to initialize the readline interface and capture keypress events
-function setupReadlineInterface() {
-    readline.emitKeypressEvents(process.stdin);
-    process.stdin.setRawMode(true);
-
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    return rl;
-}
-
 enum Suit {
     Spades = 'Spades',
     Clubs = 'Clubs',
@@ -88,10 +73,6 @@ class Game {
         this.trump = this.kitty[0].suit;
 
         this.startGame();
-
-        this.printGameBoard();
-
-        this.playGame();
     }
 
     public startGame() {
@@ -117,73 +98,6 @@ class Game {
 
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
-    }
-
-    public async playGame() {
-        const playerOrder = this.getPlayOrder();
-
-        while (this.trickCount < 5) {
-            //for each player in playerOrder, play a card
-            for (let playerNum of playerOrder) {
-                this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
-                this.printGameBoard();
-
-                if (this.currentPlayer.isPlayer) {
-                    this.printGameBoard();
-
-                    const hand: string[] = this.currentPlayer.hand.map(card =>
-                        this.getCardPrint(card)
-                    );
-                    const cardIndex = await this.selectCardWithArrows(hand);
-
-                    const playedCard = this.currentPlayer.hand[cardIndex as number];
-
-                    this.currentTrick.push(playedCard);
-                    this.currentPlayer.hand.splice(this.currentPlayer.hand.indexOf(playedCard), 1);
-
-                    this.printGameBoard();
-                } else {
-                    await this.sleep(1000);
-                    this.playNpcCard(this.currentPlayer);
-                    this.printGameBoard();
-                }
-            }
-
-            //after each player has played a card, determine the winner of the trick
-            const winningCard = this.getWinningCard();
-
-            console.log('WINNING CARD: ', this.getCardPrint(winningCard));
-
-            //get the index of the winning card in the current trick
-            const winningIndex = this.currentTrick.findIndex(card => card === winningCard);
-
-            //get the player who played the winning card
-            const winningPlayer = this.players.find(player => player.playIndex === winningIndex)!;
-
-            console.log('WINNING PLAYER: ', winningPlayer.playerNum);
-
-            //increment the tricksTaken for the winning player's team
-            const winningTeam = this.teams.find(team => team.players.includes(winningPlayer))!;
-            winningTeam.tricksTaken++;
-
-            this.trickCount++;
-
-            this.currentTrick = [];
-
-            console.log(
-                'WINNING TEAM: ',
-                winningTeam.players.map(player => player.playerNum)
-            );
-
-            this.sleep(1000);
-        }
-
-        //print the winning team
-        const winningTeam = this.teams.find(team => team.tricksTaken >= 3)!;
-        console.log(
-            'FINAL WINNING TEAM: ',
-            winningTeam.players.map(player => player.playerNum)
-        );
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -296,45 +210,6 @@ class Game {
         }
 
         return false;
-    }
-
-    // Main function to prompt the player to select a card using arrow keys
-    public async selectCardWithArrows(hand: string[]) {
-        let cursorPosition = 0; // Start with the first card selected
-        const rl = setupReadlineInterface();
-
-        return new Promise<number>(resolve => {
-            this.printHandWithCursor(hand, cursorPosition);
-
-            process.stdin.on('keypress', (str, key) => {
-                if (key.name === 'up' && cursorPosition > 0) {
-                    cursorPosition--; // Move cursor up
-                } else if (key.name === 'down' && cursorPosition < hand.length - 1) {
-                    cursorPosition++; // Move cursor down
-                } else if (key.name === 'return') {
-                    // User has made a selection
-                    rl.close();
-                    process.stdin.setRawMode(false);
-                    resolve(cursorPosition);
-                    return;
-                }
-
-                console.clear(); // Clear the console for redrawing
-                this.printGameBoard();
-                this.printHandWithCursor(hand, cursorPosition); // Reprint the hand with the new cursor position
-            });
-        });
-    }
-
-    // Function to print the user's hand with a cursor
-    public printHandWithCursor(hand: string[], cursorPosition: number) {
-        hand.forEach((card, index) => {
-            if (index === cursorPosition) {
-                console.log(`> ${card}`); // Highlight the selected card
-            } else {
-                console.log(`  ${card}`);
-            }
-        });
     }
 
     public playNpcCard(player: Player) {
@@ -474,61 +349,6 @@ class Game {
         logger('playerTeams', playerTeams);
     }
 
-    public printGameBoard() {
-        console.log('\x1Bc'); // Clears the screen in most terminal emulators
-        console.log('---------------------------------\n\n');
-        console.log('EUCHRE v0.1\n');
-
-        console.log('Trick Number: ', this.trickCount);
-        console.log('Team 1: ', ...this.teams[0].players.map(player => player.playerNum));
-        console.log('Team 1 Tricks: ', this.teams[0].tricksTaken);
-        console.log('Team 2: ', ...this.teams[1].players.map(player => player.playerNum));
-        console.log('Team 2 Tricks: ', this.teams[1].tricksTaken);
-        console.log('Dealer: ', this.getDealer().playerNum);
-        console.log('Current: ', this.currentPlayer?.playerNum);
-        console.log('Deal Order: ', ...this.getDealOrder());
-        console.log('Play Order: ', ...this.getPlayOrder());
-
-        console.log('Trump: ', this.trump + ' ' + SuitIcon[this.trump]);
-        console.log('Kitty Top: ', this.getCardPrint(this.kitty[0]));
-
-        console.log(
-            this.isCurrentPlayerMarker(this.players[0]),
-            'Player 1: ',
-            this.getHandPrint(this.players[0].hand)
-        );
-        console.log(
-            this.isCurrentPlayerMarker(this.players[1]),
-            'Player 2: ',
-            this.getHandPrint(this.players[1].hand)
-        );
-        console.log(
-            this.isCurrentPlayerMarker(this.players[2]),
-            'Player 3: ',
-            this.getHandPrint(this.players[2].hand)
-        );
-        console.log(
-            this.isCurrentPlayerMarker(this.players[3]),
-            'Player 4: ',
-            this.getHandPrint(this.players[3].hand)
-        );
-        console.log('Kitty:      ', this.getHandPrint(this.kitty));
-
-        console.log('\n');
-
-        console.log('Current Trick: ', this.getHandPrint(this.currentTrick));
-        console.log('Led Suit: ', this.getLedSuit());
-        console.log('Led Trump: ', this.getLedTrump());
-
-        console.log('\n');
-        console.log('PLAYER HAND: ', this.getPlayerHandPrint(this.currentPlayer!));
-
-        console.log('\n\n---------------------------------');
-        console.log('\n');
-
-        // this.printPlayerTeams(this.players);
-    }
-
     public getDealer(): Player {
         return this.players.find(player => player.isDealer)!;
     }
@@ -561,4 +381,5 @@ class Game {
 
 (() => {
     const game = new Game();
+    (window as any).game = game;
 })();
