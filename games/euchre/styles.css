@@ -1,6 +1,15 @@
+@font-face {
+    font-family: 'Balatro';
+    src: url('./fonts/balatro/balatro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html {
     height: 100%;
     background-color: #35654d;
+    font-family: 'Balatro', system-ui;
+
 }
 
 body {
@@ -9,6 +18,11 @@ body {
     height: 800px;
     width: 1280px;
     overflow: hidden;
+    font-family: 'Balatro', system-ui;
+}
+
+button {
+    font-family: 'Balatro', system-ui;
 }
 
 * {
@@ -16,7 +30,6 @@ body {
 }
 
 h1 {
-    font-family: monospace; 
     color: white;
     margin-top: 0;
 }
@@ -27,9 +40,12 @@ h1 {
     font-style: normal;
 }
 
+.balatro-font {
+    font-family: 'Balatro', system-ui;
+}
+
 .reload-button, .scroll-button, .grid-button, .deal-button {
     padding: 5px; 
-    font-family: monospace;
 }
 
 /* DEBUG SECTION */
@@ -96,10 +112,8 @@ h1 {
 }
 
 .score-box {
-    display: inline-block;
     color: #35664d;
     border: 2px solid white;
-    font-family: monospace;
     padding: 5px;
     width: 110px;
     text-align: center;
@@ -273,6 +287,36 @@ h1 {
     position: absolute;
     top: 620px;
     left: 295px;
+}
+
+/* Icons */
+.icon-hearts {
+    background-image: url('img/icons.png');
+    background-position: 0px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+.icon-diamonds {
+    background-image: url('img/icons.png');
+    background-position: -18px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+.icon-clubs {
+    background-image: url('img/icons.png');
+    background-position: -36px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+.icon-spades {
+    background-image: url('img/icons.png');
+    background-position: -54px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
 }
 
 /* Hearts */
