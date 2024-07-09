@@ -194,7 +194,8 @@ class Game {
             kittyDeckNode.innerHTML += cardHtml;
         });
 
-        document.querySelectorAll('#trump-box')[0].className = `icon-${this.trump.toLowerCase()}`;
+        document.querySelectorAll('#trump-icon')[0].className = `icon-${this.trump.toLowerCase()}`;
+        document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
     }
 
     public buildAndShuffleDeck(): Card[] {

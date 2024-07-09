@@ -115,7 +115,8 @@ var Game = /** @class */ (function () {
             var cardHtml = "\n                <div class=\"card-wrapper\">\n                    <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n                </div>\n            ");
             kittyDeckNode.innerHTML += cardHtml;
         });
-        document.querySelectorAll('#trump-box')[0].className = "icon-".concat(this.trump.toLowerCase());
+        document.querySelectorAll('#trump-icon')[0].className = "icon-".concat(this.trump.toLowerCase());
+        document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
     };
     Game.prototype.buildAndShuffleDeck = function () {
         var deck = [];

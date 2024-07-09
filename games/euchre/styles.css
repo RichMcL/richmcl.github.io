@@ -133,6 +133,19 @@ h1 {
     border-radius: 5px;
 }
 
+.trump-box-value {
+    flex: 1;
+    background: rgb(0 0 0 / 35%);
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.trump-box-value .trump-value {
+    margin-right: 5px;
+}
+
 .player-deck {
     bottom: 25px;
     left: 571px;
