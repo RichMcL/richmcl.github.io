@@ -19,6 +19,10 @@ function toggleGrid() {
     }
     document.querySelector('#layout-grid').style.display = 'none';
 }
+function toggleDebug() {
+    const debugMenu = document.querySelector('#debug-menu');
+    debugMenu.classList.toggle('hidden');
+}
 
 function reDeal() {
     const game = new Game();
@@ -41,6 +45,10 @@ function reDeal() {
 
         document.querySelectorAll('.deal-button').forEach(button => {
             button.addEventListener('click', reDeal);
+        });
+
+        document.querySelectorAll('.debug-button, .close-debug-button').forEach(button => {
+            button.addEventListener('click', toggleDebug);
         });
     });
 })();

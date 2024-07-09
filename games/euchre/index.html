@@ -10,10 +10,22 @@
     <body>
         <div id="layout-grid"></div>
 
+        <div id="debug-menu" class="hidden">
+            <button class="reload-button balatro-font">RELOAD</button>
+            <button class="deal-button">DEAL</button>
+            <button class="scroll-button">TOGGLE SCROLL</button>
+            <button class="grid-button">TOGGLE GRID</button>
+            <button class="close-debug-button">CLOSE</button>
+        </div>
+
         <div id="game-board">
             <div class="score-section">
                 <div class="score-box">
-                    <span>Score</span>
+                    <span>Your<br />Score</span>
+                    <span class="score-box-value">5</span>
+                </div>
+                <div class="score-box">
+                    <span>Opp.<br />Score</span>
                     <span class="score-box-value">5</span>
                 </div>
                 <div class="score-box">
@@ -24,10 +36,11 @@
                     </span>
                 </div>
 
-                <button class="reload-button balatro-font">RELOAD</button>
+                <!-- <button class="reload-button balatro-font">RELOAD</button>
                 <button class="deal-button">DEAL</button>
                 <button class="scroll-button">TOGGLE SCROLL</button>
-                <button class="grid-button">TOGGLE GRID</button>
+                <button class="grid-button">TOGGLE GRID</button> -->
+                <button class="debug-button">DEBUG</button>
             </div>
 
             <div class="player-deck"></div>
