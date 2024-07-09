@@ -89,7 +89,7 @@ class Game {
         this.kitty = this.dealDeck(this.deck, this.players);
 
         //set trump to the top card of the kitty
-        this.trump = this.kitty[0].suit;
+        this.trump = this.kitty[3].suit;
 
         this.startGame();
     }
@@ -193,6 +193,8 @@ class Game {
 
             kittyDeckNode.innerHTML += cardHtml;
         });
+
+        document.querySelectorAll('#trump-box')[0].className = `icon-${this.trump.toLowerCase()}`;
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -475,8 +477,8 @@ class Game {
 }
 
 (() => {
-    setTimeout(() => {
+    document.addEventListener('DOMContentLoaded', () => {
         const game = new Game();
         (window as any).game = game;
-    }, 100);
+    });
 })();

@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
       // Your existing compiler options
+      "outDir": "./scripts",
     },
     "exclude": [
       "node_modules",
       "scripts" // Add this line to exclude the dist folder
-    ]
+    ],
+    "include": ["euchre.ts"]
   }
