@@ -226,7 +226,7 @@ h1 {
 
 .player-played {
     top: 422px;
-    left: 700px;
+    left: 715px;
 }
 
 .player-2-name {
@@ -261,7 +261,7 @@ h1 {
 
 .player-2-played {
     top: 320px;
-    left: 530px;
+    left: 550px;
 }
 
 .player-3-name {
@@ -293,7 +293,7 @@ h1 {
 
 .player-3-played {
     top: 220px;
-    left: 700px;
+    left: 715px;
 }
 
 .player-4-name {
@@ -328,7 +328,7 @@ h1 {
 
 .player-4-played {
     top: 320px;
-    left: 870px;
+    left: 880px;
     /* transform: rotate(270deg); */
 }
 
