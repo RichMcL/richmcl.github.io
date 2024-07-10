@@ -10,15 +10,15 @@
     <body>
         <div id="layout-grid"></div>
 
-        <div id="debug-menu" class="hidden">
-            <button class="reload-button yellow-button">RELOAD</button>
-            <button class="deal-button yellow-button">DEAL</button>
-            <button class="scroll-button yellow-button">TOGGLE SCROLL</button>
-            <button class="grid-button yellow-button">TOGGLE GRID</button>
-            <button class="close-debug-button yellow-button">CLOSE</button>
-        </div>
-
         <div id="game-board">
+            <div id="debug-menu" class="hidden">
+                <button class="reload-button yellow-button">RELOAD</button>
+                <button class="deal-button yellow-button">DEAL</button>
+                <button class="scroll-button yellow-button">TOGGLE SCROLL</button>
+                <button class="grid-button yellow-button">TOGGLE GRID</button>
+                <button class="close-debug-button yellow-button">CLOSE</button>
+            </div>
+
             <div class="score-section">
                 <div class="score-box">
                     <span>Your<br />Score</span>
@@ -78,15 +78,13 @@
             <div class="kitty-wrapper"></div>
         </div>
 
-        <div>
+        <div style="display: none">
             <h1>Icons</h1>
             <div class="icon-hearts"></div>
             <div class="icon-diamonds"></div>
             <div class="icon-clubs"></div>
             <div class="icon-spades"></div>
-        </div>
 
-        <div>
             <h1>Full Deck</h1>
             <div class="card-wrapper">
                 <div class="card-face two-hearts"></div>
