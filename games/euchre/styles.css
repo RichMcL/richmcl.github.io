@@ -1,3 +1,6 @@
+:root {
+    --orange: #a66202
+}
 @font-face {
     font-family: 'Balatro';
     src: url('./fonts/balatro/balatro.ttf') format('truetype');
@@ -135,7 +138,10 @@ h1 {
     width: 250px;
     height: 100%;
     padding: 5px;
-    border-right: 2px solid white;
+    border-right: 2px solid var(--orange);
+    background-color: #293a3a;
+    border-left: 2px solid var(--orange);
+    margin-left: 20px;
 }
 
 .score-section button {
@@ -154,7 +160,7 @@ h1 {
     gap: 10px;
     text-align: center;
     margin-bottom: 10px;
-    background: #53a57b;
+    background: var(--orange);
     text-shadow: 1px 1px 2px black;
     width: 100%;
 }
