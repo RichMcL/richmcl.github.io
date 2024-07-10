@@ -1,6 +1,18 @@
 :root {
-    --orange: #a66202
+    --base: #6c6685;
 }
+
+:root.orange {
+    --base: #a66202;
+}
+
+:root.lightblue {
+    --base: #0278a6;
+}
+:root.lightyellow {
+    --base: #ffc65c;
+}
+
 @font-face {
     font-family: 'Balatro';
     src: url('./fonts/balatro/balatro.ttf') format('truetype');
@@ -138,9 +150,9 @@ h1 {
     width: 250px;
     height: 100%;
     padding: 5px;
-    border-right: 2px solid var(--orange);
+    border-right: 2px solid var(--base);
     background-color: #293a3a;
-    border-left: 2px solid var(--orange);
+    border-left: 2px solid var(--base);
     margin-left: 20px;
 }
 
@@ -160,7 +172,7 @@ h1 {
     gap: 10px;
     text-align: center;
     margin-bottom: 10px;
-    background: var(--orange);
+    background: var(--base);
     text-shadow: 1px 1px 2px black;
     width: 100%;
     line-height: 1.2;
@@ -190,14 +202,16 @@ h1 {
 .player-name {
     position: absolute;
     left: 670px;
-    bottom: -1px;
-    background-color: var(--orange);
+    bottom: -3px;
+    background-color: var(--base);
     color: white;
     width: 180px;
     text-align: center;
-    padding: 4px;
-    font-size: 12px;
+    padding: 4px 0 6px;
+    font-size: 14px;
     border-radius: 10px 10px 0 0;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
 }
 
 .player-deck {
@@ -231,17 +245,21 @@ h1 {
 
 .player-2-name {
     position: absolute;
-    left: 270px;
+    left: 269px;
     top: 308px;
-    background-color: var(--orange);
+    background-color: var(--base);
     color: white;
     height: 180px;
     text-align: center;
     padding: 4px;
-    font-size: 12px;
+    font-size: 14px;
     border-radius: 0px 10px 10px 0;
     writing-mode: vertical-lr;
     text-orientation: upright;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
+    border-left: none;
+
 }
 
 .player-2-deck {
@@ -267,14 +285,16 @@ h1 {
 .player-3-name {
     position: absolute;
     left: 670px;
-    top: 0px;
-    background-color: var(--orange);
+    top: -2px;
+    background-color: var(--base);
     color: white;
     width: 180px;
     text-align: center;
-    padding: 4px;
-    font-size: 12px;
+    padding: 4px 0 6px;
+    font-size: 14px;
     border-radius: 0px 0px 10px 10px;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
 }
 
 .player-3-deck {
@@ -298,17 +318,20 @@ h1 {
 
 .player-4-name {
     position: absolute;
-    right: 0;
+    right: -2px;
     top: 308px;
-    background-color: var(--orange);
+    background-color: var(--base);
     color: white;
     height: 180px;
     text-align: center;
     padding: 4px;
-    font-size: 12px;
+    font-size: 14px;
     border-radius: 10px 0px 0px 10px;
     writing-mode: vertical-lr;
     text-orientation: upright;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
+
 }
 
 .player-4-deck {
