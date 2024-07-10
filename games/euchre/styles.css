@@ -187,8 +187,21 @@ h1 {
     margin-right: 5px;
 }
 
+.player-name {
+    position: absolute;
+    left: 670px;
+    bottom: -1px;
+    background-color: var(--orange);
+    color: white;
+    width: 180px;
+    text-align: center;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 10px 10px 0 0;
+}
+
 .player-deck {
-    bottom: 25px;
+    bottom: 32px;
     left: 571px;
     position: absolute;
     width: 375px;
@@ -212,6 +225,21 @@ h1 {
     left: 700px;
 }
 
+.player-2-name {
+    position: absolute;
+    left: 428px;
+    top: 308px;
+    background-color: var(--orange);
+    color: white;
+    height: 180px;
+    text-align: center;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 0px 10px 10px 0;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+}
+
 .player-2-deck {
     position: absolute;
     top: 245px;
@@ -232,6 +260,19 @@ h1 {
     left: 480px;
 }
 
+.player-3-name {
+    position: absolute;
+    left: 670px;
+    top: 0px;
+    background-color: var(--orange);
+    color: white;
+    width: 180px;
+    text-align: center;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 0px 0px 10px 10px;
+}
+
 .player-3-deck {
     left: 590px;
     top: 30px;
@@ -249,6 +290,21 @@ h1 {
 .player-3-played {
     top: 203px;
     left: 700px;
+}
+
+.player-4-name {
+    position: absolute;
+    right: 172px;
+    top: 308px;
+    background-color: var(--orange);
+    color: white;
+    height: 180px;
+    text-align: center;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 10px 0px 0px 10px;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
 }
 
 .player-4-deck {
