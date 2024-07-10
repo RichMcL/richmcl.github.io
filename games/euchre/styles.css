@@ -48,6 +48,9 @@ h1 {
     position: absolute;
     width: 236px !important;
     bottom: -5px;
+}
+
+.yellow-button {
     background-color: #ff9700;
     border: none;
     color: white;
@@ -75,7 +78,8 @@ h1 {
 }
 
 #debug-menu button{
-    padding: 15px; 
+    padding: 20px; 
+    width: 150px;
 }
 
 /* DEBUG SECTION */
