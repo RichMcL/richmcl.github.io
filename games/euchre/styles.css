@@ -231,7 +231,7 @@ h1 {
 
 .player-2-name {
     position: absolute;
-    left: 428px;
+    left: 270px;
     top: 308px;
     background-color: var(--orange);
     color: white;
@@ -247,7 +247,7 @@ h1 {
 .player-2-deck {
     position: absolute;
     top: 245px;
-    left: 305px;
+    left: 332px;
     height: 375px;
     display: flex;
     flex-direction: column;
@@ -298,7 +298,7 @@ h1 {
 
 .player-4-name {
     position: absolute;
-    right: 172px;
+    right: 0;
     top: 308px;
     background-color: var(--orange);
     color: white;
@@ -712,7 +712,7 @@ h1 {
       transform: rotate(0deg) translateY(0);
     }
     75% {
-      transform: rotate(3deg) translateY(-3px);
+      transform: rotate(-3deg) translateY(-3px);
     }
 }
 
@@ -765,4 +765,99 @@ h1 {
 .player-deck > :nth-child(5n+5) {
     display: inline-block; /* Ensure elements can be transformed */
     animation: slightRotate5 16s linear infinite; /* Adjust timing and easing as needed */
+}
+
+@keyframes slightRotate1Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(92deg) translateY(-1px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(88deg) translateY(1px);
+    }
+}
+
+@keyframes slightRotate2Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(88deg) translateY(2px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(92deg) translateY(-2px);
+    }
+}
+
+@keyframes slightRotate3Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(93deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(87deg) translateY(-3px);
+    }
+}
+
+@keyframes slightRotate4Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(87deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(92deg) translateY(-3px);
+    }
+}
+@keyframes slightRotate5Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(87deg) translateY(-3px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(92deg) translateY(3px);
+    }
+}
+
+.player-2-deck > :nth-child(5n+1) {
+    display: inline-block; /* Ensure elements can be transformed */
+    animation: slightRotate1Player2 15s linear infinite; /* Adjust timing and easing as needed */
+}
+.player-2-deck > :nth-child(5n+2) {
+    display: inline-block; /* Ensure elements can be transformed */
+    animation: slightRotate2Player2 15s linear infinite; /* Adjust timing and easing as needed */
+}
+.player-2-deck > :nth-child(5n+3) {
+    display: inline-block; /* Ensure elements can be transformed */
+    animation: slightRotate3Player2 14s linear infinite; /* Adjust timing and easing as needed */
+}
+.player-2-deck > :nth-child(5n+4) {
+    display: inline-block; /* Ensure elements can be transformed */
+    animation: slightRotate4Player2 18s linear infinite; /* Adjust timing and easing as needed */
+}
+.player-2-deck > :nth-child(5n+5) {
+    display: inline-block; /* Ensure elements can be transformed */
+    animation: slightRotate5Player2 16s linear infinite; /* Adjust timing and easing as needed */
 }
