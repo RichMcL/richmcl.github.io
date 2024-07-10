@@ -201,8 +201,8 @@ h1 {
 }
 
 .player-deck {
-    bottom: 35px;
-    left: 571px;
+    bottom: 50px;
+    left: 600px;
     position: absolute;
     width: 375px;
     display: flex;
@@ -246,8 +246,8 @@ h1 {
 
 .player-2-deck {
     position: absolute;
-    top: 245px;
-    left: 332px;
+    top: 255px;
+    left: 360px;
     height: 375px;
     display: flex;
     flex-direction: column;
@@ -278,8 +278,8 @@ h1 {
 }
 
 .player-3-deck {
-    left: 590px;
-    top: 40px;
+    left: 610px;
+    top: 50px;
     position: absolute;
     width: 375px;
     display: flex;
@@ -313,8 +313,8 @@ h1 {
 
 .player-4-deck {
     position: absolute;
-    top: 245px;
-    right: 70px;
+    top: 255px;
+    right: 90px;
     height: 375px;
     display: flex;
     flex-direction: column-reverse;
