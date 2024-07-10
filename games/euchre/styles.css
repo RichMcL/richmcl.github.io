@@ -201,7 +201,7 @@ h1 {
 }
 
 .player-deck {
-    bottom: 32px;
+    bottom: 35px;
     left: 571px;
     position: absolute;
     width: 375px;
@@ -225,7 +225,7 @@ h1 {
 }
 
 .player-played {
-    top: 442px;
+    top: 422px;
     left: 700px;
 }
 
@@ -261,7 +261,7 @@ h1 {
 
 .player-2-played {
     top: 320px;
-    left: 480px;
+    left: 530px;
 }
 
 .player-3-name {
@@ -279,7 +279,7 @@ h1 {
 
 .player-3-deck {
     left: 590px;
-    top: 30px;
+    top: 40px;
     position: absolute;
     width: 375px;
     display: flex;
@@ -292,7 +292,7 @@ h1 {
 }
 
 .player-3-played {
-    top: 203px;
+    top: 220px;
     left: 700px;
 }
 
@@ -328,7 +328,7 @@ h1 {
 
 .player-4-played {
     top: 320px;
-    left: 930px;
+    left: 870px;
     /* transform: rotate(270deg); */
 }
 
