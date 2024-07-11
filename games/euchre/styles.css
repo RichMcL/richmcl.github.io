@@ -254,6 +254,12 @@ h1 {
     margin-left: -10px;
 }
 
+.player-deck .card-wrapper:hover {
+    margin-top: -15px;
+    transition: margin-top 0.1s linear;
+}
+
+
 .played-card-zone {
     position: absolute;
     border: 4px solid #cacaca;
