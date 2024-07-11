@@ -82,6 +82,8 @@ class Game {
     public currentTrick: Card[] = [];
     public currentPlayer?: Player;
 
+    public playerOrder: number[] = [];
+
     constructor() {
         this.deck = this.buildAndShuffleDeck();
         this.players = this.createPlayers();
@@ -92,6 +94,8 @@ class Game {
         this.trump = this.kitty[3].suit;
 
         this.startGame();
+
+        this.playGame();
     }
 
     public startGame() {
@@ -120,7 +124,7 @@ class Game {
 
         console.log('Game started', this);
 
-        const player1DeckNode = document.querySelectorAll('.player-deck')[0];
+        const player1DeckNode = document.querySelectorAll('.player-1-deck')[0];
         player1DeckNode.innerHTML = '';
 
         this.players[0].hand.forEach(card => {
@@ -196,6 +200,68 @@ class Game {
 
         document.querySelectorAll('#trump-icon')[0].className = `icon-${this.trump.toLowerCase()}`;
         document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
+    }
+
+    public async playGame() {
+        this.playerOrder = this.getPlayOrder();
+        console.log('playerOrder', this.playerOrder);
+
+        while (this.trickCount < 5) {
+            //for each player in playerOrder, play a card
+            for (let playerNum of this.playerOrder) {
+                this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
+                // this.printGameBoard();
+
+                if (this.currentPlayer.isPlayer) {
+                    // this.printGameBoard();
+
+                    const hand: string[] = this.currentPlayer.hand.map(card =>
+                        this.getCardPrint(card)
+                    );
+                    // const cardIndex = await this.selectCardWithArrows(hand);
+                    const cardIndex = 0;
+
+                    const playedCard = this.currentPlayer.hand[cardIndex as number];
+
+                    this.currentTrick.push(playedCard);
+                    this.currentPlayer.hand.splice(this.currentPlayer.hand.indexOf(playedCard), 1);
+
+                    // this.printGameBoard();
+                } else {
+                    await this.sleep(1000);
+                    this.playNpcCard(this.currentPlayer);
+                    // this.printGameBoard();
+                }
+            }
+
+            //after each player has played a card, determine the winner of the trick
+            const winningCard = this.getWinningCard();
+
+            console.log('WINNING CARD: ', this.getCardPrint(winningCard));
+
+            //get the index of the winning card in the current trick
+            const winningIndex = this.currentTrick.findIndex(card => card === winningCard);
+
+            //get the player who played the winning card
+            const winningPlayer = this.players.find(player => player.playIndex === winningIndex)!;
+
+            console.log('WINNING PLAYER: ', winningPlayer.playerNum);
+
+            //increment the tricksTaken for the winning player's team
+            const winningTeam = this.teams.find(team => team.players.includes(winningPlayer))!;
+            winningTeam.tricksTaken++;
+
+            this.trickCount++;
+
+            this.currentTrick = [];
+
+            console.log(
+                'WINNING TEAM: ',
+                winningTeam.players.map(player => player.playerNum)
+            );
+
+            this.sleep(1000);
+        }
     }
 
     public buildAndShuffleDeck(): Card[] {
@@ -340,6 +406,30 @@ class Game {
 
         this.currentTrick.push(playedCard);
         player.hand.splice(player.hand.indexOf(playedCard), 1);
+
+        //Play the card on the game board
+        const playedCardNode = document.querySelectorAll(
+            `.played-card-zone.player-${player.playerNum}-played`
+        )[0];
+
+        const cardHtml = `
+            <div class="card-wrapper">
+                <div class="card-face ${cardValueToKey(
+                    playedCard.value
+                )}-${playedCard.suit.toLowerCase()}"></div>
+            </div>
+        `;
+
+        playedCardNode.innerHTML = cardHtml;
+
+        const toRemove = `.player-${player.playerNum}-deck > .card-wrapper > .${cardValueToKey(
+            playedCard.value
+        )}-${playedCard.suit.toLowerCase()}`;
+
+        //Remove the card from the player's hand on the game board
+        const playerDeckNode = document.querySelectorAll(toRemove)[0];
+
+        (playerDeckNode.parentNode as Element)?.remove();
     }
 
     public getWinningCard(): Card {

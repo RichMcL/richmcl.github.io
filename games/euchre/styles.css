@@ -223,7 +223,7 @@ h1 {
     margin-right: 5px;
 }
 
-.player-name {
+.player-1-name {
     position: absolute;
     left: 670px;
     bottom: -3px;
@@ -238,7 +238,7 @@ h1 {
     border: 2px solid #293a3a;
 }
 
-.player-deck {
+.player-1-deck {
     bottom: 50px;
     left: 375px;
     position: absolute;
@@ -250,11 +250,11 @@ h1 {
     padding: 0 100px;
 }
 
-.player-deck .card-wrapper {
+.player-1-deck .card-wrapper {
     margin-left: -10px;
 }
 
-.player-deck .card-wrapper:hover {
+.player-1-deck .card-wrapper:hover {
     margin-top: -15px;
     transition: margin-top 0.1s linear;
 }
@@ -270,7 +270,7 @@ h1 {
     padding-left: 2px;
 }
 
-.player-played {
+.player-1-played {
     top: 422px;
     left: 715px;
 }
@@ -800,23 +800,23 @@ h1 {
 }
 
 
-.player-deck > :nth-child(5n+1) {
+.player-1-deck > :nth-child(5n+1) {
     display: inline-block;
     animation: slightRotate1 15s linear infinite;
 }
-.player-deck > :nth-child(5n+2) {
+.player-1-deck > :nth-child(5n+2) {
     display: inline-block; 
     animation: slightRotate2 15s linear infinite; 
 }
-.player-deck > :nth-child(5n+3) {
+.player-1-deck > :nth-child(5n+3) {
     display: inline-block; 
     animation: slightRotate3 14s linear infinite; 
 }
-.player-deck > :nth-child(5n+4) {
+.player-1-deck > :nth-child(5n+4) {
     display: inline-block; 
     animation: slightRotate4 18s linear infinite; 
 }
-.player-deck > :nth-child(5n+5) {
+.player-1-deck > :nth-child(5n+5) {
     display: inline-block; 
     animation: slightRotate5 16s linear infinite; 
 }
