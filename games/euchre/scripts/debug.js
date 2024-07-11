@@ -80,6 +80,13 @@ function scaleGame() {
             button.addEventListener('click', toggleDebug);
         });
 
+        const themes = ['orange', 'lightblue', 'blue', 'lightyellow', 'green', 'red'];
+
+        const randomIndex = Math.floor(Math.random() * themes.length);
+        const randomTheme = themes[randomIndex];
+
+        setTheme(randomTheme);
+
         // Initial scale
         scaleGame();
 
