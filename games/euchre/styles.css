@@ -1,25 +1,32 @@
 :root {
     --base: #6c6685;
+    --base-bg: #423e54
 }
 
 :root.orange {
     --base: #a66202;
+    --base-bg: #442801;
 }
 
 :root.lightblue {
     --base: #0278a6;
+    --base-bg: #01364b;
 }
 :root.blue {
     --base: #625df5;
+    --base-bg: #232155;
 }
 :root.lightyellow {
     --base: #ffc65c;
+    --base-bg: #644e26;
 }
 :root.green {
     --base: #30874b;
+    --base-bg: #153b21;
 }
 :root.red {
     --base: #b53434;
+    --base-bg: #581a1a;
 }
 
 @font-face {
@@ -31,7 +38,8 @@
 
 html {
     height: 100%;
-    background-color: #35654d;
+    /* background-color: #35654d; */
+    background-color: var(--base-bg);
     font-family: 'Balatro', system-ui;
 
 }
@@ -232,12 +240,14 @@ h1 {
 
 .player-deck {
     bottom: 50px;
-    left: 600px;
+    left: 375px;
     position: absolute;
-    width: 375px;
+    width: 805px;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    background-color: #00000024;
+    padding: 0 100px;
 }
 
 .player-deck .card-wrapper {
@@ -445,8 +455,8 @@ h1 {
 
 #game-board .kitty-wrapper {
     position: absolute;
-    top: 620px;
-    left: 325px;
+    top: 580px;
+    left: 85px;
 }
 
 /* Icons */
