@@ -248,6 +248,7 @@ h1 {
     justify-content: center;
     background-color: #00000024;
     padding: 0 100px;
+    height: 141px;
 }
 
 .player-1-deck .card-wrapper {
@@ -709,6 +710,93 @@ h1 {
 .ace-spades {
     background-image: url('img/deck-sprite-sheet.png');
     background-position: -852px -285px;
+}
+
+/* Chips */
+.chip-white {
+    background-image: url('img/chips.png');
+    background-position: 0px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+
+}
+.chip-red {
+    background-image: url('img/chips.png');
+    background-position: -29px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-green {
+    background-image: url('img/chips.png');
+    background-position: -58px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-blue {
+    background-image: url('img/chips.png');
+    background-position: -87px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-black {
+    background-image: url('img/chips.png');
+    background-position: -116px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-purple {
+    background-image: url('img/chips.png');
+    background-position: 0px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-orange {
+    background-image: url('img/chips.png');
+    background-position: -29px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-yellow {
+    background-image: url('img/chips.png');
+    background-position: -58px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-darkyellow {
+    background-image: url('img/chips.png');
+    background-position: -87px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-joker {
+    background-image: url('img/chips.png');
+    background-position: -116px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+
+.dealer-chip {
+    display: inline-block;
+    width: 29px;
+    zoom: 2;
+    position: relative;
+}
+
+.dealer-chip-text {
+    position: absolute;
+    top: 10px;
+    left: 7px;
+    font-size: 7px;
 }
 
 
