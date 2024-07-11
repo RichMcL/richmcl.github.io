@@ -11,11 +11,56 @@
         <div id="game-board">
             <div id="layout-grid"></div>
             <div id="debug-menu" class="hidden">
-                <button class="reload-button yellow-button">RELOAD</button>
-                <button class="deal-button yellow-button">DEAL</button>
-                <button class="scroll-button yellow-button">TOGGLE SCROLL</button>
-                <button class="grid-button yellow-button">TOGGLE GRID</button>
-                <button class="close-debug-button yellow-button">CLOSE</button>
+                <div class="theme-toggle-group">
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #6c6685"
+                        onclick="setTheme('base');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #a66202"
+                        onclick="setTheme('orange');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #0278a6"
+                        onclick="setTheme('lightblue');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #625df5"
+                        onclick="setTheme('blue');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #ffc65c"
+                        onclick="setTheme('lightyellow');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #30874b"
+                        onclick="setTheme('green');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #b53434"
+                        onclick="setTheme('red');"
+                    >
+                    </span>
+                </div>
+
+                <button class="reload-button theme-button">RELOAD</button>
+                <button class="deal-button theme-button">DEAL</button>
+                <button class="scroll-button theme-button">TOGGLE SCROLL</button>
+                <button class="grid-button theme-button">TOGGLE GRID</button>
+                <button class="close-debug-button theme-button">CLOSE</button>
             </div>
 
             <div class="score-section">
@@ -43,7 +88,7 @@
                 <button class="deal-button">DEAL</button>
                 <button class="scroll-button">TOGGLE SCROLL</button>
                 <button class="grid-button">TOGGLE GRID</button> -->
-                <button class="debug-button yellow-button">DEBUG</button>
+                <button class="debug-button theme-button">DEBUG</button>
             </div>
 
             <div class="player-name">PLAYER 1</div>

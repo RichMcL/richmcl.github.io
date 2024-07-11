@@ -9,8 +9,17 @@
 :root.lightblue {
     --base: #0278a6;
 }
+:root.blue {
+    --base: #625df5;
+}
 :root.lightyellow {
     --base: #ffc65c;
+}
+:root.green {
+    --base: #30874b;
+}
+:root.red {
+    --base: #b53434;
 }
 
 @font-face {
@@ -65,8 +74,15 @@ h1 {
     bottom: -5px;
 }
 
-.yellow-button {
-    background-color: #ff9700;
+.theme-toggle {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.theme-button {
+    background-color: var(--base);
     border: none;
     color: white;
     text-shadow: 1px 1px 2px black;

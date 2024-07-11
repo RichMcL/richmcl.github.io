@@ -29,6 +29,11 @@ function reDeal() {
     window.game = game;
 }
 
+function setTheme(theme) {
+    document.documentElement.className = '';
+    document.documentElement.classList.add(theme);
+}
+
 function scaleGame() {
     const gameAspectRatio = 1280 / 800;
     const currentWidth = window.innerWidth;
