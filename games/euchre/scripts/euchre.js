@@ -123,6 +123,15 @@ var Game = /** @class */ (function () {
         }
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
+        //sort each player's hand by suit and value
+        this.players.forEach(function (player) {
+            player.hand.sort(function (a, b) {
+                if (a.suit === b.suit) {
+                    return a.value > b.value ? 1 : -1;
+                }
+                return a.suit > b.suit ? 1 : -1;
+            });
+        });
         console.log('Game started', this);
         var player1DeckNode = document.querySelectorAll('.player-1-deck')[0];
         player1DeckNode.innerHTML = '';
