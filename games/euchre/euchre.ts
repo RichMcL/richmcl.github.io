@@ -139,13 +139,7 @@ class Game {
         player1DeckNode.innerHTML = '';
 
         this.players[0].hand.forEach(card => {
-            const cardHtml = `
-                <div class="card-wrapper">
-                    <div class="card-face ${cardValueToKey(
-                        card.value
-                    )}-${card.suit.toLowerCase()}"></div>
-                </div>
-            `;
+            const cardHtml = this.buildCardHtml(card);
 
             player1DeckNode.innerHTML += cardHtml;
         });
@@ -154,13 +148,7 @@ class Game {
         player2DeckNode.innerHTML = '';
 
         this.players[1].hand.forEach(card => {
-            const cardHtml = `
-                <div class="card-wrapper">
-                    <div class="card-face ${cardValueToKey(
-                        card.value
-                    )}-${card.suit.toLowerCase()}"></div>
-                </div>
-            `;
+            const cardHtml = this.buildCardHtml(card);
 
             player2DeckNode.innerHTML += cardHtml;
         });
@@ -169,13 +157,7 @@ class Game {
         player3DeckNode.innerHTML = '';
 
         this.players[2].hand.forEach(card => {
-            const cardHtml = `
-                <div class="card-wrapper">
-                    <div class="card-face ${cardValueToKey(
-                        card.value
-                    )}-${card.suit.toLowerCase()}"></div>
-                </div>
-            `;
+            const cardHtml = this.buildCardHtml(card);
 
             player3DeckNode.innerHTML += cardHtml;
         });
@@ -184,13 +166,7 @@ class Game {
         player4DeckNode.innerHTML = '';
 
         this.players[3].hand.forEach(card => {
-            const cardHtml = `
-                <div class="card-wrapper">
-                    <div class="card-face ${cardValueToKey(
-                        card.value
-                    )}-${card.suit.toLowerCase()}"></div>
-                </div>
-            `;
+            const cardHtml = this.buildCardHtml(card);
 
             player4DeckNode.innerHTML += cardHtml;
         });
@@ -198,13 +174,7 @@ class Game {
         const kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
 
         this.kitty.forEach(card => {
-            const cardHtml = `
-                <div class="card-wrapper">
-                    <div class="card-face ${cardValueToKey(
-                        card.value
-                    )}-${card.suit.toLowerCase()}"></div>
-                </div>
-            `;
+            const cardHtml = this.buildCardHtml(card);
 
             kittyDeckNode.innerHTML += cardHtml;
         });
@@ -250,13 +220,7 @@ class Game {
                         `.played-card-zone.player-1-played`
                     )[0];
 
-                    const cardHtml = `
-                        <div class="card-wrapper">
-                            <div class="card-face ${cardValueToKey(
-                                playedCard.value
-                            )}-${playedCard.suit.toLowerCase()}"></div>
-                        </div>
-                    `;
+                    const cardHtml = this.buildCardHtml(playedCard);
 
                     playedCardNode.innerHTML = cardHtml;
 
@@ -429,6 +393,14 @@ class Game {
         return false;
     }
 
+    public buildCardHtml(card: Card) {
+        return `
+        <div class="card-wrapper">
+            <div class="card-face ${cardValueToKey(card.value)}-${card.suit.toLowerCase()}"></div>
+        </div>
+        `;
+    }
+
     public playNpcCard(player: Player) {
         const ledSuit = this.getLedSuit();
         const ledTrump = this.getLedTrump();
@@ -465,13 +437,7 @@ class Game {
             `.played-card-zone.player-${player.playerNum}-played`
         )[0];
 
-        const cardHtml = `
-            <div class="card-wrapper">
-                <div class="card-face ${cardValueToKey(
-                    playedCard.value
-                )}-${playedCard.suit.toLowerCase()}"></div>
-            </div>
-        `;
+        const cardHtml = this.buildCardHtml(playedCard);
 
         playedCardNode.innerHTML = cardHtml;
 

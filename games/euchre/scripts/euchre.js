@@ -105,6 +105,7 @@ var Game = /** @class */ (function () {
         this.playGame();
     }
     Game.prototype.startGame = function () {
+        var _this = this;
         var dealerIndex = Math.floor(Math.random() * 4);
         this.players[dealerIndex].isDealer = true;
         this.players[dealerIndex].dealIndex = 0;
@@ -136,30 +137,30 @@ var Game = /** @class */ (function () {
         var player1DeckNode = document.querySelectorAll('.player-1-deck')[0];
         player1DeckNode.innerHTML = '';
         this.players[0].hand.forEach(function (card) {
-            var cardHtml = "\n                <div class=\"card-wrapper\">\n                    <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n                </div>\n            ");
+            var cardHtml = _this.buildCardHtml(card);
             player1DeckNode.innerHTML += cardHtml;
         });
         var player2DeckNode = document.querySelectorAll('.player-2-deck')[0];
         player2DeckNode.innerHTML = '';
         this.players[1].hand.forEach(function (card) {
-            var cardHtml = "\n                <div class=\"card-wrapper\">\n                    <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n                </div>\n            ");
+            var cardHtml = _this.buildCardHtml(card);
             player2DeckNode.innerHTML += cardHtml;
         });
         var player3DeckNode = document.querySelectorAll('.player-3-deck')[0];
         player3DeckNode.innerHTML = '';
         this.players[2].hand.forEach(function (card) {
-            var cardHtml = "\n                <div class=\"card-wrapper\">\n                    <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n                </div>\n            ");
+            var cardHtml = _this.buildCardHtml(card);
             player3DeckNode.innerHTML += cardHtml;
         });
         var player4DeckNode = document.querySelectorAll('.player-4-deck')[0];
         player4DeckNode.innerHTML = '';
         this.players[3].hand.forEach(function (card) {
-            var cardHtml = "\n                <div class=\"card-wrapper\">\n                    <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n                </div>\n            ");
+            var cardHtml = _this.buildCardHtml(card);
             player4DeckNode.innerHTML += cardHtml;
         });
         var kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
         this.kitty.forEach(function (card) {
-            var cardHtml = "\n                <div class=\"card-wrapper\">\n                    <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n                </div>\n            ");
+            var cardHtml = _this.buildCardHtml(card);
             kittyDeckNode.innerHTML += cardHtml;
         });
         document.querySelectorAll('#trump-icon')[0].className = "icon-".concat(this.trump.toLowerCase());
@@ -205,7 +206,7 @@ var Game = /** @class */ (function () {
                                         this_1.currentTrick.push(playedCard);
                                         this_1.currentPlayer.hand.splice(this_1.currentPlayer.hand.indexOf(playedCard), 1);
                                         playedCardNode = document.querySelectorAll(".played-card-zone.player-1-played")[0];
-                                        cardHtml = "\n                        <div class=\"card-wrapper\">\n                            <div class=\"card-face ".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase(), "\"></div>\n                        </div>\n                    ");
+                                        cardHtml = this_1.buildCardHtml(playedCard);
                                         playedCardNode.innerHTML = cardHtml;
                                         toRemove = ".player-1-deck > .card-wrapper > .".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
                                         playerDeckNode = document.querySelectorAll(toRemove)[0];
@@ -359,6 +360,9 @@ var Game = /** @class */ (function () {
         }
         return false;
     };
+    Game.prototype.buildCardHtml = function (card) {
+        return "\n        <div class=\"card-wrapper\">\n            <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n        </div>\n        ");
+    };
     Game.prototype.playNpcCard = function (player) {
         var _a;
         var ledSuit = this.getLedSuit();
@@ -394,7 +398,7 @@ var Game = /** @class */ (function () {
         player.hand.splice(player.hand.indexOf(playedCard), 1);
         //Play the card on the game board
         var playedCardNode = document.querySelectorAll(".played-card-zone.player-".concat(player.playerNum, "-played"))[0];
-        var cardHtml = "\n            <div class=\"card-wrapper\">\n                <div class=\"card-face ".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase(), "\"></div>\n            </div>\n        ");
+        var cardHtml = this.buildCardHtml(playedCard);
         playedCardNode.innerHTML = cardHtml;
         var toRemove = ".player-".concat(player.playerNum, "-deck > .card-wrapper > .").concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
         //Remove the card from the player's hand on the game board
