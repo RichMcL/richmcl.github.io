@@ -207,10 +207,17 @@ class Game {
         console.log('playerOrder', this.playerOrder);
 
         while (this.trickCount < 5) {
+            //clear all played card zones
+
+            await this.sleep(2000);
+
+            document.querySelectorAll('.played-card-zone').forEach(zone => {
+                zone.innerHTML = '';
+            });
+
             //for each player in playerOrder, play a card
             for (let playerNum of this.playerOrder) {
                 this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
-                // this.printGameBoard();
 
                 if (this.currentPlayer.isPlayer) {
                     // this.printGameBoard();
@@ -218,17 +225,40 @@ class Game {
                     const hand: string[] = this.currentPlayer.hand.map(card =>
                         this.getCardPrint(card)
                     );
-                    // const cardIndex = await this.selectCardWithArrows(hand);
-                    const cardIndex = 0;
+
+                    //here await the user clicking a card
+                    const cardIndex = await this.getUserCardChoice();
 
                     const playedCard = this.currentPlayer.hand[cardIndex as number];
 
                     this.currentTrick.push(playedCard);
                     this.currentPlayer.hand.splice(this.currentPlayer.hand.indexOf(playedCard), 1);
 
-                    // this.printGameBoard();
+                    //Play the card on the game board
+                    const playedCardNode = document.querySelectorAll(
+                        `.played-card-zone.player-1-played`
+                    )[0];
+
+                    const cardHtml = `
+                        <div class="card-wrapper">
+                            <div class="card-face ${cardValueToKey(
+                                playedCard.value
+                            )}-${playedCard.suit.toLowerCase()}"></div>
+                        </div>
+                    `;
+
+                    playedCardNode.innerHTML = cardHtml;
+
+                    const toRemove = `.player-1-deck > .card-wrapper > .${cardValueToKey(
+                        playedCard.value
+                    )}-${playedCard.suit.toLowerCase()}`;
+
+                    //Remove the card from the player's hand on the game board
+                    const playerDeckNode = document.querySelectorAll(toRemove)[0];
+
+                    (playerDeckNode.parentNode as Element)?.remove();
                 } else {
-                    await this.sleep(1000);
+                    await this.sleep(2000);
                     this.playNpcCard(this.currentPlayer);
                     // this.printGameBoard();
                 }
@@ -262,6 +292,18 @@ class Game {
 
             this.sleep(1000);
         }
+    }
+
+    public getUserCardChoice() {
+        return new Promise(resolve => {
+            const cardButtons = document.querySelectorAll('.player-1-deck .card-wrapper');
+
+            cardButtons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    resolve(index);
+                });
+            });
+        });
     }
 
     public buildAndShuffleDeck(): Card[] {
