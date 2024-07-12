@@ -66,6 +66,12 @@ var CardValue;
     CardValue["King"] = "K";
     CardValue["Ace"] = "A";
 })(CardValue || (CardValue = {}));
+var OrderAction;
+(function (OrderAction) {
+    OrderAction["Pass"] = "Pass";
+    OrderAction["OrderUp"] = "Order Up";
+    OrderAction["Alone"] = "Alone";
+})(OrderAction || (OrderAction = {}));
 var blackSuits = [Suit.Spades, Suit.Clubs];
 var redSuits = [Suit.Diamonds, Suit.Hearts];
 var logger = function (label, obj) {
@@ -168,32 +174,59 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _loop_1, this_1;
+            var _i, _a, playerNum, orderAction, orderAction, _loop_1, this_1;
             var _this = this;
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         this.playerOrder = this.getPlayOrder();
                         console.log('playerOrder', this.playerOrder);
+                        _i = 0, _a = this.playerOrder;
+                        _c.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 6];
+                        playerNum = _a[_i];
+                        this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
+                        if (!this.currentPlayer.isPlayer) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.getUserOrderAction()];
+                    case 2:
+                        orderAction = _c.sent();
+                        console.log('PLAYER ORDER ACTION', orderAction);
+                        return [3 /*break*/, 5];
+                    case 3: return [4 /*yield*/, this.sleep(2000)];
+                    case 4:
+                        _c.sent();
+                        orderAction = this.npcOrderAction(this.currentPlayer);
+                        console.log('playerNum', playerNum);
+                        console.log('NPC ORDER ACTION: ', orderAction);
+                        if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
+                            return [3 /*break*/, 6];
+                        }
+                        _c.label = 5;
+                    case 5:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 6:
+                        console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
                         _loop_1 = function () {
-                            var _i, _c, playerNum, hand, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
-                            return __generator(this, function (_d) {
-                                switch (_d.label) {
+                            var _d, _e, playerNum, hand, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
+                            return __generator(this, function (_f) {
+                                switch (_f.label) {
                                     case 0: 
                                     //clear all played card zones
                                     return [4 /*yield*/, this_1.sleep(2000)];
                                     case 1:
                                         //clear all played card zones
-                                        _d.sent();
+                                        _f.sent();
                                         document.querySelectorAll('.played-card-zone').forEach(function (zone) {
                                             zone.innerHTML = '';
                                         });
-                                        _i = 0, _c = this_1.playerOrder;
-                                        _d.label = 2;
+                                        _d = 0, _e = this_1.playerOrder;
+                                        _f.label = 2;
                                     case 2:
-                                        if (!(_i < _c.length)) return [3 /*break*/, 7];
-                                        playerNum = _c[_i];
+                                        if (!(_d < _e.length)) return [3 /*break*/, 7];
+                                        playerNum = _e[_d];
                                         this_1.currentPlayer = this_1.getPlayerByPlayerNum(playerNum);
                                         if (!this_1.currentPlayer.isPlayer) return [3 /*break*/, 4];
                                         hand = this_1.currentPlayer.hand.map(function (card) {
@@ -201,7 +234,7 @@ var Game = /** @class */ (function () {
                                         });
                                         return [4 /*yield*/, this_1.getUserCardChoice()];
                                     case 3:
-                                        cardIndex = _d.sent();
+                                        cardIndex = _f.sent();
                                         playedCard = this_1.currentPlayer.hand[cardIndex];
                                         this_1.currentTrick.push(playedCard);
                                         this_1.currentPlayer.hand.splice(this_1.currentPlayer.hand.indexOf(playedCard), 1);
@@ -210,15 +243,15 @@ var Game = /** @class */ (function () {
                                         playedCardNode.innerHTML = cardHtml;
                                         toRemove = ".player-1-deck > .card-wrapper > .".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
                                         playerDeckNode = document.querySelectorAll(toRemove)[0];
-                                        (_a = playerDeckNode.parentNode) === null || _a === void 0 ? void 0 : _a.remove();
+                                        (_b = playerDeckNode.parentNode) === null || _b === void 0 ? void 0 : _b.remove();
                                         return [3 /*break*/, 6];
                                     case 4: return [4 /*yield*/, this_1.sleep(2000)];
                                     case 5:
-                                        _d.sent();
+                                        _f.sent();
                                         this_1.playNpcCard(this_1.currentPlayer);
-                                        _d.label = 6;
+                                        _f.label = 6;
                                     case 6:
-                                        _i++;
+                                        _d++;
                                         return [3 /*break*/, 2];
                                     case 7:
                                         winningCard = this_1.getWinningCard();
@@ -237,14 +270,14 @@ var Game = /** @class */ (function () {
                             });
                         };
                         this_1 = this;
-                        _b.label = 1;
-                    case 1:
-                        if (!(this.trickCount < 5)) return [3 /*break*/, 3];
+                        _c.label = 7;
+                    case 7:
+                        if (!(this.trickCount < 5)) return [3 /*break*/, 9];
                         return [5 /*yield**/, _loop_1()];
-                    case 2:
-                        _b.sent();
-                        return [3 /*break*/, 1];
-                    case 3: return [2 /*return*/];
+                    case 8:
+                        _c.sent();
+                        return [3 /*break*/, 7];
+                    case 9: return [2 /*return*/];
                 }
             });
         });
@@ -255,6 +288,19 @@ var Game = /** @class */ (function () {
             cardButtons.forEach(function (button, index) {
                 button.addEventListener('click', function () {
                     resolve(index);
+                });
+            });
+        });
+    };
+    Game.prototype.getUserOrderAction = function () {
+        var orderActionsNode = document.querySelectorAll('.player-1-order-actions')[0];
+        orderActionsNode.classList.remove('hidden');
+        return new Promise(function (resolve) {
+            var orderActions = document.querySelectorAll('.player-1-order-actions button');
+            orderActions.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    orderActionsNode.classList.add('hidden');
+                    resolve(button.innerHTML);
                 });
             });
         });
@@ -404,6 +450,19 @@ var Game = /** @class */ (function () {
         //Remove the card from the player's hand on the game board
         var playerDeckNode = document.querySelectorAll(toRemove)[0];
         (_a = playerDeckNode.parentNode) === null || _a === void 0 ? void 0 : _a.remove();
+    };
+    Game.prototype.npcOrderAction = function (player) {
+        var trump = this.kitty[3].suit;
+        // if the player has a right bower, order up
+        if (player.hand.find(function (card) { return card.value === CardValue.Jack && card.suit === trump; })) {
+            return OrderAction.OrderUp;
+        }
+        // if they have at least 2 trump cards, order up
+        if (player.hand.filter(function (card) { return card.isTrump; }).length >= 2) {
+            return OrderAction.OrderUp;
+        }
+        // else pass
+        return OrderAction.Pass;
     };
     Game.prototype.getWinningCard = function () {
         var ledSuit = this.getLedSuit();

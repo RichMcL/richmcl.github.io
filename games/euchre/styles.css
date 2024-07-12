@@ -223,6 +223,13 @@ h1 {
     margin-right: 5px;
 }
 
+.player-1-order-actions {
+    position: absolute;
+    top: 420px;
+    width: 150px;
+    left: 67px;
+}
+
 .player-1-name {
     position: absolute;
     left: 670px;

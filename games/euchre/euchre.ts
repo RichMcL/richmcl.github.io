@@ -21,6 +21,12 @@ enum CardValue {
     Ace = 'A'
 }
 
+enum OrderAction {
+    Pass = 'Pass',
+    OrderUp = 'Order Up',
+    Alone = 'Alone'
+}
+
 const blackSuits = [Suit.Spades, Suit.Clubs];
 const redSuits = [Suit.Diamonds, Suit.Hearts];
 
@@ -187,6 +193,29 @@ class Game {
         this.playerOrder = this.getPlayOrder();
         console.log('playerOrder', this.playerOrder);
 
+        // We need to determine trump so use the playOrder to ask pass or order up
+        for (let playerNum of this.playerOrder) {
+            this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
+
+            if (this.currentPlayer.isPlayer) {
+                //Unhide player-1-order-actions and await a button click
+                const orderAction = await this.getUserOrderAction();
+
+                console.log('PLAYER ORDER ACTION', orderAction);
+            } else {
+                await this.sleep(2000);
+                const orderAction = this.npcOrderAction(this.currentPlayer);
+                console.log('playerNum', playerNum);
+                console.log('NPC ORDER ACTION: ', orderAction);
+
+                if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
+                    break;
+                }
+            }
+        }
+
+        console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
+
         while (this.trickCount < 5) {
             //clear all played card zones
 
@@ -276,6 +305,22 @@ class Game {
             cardButtons.forEach((button, index) => {
                 button.addEventListener('click', () => {
                     resolve(index);
+                });
+            });
+        });
+    }
+
+    public getUserOrderAction(): Promise<OrderAction> {
+        const orderActionsNode = document.querySelectorAll('.player-1-order-actions')[0];
+        orderActionsNode.classList.remove('hidden');
+
+        return new Promise(resolve => {
+            const orderActions = document.querySelectorAll('.player-1-order-actions button');
+
+            orderActions.forEach(button => {
+                button.addEventListener('click', () => {
+                    orderActionsNode.classList.add('hidden');
+                    resolve(button.innerHTML as OrderAction);
                 });
             });
         });
@@ -449,6 +494,23 @@ class Game {
         const playerDeckNode = document.querySelectorAll(toRemove)[0];
 
         (playerDeckNode.parentNode as Element)?.remove();
+    }
+
+    public npcOrderAction(player: Player): OrderAction {
+        const trump = this.kitty[3].suit;
+
+        // if the player has a right bower, order up
+        if (player.hand.find(card => card.value === CardValue.Jack && card.suit === trump)) {
+            return OrderAction.OrderUp;
+        }
+
+        // if they have at least 2 trump cards, order up
+        if (player.hand.filter(card => card.isTrump).length >= 2) {
+            return OrderAction.OrderUp;
+        }
+
+        // else pass
+        return OrderAction.Pass;
     }
 
     public getWinningCard(): Card {
