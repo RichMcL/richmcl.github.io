@@ -185,7 +185,7 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1;
+            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, passCardHtml, passCardHtml, orderAction, passCardHtml, passCardHtml, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1;
             var _this = this;
             var _b, _c;
             return __generator(this, function (_d) {
@@ -195,6 +195,9 @@ var Game = /** @class */ (function () {
                         console.log('playerOrder', this.playerOrder);
                         dealer = this.players.find(function (player) { return player.isDealer; });
                         document.querySelectorAll('.dealer-box-value')[0].innerHTML = "Player ".concat(dealer === null || dealer === void 0 ? void 0 : dealer.playerNum);
+                        document
+                            .querySelectorAll(".player-".concat(dealer.playerNum, "-dealer"))[0]
+                            .classList.remove('hidden');
                         isOrderedUp = false;
                         orderedUpBy = null;
                         _i = 0, _a = this.playerOrder;
@@ -211,7 +214,13 @@ var Game = /** @class */ (function () {
                         if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                             isOrderedUp = true;
                             orderedUpBy = playerNum;
+                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
+                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
                             return [3 /*break*/, 6];
+                        }
+                        else {
+                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
+                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
                         }
                         return [3 /*break*/, 5];
                     case 3: return [4 /*yield*/, this.sleep(2000)];
@@ -223,7 +232,13 @@ var Game = /** @class */ (function () {
                         if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                             isOrderedUp = true;
                             orderedUpBy = playerNum;
+                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
+                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
                             return [3 /*break*/, 6];
+                        }
+                        else {
+                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
+                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
                         }
                         _d.label = 5;
                     case 5:

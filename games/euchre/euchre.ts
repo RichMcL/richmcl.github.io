@@ -194,6 +194,9 @@ class Game {
         console.log('playerOrder', this.playerOrder);
         const dealer = this.players.find(player => player.isDealer);
         document.querySelectorAll('.dealer-box-value')[0].innerHTML = `Player ${dealer?.playerNum}`;
+        document
+            .querySelectorAll(`.player-${dealer.playerNum}-dealer`)[0]
+            .classList.remove('hidden');
 
         let isOrderedUp = false;
         let orderedUpBy: number = null;
@@ -210,7 +213,20 @@ class Game {
                 if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                     isOrderedUp = true;
                     orderedUpBy = playerNum;
+
+                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
+
+                    document.querySelectorAll(
+                        `.player-${this.currentPlayer.playerNum}-played`
+                    )[0].innerHTML = passCardHtml;
+
                     break;
+                } else {
+                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
+
+                    document.querySelectorAll(
+                        `.player-${this.currentPlayer.playerNum}-played`
+                    )[0].innerHTML = passCardHtml;
                 }
             } else {
                 await this.sleep(2000);
@@ -221,7 +237,19 @@ class Game {
                 if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                     isOrderedUp = true;
                     orderedUpBy = playerNum;
+                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
+
+                    document.querySelectorAll(
+                        `.player-${this.currentPlayer.playerNum}-played`
+                    )[0].innerHTML = passCardHtml;
+
                     break;
+                } else {
+                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
+
+                    document.querySelectorAll(
+                        `.player-${this.currentPlayer.playerNum}-played`
+                    )[0].innerHTML = passCardHtml;
                 }
             }
         }

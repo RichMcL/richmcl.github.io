@@ -1,32 +1,39 @@
 :root {
     --base: #6c6685;
-    --base-bg: #423e54
+    --base-bg: #423e54;
+    --black: #3c4368;
 }
 
 :root.orange {
     --base: #a66202;
     --base-bg: #442801;
+    --black: #3c4368;
 }
 
 :root.lightblue {
     --base: #0278a6;
     --base-bg: #01364b;
+    --black: #3c4368;
 }
 :root.blue {
     --base: #625df5;
     --base-bg: #232155;
+    --black: #3c4368;
 }
 :root.lightyellow {
     --base: #ffc65c;
     --base-bg: #644e26;
+    --black: #3c4368;
 }
 :root.green {
     --base: #30874b;
     --base-bg: #153b21;
+    --black: #3c4368;
 }
 :root.red {
     --base: #b53434;
     --base-bg: #581a1a;
+    --black: #3c4368;
 }
 
 @font-face {
@@ -232,9 +239,14 @@ h1 {
 
 .player-1-order-actions {
     position: absolute;
-    top: 420px;
-    width: 150px;
-    left: 67px;
+    top: 426px;
+    width: 112px;
+    left: 719px;
+    background: white;
+    padding: 8px;
+    border-radius: 5px;
+    height: 148px;
+    z-index: 10;
 }
 
 .player-1-name {
@@ -278,6 +290,7 @@ h1 {
 .played-card-zone {
     position: absolute;
     border: 4px solid #cacaca;
+    background-color: #ffffff45;
     height: 155px;
     width: 120px;
     border-radius: 9px;
@@ -288,6 +301,19 @@ h1 {
 .player-1-played {
     top: 422px;
     left: 715px;
+}
+
+.player-1-dealer {
+    position: absolute;
+    top: 547px;
+    left: 719px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
 }
 
 .player-2-name {
@@ -329,6 +355,19 @@ h1 {
     left: 550px;
 }
 
+.player-2-dealer {
+    position: absolute;
+    top: 445px;
+    left: 554px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
+}
+
 .player-3-name {
     position: absolute;
     left: 670px;
@@ -361,6 +400,19 @@ h1 {
 .player-3-played {
     top: 220px;
     left: 715px;
+}
+
+.player-3-dealer {
+    position: absolute;
+    top: 345px;
+    left: 719px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
 }
 
 .player-4-name {
@@ -402,10 +454,36 @@ h1 {
     /* transform: rotate(270deg); */
 }
 
+.player-4-dealer {
+    position: absolute;
+    top: 445px;
+    left: 884px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
+}
+
 .card-face {
     display: inline-block;
     width: 71px;
     height: 95px;
+}
+
+.pass-card {
+    position: absolute;
+    background-color: white;
+    color: var(--black);
+    width: 113px;
+    text-align: center;
+    height: 148px;
+    padding-top: 60px;
+    border-radius: 5px;
+    margin: -3px;
+    font-size: 20px;
 }
 
 .card-wrapper {
