@@ -185,11 +185,11 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, passCardHtml, passCardHtml, orderAction, passCardHtml, passCardHtml, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1;
+            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, passCardHtml, passCardHtml, orderAction, passCardHtml, passCardHtml, topKitty_1, dealerDeckNode, cardHtml, discardCard, toRemove, playerDeckNode, _loop_1, this_1;
             var _this = this;
-            var _b, _c;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var _b, _c, _d;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
                         this.playerOrder = this.getPlayOrder();
                         console.log('playerOrder', this.playerOrder);
@@ -201,7 +201,7 @@ var Game = /** @class */ (function () {
                         isOrderedUp = false;
                         orderedUpBy = null;
                         _i = 0, _a = this.playerOrder;
-                        _d.label = 1;
+                        _e.label = 1;
                     case 1:
                         if (!(_i < _a.length)) return [3 /*break*/, 6];
                         playerNum = _a[_i];
@@ -209,7 +209,7 @@ var Game = /** @class */ (function () {
                         if (!this.currentPlayer.isPlayer) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.getUserOrderAction()];
                     case 2:
-                        orderAction = _d.sent();
+                        orderAction = _e.sent();
                         console.log('PLAYER ORDER ACTION', orderAction);
                         if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                             isOrderedUp = true;
@@ -225,7 +225,7 @@ var Game = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 3: return [4 /*yield*/, this.sleep(2000)];
                     case 4:
-                        _d.sent();
+                        _e.sent();
                         orderAction = this.npcOrderAction(this.currentPlayer);
                         console.log('playerNum', playerNum);
                         console.log('NPC ORDER ACTION: ', orderAction);
@@ -240,7 +240,7 @@ var Game = /** @class */ (function () {
                             passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
                             document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
                         }
-                        _d.label = 5;
+                        _e.label = 5;
                     case 5:
                         _i++;
                         return [3 /*break*/, 1];
@@ -250,32 +250,51 @@ var Game = /** @class */ (function () {
                         //If ordered up, add the kitty to the dealer's hand
                         if (isOrderedUp) {
                             document.querySelectorAll('.ordered-up-box-value')[0].innerHTML = "Player ".concat((_b = this.currentPlayer) === null || _b === void 0 ? void 0 : _b.playerNum);
-                            topKitty = __assign(__assign({}, this.kitty[3]), { isTrump: true });
-                            dealer.hand.push(topKitty);
+                            topKitty_1 = __assign(__assign({}, this.kitty[3]), { isTrump: true });
+                            dealer.hand.push(topKitty_1);
                             dealerDeckNode = document.querySelectorAll(".player-".concat(dealer.playerNum, "-deck"))[0];
-                            cardHtml = this.buildCardHtml(topKitty);
+                            cardHtml = this.buildCardHtml(topKitty_1);
                             dealerDeckNode.innerHTML += cardHtml;
+                            //if an NPC is the dealer, they need to discard, but it can't be the top card of the kitty
+                            //TODO - make this smarter
+                            if (!dealer.isPlayer) {
+                                discardCard = dealer.hand.find(function (card) { return card !== topKitty_1; });
+                                dealer.hand.splice(dealer.hand.indexOf(discardCard), 1);
+                                toRemove = ".player-".concat(dealer.playerNum, "-deck > .card-wrapper > .").concat(cardValueToKey(discardCard.value), "-").concat(discardCard.suit.toLowerCase());
+                                playerDeckNode = document.querySelectorAll(toRemove)[0];
+                                (_c = playerDeckNode.parentNode) === null || _c === void 0 ? void 0 : _c.remove();
+                            }
+                            //delete the card faces from the kitty and swap with red deck
+                            document.querySelectorAll('.kitty-wrapper .card-face').forEach(function (card, index) {
+                                card.remove();
+                            });
+                            document.querySelectorAll('.kitty-wrapper .card-wrapper').forEach(function (card, index) {
+                                card.classList.add('red-deck');
+                                if (index === 3) {
+                                    card.remove();
+                                }
+                            });
                         }
                         //TODO: If no one orders up, we need to loop through again to pick trump
                         console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
                         _loop_1 = function () {
-                            var _e, _f, playerNum, hand, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
-                            return __generator(this, function (_g) {
-                                switch (_g.label) {
+                            var _f, _g, playerNum, hand, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
+                            return __generator(this, function (_h) {
+                                switch (_h.label) {
                                     case 0: 
                                     //clear all played card zones
                                     return [4 /*yield*/, this_1.sleep(2000)];
                                     case 1:
                                         //clear all played card zones
-                                        _g.sent();
+                                        _h.sent();
                                         document.querySelectorAll('.played-card-zone').forEach(function (zone) {
                                             zone.innerHTML = '';
                                         });
-                                        _e = 0, _f = this_1.playerOrder;
-                                        _g.label = 2;
+                                        _f = 0, _g = this_1.playerOrder;
+                                        _h.label = 2;
                                     case 2:
-                                        if (!(_e < _f.length)) return [3 /*break*/, 7];
-                                        playerNum = _f[_e];
+                                        if (!(_f < _g.length)) return [3 /*break*/, 7];
+                                        playerNum = _g[_f];
                                         this_1.currentPlayer = this_1.getPlayerByPlayerNum(playerNum);
                                         if (!this_1.currentPlayer.isPlayer) return [3 /*break*/, 4];
                                         hand = this_1.currentPlayer.hand.map(function (card) {
@@ -283,7 +302,7 @@ var Game = /** @class */ (function () {
                                         });
                                         return [4 /*yield*/, this_1.getUserCardChoice()];
                                     case 3:
-                                        cardIndex = _g.sent();
+                                        cardIndex = _h.sent();
                                         playedCard = this_1.currentPlayer.hand[cardIndex];
                                         this_1.currentTrick.push(playedCard);
                                         this_1.currentPlayer.hand.splice(this_1.currentPlayer.hand.indexOf(playedCard), 1);
@@ -292,15 +311,15 @@ var Game = /** @class */ (function () {
                                         playedCardNode.innerHTML = cardHtml;
                                         toRemove = ".player-1-deck > .card-wrapper > .".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
                                         playerDeckNode = document.querySelectorAll(toRemove)[0];
-                                        (_c = playerDeckNode.parentNode) === null || _c === void 0 ? void 0 : _c.remove();
+                                        (_d = playerDeckNode.parentNode) === null || _d === void 0 ? void 0 : _d.remove();
                                         return [3 /*break*/, 6];
                                     case 4: return [4 /*yield*/, this_1.sleep(2000)];
                                     case 5:
-                                        _g.sent();
+                                        _h.sent();
                                         this_1.playNpcCard(this_1.currentPlayer);
-                                        _g.label = 6;
+                                        _h.label = 6;
                                     case 6:
-                                        _e++;
+                                        _f++;
                                         return [3 /*break*/, 2];
                                     case 7:
                                         winningCard = this_1.getWinningCard();
@@ -319,12 +338,12 @@ var Game = /** @class */ (function () {
                             });
                         };
                         this_1 = this;
-                        _d.label = 7;
+                        _e.label = 7;
                     case 7:
                         if (!(this.trickCount < 5)) return [3 /*break*/, 9];
                         return [5 /*yield**/, _loop_1()];
                     case 8:
-                        _d.sent();
+                        _e.sent();
                         return [3 /*break*/, 7];
                     case 9: return [2 /*return*/];
                 }

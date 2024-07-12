@@ -271,6 +271,36 @@ class Game {
 
             const cardHtml = this.buildCardHtml(topKitty);
             dealerDeckNode.innerHTML += cardHtml;
+
+            //if an NPC is the dealer, they need to discard, but it can't be the top card of the kitty
+            //TODO - make this smarter
+            if (!dealer.isPlayer) {
+                const discardCard = dealer.hand.find(card => card !== topKitty);
+                dealer.hand.splice(dealer.hand.indexOf(discardCard), 1);
+
+                //find the card in the DOM and remove it
+                const toRemove = `.player-${
+                    dealer.playerNum
+                }-deck > .card-wrapper > .${cardValueToKey(
+                    discardCard.value
+                )}-${discardCard.suit.toLowerCase()}`;
+
+                const playerDeckNode = document.querySelectorAll(toRemove)[0];
+
+                (playerDeckNode.parentNode as Element)?.remove();
+            }
+
+            //delete the card faces from the kitty and swap with red deck
+            document.querySelectorAll('.kitty-wrapper .card-face').forEach((card, index) => {
+                card.remove();
+            });
+            document.querySelectorAll('.kitty-wrapper .card-wrapper').forEach((card, index) => {
+                card.classList.add('red-deck');
+
+                if (index === 3) {
+                    card.remove();
+                }
+            });
         }
 
         //TODO: If no one orders up, we need to loop through again to pick trump
