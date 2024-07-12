@@ -192,6 +192,11 @@ class Game {
     public async playGame() {
         this.playerOrder = this.getPlayOrder();
         console.log('playerOrder', this.playerOrder);
+        const dealer = this.players.find(player => player.isDealer);
+        document.querySelectorAll('.dealer-box-value')[0].innerHTML = `Player ${dealer?.playerNum}`;
+
+        let isOrderedUp = false;
+        let orderedUpBy: number = null;
 
         // We need to determine trump so use the playOrder to ask pass or order up
         for (let playerNum of this.playerOrder) {
@@ -200,8 +205,13 @@ class Game {
             if (this.currentPlayer.isPlayer) {
                 //Unhide player-1-order-actions and await a button click
                 const orderAction = await this.getUserOrderAction();
-
                 console.log('PLAYER ORDER ACTION', orderAction);
+
+                if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
+                    isOrderedUp = true;
+                    orderedUpBy = playerNum;
+                    break;
+                }
             } else {
                 await this.sleep(2000);
                 const orderAction = this.npcOrderAction(this.currentPlayer);
@@ -209,10 +219,33 @@ class Game {
                 console.log('NPC ORDER ACTION: ', orderAction);
 
                 if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
+                    isOrderedUp = true;
+                    orderedUpBy = playerNum;
                     break;
                 }
             }
         }
+
+        console.log('isOrderedUp', isOrderedUp);
+        console.log('orderedUpBy', orderedUpBy);
+
+        //If ordered up, add the kitty to the dealer's hand
+        if (isOrderedUp) {
+            document.querySelectorAll(
+                '.ordered-up-box-value'
+            )[0].innerHTML = `Player ${this.currentPlayer?.playerNum}`;
+
+            const topKitty = { ...this.kitty[3], isTrump: true };
+            dealer.hand.push(topKitty);
+
+            //find their hand in the DOM and add the element
+            const dealerDeckNode = document.querySelectorAll(`.player-${dealer.playerNum}-deck`)[0];
+
+            const cardHtml = this.buildCardHtml(topKitty);
+            dealerDeckNode.innerHTML += cardHtml;
+        }
+
+        //TODO: If no one orders up, we need to loop through again to pick trump
 
         console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
 
