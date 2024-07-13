@@ -142,14 +142,7 @@ class Game {
         console.log('Game started', this);
 
         this.renderInitialHands();
-
-        const kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
-
-        this.kitty.forEach(card => {
-            const cardHtml = this.buildCardHtml(card);
-
-            kittyDeckNode.innerHTML += cardHtml;
-        });
+        this.renderKitty();
 
         document.querySelectorAll('#trump-icon')[0].className = `icon-${this.trump.toLowerCase()}`;
         document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
@@ -171,6 +164,16 @@ class Game {
             const cardHtml = this.buildCardHtml(card);
 
             playerDeckNode.innerHTML += cardHtml;
+        });
+    }
+
+    public renderKitty() {
+        const kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
+
+        this.kitty.forEach(card => {
+            const cardHtml = this.buildCardHtml(card);
+
+            kittyDeckNode.innerHTML += cardHtml;
         });
     }
 
@@ -199,19 +202,11 @@ class Game {
                     isOrderedUp = true;
                     orderedUpBy = playerNum;
 
-                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
-
-                    document.querySelectorAll(
-                        `.player-${this.currentPlayer.playerNum}-played`
-                    )[0].innerHTML = passCardHtml;
+                    this.renderOrderActionSelection(this.currentPlayer, orderAction);
 
                     break;
                 } else {
-                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
-
-                    document.querySelectorAll(
-                        `.player-${this.currentPlayer.playerNum}-played`
-                    )[0].innerHTML = passCardHtml;
+                    this.renderOrderActionSelection(this.currentPlayer, orderAction);
                 }
             } else {
                 await this.sleep(2000);
@@ -222,19 +217,12 @@ class Game {
                 if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                     isOrderedUp = true;
                     orderedUpBy = playerNum;
-                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
 
-                    document.querySelectorAll(
-                        `.player-${this.currentPlayer.playerNum}-played`
-                    )[0].innerHTML = passCardHtml;
+                    this.renderOrderActionSelection(this.currentPlayer, orderAction);
 
                     break;
                 } else {
-                    const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
-
-                    document.querySelectorAll(
-                        `.player-${this.currentPlayer.playerNum}-played`
-                    )[0].innerHTML = passCardHtml;
+                    this.renderOrderActionSelection(this.currentPlayer, orderAction);
                 }
             }
         }
@@ -400,6 +388,12 @@ class Game {
                 });
             });
         });
+    }
+
+    public renderOrderActionSelection(player: Player, orderAction: OrderAction) {
+        const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
+
+        document.querySelectorAll(`.player-${player.playerNum}-played`)[0].innerHTML = passCardHtml;
     }
 
     public buildAndShuffleDeck(): Card[] {

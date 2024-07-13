@@ -122,7 +122,6 @@ var Game = /** @class */ (function () {
         this.playGame();
     }
     Game.prototype.startGame = function () {
-        var _this = this;
         var dealerIndex = Math.floor(Math.random() * 4);
         this.players[dealerIndex].isDealer = true;
         this.players[dealerIndex].dealIndex = 0;
@@ -152,11 +151,7 @@ var Game = /** @class */ (function () {
         });
         console.log('Game started', this);
         this.renderInitialHands();
-        var kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
-        this.kitty.forEach(function (card) {
-            var cardHtml = _this.buildCardHtml(card);
-            kittyDeckNode.innerHTML += cardHtml;
-        });
+        this.renderKitty();
         document.querySelectorAll('#trump-icon')[0].className = "icon-".concat(this.trump.toLowerCase());
         document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
     };
@@ -176,9 +171,17 @@ var Game = /** @class */ (function () {
             playerDeckNode.innerHTML += cardHtml;
         });
     };
+    Game.prototype.renderKitty = function () {
+        var _this = this;
+        var kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
+        this.kitty.forEach(function (card) {
+            var cardHtml = _this.buildCardHtml(card);
+            kittyDeckNode.innerHTML += cardHtml;
+        });
+    };
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, passCardHtml, passCardHtml, orderAction, passCardHtml, passCardHtml, topKitty_1, dealerDeckNode, cardHtml, discardCard, toRemove, playerDeckNode, _loop_1, this_1;
+            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, topKitty_1, dealerDeckNode, cardHtml, discardCard, toRemove, playerDeckNode, _loop_1, this_1;
             var _this = this;
             var _b, _c, _d;
             return __generator(this, function (_e) {
@@ -207,13 +210,11 @@ var Game = /** @class */ (function () {
                         if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                             isOrderedUp = true;
                             orderedUpBy = playerNum;
-                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
-                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
+                            this.renderOrderActionSelection(this.currentPlayer, orderAction);
                             return [3 /*break*/, 6];
                         }
                         else {
-                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
-                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
+                            this.renderOrderActionSelection(this.currentPlayer, orderAction);
                         }
                         return [3 /*break*/, 5];
                     case 3: return [4 /*yield*/, this.sleep(2000)];
@@ -225,13 +226,11 @@ var Game = /** @class */ (function () {
                         if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                             isOrderedUp = true;
                             orderedUpBy = playerNum;
-                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
-                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
+                            this.renderOrderActionSelection(this.currentPlayer, orderAction);
                             return [3 /*break*/, 6];
                         }
                         else {
-                            passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
-                            document.querySelectorAll(".player-".concat(this.currentPlayer.playerNum, "-played"))[0].innerHTML = passCardHtml;
+                            this.renderOrderActionSelection(this.currentPlayer, orderAction);
                         }
                         _e.label = 5;
                     case 5:
@@ -365,6 +364,10 @@ var Game = /** @class */ (function () {
                 });
             });
         });
+    };
+    Game.prototype.renderOrderActionSelection = function (player, orderAction) {
+        var passCardHtml = "<div class=\"pass-card\">".concat(orderAction, "</div>");
+        document.querySelectorAll(".player-".concat(player.playerNum, "-played"))[0].innerHTML = passCardHtml;
     };
     Game.prototype.buildAndShuffleDeck = function () {
         var deck = [];
