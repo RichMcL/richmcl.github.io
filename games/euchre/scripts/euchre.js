@@ -182,7 +182,6 @@ var Game = /** @class */ (function () {
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
             var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, topKitty_1, dealerDeckNode, cardHtml, discardCard, toRemove, playerDeckNode, _loop_1, this_1;
-            var _this = this;
             var _b, _c, _d;
             return __generator(this, function (_e) {
                 switch (_e.label) {
@@ -270,7 +269,7 @@ var Game = /** @class */ (function () {
                         //TODO: If no one orders up, we need to loop through again to pick trump
                         console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
                         _loop_1 = function () {
-                            var _f, _g, playerNum, hand, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
+                            var _f, _g, playerNum, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
                             return __generator(this, function (_h) {
                                 switch (_h.label) {
                                     case 0: 
@@ -289,9 +288,6 @@ var Game = /** @class */ (function () {
                                         playerNum = _g[_f];
                                         this_1.currentPlayer = this_1.getPlayerByPlayerNum(playerNum);
                                         if (!this_1.currentPlayer.isPlayer) return [3 /*break*/, 4];
-                                        hand = this_1.currentPlayer.hand.map(function (card) {
-                                            return _this.getCardPrint(card);
-                                        });
                                         return [4 /*yield*/, this_1.getUserCardChoice()];
                                     case 3:
                                         cardIndex = _h.sent();
@@ -315,7 +311,6 @@ var Game = /** @class */ (function () {
                                         return [3 /*break*/, 2];
                                     case 7:
                                         winningCard = this_1.getWinningCard();
-                                        console.log('WINNING CARD: ', this_1.getCardPrint(winningCard));
                                         winningIndex = this_1.currentTrick.findIndex(function (card) { return card === winningCard; });
                                         winningPlayer = this_1.players.find(function (player) { return player.playIndex === winningIndex; });
                                         console.log('WINNING PLAYER: ', winningPlayer.playerNum);
@@ -602,40 +597,8 @@ var Game = /** @class */ (function () {
     Game.prototype.getPlayerByPlayerNum = function (playerNum) {
         return this.players.find(function (player) { return player.playerNum === playerNum; });
     };
-    Game.prototype.printPlayerTeams = function (players) {
-        var playerTeams = players.map(function (player) {
-            return {
-                playerNum: player.playerNum,
-                team: player.team,
-                isPlayer: player.isPlayer,
-                isDealer: player.isDealer,
-                isPlayerTeammate: player.isPlayerTeammate,
-                playIndex: player.playIndex,
-                dealIndex: player.dealIndex
-            };
-        });
-        logger('playerTeams', playerTeams);
-    };
     Game.prototype.getDealer = function () {
         return this.players.find(function (player) { return player.isDealer; });
-    };
-    Game.prototype.getCardPrint = function (card) {
-        return card.value + ' ' + SuitIcon[card.suit];
-    };
-    Game.prototype.getHandPrint = function (hand) {
-        var _this = this;
-        return hand.map(function (card) { return _this.getCardPrint(card); }).join(' - ');
-    };
-    Game.prototype.getPlayerHandPrint = function (player) {
-        var _a;
-        if (!((_a = this.currentPlayer) === null || _a === void 0 ? void 0 : _a.isPlayer)) {
-            return ' *** WAITING FOR CPU *** ';
-        }
-        return this.getHandPrint(player.hand);
-    };
-    Game.prototype.isCurrentPlayerMarker = function (player) {
-        var _a;
-        return player.playerNum === ((_a = this.currentPlayer) === null || _a === void 0 ? void 0 : _a.playerNum) ? '>' : ' ';
     };
     // Sleep function using Promise and async/await
     Game.prototype.sleep = function (ms) {

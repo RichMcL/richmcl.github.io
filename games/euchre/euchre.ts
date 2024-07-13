@@ -277,7 +277,6 @@ class Game {
         }
 
         //TODO: If no one orders up, we need to loop through again to pick trump
-
         console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
 
         while (this.trickCount < 5) {
@@ -294,12 +293,6 @@ class Game {
                 this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
 
                 if (this.currentPlayer.isPlayer) {
-                    // this.printGameBoard();
-
-                    const hand: string[] = this.currentPlayer.hand.map(card =>
-                        this.getCardPrint(card)
-                    );
-
                     //here await the user clicking a card
                     const cardIndex = await this.getUserCardChoice();
 
@@ -328,14 +321,11 @@ class Game {
                 } else {
                     await this.sleep(2000);
                     this.playNpcCard(this.currentPlayer);
-                    // this.printGameBoard();
                 }
             }
 
             //after each player has played a card, determine the winner of the trick
             const winningCard = this.getWinningCard();
-
-            console.log('WINNING CARD: ', this.getCardPrint(winningCard));
 
             //get the index of the winning card in the current trick
             const winningIndex = this.currentTrick.findIndex(card => card === winningCard);
@@ -672,44 +662,8 @@ class Game {
         return this.players.find(player => player.playerNum === playerNum)!;
     }
 
-    public printPlayerTeams(players: Player[]) {
-        const playerTeams = players.map(player => {
-            return {
-                playerNum: player.playerNum,
-                team: player.team,
-                isPlayer: player.isPlayer,
-                isDealer: player.isDealer,
-                isPlayerTeammate: player.isPlayerTeammate,
-                playIndex: player.playIndex,
-                dealIndex: player.dealIndex
-            };
-        });
-
-        logger('playerTeams', playerTeams);
-    }
-
     public getDealer(): Player {
         return this.players.find(player => player.isDealer)!;
-    }
-
-    public getCardPrint(card: Card): string {
-        return card.value + ' ' + SuitIcon[card.suit];
-    }
-
-    public getHandPrint(hand: Card[]): string {
-        return hand.map(card => this.getCardPrint(card)).join(' - ');
-    }
-
-    public getPlayerHandPrint(player: Player): string {
-        if (!this.currentPlayer?.isPlayer) {
-            return ' *** WAITING FOR CPU *** ';
-        }
-
-        return this.getHandPrint(player.hand);
-    }
-
-    public isCurrentPlayerMarker(player: Player): string {
-        return player.playerNum === this.currentPlayer?.playerNum ? '>' : ' ';
     }
 
     // Sleep function using Promise and async/await
