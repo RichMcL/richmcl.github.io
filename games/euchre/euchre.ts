@@ -300,19 +300,9 @@ class Game {
                 '.ordered-up-box-value'
             )[0].innerHTML = `Player ${this.currentPlayer?.playerNum}`;
 
-            const topKitty = { ...this.kitty[3], isTrump: true };
-            dealer.hand.push(topKitty);
-
-            //find their hand in the DOM and add the element
-            const dealerDeckNode = document.querySelectorAll(`.player-${dealer.playerNum}-deck`)[0];
-
-            const cardHtml = this.buildCardHtml(topKitty);
-            dealerDeckNode.innerHTML += cardHtml;
-
-            //if an NPC is the dealer, they need to discard, but it can't be the top card of the kitty
             //TODO - make this smarter
             if (!dealer.isPlayer) {
-                const discardCard = dealer.hand.find(card => card !== topKitty);
+                const discardCard = dealer.hand.find(card => !card.isTrump);
                 dealer.hand.splice(dealer.hand.indexOf(discardCard), 1);
 
                 this.removeDiscardCardFromDom(dealer, discardCard);
@@ -325,6 +315,15 @@ class Game {
 
                 this.removeDiscardCardFromDom(dealer, discardCard);
             }
+
+            const topKitty = { ...this.kitty[3], isTrump: true };
+            dealer.hand.push(topKitty);
+
+            //find their hand in the DOM and add the element
+            const dealerDeckNode = document.querySelectorAll(`.player-${dealer.playerNum}-deck`)[0];
+
+            const cardHtml = this.buildCardHtml(topKitty);
+            dealerDeckNode.innerHTML += cardHtml;
 
             //delete the card faces from the kitty and swap with red deck
             document.querySelectorAll('.kitty-wrapper .card-face').forEach((card, index) => {

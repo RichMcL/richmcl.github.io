@@ -181,7 +181,7 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, isCalledTrump, _b, _c, playerNum, isStickTheDealer, result, orderAction, suit, _d, suit, orderAction, topKitty_1, dealerDeckNode, cardHtml, discardCard, discardCardIndex, discardCard, _loop_1, this_1;
+            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, isCalledTrump, _b, _c, playerNum, isStickTheDealer, result, orderAction, suit, _d, suit, orderAction, discardCard, discardCardIndex, discardCard, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1;
             var _e, _f;
             return __generator(this, function (_g) {
                 switch (_g.label) {
@@ -301,13 +301,8 @@ var Game = /** @class */ (function () {
                         if (!isOrderedUp) return [3 /*break*/, 18];
                         //If ordered up, add the kitty to the dealer's hand
                         document.querySelectorAll('.ordered-up-box-value')[0].innerHTML = "Player ".concat((_e = this.currentPlayer) === null || _e === void 0 ? void 0 : _e.playerNum);
-                        topKitty_1 = __assign(__assign({}, this.kitty[3]), { isTrump: true });
-                        dealer.hand.push(topKitty_1);
-                        dealerDeckNode = document.querySelectorAll(".player-".concat(dealer.playerNum, "-deck"))[0];
-                        cardHtml = this.buildCardHtml(topKitty_1);
-                        dealerDeckNode.innerHTML += cardHtml;
                         if (!!dealer.isPlayer) return [3 /*break*/, 15];
-                        discardCard = dealer.hand.find(function (card) { return card !== topKitty_1; });
+                        discardCard = dealer.hand.find(function (card) { return !card.isTrump; });
                         dealer.hand.splice(dealer.hand.indexOf(discardCard), 1);
                         this.removeDiscardCardFromDom(dealer, discardCard);
                         return [3 /*break*/, 17];
@@ -319,6 +314,11 @@ var Game = /** @class */ (function () {
                         this.removeDiscardCardFromDom(dealer, discardCard);
                         _g.label = 17;
                     case 17:
+                        topKitty = __assign(__assign({}, this.kitty[3]), { isTrump: true });
+                        dealer.hand.push(topKitty);
+                        dealerDeckNode = document.querySelectorAll(".player-".concat(dealer.playerNum, "-deck"))[0];
+                        cardHtml = this.buildCardHtml(topKitty);
+                        dealerDeckNode.innerHTML += cardHtml;
                         //delete the card faces from the kitty and swap with red deck
                         document.querySelectorAll('.kitty-wrapper .card-face').forEach(function (card, index) {
                             card.remove();
