@@ -315,16 +315,15 @@ class Game {
                 const discardCard = dealer.hand.find(card => card !== topKitty);
                 dealer.hand.splice(dealer.hand.indexOf(discardCard), 1);
 
-                //find the card in the DOM and remove it
-                const toRemove = `.player-${
-                    dealer.playerNum
-                }-deck > .card-wrapper > .${cardValueToKey(
-                    discardCard.value
-                )}-${discardCard.suit.toLowerCase()}`;
+                this.removeDiscardCardFromDom(dealer, discardCard);
+            } else {
+                //we need to prompt the player to discard a card
+                const discardCardIndex = await this.getUserCardChoice();
 
-                const playerDeckNode = document.querySelectorAll(toRemove)[0];
+                const discardCard = dealer.hand[discardCardIndex as number];
+                dealer.hand.splice(dealer.hand.indexOf(discardCard), 1);
 
-                (playerDeckNode.parentNode as Element)?.remove();
+                this.removeDiscardCardFromDom(dealer, discardCard);
             }
 
             //delete the card faces from the kitty and swap with red deck
@@ -496,6 +495,17 @@ class Game {
         const passCardHtml = `<div class="pass-card">${action}</div>`;
 
         document.querySelectorAll(`.player-${player.playerNum}-played`)[0].innerHTML = passCardHtml;
+    }
+
+    public removeDiscardCardFromDom(dealer: Player, discardCard: Card): void {
+        //find the card in the DOM and remove it
+        const toRemove = `.player-${dealer.playerNum}-deck > .card-wrapper > .${cardValueToKey(
+            discardCard.value
+        )}-${discardCard.suit.toLowerCase()}`;
+
+        const playerDeckNode = document.querySelectorAll(toRemove)[0];
+
+        (playerDeckNode.parentNode as Element)?.remove();
     }
 
     public updateCurrentPlayerHighlight(playerNum: number) {
