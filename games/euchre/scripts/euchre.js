@@ -151,30 +151,7 @@ var Game = /** @class */ (function () {
             });
         });
         console.log('Game started', this);
-        var player1DeckNode = document.querySelectorAll('.player-1-deck')[0];
-        player1DeckNode.innerHTML = '';
-        this.players[0].hand.forEach(function (card) {
-            var cardHtml = _this.buildCardHtml(card);
-            player1DeckNode.innerHTML += cardHtml;
-        });
-        var player2DeckNode = document.querySelectorAll('.player-2-deck')[0];
-        player2DeckNode.innerHTML = '';
-        this.players[1].hand.forEach(function (card) {
-            var cardHtml = _this.buildCardHtml(card);
-            player2DeckNode.innerHTML += cardHtml;
-        });
-        var player3DeckNode = document.querySelectorAll('.player-3-deck')[0];
-        player3DeckNode.innerHTML = '';
-        this.players[2].hand.forEach(function (card) {
-            var cardHtml = _this.buildCardHtml(card);
-            player3DeckNode.innerHTML += cardHtml;
-        });
-        var player4DeckNode = document.querySelectorAll('.player-4-deck')[0];
-        player4DeckNode.innerHTML = '';
-        this.players[3].hand.forEach(function (card) {
-            var cardHtml = _this.buildCardHtml(card);
-            player4DeckNode.innerHTML += cardHtml;
-        });
+        this.renderInitialHands();
         var kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
         this.kitty.forEach(function (card) {
             var cardHtml = _this.buildCardHtml(card);
@@ -182,6 +159,22 @@ var Game = /** @class */ (function () {
         });
         document.querySelectorAll('#trump-icon')[0].className = "icon-".concat(this.trump.toLowerCase());
         document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
+    };
+    Game.prototype.renderInitialHands = function () {
+        var _this = this;
+        [0, 1, 2, 3].forEach(function (index) {
+            _this.renderPlayerHand(index);
+        });
+    };
+    Game.prototype.renderPlayerHand = function (index) {
+        var _this = this;
+        var player = this.players[index];
+        var playerDeckNode = document.querySelectorAll(".player-".concat(player.playerNum, "-deck"))[0];
+        playerDeckNode.innerHTML = '';
+        this.players[index].hand.forEach(function (card) {
+            var cardHtml = _this.buildCardHtml(card);
+            playerDeckNode.innerHTML += cardHtml;
+        });
     };
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {

@@ -141,41 +141,7 @@ class Game {
 
         console.log('Game started', this);
 
-        const player1DeckNode = document.querySelectorAll('.player-1-deck')[0];
-        player1DeckNode.innerHTML = '';
-
-        this.players[0].hand.forEach(card => {
-            const cardHtml = this.buildCardHtml(card);
-
-            player1DeckNode.innerHTML += cardHtml;
-        });
-
-        const player2DeckNode = document.querySelectorAll('.player-2-deck')[0];
-        player2DeckNode.innerHTML = '';
-
-        this.players[1].hand.forEach(card => {
-            const cardHtml = this.buildCardHtml(card);
-
-            player2DeckNode.innerHTML += cardHtml;
-        });
-
-        const player3DeckNode = document.querySelectorAll('.player-3-deck')[0];
-        player3DeckNode.innerHTML = '';
-
-        this.players[2].hand.forEach(card => {
-            const cardHtml = this.buildCardHtml(card);
-
-            player3DeckNode.innerHTML += cardHtml;
-        });
-
-        const player4DeckNode = document.querySelectorAll('.player-4-deck')[0];
-        player4DeckNode.innerHTML = '';
-
-        this.players[3].hand.forEach(card => {
-            const cardHtml = this.buildCardHtml(card);
-
-            player4DeckNode.innerHTML += cardHtml;
-        });
+        this.renderInitialHands();
 
         const kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
 
@@ -187,6 +153,25 @@ class Game {
 
         document.querySelectorAll('#trump-icon')[0].className = `icon-${this.trump.toLowerCase()}`;
         document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
+    }
+
+    public renderInitialHands() {
+        [0, 1, 2, 3].forEach(index => {
+            this.renderPlayerHand(index);
+        });
+    }
+
+    public renderPlayerHand(index: number): void {
+        const player = this.players[index];
+
+        const playerDeckNode = document.querySelectorAll(`.player-${player.playerNum}-deck`)[0];
+        playerDeckNode.innerHTML = '';
+
+        this.players[index].hand.forEach(card => {
+            const cardHtml = this.buildCardHtml(card);
+
+            playerDeckNode.innerHTML += cardHtml;
+        });
     }
 
     public async playGame() {
