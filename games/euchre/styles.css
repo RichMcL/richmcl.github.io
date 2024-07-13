@@ -83,12 +83,6 @@ h1 {
     font-family: 'Balatro', system-ui;
 }
 
-.debug-button {
-    position: absolute;
-    width: 236px !important;
-    bottom: -5px;
-}
-
 .theme-toggle {
     display: inline-block;
     height: 40px;
@@ -104,6 +98,20 @@ h1 {
     outline: inherit;
     box-shadow: 2px 2px 2px black;
     border-radius: 5px;
+}
+
+.debug-section {
+    position: absolute;
+    width: 236px !important;
+    bottom: -5px;
+    display: flex;
+    gap: 8px;
+}
+
+.debug-section .reload-icon {
+    font-size: 26px;
+    padding: 0;
+    width: 60px;
 }
 
 .hidden {
