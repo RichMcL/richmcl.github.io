@@ -201,6 +201,7 @@ var Game = /** @class */ (function () {
                         if (!(_i < _a.length)) return [3 /*break*/, 6];
                         playerNum = _a[_i];
                         this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
+                        this.updateCurrentPlayerHighlight(playerNum);
                         if (!this.currentPlayer.isPlayer) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.getUserOrderAction()];
                     case 2:
@@ -253,6 +254,7 @@ var Game = /** @class */ (function () {
                         playerNum = _c[_b];
                         this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
                         isStickTheDealer = this.currentPlayer.isDealer;
+                        this.updateCurrentPlayerHighlight(playerNum);
                         if (!this.currentPlayer.isPlayer) return [3 /*break*/, 10];
                         return [4 /*yield*/, this.getUserCallTrump()];
                     case 9:
@@ -281,6 +283,7 @@ var Game = /** @class */ (function () {
                     case 10: return [4 /*yield*/, this.sleep(2000)];
                     case 11:
                         _h.sent();
+                        this.updateCurrentPlayerHighlight(playerNum);
                         _d = this.npcCallTrump(this.currentPlayer, isStickTheDealer), suit = _d.suit, orderAction = _d.orderAction;
                         if (suit) {
                             isCalledTrump = true;
@@ -345,6 +348,7 @@ var Game = /** @class */ (function () {
                                         playerNum = _k[_j];
                                         this_1.currentPlayer = this_1.getPlayerByPlayerNum(playerNum);
                                         if (!this_1.currentPlayer.isPlayer) return [3 /*break*/, 4];
+                                        this_1.updateCurrentPlayerHighlight(playerNum);
                                         return [4 /*yield*/, this_1.getUserCardChoice()];
                                     case 3:
                                         cardIndex = _l.sent();
@@ -358,7 +362,9 @@ var Game = /** @class */ (function () {
                                         playerDeckNode = document.querySelectorAll(toRemove)[0];
                                         (_g = playerDeckNode.parentNode) === null || _g === void 0 ? void 0 : _g.remove();
                                         return [3 /*break*/, 6];
-                                    case 4: return [4 /*yield*/, this_1.sleep(2000)];
+                                    case 4:
+                                        this_1.updateCurrentPlayerHighlight(playerNum);
+                                        return [4 /*yield*/, this_1.sleep(2000)];
                                     case 5:
                                         _l.sent();
                                         this_1.playNpcCard(this_1.currentPlayer);
@@ -459,6 +465,14 @@ var Game = /** @class */ (function () {
         }
         var passCardHtml = "<div class=\"pass-card\">".concat(action, "</div>");
         document.querySelectorAll(".player-".concat(player.playerNum, "-played"))[0].innerHTML = passCardHtml;
+    };
+    Game.prototype.updateCurrentPlayerHighlight = function (playerNum) {
+        document.querySelectorAll('.played-card-zone').forEach(function (zone) {
+            zone.classList.remove('current-player');
+        });
+        document
+            .querySelectorAll(".played-card-zone.player-".concat(playerNum, "-played"))[0]
+            .classList.add('current-player');
     };
     Game.prototype.buildAndShuffleDeck = function () {
         var deck = [];

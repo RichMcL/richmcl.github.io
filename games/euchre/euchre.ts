@@ -193,6 +193,8 @@ class Game {
         for (let playerNum of this.playerOrder) {
             this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
 
+            this.updateCurrentPlayerHighlight(playerNum);
+
             if (this.currentPlayer.isPlayer) {
                 //Unhide player-1-order-actions and await a button click
                 const orderAction = await this.getUserOrderAction();
@@ -243,6 +245,8 @@ class Game {
                 this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
                 const isStickTheDealer = this.currentPlayer.isDealer;
 
+                this.updateCurrentPlayerHighlight(playerNum);
+
                 if (this.currentPlayer.isPlayer) {
                     const { result } = await this.getUserCallTrump();
                     let orderAction: OrderAction;
@@ -271,6 +275,8 @@ class Game {
                     }
                 } else {
                     await this.sleep(2000);
+
+                    this.updateCurrentPlayerHighlight(playerNum);
 
                     const { suit, orderAction } = this.npcCallTrump(
                         this.currentPlayer,
@@ -349,6 +355,8 @@ class Game {
                 this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
 
                 if (this.currentPlayer.isPlayer) {
+                    this.updateCurrentPlayerHighlight(playerNum);
+
                     //here await the user clicking a card
                     const cardIndex = await this.getUserCardChoice();
 
@@ -375,6 +383,8 @@ class Game {
 
                     (playerDeckNode.parentNode as Element)?.remove();
                 } else {
+                    this.updateCurrentPlayerHighlight(playerNum);
+
                     await this.sleep(2000);
                     this.playNpcCard(this.currentPlayer);
                 }
@@ -486,6 +496,16 @@ class Game {
         const passCardHtml = `<div class="pass-card">${action}</div>`;
 
         document.querySelectorAll(`.player-${player.playerNum}-played`)[0].innerHTML = passCardHtml;
+    }
+
+    public updateCurrentPlayerHighlight(playerNum: number) {
+        document.querySelectorAll('.played-card-zone').forEach(zone => {
+            zone.classList.remove('current-player');
+        });
+
+        document
+            .querySelectorAll(`.played-card-zone.player-${playerNum}-played`)[0]
+            .classList.add('current-player');
     }
 
     public buildAndShuffleDeck(): Card[] {

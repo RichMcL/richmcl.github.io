@@ -325,6 +325,10 @@ h1 {
     padding-left: 2px;
 }
 
+.played-card-zone.current-player {
+    border: 4px solid var(--base);
+}
+
 .player-1-played {
     top: 422px;
     left: 715px;
