@@ -382,6 +382,8 @@ var Game = /** @class */ (function () {
                                         console.log('WINNING PLAYER: ', winningPlayer.playerNum);
                                         winningTeam = this_1.teams.find(function (team) { return team.players.includes(winningPlayer); });
                                         winningTeam.tricksTaken++;
+                                        document.querySelectorAll('.team-1-tricks')[0].innerHTML = "".concat(this_1.teams[0].tricksTaken);
+                                        document.querySelectorAll('.team-2-tricks')[0].innerHTML = "".concat(this_1.teams[1].tricksTaken);
                                         this_1.trickCount++;
                                         this_1.currentTrick = [];
                                         console.log('WINNING TEAM: ', winningTeam.players.map(function (player) { return player.playerNum; }));
