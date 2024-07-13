@@ -230,8 +230,66 @@ class Game {
         console.log('isOrderedUp', isOrderedUp);
         console.log('orderedUpBy', orderedUpBy);
 
-        //If ordered up, add the kitty to the dealer's hand
-        if (isOrderedUp) {
+        if (!isOrderedUp) {
+            //if no one orders up, we need to loop through again to pick trump
+            console.log('NO ONE ORDERED UP');
+
+            await this.sleep(2000);
+            this.clearAllPlayedZones();
+
+            let isCalledTrump = false;
+
+            for (let playerNum of this.playerOrder) {
+                this.currentPlayer = this.getPlayerByPlayerNum(playerNum);
+                const isStickTheDealer = this.currentPlayer.isDealer;
+
+                if (this.currentPlayer.isPlayer) {
+                    const { result } = await this.getUserCallTrump();
+                    let orderAction: OrderAction;
+                    let suit: Suit | undefined;
+
+                    if (result == OrderAction.Pass) {
+                        orderAction = OrderAction.Pass;
+                    } else {
+                        suit = result as Suit;
+                    }
+
+                    console.log('suit', suit);
+                    if (!suit) {
+                        orderAction = OrderAction.Pass;
+                    }
+                    console.log('PLAYER ORDER ACTION', orderAction);
+
+                    if (suit) {
+                        isCalledTrump = true;
+                    }
+
+                    this.renderCallTrumpSelection(this.currentPlayer, orderAction, suit);
+
+                    if (isCalledTrump) {
+                        break;
+                    }
+                } else {
+                    await this.sleep(2000);
+
+                    const { suit, orderAction } = this.npcCallTrump(
+                        this.currentPlayer,
+                        isStickTheDealer
+                    );
+
+                    if (suit) {
+                        isCalledTrump = true;
+                    }
+
+                    this.renderCallTrumpSelection(this.currentPlayer, orderAction, suit);
+
+                    if (isCalledTrump) {
+                        break;
+                    }
+                }
+            }
+        } else if (isOrderedUp) {
+            //If ordered up, add the kitty to the dealer's hand
             document.querySelectorAll(
                 '.ordered-up-box-value'
             )[0].innerHTML = `Player ${this.currentPlayer?.playerNum}`;
@@ -284,9 +342,7 @@ class Game {
 
             await this.sleep(2000);
 
-            document.querySelectorAll('.played-card-zone').forEach(zone => {
-                zone.innerHTML = '';
-            });
+            this.clearAllPlayedZones();
 
             //for each player in playerOrder, play a card
             for (let playerNum of this.playerOrder) {
@@ -380,8 +436,54 @@ class Game {
         });
     }
 
+    public getUserCallTrump(): Promise<{ result: Suit | OrderAction.Pass }> {
+        const callTrumpNode = document.querySelectorAll('.player-1-call-trump')[0];
+        callTrumpNode.classList.remove('hidden');
+
+        const kitty = this.kitty[3].suit;
+        const suits = Object.values(Suit).filter(suit => suit !== kitty);
+
+        suits.forEach(suit => {
+            const button = document.createElement('button');
+            button.innerHTML = suit;
+            button.classList.add('theme-button');
+            callTrumpNode.appendChild(button);
+        });
+
+        const button = document.createElement('button');
+        button.innerHTML = OrderAction.Pass;
+        button.classList.add('theme-button');
+        callTrumpNode.appendChild(button);
+
+        return new Promise(resolve => {
+            const suits = document.querySelectorAll('.player-1-call-trump button');
+
+            suits.forEach(button => {
+                button.addEventListener('click', () => {
+                    callTrumpNode.classList.add('hidden');
+                    resolve({ result: button.innerHTML as Suit | OrderAction.Pass });
+                });
+            });
+        });
+    }
+
     public renderOrderActionSelection(player: Player, orderAction: OrderAction) {
         const passCardHtml = `<div class="pass-card">${orderAction}</div>`;
+
+        document.querySelectorAll(`.player-${player.playerNum}-played`)[0].innerHTML = passCardHtml;
+    }
+
+    public renderCallTrumpSelection(player: Player, orderAction: OrderAction, suit: Suit) {
+        let action;
+
+        if (orderAction === OrderAction.Pass) {
+            action = orderAction;
+        } else if (orderAction === OrderAction.Alone) {
+            action = `${orderAction} ${suit}`;
+        } else {
+            action = suit;
+        }
+        const passCardHtml = `<div class="pass-card">${action}</div>`;
 
         document.querySelectorAll(`.player-${player.playerNum}-played`)[0].innerHTML = passCardHtml;
     }
@@ -571,6 +673,49 @@ class Game {
 
         // else pass
         return OrderAction.Pass;
+    }
+
+    public npcCallTrump(
+        player: Player,
+        stickTheDealer: boolean
+    ):
+        | { orderAction: OrderAction.Pass; suit: undefined }
+        | { suit: Suit; orderAction?: OrderAction.Alone } {
+        // npc can call any suit other than the top card of the kitty
+        const kitty = this.kitty[3].suit;
+
+        const suits = Object.values(Suit).filter(suit => suit !== kitty);
+
+        // if the player has 4 or more cards in a suit, call that suit and go alone
+        for (let suit of suits) {
+            if (player.hand.filter(card => card.suit === suit).length >= 4) {
+                return { suit, orderAction: OrderAction.Alone };
+            }
+        }
+
+        //if the player has 3 cards in a suit, call that suit
+        for (let suit of suits) {
+            if (player.hand.filter(card => card.suit === suit).length === 3) {
+                return { suit };
+            }
+        }
+
+        //if stickTheDealer is true, pick random suit from their hand, but not the kitty suit
+        if (stickTheDealer) {
+            const cards = player.hand.filter(card => card.suit !== kitty);
+            const randomCard = cards[Math.floor(Math.random() * suits.length)];
+
+            return { suit: randomCard.suit };
+        }
+
+        // else pass
+        return { orderAction: OrderAction.Pass, suit: undefined };
+    }
+
+    public clearAllPlayedZones() {
+        document.querySelectorAll('.played-card-zone').forEach(zone => {
+            zone.innerHTML = '';
+        });
     }
 
     public getWinningCard(): Card {

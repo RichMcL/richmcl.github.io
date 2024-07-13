@@ -256,6 +256,18 @@ h1 {
     z-index: 10;
 }
 
+.player-1-call-trump {
+    position: absolute;
+    top: 426px;
+    width: 112px;
+    left: 719px;
+    background: white;
+    padding: 8px;
+    border-radius: 5px;
+    height: 148px;
+    z-index: 10;
+}
+
 .player-1-name {
     position: absolute;
     left: 670px;
