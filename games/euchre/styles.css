@@ -531,37 +531,37 @@ h1 {
 }
 
 .card-wrapper.glass {
-    background-position: -355px -96px;
+    background-position: -355px -95px;
     background-color: #878f96;
     border-radius: 4px;
 }
 
 .card-wrapper.wild {
-    background-position: -213px -96px;
+    background-position: -213px -95px;
     border-radius: 4px;
 }
 
 .card-wrapper.bonus {
-    background-position: -71px -96px;
+    background-position: -71px -95px;
     border-radius: 4px;
 }
 
 .card-wrapper.mult {
-    background-position: -142px -96px;
+    background-position: -142px -95px;
     border-radius: 4px;
 }
 
 .card-wrapper.steel {
-    background-position: -426px -96px;
+    background-position: -426px -95px;
     border-radius: 4px;
 }
 
 .card-wrapper.gold {
-    background-position: -426px -1px;
+    background-position: -426px 0px;
     border-radius: 4px;
 }
 .card-wrapper.lucky {
-    background-position: -284px -96px;
+    background-position: -284px -95px;
     border-radius: 4px;
 }
 .card-wrapper.red-deck {

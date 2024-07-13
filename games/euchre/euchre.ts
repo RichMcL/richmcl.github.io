@@ -99,6 +99,29 @@ class Game {
         //set trump to the top card of the kitty
         this.trump = this.kitty[3].suit;
 
+        //sort player hands by suit and value, prioritizing trump
+        this.players.forEach(player => {
+            // player.hand.sort((a, b) => {
+            //     if (a.suit === b.suit) {
+            //         return a.value > b.value ? 1 : -1;
+            //     }
+
+            //     return a.suit > b.suit ? 1 : -1;
+            // });
+
+            player.hand.sort((a, b) => {
+                if (a.isTrump && !b.isTrump) {
+                    return a.value > b.value ? 1 : -1;
+                }
+
+                if (a.suit === b.suit) {
+                    return a.value > b.value ? 1 : -1;
+                }
+
+                return a.suit > b.suit ? 1 : -1;
+            });
+        });
+
         this.startGame();
 
         this.playGame();
@@ -161,7 +184,7 @@ class Game {
         playerDeckNode.innerHTML = '';
 
         this.players[index].hand.forEach(card => {
-            const cardHtml = this.buildCardHtml(card);
+            const cardHtml = this.buildCardHtml(card, true);
 
             playerDeckNode.innerHTML += cardHtml;
         });
@@ -170,8 +193,9 @@ class Game {
     public renderKitty() {
         const kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
 
-        this.kitty.forEach(card => {
-            const cardHtml = this.buildCardHtml(card);
+        this.kitty.forEach((card, index) => {
+            console.log('kitty index', index);
+            const cardHtml = this.buildCardHtml(card, index === 3);
 
             kittyDeckNode.innerHTML += cardHtml;
         });
@@ -322,7 +346,7 @@ class Game {
             //find their hand in the DOM and add the element
             const dealerDeckNode = document.querySelectorAll(`.player-${dealer.playerNum}-deck`)[0];
 
-            const cardHtml = this.buildCardHtml(topKitty);
+            const cardHtml = this.buildCardHtml(topKitty, true);
             dealerDeckNode.innerHTML += cardHtml;
 
             //delete the card faces from the kitty and swap with red deck
@@ -368,7 +392,7 @@ class Game {
                         `.played-card-zone.player-1-played`
                     )[0];
 
-                    const cardHtml = this.buildCardHtml(playedCard);
+                    const cardHtml = this.buildCardHtml(playedCard, true);
 
                     playedCardNode.innerHTML = cardHtml;
 
@@ -636,9 +660,10 @@ class Game {
         return false;
     }
 
-    public buildCardHtml(card: Card) {
+    public buildCardHtml(card: Card, showTrump = false): string {
+        card.isTrump = this.isCardTrump(card, this.trump);
         return `
-        <div class="card-wrapper">
+        <div class="card-wrapper ${card.isTrump && showTrump ? 'gold' : ''}">
             <div class="card-face ${cardValueToKey(card.value)}-${card.suit.toLowerCase()}"></div>
         </div>
         `;
@@ -680,7 +705,7 @@ class Game {
             `.played-card-zone.player-${player.playerNum}-played`
         )[0];
 
-        const cardHtml = this.buildCardHtml(playedCard);
+        const cardHtml = this.buildCardHtml(playedCard, true);
 
         playedCardNode.innerHTML = cardHtml;
 

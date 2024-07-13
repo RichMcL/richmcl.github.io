@@ -118,6 +118,24 @@ var Game = /** @class */ (function () {
         this.kitty = this.dealDeck(this.deck, this.players);
         //set trump to the top card of the kitty
         this.trump = this.kitty[3].suit;
+        //sort player hands by suit and value, prioritizing trump
+        this.players.forEach(function (player) {
+            // player.hand.sort((a, b) => {
+            //     if (a.suit === b.suit) {
+            //         return a.value > b.value ? 1 : -1;
+            //     }
+            //     return a.suit > b.suit ? 1 : -1;
+            // });
+            player.hand.sort(function (a, b) {
+                if (a.isTrump && !b.isTrump) {
+                    return a.value > b.value ? 1 : -1;
+                }
+                if (a.suit === b.suit) {
+                    return a.value > b.value ? 1 : -1;
+                }
+                return a.suit > b.suit ? 1 : -1;
+            });
+        });
         this.startGame();
         this.playGame();
     }
@@ -167,15 +185,16 @@ var Game = /** @class */ (function () {
         var playerDeckNode = document.querySelectorAll(".player-".concat(player.playerNum, "-deck"))[0];
         playerDeckNode.innerHTML = '';
         this.players[index].hand.forEach(function (card) {
-            var cardHtml = _this.buildCardHtml(card);
+            var cardHtml = _this.buildCardHtml(card, true);
             playerDeckNode.innerHTML += cardHtml;
         });
     };
     Game.prototype.renderKitty = function () {
         var _this = this;
         var kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
-        this.kitty.forEach(function (card) {
-            var cardHtml = _this.buildCardHtml(card);
+        this.kitty.forEach(function (card, index) {
+            console.log('kitty index', index);
+            var cardHtml = _this.buildCardHtml(card, index === 3);
             kittyDeckNode.innerHTML += cardHtml;
         });
     };
@@ -317,7 +336,7 @@ var Game = /** @class */ (function () {
                         topKitty = __assign(__assign({}, this.kitty[3]), { isTrump: true });
                         dealer.hand.push(topKitty);
                         dealerDeckNode = document.querySelectorAll(".player-".concat(dealer.playerNum, "-deck"))[0];
-                        cardHtml = this.buildCardHtml(topKitty);
+                        cardHtml = this.buildCardHtml(topKitty, true);
                         dealerDeckNode.innerHTML += cardHtml;
                         //delete the card faces from the kitty and swap with red deck
                         document.querySelectorAll('.kitty-wrapper .card-face').forEach(function (card, index) {
@@ -359,7 +378,7 @@ var Game = /** @class */ (function () {
                                         this_1.currentTrick.push(playedCard);
                                         this_1.currentPlayer.hand.splice(this_1.currentPlayer.hand.indexOf(playedCard), 1);
                                         playedCardNode = document.querySelectorAll(".played-card-zone.player-1-played")[0];
-                                        cardHtml = this_1.buildCardHtml(playedCard);
+                                        cardHtml = this_1.buildCardHtml(playedCard, true);
                                         playedCardNode.innerHTML = cardHtml;
                                         toRemove = ".player-1-deck > .card-wrapper > .".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
                                         playerDeckNode = document.querySelectorAll(toRemove)[0];
@@ -590,8 +609,10 @@ var Game = /** @class */ (function () {
         }
         return false;
     };
-    Game.prototype.buildCardHtml = function (card) {
-        return "\n        <div class=\"card-wrapper\">\n            <div class=\"card-face ".concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n        </div>\n        ");
+    Game.prototype.buildCardHtml = function (card, showTrump) {
+        if (showTrump === void 0) { showTrump = false; }
+        card.isTrump = this.isCardTrump(card, this.trump);
+        return "\n        <div class=\"card-wrapper ".concat(card.isTrump && showTrump ? 'gold' : '', "\">\n            <div class=\"card-face ").concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n        </div>\n        ");
     };
     Game.prototype.playNpcCard = function (player) {
         var _a;
@@ -628,7 +649,7 @@ var Game = /** @class */ (function () {
         player.hand.splice(player.hand.indexOf(playedCard), 1);
         //Play the card on the game board
         var playedCardNode = document.querySelectorAll(".played-card-zone.player-".concat(player.playerNum, "-played"))[0];
-        var cardHtml = this.buildCardHtml(playedCard);
+        var cardHtml = this.buildCardHtml(playedCard, true);
         playedCardNode.innerHTML = cardHtml;
         var toRemove = ".player-".concat(player.playerNum, "-deck > .card-wrapper > .").concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
         //Remove the card from the player's hand on the game board

@@ -85,7 +85,8 @@ function scaleGame() {
         const randomIndex = Math.floor(Math.random() * themes.length);
         const randomTheme = themes[randomIndex];
 
-        setTheme(randomTheme);
+        // setTheme(randomTheme);
+        setTheme('green');
 
         // Initial scale
         scaleGame();
