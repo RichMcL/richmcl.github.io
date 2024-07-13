@@ -403,12 +403,7 @@ class Game {
             const winningTeam = this.teams.find(team => team.players.includes(winningPlayer))!;
             winningTeam.tricksTaken++;
 
-            document.querySelectorAll(
-                '.team-1-tricks'
-            )[0].innerHTML = `${this.teams[0].tricksTaken}`;
-            document.querySelectorAll(
-                '.team-2-tricks'
-            )[0].innerHTML = `${this.teams[1].tricksTaken}`;
+            this.renderTrickCount();
 
             this.trickCount++;
 
@@ -512,6 +507,11 @@ class Game {
         const playerDeckNode = document.querySelectorAll(toRemove)[0];
 
         (playerDeckNode.parentNode as Element)?.remove();
+    }
+
+    public renderTrickCount() {
+        document.querySelectorAll('.team-1-tricks')[0].innerHTML = `${this.teams[0].tricksTaken}`;
+        document.querySelectorAll('.team-2-tricks')[0].innerHTML = `${this.teams[1].tricksTaken}`;
     }
 
     public updateCurrentPlayerHighlight(playerNum: number) {

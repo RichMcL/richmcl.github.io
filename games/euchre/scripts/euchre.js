@@ -382,8 +382,7 @@ var Game = /** @class */ (function () {
                                         console.log('WINNING PLAYER: ', winningPlayer.playerNum);
                                         winningTeam = this_1.teams.find(function (team) { return team.players.includes(winningPlayer); });
                                         winningTeam.tricksTaken++;
-                                        document.querySelectorAll('.team-1-tricks')[0].innerHTML = "".concat(this_1.teams[0].tricksTaken);
-                                        document.querySelectorAll('.team-2-tricks')[0].innerHTML = "".concat(this_1.teams[1].tricksTaken);
+                                        this_1.renderTrickCount();
                                         this_1.trickCount++;
                                         this_1.currentTrick = [];
                                         console.log('WINNING TEAM: ', winningTeam.players.map(function (player) { return player.playerNum; }));
@@ -477,6 +476,10 @@ var Game = /** @class */ (function () {
         var toRemove = ".player-".concat(dealer.playerNum, "-deck > .card-wrapper > .").concat(cardValueToKey(discardCard.value), "-").concat(discardCard.suit.toLowerCase());
         var playerDeckNode = document.querySelectorAll(toRemove)[0];
         (_a = playerDeckNode.parentNode) === null || _a === void 0 ? void 0 : _a.remove();
+    };
+    Game.prototype.renderTrickCount = function () {
+        document.querySelectorAll('.team-1-tricks')[0].innerHTML = "".concat(this.teams[0].tricksTaken);
+        document.querySelectorAll('.team-2-tricks')[0].innerHTML = "".concat(this.teams[1].tricksTaken);
     };
     Game.prototype.updateCurrentPlayerHighlight = function (playerNum) {
         document.querySelectorAll('.played-card-zone').forEach(function (zone) {
