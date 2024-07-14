@@ -138,8 +138,12 @@ class Game {
         this.renderInitialHands();
         this.renderKitty();
 
-        document.querySelectorAll('#trump-icon')[0].className = `icon-${this.trump.toLowerCase()}`;
-        document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
+        this.setTrumpIconAndValue(this.trump);
+    }
+
+    public setTrumpIconAndValue(suit: Suit) {
+        document.querySelectorAll('#trump-icon')[0].className = `icon-${suit.toLowerCase()}`;
+        document.querySelectorAll('.trump-value')[0].innerHTML = suit;
     }
 
     public renderInitialHands() {
@@ -292,8 +296,11 @@ class Game {
             }
 
             if (isCalledTrump) {
+                this.flipKittyOnDom();
+
                 // update the isTrump property for each card in the players' hands
                 this.setTrumpOnDeck();
+                this.setTrumpIconAndValue(this.trump);
 
                 //sort player hands by suit and value, prioritizing trump
                 this.players.forEach(player => {
@@ -333,17 +340,7 @@ class Game {
             const cardHtml = this.buildCardHtml(topKitty, true);
             dealerDeckNode.innerHTML += cardHtml;
 
-            //delete the card faces from the kitty and swap with red deck
-            document.querySelectorAll('.kitty-wrapper .card-face').forEach((card, index) => {
-                card.remove();
-            });
-            document.querySelectorAll('.kitty-wrapper .card-wrapper').forEach((card, index) => {
-                card.classList.add('red-deck');
-
-                if (index === 3) {
-                    card.remove();
-                }
-            });
+            this.flipKittyOnDom();
         }
 
         //TODO: If no one orders up, we need to loop through again to pick trump
@@ -773,20 +770,20 @@ class Game {
         const trumpCount = player.hand.filter(card => card.isTrump).length;
         const aceCount = player.hand.filter(card => card.value === CardValue.Ace).length;
 
-        // if the player has both bowers, and either 4 trump or 2 aces, go alone
-        if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
-            return OrderAction.Alone;
-        }
+        // // if the player has both bowers, and either 4 trump or 2 aces, go alone
+        // if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
+        //     return OrderAction.Alone;
+        // }
 
-        // if the player has a right bower and another trump card, order up
-        if (hasRightBower && trumpCount >= 2) {
-            return OrderAction.OrderUp;
-        }
+        // // if the player has a right bower and another trump card, order up
+        // if (hasRightBower && trumpCount >= 2) {
+        //     return OrderAction.OrderUp;
+        // }
 
-        // if they have at least 2 trump cards, order up
-        if (trumpCount >= 3) {
-            return OrderAction.OrderUp;
-        }
+        // // if they have at least 2 trump cards, order up
+        // if (trumpCount >= 3) {
+        //     return OrderAction.OrderUp;
+        // }
 
         // else pass
         return OrderAction.Pass;
@@ -832,6 +829,20 @@ class Game {
     public clearAllPlayedZones() {
         document.querySelectorAll('.played-card-zone').forEach(zone => {
             zone.innerHTML = '';
+        });
+    }
+
+    public flipKittyOnDom() {
+        //delete the card faces from the kitty and swap with red deck
+        document.querySelectorAll('.kitty-wrapper .card-face').forEach((card, index) => {
+            card.remove();
+        });
+        document.querySelectorAll('.kitty-wrapper .card-wrapper').forEach((card, index) => {
+            card.classList.add('red-deck');
+
+            if (index === 3) {
+                card.remove();
+            }
         });
     }
 

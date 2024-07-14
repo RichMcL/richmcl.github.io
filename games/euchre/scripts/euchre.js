@@ -148,8 +148,11 @@ var Game = /** @class */ (function () {
         console.log('Game started', this);
         this.renderInitialHands();
         this.renderKitty();
-        document.querySelectorAll('#trump-icon')[0].className = "icon-".concat(this.trump.toLowerCase());
-        document.querySelectorAll('.trump-value')[0].innerHTML = this.trump;
+        this.setTrumpIconAndValue(this.trump);
+    };
+    Game.prototype.setTrumpIconAndValue = function (suit) {
+        document.querySelectorAll('#trump-icon')[0].className = "icon-".concat(suit.toLowerCase());
+        document.querySelectorAll('.trump-value')[0].innerHTML = suit;
     };
     Game.prototype.renderInitialHands = function () {
         var _this = this;
@@ -297,8 +300,10 @@ var Game = /** @class */ (function () {
                         return [3 /*break*/, 8];
                     case 13:
                         if (isCalledTrump) {
+                            this.flipKittyOnDom();
                             // update the isTrump property for each card in the players' hands
                             this.setTrumpOnDeck();
+                            this.setTrumpIconAndValue(this.trump);
                             //sort player hands by suit and value, prioritizing trump
                             this.players.forEach(function (player) {
                                 _this.sortPlayerHand(player);
@@ -328,16 +333,7 @@ var Game = /** @class */ (function () {
                         dealerDeckNode = document.querySelectorAll(".player-".concat(dealer.playerNum, "-deck"))[0];
                         cardHtml = this.buildCardHtml(topKitty, true);
                         dealerDeckNode.innerHTML += cardHtml;
-                        //delete the card faces from the kitty and swap with red deck
-                        document.querySelectorAll('.kitty-wrapper .card-face').forEach(function (card, index) {
-                            card.remove();
-                        });
-                        document.querySelectorAll('.kitty-wrapper .card-wrapper').forEach(function (card, index) {
-                            card.classList.add('red-deck');
-                            if (index === 3) {
-                                card.remove();
-                            }
-                        });
+                        this.flipKittyOnDom();
                         _g.label = 18;
                     case 18:
                         //TODO: If no one orders up, we need to loop through again to pick trump
@@ -699,18 +695,18 @@ var Game = /** @class */ (function () {
         var hasLeftBower = player.hand.find(function (card) { return card.value === CardValue.Jack && card.isTrump && card.suit !== trump; });
         var trumpCount = player.hand.filter(function (card) { return card.isTrump; }).length;
         var aceCount = player.hand.filter(function (card) { return card.value === CardValue.Ace; }).length;
-        // if the player has both bowers, and either 4 trump or 2 aces, go alone
-        if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
-            return OrderAction.Alone;
-        }
-        // if the player has a right bower and another trump card, order up
-        if (hasRightBower && trumpCount >= 2) {
-            return OrderAction.OrderUp;
-        }
-        // if they have at least 2 trump cards, order up
-        if (trumpCount >= 3) {
-            return OrderAction.OrderUp;
-        }
+        // // if the player has both bowers, and either 4 trump or 2 aces, go alone
+        // if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
+        //     return OrderAction.Alone;
+        // }
+        // // if the player has a right bower and another trump card, order up
+        // if (hasRightBower && trumpCount >= 2) {
+        //     return OrderAction.OrderUp;
+        // }
+        // // if they have at least 2 trump cards, order up
+        // if (trumpCount >= 3) {
+        //     return OrderAction.OrderUp;
+        // }
         // else pass
         return OrderAction.Pass;
     };
@@ -754,6 +750,18 @@ var Game = /** @class */ (function () {
     Game.prototype.clearAllPlayedZones = function () {
         document.querySelectorAll('.played-card-zone').forEach(function (zone) {
             zone.innerHTML = '';
+        });
+    };
+    Game.prototype.flipKittyOnDom = function () {
+        //delete the card faces from the kitty and swap with red deck
+        document.querySelectorAll('.kitty-wrapper .card-face').forEach(function (card, index) {
+            card.remove();
+        });
+        document.querySelectorAll('.kitty-wrapper .card-wrapper').forEach(function (card, index) {
+            card.classList.add('red-deck');
+            if (index === 3) {
+                card.remove();
+            }
         });
     };
     Game.prototype.getWinningCard = function () {
