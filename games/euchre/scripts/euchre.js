@@ -178,6 +178,7 @@ var Game = /** @class */ (function () {
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
             var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, isCalledTrump, _b, _c, playerNum, isStickTheDealer, result, orderAction, suit, _d, suit, orderAction, discardCard, discardCardIndex, discardCard, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1;
+            var _this = this;
             var _e, _f;
             return __generator(this, function (_g) {
                 switch (_g.label) {
@@ -269,6 +270,7 @@ var Game = /** @class */ (function () {
                         }
                         console.log('PLAYER ORDER ACTION', orderAction);
                         if (suit) {
+                            this.trump = suit;
                             isCalledTrump = true;
                         }
                         this.renderCallTrumpSelection(this.currentPlayer, orderAction, suit);
@@ -282,6 +284,7 @@ var Game = /** @class */ (function () {
                         this.updateCurrentPlayerHighlight(playerNum);
                         _d = this.npcCallTrump(this.currentPlayer, isStickTheDealer), suit = _d.suit, orderAction = _d.orderAction;
                         if (suit) {
+                            this.trump = suit;
                             isCalledTrump = true;
                         }
                         this.renderCallTrumpSelection(this.currentPlayer, orderAction, suit);
@@ -292,7 +295,17 @@ var Game = /** @class */ (function () {
                     case 12:
                         _b++;
                         return [3 /*break*/, 8];
-                    case 13: return [3 /*break*/, 18];
+                    case 13:
+                        if (isCalledTrump) {
+                            // update the isTrump property for each card in the players' hands
+                            this.setTrumpOnDeck();
+                            //sort player hands by suit and value, prioritizing trump
+                            this.players.forEach(function (player) {
+                                _this.sortPlayerHand(player);
+                            });
+                            this.renderInitialHands();
+                        }
+                        return [3 /*break*/, 18];
                     case 14:
                         if (!isOrderedUp) return [3 /*break*/, 18];
                         //If ordered up, add the kitty to the dealer's hand
@@ -555,6 +568,22 @@ var Game = /** @class */ (function () {
     Game.prototype.sortPlayerHand = function (player) {
         var _this = this;
         player.hand.sort(function (a, b) {
+            //if a is the right bower, it should be first
+            if (a.value === CardValue.Jack && a.suit === _this.trump) {
+                return -1;
+            }
+            //if b is the right bower, it should be first
+            if (b.value === CardValue.Jack && b.suit === _this.trump) {
+                return 1;
+            }
+            //if a is the left bower, it should be first
+            if (a.value === CardValue.Jack && a.isTrump) {
+                return -1;
+            }
+            //if b is the left bower, it should be first
+            if (b.value === CardValue.Jack && b.isTrump) {
+                return 1;
+            }
             //if a is trump, it should be first
             if (a.isTrump && !b.isTrump) {
                 return -1;
@@ -666,12 +695,20 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.npcOrderAction = function (player) {
         var trump = this.kitty[3].suit;
-        // if the player has a right bower, order up
-        if (player.hand.find(function (card) { return card.value === CardValue.Jack && card.suit === trump; })) {
+        var hasRightBower = player.hand.find(function (card) { return card.value === CardValue.Jack && card.suit === trump; });
+        var hasLeftBower = player.hand.find(function (card) { return card.value === CardValue.Jack && card.isTrump && card.suit !== trump; });
+        var trumpCount = player.hand.filter(function (card) { return card.isTrump; }).length;
+        var aceCount = player.hand.filter(function (card) { return card.value === CardValue.Ace; }).length;
+        // if the player has both bowers, and either 4 trump or 2 aces, go alone
+        if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
+            return OrderAction.Alone;
+        }
+        // if the player has a right bower and another trump card, order up
+        if (hasRightBower && trumpCount >= 2) {
             return OrderAction.OrderUp;
         }
         // if they have at least 2 trump cards, order up
-        if (player.hand.filter(function (card) { return card.isTrump; }).length >= 2) {
+        if (trumpCount >= 3) {
             return OrderAction.OrderUp;
         }
         // else pass

@@ -259,6 +259,7 @@ class Game {
                     console.log('PLAYER ORDER ACTION', orderAction);
 
                     if (suit) {
+                        this.trump = suit;
                         isCalledTrump = true;
                     }
 
@@ -278,6 +279,7 @@ class Game {
                     );
 
                     if (suit) {
+                        this.trump = suit;
                         isCalledTrump = true;
                     }
 
@@ -287,6 +289,18 @@ class Game {
                         break;
                     }
                 }
+            }
+
+            if (isCalledTrump) {
+                // update the isTrump property for each card in the players' hands
+                this.setTrumpOnDeck();
+
+                //sort player hands by suit and value, prioritizing trump
+                this.players.forEach(player => {
+                    this.sortPlayerHand(player);
+                });
+
+                this.renderInitialHands();
             }
         } else if (isOrderedUp) {
             //If ordered up, add the kitty to the dealer's hand
@@ -592,6 +606,26 @@ class Game {
 
     public sortPlayerHand(player: Player) {
         player.hand.sort((a, b) => {
+            //if a is the right bower, it should be first
+            if (a.value === CardValue.Jack && a.suit === this.trump) {
+                return -1;
+            }
+
+            //if b is the right bower, it should be first
+            if (b.value === CardValue.Jack && b.suit === this.trump) {
+                return 1;
+            }
+
+            //if a is the left bower, it should be first
+            if (a.value === CardValue.Jack && a.isTrump) {
+                return -1;
+            }
+
+            //if b is the left bower, it should be first
+            if (b.value === CardValue.Jack && b.isTrump) {
+                return 1;
+            }
+
             //if a is trump, it should be first
             if (a.isTrump && !b.isTrump) {
                 return -1;
@@ -730,13 +764,27 @@ class Game {
     public npcOrderAction(player: Player): OrderAction {
         const trump = this.kitty[3].suit;
 
-        // if the player has a right bower, order up
-        if (player.hand.find(card => card.value === CardValue.Jack && card.suit === trump)) {
+        const hasRightBower = player.hand.find(
+            card => card.value === CardValue.Jack && card.suit === trump
+        );
+        const hasLeftBower = player.hand.find(
+            card => card.value === CardValue.Jack && card.isTrump && card.suit !== trump
+        );
+        const trumpCount = player.hand.filter(card => card.isTrump).length;
+        const aceCount = player.hand.filter(card => card.value === CardValue.Ace).length;
+
+        // if the player has both bowers, and either 4 trump or 2 aces, go alone
+        if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
+            return OrderAction.Alone;
+        }
+
+        // if the player has a right bower and another trump card, order up
+        if (hasRightBower && trumpCount >= 2) {
             return OrderAction.OrderUp;
         }
 
         // if they have at least 2 trump cards, order up
-        if (player.hand.filter(card => card.isTrump).length >= 2) {
+        if (trumpCount >= 3) {
             return OrderAction.OrderUp;
         }
 
