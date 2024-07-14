@@ -101,25 +101,9 @@ class Game {
 
         //sort player hands by suit and value, prioritizing trump
         this.players.forEach(player => {
-            // player.hand.sort((a, b) => {
-            //     if (a.suit === b.suit) {
-            //         return a.value > b.value ? 1 : -1;
-            //     }
+            this.sortPlayerHand(player);
 
-            //     return a.suit > b.suit ? 1 : -1;
-            // });
-
-            player.hand.sort((a, b) => {
-                if (a.isTrump && !b.isTrump) {
-                    return a.value > b.value ? 1 : -1;
-                }
-
-                if (a.suit === b.suit) {
-                    return a.value > b.value ? 1 : -1;
-                }
-
-                return a.suit > b.suit ? 1 : -1;
-            });
+            console.log('player hand', player.playerNum, player.hand);
         });
 
         this.startGame();
@@ -150,17 +134,6 @@ class Game {
 
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
-
-        //sort each player's hand by suit and value
-        this.players.forEach(player => {
-            player.hand.sort((a, b) => {
-                if (a.suit === b.suit) {
-                    return a.value > b.value ? 1 : -1;
-                }
-
-                return a.suit > b.suit ? 1 : -1;
-            });
-        });
 
         console.log('Game started', this);
 
@@ -618,6 +591,41 @@ class Game {
                 isPlayerTeammate: false
             }
         ];
+    }
+
+    public sortPlayerHand(player: Player) {
+        player.hand = player.hand.sort((a, b) => {
+            //if a is trump, it should be first
+            if (a.isTrump && !b.isTrump) {
+                return -1;
+            }
+
+            //if b is trump, it should be first
+            if (!a.isTrump && b.isTrump) {
+                return 1;
+            }
+
+            //if a and b are both trump, compare their values
+            if (a.isTrump && b.isTrump) {
+                if (a.value === CardValue.Jack && a.suit === this.trump) {
+                    return -1;
+                }
+
+                if (b.value === CardValue.Jack && b.suit === this.trump) {
+                    return 1;
+                }
+
+                return a.value > b.value ? -1 : 1;
+            }
+
+            //if a and b are both not trump, compare their suits
+            if (a.suit === b.suit) {
+                return a.value > b.value ? -1 : 1;
+            }
+
+            //if a and b are different suits, compare their suits
+            return a.suit > b.suit ? -1 : 1;
+        });
     }
 
     public buildTeams() {

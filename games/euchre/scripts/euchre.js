@@ -109,6 +109,7 @@ var cardValueToKey = function (value) {
 };
 var Game = /** @class */ (function () {
     function Game() {
+        var _this = this;
         this.trickCount = 0;
         this.currentTrick = [];
         this.playerOrder = [];
@@ -120,21 +121,8 @@ var Game = /** @class */ (function () {
         this.trump = this.kitty[3].suit;
         //sort player hands by suit and value, prioritizing trump
         this.players.forEach(function (player) {
-            // player.hand.sort((a, b) => {
-            //     if (a.suit === b.suit) {
-            //         return a.value > b.value ? 1 : -1;
-            //     }
-            //     return a.suit > b.suit ? 1 : -1;
-            // });
-            player.hand.sort(function (a, b) {
-                if (a.isTrump && !b.isTrump) {
-                    return a.value > b.value ? 1 : -1;
-                }
-                if (a.suit === b.suit) {
-                    return a.value > b.value ? 1 : -1;
-                }
-                return a.suit > b.suit ? 1 : -1;
-            });
+            _this.sortPlayerHand(player);
+            console.log('player hand', player.playerNum, player.hand);
         });
         this.startGame();
         this.playGame();
@@ -158,15 +146,6 @@ var Game = /** @class */ (function () {
         }
         // update the isTrump property for each card in the players' hands
         this.setTrumpOnDeck();
-        //sort each player's hand by suit and value
-        this.players.forEach(function (player) {
-            player.hand.sort(function (a, b) {
-                if (a.suit === b.suit) {
-                    return a.value > b.value ? 1 : -1;
-                }
-                return a.suit > b.suit ? 1 : -1;
-            });
-        });
         console.log('Game started', this);
         this.renderInitialHands();
         this.renderKitty();
@@ -574,6 +553,35 @@ var Game = /** @class */ (function () {
                 isPlayerTeammate: false
             }
         ];
+    };
+    Game.prototype.sortPlayerHand = function (player) {
+        var _this = this;
+        player.hand = player.hand.sort(function (a, b) {
+            //if a is trump, it should be first
+            if (a.isTrump && !b.isTrump) {
+                return -1;
+            }
+            //if b is trump, it should be first
+            if (!a.isTrump && b.isTrump) {
+                return 1;
+            }
+            //if a and b are both trump, compare their values
+            if (a.isTrump && b.isTrump) {
+                if (a.value === CardValue.Jack && a.suit === _this.trump) {
+                    return -1;
+                }
+                if (b.value === CardValue.Jack && b.suit === _this.trump) {
+                    return 1;
+                }
+                return a.value > b.value ? -1 : 1;
+            }
+            //if a and b are both not trump, compare their suits
+            if (a.suit === b.suit) {
+                return a.value > b.value ? -1 : 1;
+            }
+            //if a and b are different suits, compare their suits
+            return a.suit > b.suit ? -1 : 1;
+        });
     };
     Game.prototype.buildTeams = function () {
         return [
