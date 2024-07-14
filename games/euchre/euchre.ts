@@ -702,7 +702,7 @@ class Game {
     public buildCardHtml(card: Card, showTrump = false): string {
         card.isTrump = this.isCardTrump(card, this.trump);
         return `
-        <div class="card-wrapper ${card.isTrump && showTrump ? 'gold' : ''}">
+        <div class="card-wrapper ${card.isTrump && showTrump ? 'steel' : ''}">
             <div class="card-face ${cardValueToKey(card.value)}-${card.suit.toLowerCase()}"></div>
         </div>
         `;
@@ -713,8 +713,11 @@ class Game {
         const ledTrump = this.getLedTrump();
         let playedCard: Card;
 
-        // if trump was led, the player must play a trump card if they have one
-        if (ledTrump) {
+        // if the player has the lead, play the highest card in their hand
+        if (this.currentTrick.length === 0) {
+            playedCard = player.hand[player.hand.length - 1];
+        } else if (ledTrump) {
+            // if trump was led, the player must play a trump card if they have one
             const trumpCard = player.hand.find(card => card.isTrump);
             if (trumpCard) {
                 playedCard = trumpCard;
@@ -770,20 +773,20 @@ class Game {
         const trumpCount = player.hand.filter(card => card.isTrump).length;
         const aceCount = player.hand.filter(card => card.value === CardValue.Ace).length;
 
-        // // if the player has both bowers, and either 4 trump or 2 aces, go alone
-        // if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
-        //     return OrderAction.Alone;
-        // }
+        // if the player has both bowers, and either 4 trump or 2 aces, go alone
+        if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
+            return OrderAction.Alone;
+        }
 
         // // if the player has a right bower and another trump card, order up
-        // if (hasRightBower && trumpCount >= 2) {
-        //     return OrderAction.OrderUp;
-        // }
+        if (hasRightBower && trumpCount >= 2) {
+            return OrderAction.OrderUp;
+        }
 
-        // // if they have at least 2 trump cards, order up
-        // if (trumpCount >= 3) {
-        //     return OrderAction.OrderUp;
-        // }
+        // if they have at least 2 trump cards, order up
+        if (trumpCount >= 3) {
+            return OrderAction.OrderUp;
+        }
 
         // else pass
         return OrderAction.Pass;

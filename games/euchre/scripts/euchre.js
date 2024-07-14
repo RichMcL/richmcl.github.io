@@ -645,15 +645,19 @@ var Game = /** @class */ (function () {
     Game.prototype.buildCardHtml = function (card, showTrump) {
         if (showTrump === void 0) { showTrump = false; }
         card.isTrump = this.isCardTrump(card, this.trump);
-        return "\n        <div class=\"card-wrapper ".concat(card.isTrump && showTrump ? 'gold' : '', "\">\n            <div class=\"card-face ").concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n        </div>\n        ");
+        return "\n        <div class=\"card-wrapper ".concat(card.isTrump && showTrump ? 'steel' : '', "\">\n            <div class=\"card-face ").concat(cardValueToKey(card.value), "-").concat(card.suit.toLowerCase(), "\"></div>\n        </div>\n        ");
     };
     Game.prototype.playNpcCard = function (player) {
         var _a;
         var ledSuit = this.getLedSuit();
         var ledTrump = this.getLedTrump();
         var playedCard;
-        // if trump was led, the player must play a trump card if they have one
-        if (ledTrump) {
+        // if the player has the lead, play the highest card in their hand
+        if (this.currentTrick.length === 0) {
+            playedCard = player.hand[player.hand.length - 1];
+        }
+        else if (ledTrump) {
+            // if trump was led, the player must play a trump card if they have one
             var trumpCard = player.hand.find(function (card) { return card.isTrump; });
             if (trumpCard) {
                 playedCard = trumpCard;
@@ -695,18 +699,18 @@ var Game = /** @class */ (function () {
         var hasLeftBower = player.hand.find(function (card) { return card.value === CardValue.Jack && card.isTrump && card.suit !== trump; });
         var trumpCount = player.hand.filter(function (card) { return card.isTrump; }).length;
         var aceCount = player.hand.filter(function (card) { return card.value === CardValue.Ace; }).length;
-        // // if the player has both bowers, and either 4 trump or 2 aces, go alone
-        // if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
-        //     return OrderAction.Alone;
-        // }
+        // if the player has both bowers, and either 4 trump or 2 aces, go alone
+        if (hasRightBower && hasLeftBower && (trumpCount >= 4 || aceCount >= 2)) {
+            return OrderAction.Alone;
+        }
         // // if the player has a right bower and another trump card, order up
-        // if (hasRightBower && trumpCount >= 2) {
-        //     return OrderAction.OrderUp;
-        // }
-        // // if they have at least 2 trump cards, order up
-        // if (trumpCount >= 3) {
-        //     return OrderAction.OrderUp;
-        // }
+        if (hasRightBower && trumpCount >= 2) {
+            return OrderAction.OrderUp;
+        }
+        // if they have at least 2 trump cards, order up
+        if (trumpCount >= 3) {
+            return OrderAction.OrderUp;
+        }
         // else pass
         return OrderAction.Pass;
     };
