@@ -348,17 +348,23 @@ var Game = /** @class */ (function () {
                                     case 1:
                                         //clear all played card zones
                                         _k.sent();
+                                        document.querySelectorAll('.played-card-zone .card-wrapper').forEach(function (zone) {
+                                            zone.classList.add('player-1-take-trick');
+                                        });
+                                        return [4 /*yield*/, this_1.sleep(2000)];
+                                    case 2:
+                                        _k.sent();
                                         this_1.clearAllPlayedZones();
                                         _h = 0, _j = this_1.playerOrder;
-                                        _k.label = 2;
-                                    case 2:
-                                        if (!(_h < _j.length)) return [3 /*break*/, 7];
+                                        _k.label = 3;
+                                    case 3:
+                                        if (!(_h < _j.length)) return [3 /*break*/, 8];
                                         playerNum = _j[_h];
                                         this_1.currentPlayer = this_1.getPlayerByPlayerNum(playerNum);
-                                        if (!this_1.currentPlayer.isPlayer) return [3 /*break*/, 4];
+                                        if (!this_1.currentPlayer.isPlayer) return [3 /*break*/, 5];
                                         this_1.updateCurrentPlayerHighlight(playerNum);
                                         return [4 /*yield*/, this_1.getUserCardChoice()];
-                                    case 3:
+                                    case 4:
                                         cardIndex = _k.sent();
                                         playedCard = this_1.currentPlayer.hand[cardIndex];
                                         this_1.currentTrick.push(playedCard);
@@ -369,18 +375,18 @@ var Game = /** @class */ (function () {
                                         toRemove = ".player-1-deck > .card-wrapper > .".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
                                         playerDeckNode = document.querySelectorAll(toRemove)[0];
                                         (_f = playerDeckNode.parentNode) === null || _f === void 0 ? void 0 : _f.remove();
-                                        return [3 /*break*/, 6];
-                                    case 4:
+                                        return [3 /*break*/, 7];
+                                    case 5:
                                         this_1.updateCurrentPlayerHighlight(playerNum);
                                         return [4 /*yield*/, this_1.sleep(2000)];
-                                    case 5:
+                                    case 6:
                                         _k.sent();
                                         this_1.playNpcCard(this_1.currentPlayer);
-                                        _k.label = 6;
-                                    case 6:
-                                        _h++;
-                                        return [3 /*break*/, 2];
+                                        _k.label = 7;
                                     case 7:
+                                        _h++;
+                                        return [3 /*break*/, 3];
+                                    case 8:
                                         winningCard = this_1.getWinningCard();
                                         winningIndex = this_1.currentTrick.findIndex(function (card) { return card === winningCard; });
                                         winningPlayer = this_1.players.find(function (player) { return player.playIndex === winningIndex; });

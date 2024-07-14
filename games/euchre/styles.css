@@ -329,6 +329,11 @@ h1 {
     padding-left: 2px;
 }
 
+.played-card-zone > .card-wrapper {
+    position: absolute;
+    top: 1px;
+}
+
 .played-card-zone.current-player {
     border: 4px solid var(--base);
 }
@@ -337,6 +342,19 @@ h1 {
     top: 422px;
     left: 715px;
 }
+
+@keyframes player1TakeTrick {
+    to {
+      /* Ending, fixed position */
+      top: 770px; /* Example fixed position */
+      left: 715px; /* Example fixed position */
+      position: absolute;
+    }
+  }
+
+  .player-1-take-trick {
+    animation: player1TakeTrick .5s forwards linear; /* Adjust time as needed */
+  }
 
 .player-1-dealer {
     position: absolute;

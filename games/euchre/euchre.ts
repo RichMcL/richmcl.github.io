@@ -180,6 +180,7 @@ class Game {
         console.log('playerOrder', this.playerOrder);
         const dealer = this.players.find(player => player.isDealer);
         document.querySelectorAll('.dealer-box-value')[0].innerHTML = `Player ${dealer?.playerNum}`;
+
         document
             .querySelectorAll(`.player-${dealer.playerNum}-dealer`)[0]
             .classList.remove('hidden');
@@ -348,6 +349,12 @@ class Game {
 
         while (this.trickCount < 5) {
             //clear all played card zones
+
+            await this.sleep(2000);
+
+            document.querySelectorAll('.played-card-zone .card-wrapper').forEach(zone => {
+                zone.classList.add('player-1-take-trick');
+            });
 
             await this.sleep(2000);
 
