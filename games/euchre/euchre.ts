@@ -99,11 +99,12 @@ class Game {
         //set trump to the top card of the kitty
         this.trump = this.kitty[3].suit;
 
+        // update the isTrump property for each card in the players' hands
+        this.setTrumpOnDeck();
+
         //sort player hands by suit and value, prioritizing trump
         this.players.forEach(player => {
             this.sortPlayerHand(player);
-
-            console.log('player hand', player.playerNum, player.hand);
         });
 
         this.startGame();
@@ -131,9 +132,6 @@ class Game {
 
             p.playIndex = playIndex;
         }
-
-        // update the isTrump property for each card in the players' hands
-        this.setTrumpOnDeck();
 
         console.log('Game started', this);
 
@@ -167,7 +165,6 @@ class Game {
         const kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
 
         this.kitty.forEach((card, index) => {
-            console.log('kitty index', index);
             const cardHtml = this.buildCardHtml(card, index === 3);
 
             kittyDeckNode.innerHTML += cardHtml;
@@ -594,7 +591,7 @@ class Game {
     }
 
     public sortPlayerHand(player: Player) {
-        player.hand = player.hand.sort((a, b) => {
+        player.hand.sort((a, b) => {
             //if a is trump, it should be first
             if (a.isTrump && !b.isTrump) {
                 return -1;
@@ -626,6 +623,9 @@ class Game {
             //if a and b are different suits, compare their suits
             return a.suit > b.suit ? -1 : 1;
         });
+
+        //reverse the order of the hand so that the highest cards are first
+        player.hand.reverse();
     }
 
     public buildTeams() {

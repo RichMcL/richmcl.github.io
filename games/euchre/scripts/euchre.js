@@ -119,10 +119,11 @@ var Game = /** @class */ (function () {
         this.kitty = this.dealDeck(this.deck, this.players);
         //set trump to the top card of the kitty
         this.trump = this.kitty[3].suit;
+        // update the isTrump property for each card in the players' hands
+        this.setTrumpOnDeck();
         //sort player hands by suit and value, prioritizing trump
         this.players.forEach(function (player) {
             _this.sortPlayerHand(player);
-            console.log('player hand', player.playerNum, player.hand);
         });
         this.startGame();
         this.playGame();
@@ -144,8 +145,6 @@ var Game = /** @class */ (function () {
             }
             p.playIndex = playIndex;
         }
-        // update the isTrump property for each card in the players' hands
-        this.setTrumpOnDeck();
         console.log('Game started', this);
         this.renderInitialHands();
         this.renderKitty();
@@ -172,7 +171,6 @@ var Game = /** @class */ (function () {
         var _this = this;
         var kittyDeckNode = document.querySelectorAll('.kitty-wrapper')[0];
         this.kitty.forEach(function (card, index) {
-            console.log('kitty index', index);
             var cardHtml = _this.buildCardHtml(card, index === 3);
             kittyDeckNode.innerHTML += cardHtml;
         });
@@ -556,7 +554,7 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.sortPlayerHand = function (player) {
         var _this = this;
-        player.hand = player.hand.sort(function (a, b) {
+        player.hand.sort(function (a, b) {
             //if a is trump, it should be first
             if (a.isTrump && !b.isTrump) {
                 return -1;
@@ -582,6 +580,8 @@ var Game = /** @class */ (function () {
             //if a and b are different suits, compare their suits
             return a.suit > b.suit ? -1 : 1;
         });
+        //reverse the order of the hand so that the highest cards are first
+        player.hand.reverse();
     };
     Game.prototype.buildTeams = function () {
         return [
