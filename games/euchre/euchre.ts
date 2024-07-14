@@ -778,8 +778,13 @@ class Game {
             return OrderAction.Alone;
         }
 
-        // // if the player has a right bower and another trump card, order up
+        // if the player has a right bower and another trump card, order up
         if (hasRightBower && trumpCount >= 2) {
+            return OrderAction.OrderUp;
+        }
+
+        // if the player is dealer and has a left bower and another trump card, order up
+        if (player.isDealer && hasLeftBower && trumpCount >= 2) {
             return OrderAction.OrderUp;
         }
 
