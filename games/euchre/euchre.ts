@@ -352,21 +352,8 @@ class Game {
 
             await this.sleep(2000);
 
-            document
-                .querySelectorAll('.played-card-zone.player-1-played .card-wrapper')[0]
-                ?.classList.add('player-1-take-trick-from-3');
-
-            document
-                .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]
-                ?.classList.add('player-1-take-trick-from-2');
-
-            document
-                .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]
-                ?.classList.add('player-1-take-trick-from-3');
-
-            document
-                .querySelectorAll('.played-card-zone.player-4-played .card-wrapper')[0]
-                ?.classList.add('player-1-take-trick-from-4');
+            this.animatePlayer1TakeTrick();
+            this.animatePlayer3TakeTrick();
 
             await this.sleep(2000);
 
@@ -871,6 +858,42 @@ class Game {
                 card.remove();
             }
         });
+    }
+
+    public animatePlayer1TakeTrick() {
+        document
+            .querySelectorAll('.played-card-zone.player-1-played .card-wrapper')[0]
+            ?.classList.add('player-1-take-trick-from-3');
+
+        document
+            .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]
+            ?.classList.add('player-1-take-trick-from-2');
+
+        document
+            .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]
+            ?.classList.add('player-1-take-trick-from-3');
+
+        document
+            .querySelectorAll('.played-card-zone.player-4-played .card-wrapper')[0]
+            ?.classList.add('player-1-take-trick-from-4');
+    }
+
+    public animatePlayer3TakeTrick() {
+        document
+            .querySelectorAll('.played-card-zone.player-1-played .card-wrapper')[0]
+            ?.classList.add('player-3-take-trick-from-1');
+
+        document
+            .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]
+            ?.classList.add('player-3-take-trick-from-2');
+
+        document
+            .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]
+            ?.classList.add('player-3-take-trick-from-1');
+
+        document
+            .querySelectorAll('.played-card-zone.player-4-played .card-wrapper')[0]
+            ?.classList.add('player-3-take-trick-from-4');
     }
 
     public getWinningCard(): Card {

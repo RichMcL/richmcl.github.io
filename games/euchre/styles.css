@@ -476,6 +476,41 @@ h1 {
     left: 715px;
 }
 
+
+
+@keyframes player3TakeTrickFrom1 {
+    to {
+      position: absolute;
+      transform: translateY(-390px);
+    }
+}
+
+@keyframes player3TakeTrickFrom2 {
+    to {
+      position: absolute;
+      transform: translateX(110px) translateY(-320px);
+    }
+}
+
+@keyframes player3TakeTrickFrom4 {
+    to {
+      position: absolute;
+      transform: translateX(-110px) translateY(-320px);
+    }
+}
+
+.player-3-take-trick-from-1 {
+    animation: player3TakeTrickFrom1 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-3-take-trick-from-2 {
+    animation: player3TakeTrickFrom2 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-3-take-trick-from-4 {
+    animation: player3TakeTrickFrom4 .20s forwards linear; /* Adjust time as needed */
+}
+
 .player-3-dealer {
     position: absolute;
     top: 345px;
