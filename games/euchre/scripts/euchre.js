@@ -182,9 +182,9 @@ var Game = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, isCalledTrump, _b, _c, playerNum, isStickTheDealer, result, orderAction, suit, _d, suit, orderAction, discardCard, discardCardIndex, discardCard, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1;
             var _this = this;
-            var _e, _f;
-            return __generator(this, function (_g) {
-                switch (_g.label) {
+            var _e, _f, _g, _h, _j, _k;
+            return __generator(this, function (_l) {
+                switch (_l.label) {
                     case 0:
                         this.playerOrder = this.getPlayOrder();
                         console.log('playerOrder', this.playerOrder);
@@ -196,7 +196,7 @@ var Game = /** @class */ (function () {
                         isOrderedUp = false;
                         orderedUpBy = null;
                         _i = 0, _a = this.playerOrder;
-                        _g.label = 1;
+                        _l.label = 1;
                     case 1:
                         if (!(_i < _a.length)) return [3 /*break*/, 6];
                         playerNum = _a[_i];
@@ -205,7 +205,7 @@ var Game = /** @class */ (function () {
                         if (!this.currentPlayer.isPlayer) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.getUserOrderAction()];
                     case 2:
-                        orderAction = _g.sent();
+                        orderAction = _l.sent();
                         console.log('PLAYER ORDER ACTION', orderAction);
                         if (orderAction === OrderAction.OrderUp || orderAction === OrderAction.Alone) {
                             isOrderedUp = true;
@@ -219,7 +219,7 @@ var Game = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 3: return [4 /*yield*/, this.sleep(2000)];
                     case 4:
-                        _g.sent();
+                        _l.sent();
                         orderAction = this.npcOrderAction(this.currentPlayer);
                         console.log('playerNum', playerNum);
                         console.log('NPC ORDER ACTION: ', orderAction);
@@ -232,7 +232,7 @@ var Game = /** @class */ (function () {
                         else {
                             this.renderOrderActionSelection(this.currentPlayer, orderAction);
                         }
-                        _g.label = 5;
+                        _l.label = 5;
                     case 5:
                         _i++;
                         return [3 /*break*/, 1];
@@ -244,11 +244,11 @@ var Game = /** @class */ (function () {
                         console.log('NO ONE ORDERED UP');
                         return [4 /*yield*/, this.sleep(2000)];
                     case 7:
-                        _g.sent();
+                        _l.sent();
                         this.clearAllPlayedZones();
                         isCalledTrump = false;
                         _b = 0, _c = this.playerOrder;
-                        _g.label = 8;
+                        _l.label = 8;
                     case 8:
                         if (!(_b < _c.length)) return [3 /*break*/, 13];
                         playerNum = _c[_b];
@@ -258,7 +258,7 @@ var Game = /** @class */ (function () {
                         if (!this.currentPlayer.isPlayer) return [3 /*break*/, 10];
                         return [4 /*yield*/, this.getUserCallTrump()];
                     case 9:
-                        result = (_g.sent()).result;
+                        result = (_l.sent()).result;
                         orderAction = void 0;
                         suit = void 0;
                         if (result == OrderAction.Pass) {
@@ -283,7 +283,7 @@ var Game = /** @class */ (function () {
                         return [3 /*break*/, 12];
                     case 10: return [4 /*yield*/, this.sleep(2000)];
                     case 11:
-                        _g.sent();
+                        _l.sent();
                         this.updateCurrentPlayerHighlight(playerNum);
                         _d = this.npcCallTrump(this.currentPlayer, isStickTheDealer), suit = _d.suit, orderAction = _d.orderAction;
                         if (suit) {
@@ -294,7 +294,7 @@ var Game = /** @class */ (function () {
                         if (isCalledTrump) {
                             return [3 /*break*/, 13];
                         }
-                        _g.label = 12;
+                        _l.label = 12;
                     case 12:
                         _b++;
                         return [3 /*break*/, 8];
@@ -322,11 +322,11 @@ var Game = /** @class */ (function () {
                         return [3 /*break*/, 17];
                     case 15: return [4 /*yield*/, this.getUserCardChoice()];
                     case 16:
-                        discardCardIndex = _g.sent();
+                        discardCardIndex = _l.sent();
                         discardCard = dealer.hand[discardCardIndex];
                         dealer.hand.splice(dealer.hand.indexOf(discardCard), 1);
                         this.removeDiscardCardFromDom(dealer, discardCard);
-                        _g.label = 17;
+                        _l.label = 17;
                     case 17:
                         topKitty = __assign(__assign({}, this.kitty[3]), { isTrump: true });
                         dealer.hand.push(topKitty);
@@ -334,38 +334,43 @@ var Game = /** @class */ (function () {
                         cardHtml = this.buildCardHtml(topKitty, true);
                         dealerDeckNode.innerHTML += cardHtml;
                         this.flipKittyOnDom();
-                        _g.label = 18;
+                        _l.label = 18;
                     case 18:
                         //TODO: If no one orders up, we need to loop through again to pick trump
                         console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
                         _loop_1 = function () {
-                            var _h, _j, playerNum, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
-                            return __generator(this, function (_k) {
-                                switch (_k.label) {
+                            var _m, _o, playerNum, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
+                            return __generator(this, function (_p) {
+                                switch (_p.label) {
                                     case 0: 
                                     //clear all played card zones
                                     return [4 /*yield*/, this_1.sleep(2000)];
                                     case 1:
                                         //clear all played card zones
-                                        _k.sent();
-                                        document.querySelectorAll('.played-card-zone .card-wrapper').forEach(function (zone) {
-                                            zone.classList.add('player-1-take-trick');
-                                        });
+                                        _p.sent();
+                                        (_f = document
+                                            .querySelectorAll('.played-card-zone.player-1-played .card-wrapper')[0]) === null || _f === void 0 ? void 0 : _f.classList.add('player-1-take-trick-from-3');
+                                        (_g = document
+                                            .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]) === null || _g === void 0 ? void 0 : _g.classList.add('player-1-take-trick-from-2');
+                                        (_h = document
+                                            .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]) === null || _h === void 0 ? void 0 : _h.classList.add('player-1-take-trick-from-3');
+                                        (_j = document
+                                            .querySelectorAll('.played-card-zone.player-4-played .card-wrapper')[0]) === null || _j === void 0 ? void 0 : _j.classList.add('player-1-take-trick-from-4');
                                         return [4 /*yield*/, this_1.sleep(2000)];
                                     case 2:
-                                        _k.sent();
+                                        _p.sent();
                                         this_1.clearAllPlayedZones();
-                                        _h = 0, _j = this_1.playerOrder;
-                                        _k.label = 3;
+                                        _m = 0, _o = this_1.playerOrder;
+                                        _p.label = 3;
                                     case 3:
-                                        if (!(_h < _j.length)) return [3 /*break*/, 8];
-                                        playerNum = _j[_h];
+                                        if (!(_m < _o.length)) return [3 /*break*/, 8];
+                                        playerNum = _o[_m];
                                         this_1.currentPlayer = this_1.getPlayerByPlayerNum(playerNum);
                                         if (!this_1.currentPlayer.isPlayer) return [3 /*break*/, 5];
                                         this_1.updateCurrentPlayerHighlight(playerNum);
                                         return [4 /*yield*/, this_1.getUserCardChoice()];
                                     case 4:
-                                        cardIndex = _k.sent();
+                                        cardIndex = _p.sent();
                                         playedCard = this_1.currentPlayer.hand[cardIndex];
                                         this_1.currentTrick.push(playedCard);
                                         this_1.currentPlayer.hand.splice(this_1.currentPlayer.hand.indexOf(playedCard), 1);
@@ -374,17 +379,17 @@ var Game = /** @class */ (function () {
                                         playedCardNode.innerHTML = cardHtml;
                                         toRemove = ".player-1-deck > .card-wrapper > .".concat(cardValueToKey(playedCard.value), "-").concat(playedCard.suit.toLowerCase());
                                         playerDeckNode = document.querySelectorAll(toRemove)[0];
-                                        (_f = playerDeckNode.parentNode) === null || _f === void 0 ? void 0 : _f.remove();
+                                        (_k = playerDeckNode.parentNode) === null || _k === void 0 ? void 0 : _k.remove();
                                         return [3 /*break*/, 7];
                                     case 5:
                                         this_1.updateCurrentPlayerHighlight(playerNum);
                                         return [4 /*yield*/, this_1.sleep(2000)];
                                     case 6:
-                                        _k.sent();
+                                        _p.sent();
                                         this_1.playNpcCard(this_1.currentPlayer);
-                                        _k.label = 7;
+                                        _p.label = 7;
                                     case 7:
-                                        _h++;
+                                        _m++;
                                         return [3 /*break*/, 3];
                                     case 8:
                                         winningCard = this_1.getWinningCard();
@@ -403,12 +408,12 @@ var Game = /** @class */ (function () {
                             });
                         };
                         this_1 = this;
-                        _g.label = 19;
+                        _l.label = 19;
                     case 19:
                         if (!(this.trickCount < 5)) return [3 /*break*/, 21];
                         return [5 /*yield**/, _loop_1()];
                     case 20:
-                        _g.sent();
+                        _l.sent();
                         return [3 /*break*/, 19];
                     case 21: return [2 /*return*/];
                 }

@@ -343,18 +343,39 @@ h1 {
     left: 715px;
 }
 
-@keyframes player1TakeTrick {
+@keyframes player1TakeTrickFrom2{
     to {
-      /* Ending, fixed position */
-      top: 770px; /* Example fixed position */
-      left: 715px; /* Example fixed position */
       position: absolute;
+      transform: translateX(110px) translateY(320px);
     }
-  }
+}
 
-  .player-1-take-trick {
-    animation: player1TakeTrick .5s forwards linear; /* Adjust time as needed */
-  }
+
+@keyframes player1TakeTrickFrom3 {
+    to {
+      position: absolute;
+      transform: translateY(390px);
+    }
+}
+
+@keyframes player1TakeTrickFrom4 {
+    to {
+      position: absolute;
+      transform: translateX(-110px) translateY(320px);
+    }
+}
+
+.player-1-take-trick-from-2 {
+    animation: player1TakeTrickFrom2 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-1-take-trick-from-3 {
+    animation: player1TakeTrickFrom3 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-1-take-trick-from-4 {
+    animation: player1TakeTrickFrom4 .20s forwards linear; /* Adjust time as needed */
+}
 
 .player-1-dealer {
     position: absolute;
