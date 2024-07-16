@@ -348,17 +348,7 @@ class Game {
         console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
 
         while (this.trickCount < 5) {
-            //clear all played card zones
-
             await this.sleep(2000);
-
-            // this.animatePlayer1TakeTrick();
-            // this.animatePlayer2TakeTrick();
-            // this.animatePlayer3TakeTrick();
-            this.animatePlayer4TakeTrick();
-
-            await this.sleep(2000);
-
             this.clearAllPlayedZones();
 
             //for each player in playerOrder, play a card
@@ -427,7 +417,20 @@ class Game {
                 winningTeam.players.map(player => player.playerNum)
             );
 
-            this.sleep(1000);
+            await this.sleep(1000);
+
+            //animate the winning player taking the trick
+            if (winningPlayer.playerNum === 1) {
+                this.animatePlayer1TakeTrick();
+            } else if (winningPlayer.playerNum === 2) {
+                this.animatePlayer2TakeTrick();
+            } else if (winningPlayer.playerNum === 3) {
+                this.animatePlayer3TakeTrick();
+            } else if (winningPlayer.playerNum === 4) {
+                this.animatePlayer4TakeTrick();
+            }
+
+            await this.sleep(1000);
         }
     }
 
