@@ -404,8 +404,41 @@ var Game = /** @class */ (function () {
                                         else if (winningPlayer.playerNum === 4) {
                                             this_1.animatePlayer4TakeTrick();
                                         }
+                                        //update the playIndex for each player starting with the winning player
+                                        // TODO clean this up
+                                        if (winningPlayer.playerNum === 1) {
+                                            this_1.playerOrder = [1, 2, 3, 4];
+                                            this_1.players[0].playIndex = 0;
+                                            this_1.players[1].playIndex = 1;
+                                            this_1.players[2].playIndex = 2;
+                                            this_1.players[3].playIndex = 3;
+                                        }
+                                        else if (winningPlayer.playerNum === 2) {
+                                            this_1.playerOrder = [2, 3, 4, 1];
+                                            this_1.players[0].playIndex = 1;
+                                            this_1.players[1].playIndex = 2;
+                                            this_1.players[2].playIndex = 3;
+                                            this_1.players[3].playIndex = 0;
+                                        }
+                                        else if (winningPlayer.playerNum === 3) {
+                                            this_1.playerOrder = [3, 4, 1, 2];
+                                            this_1.players[0].playIndex = 2;
+                                            this_1.players[1].playIndex = 3;
+                                            this_1.players[2].playIndex = 0;
+                                            this_1.players[3].playIndex = 1;
+                                        }
+                                        else {
+                                            this_1.playerOrder = [4, 1, 2, 3];
+                                            this_1.players[0].playIndex = 3;
+                                            this_1.players[1].playIndex = 0;
+                                            this_1.players[2].playIndex = 1;
+                                            this_1.players[3].playIndex = 2;
+                                        }
+                                        console.log('playerOrder', this_1.playerOrder);
+                                        // this.playerOrder = this.getPlayOrder();
                                         return [4 /*yield*/, this_1.sleep(1000)];
                                     case 9:
+                                        // this.playerOrder = this.getPlayOrder();
                                         _k.sent();
                                         return [2 /*return*/];
                                 }

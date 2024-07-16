@@ -430,6 +430,37 @@ class Game {
                 this.animatePlayer4TakeTrick();
             }
 
+            //update the playIndex for each player starting with the winning player
+            // TODO clean this up
+            if (winningPlayer.playerNum === 1) {
+                this.playerOrder = [1, 2, 3, 4];
+                this.players[0].playIndex = 0;
+                this.players[1].playIndex = 1;
+                this.players[2].playIndex = 2;
+                this.players[3].playIndex = 3;
+            } else if (winningPlayer.playerNum === 2) {
+                this.playerOrder = [2, 3, 4, 1];
+                this.players[0].playIndex = 1;
+                this.players[1].playIndex = 2;
+                this.players[2].playIndex = 3;
+                this.players[3].playIndex = 0;
+            } else if (winningPlayer.playerNum === 3) {
+                this.playerOrder = [3, 4, 1, 2];
+                this.players[0].playIndex = 2;
+                this.players[1].playIndex = 3;
+                this.players[2].playIndex = 0;
+                this.players[3].playIndex = 1;
+            } else {
+                this.playerOrder = [4, 1, 2, 3];
+                this.players[0].playIndex = 3;
+                this.players[1].playIndex = 0;
+                this.players[2].playIndex = 1;
+                this.players[3].playIndex = 2;
+            }
+
+            console.log('playerOrder', this.playerOrder);
+            // this.playerOrder = this.getPlayOrder();
+
             await this.sleep(1000);
         }
     }
