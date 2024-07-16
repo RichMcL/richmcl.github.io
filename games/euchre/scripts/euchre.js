@@ -348,13 +348,12 @@ var Game = /** @class */ (function () {
                                     case 1:
                                         //clear all played card zones
                                         _k.sent();
-                                        this_1.animatePlayer2TakeTrick();
                                         // this.animatePlayer1TakeTrick();
+                                        // this.animatePlayer2TakeTrick();
                                         // this.animatePlayer3TakeTrick();
+                                        this_1.animatePlayer4TakeTrick();
                                         return [4 /*yield*/, this_1.sleep(2000)];
                                     case 2:
-                                        // this.animatePlayer1TakeTrick();
-                                        // this.animatePlayer3TakeTrick();
                                         _k.sent();
                                         this_1.clearAllPlayedZones();
                                         _h = 0, _j = this_1.playerOrder;
@@ -812,6 +811,17 @@ var Game = /** @class */ (function () {
             .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]) === null || _c === void 0 ? void 0 : _c.classList.add('player-3-take-trick-from-1');
         (_d = document
             .querySelectorAll('.played-card-zone.player-4-played .card-wrapper')[0]) === null || _d === void 0 ? void 0 : _d.classList.add('player-3-take-trick-from-4');
+    };
+    Game.prototype.animatePlayer4TakeTrick = function () {
+        var _a, _b, _c, _d;
+        (_a = document
+            .querySelectorAll('.played-card-zone.player-1-played .card-wrapper')[0]) === null || _a === void 0 ? void 0 : _a.classList.add('player-4-take-trick-from-1');
+        (_b = document
+            .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]) === null || _b === void 0 ? void 0 : _b.classList.add('player-4-take-trick-from-2');
+        (_c = document
+            .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]) === null || _c === void 0 ? void 0 : _c.classList.add('player-4-take-trick-from-3');
+        (_d = document
+            .querySelectorAll('.played-card-zone.player-4-played .card-wrapper')[0]) === null || _d === void 0 ? void 0 : _d.classList.add('player-4-take-trick-from-4');
     };
     Game.prototype.getWinningCard = function () {
         var ledSuit = this.getLedSuit();
