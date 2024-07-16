@@ -796,7 +796,7 @@ var Game = /** @class */ (function () {
         (_a = document
             .querySelectorAll('.played-card-zone.player-1-played .card-wrapper')[0]) === null || _a === void 0 ? void 0 : _a.classList.add('player-2-take-trick-from-1');
         (_b = document
-            .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]) === null || _b === void 0 ? void 0 : _b.classList.add('player-2-take-trick-from-4');
+            .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]) === null || _b === void 0 ? void 0 : _b.classList.add('player-2-take-trick-from-2');
         (_c = document
             .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]) === null || _c === void 0 ? void 0 : _c.classList.add('player-2-take-trick-from-3');
         (_d = document

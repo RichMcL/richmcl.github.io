@@ -886,7 +886,7 @@ class Game {
 
         document
             .querySelectorAll('.played-card-zone.player-2-played .card-wrapper')[0]
-            ?.classList.add('player-2-take-trick-from-4');
+            ?.classList.add('player-2-take-trick-from-2');
 
         document
             .querySelectorAll('.played-card-zone.player-3-played .card-wrapper')[0]

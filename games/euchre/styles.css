@@ -186,6 +186,8 @@ h1 {
 }
 
 .score-section {
+    position: absolute;
+    z-index: 1;
     width: 250px;
     height: 100%;
     padding: 5px;
@@ -260,7 +262,7 @@ h1 {
     position: absolute;
     top: 426px;
     width: 112px;
-    left: 719px;
+    left: 697px;
     background: white;
     padding: 8px;
     border-radius: 5px;
@@ -436,6 +438,13 @@ h1 {
     }
 }
 
+@keyframes player2TakeTrickFrom2 {
+    to {
+      position: absolute;
+      transform: translateX(-300px) translateY(0px);
+    }
+}
+
 @keyframes player2TakeTrickFrom3 {
     to {
       position: absolute;
@@ -452,6 +461,10 @@ h1 {
 
 .player-2-take-trick-from-1 {
     animation: player2TakeTrickFrom1 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-2-take-trick-from-2 {
+    animation: player2TakeTrickFrom2 .20s forwards linear; /* Adjust time as needed */
 }
 
 .player-2-take-trick-from-3 {
@@ -697,7 +710,7 @@ h1 {
 #game-board .kitty-wrapper {
     position: absolute;
     top: 580px;
-    left: 85px;
+    left: 65px;
 }
 
 /* Icons */
