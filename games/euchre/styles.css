@@ -314,9 +314,31 @@ h1 {
     margin-left: -10px;
 }
 
+@keyframes focus {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-15px);
+    }
+}
+
+
 .player-1-deck .card-wrapper:hover {
-    margin-top: -15px;
-    transition: margin-top 0.1s linear;
+    animation: focus 0.1s linear;
+    transform: translateY(-15px)
+}
+
+/* This fixes the bouncing when the cursor stays at the bottom of the card */
+.player-1-deck .card-wrapper:hover::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: -16px;
+    left: 0px;
+    right: 0px; 
+    z-index: -1;
 }
 
 
