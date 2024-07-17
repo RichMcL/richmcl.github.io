@@ -161,6 +161,23 @@ var Game = /** @class */ (function () {
     Game.prototype.nextRound = function () {
         var _this = this;
         this.deck = this.buildAndShuffleDeck();
+        //TODO need to handle the dealer rotation
+        this.players.forEach(function (player) {
+            player.hand = [];
+            player.isDealer = false;
+            player.dealIndex = undefined;
+            player.playIndex = undefined;
+            document
+                .querySelectorAll(".player-".concat(player.playerNum, "-dealer"))[0]
+                .classList.add('hidden');
+        });
+        this.trickCount = 0;
+        this.currentTrick = [];
+        this.teams.forEach(function (team) {
+            team.tricksTaken = 0;
+        });
+        this.renderTrickCount();
+        document.querySelectorAll('.ordered-up-box-value')[0].innerHTML = "None";
         this.kitty = this.dealDeck(this.deck, this.players);
         //set trump to the top card of the kitty
         this.trump = this.kitty[3].suit;

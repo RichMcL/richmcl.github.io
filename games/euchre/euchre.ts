@@ -152,6 +152,31 @@ class Game {
 
     public nextRound() {
         this.deck = this.buildAndShuffleDeck();
+
+        //TODO need to handle the dealer rotation
+
+        this.players.forEach(player => {
+            player.hand = [];
+            player.isDealer = false;
+            player.dealIndex = undefined;
+            player.playIndex = undefined;
+
+            document
+                .querySelectorAll(`.player-${player.playerNum}-dealer`)[0]
+                .classList.add('hidden');
+        });
+
+        this.trickCount = 0;
+        this.currentTrick = [];
+
+        this.teams.forEach(team => {
+            team.tricksTaken = 0;
+        });
+
+        this.renderTrickCount();
+
+        document.querySelectorAll('.ordered-up-box-value')[0].innerHTML = `None`;
+
         this.kitty = this.dealDeck(this.deck, this.players);
 
         //set trump to the top card of the kitty
