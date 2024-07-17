@@ -531,22 +531,22 @@ class Game {
         if (team1Tricks > team2Tricks) {
             if (team1Ordered) {
                 if (team1Tricks === 5) {
-                    this.teams[0].score = 2;
+                    this.teams[0].score += 2;
                 } else {
-                    this.teams[0].score = 1;
+                    this.teams[0].score += 1;
                 }
             } else {
-                this.teams[0].score = 2;
+                this.teams[0].score += 2;
             }
         } else {
             if (team2Ordered) {
                 if (team2Tricks === 5) {
-                    this.teams[1].score = 2;
+                    this.teams[1].score += 2;
                 } else {
-                    this.teams[1].score = 1;
+                    this.teams[1].score += 1;
                 }
             } else {
-                this.teams[1].score = 2;
+                this.teams[1].score += 2;
             }
         }
 
