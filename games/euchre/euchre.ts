@@ -219,7 +219,7 @@ class Game {
                     this.renderOrderActionSelection(this.currentPlayer, orderAction);
                 }
             } else {
-                await this.sleep(2000);
+                await this.sleep(1000);
                 const orderAction = this.npcOrderAction(this.currentPlayer);
                 console.log('playerNum', playerNum);
                 console.log('NPC ORDER ACTION: ', orderAction);
@@ -244,7 +244,7 @@ class Game {
             //if no one orders up, we need to loop through again to pick trump
             console.log('NO ONE ORDERED UP');
 
-            await this.sleep(2000);
+            await this.sleep(1000);
             this.clearAllPlayedZones();
 
             let isCalledTrump = false;
@@ -283,7 +283,7 @@ class Game {
                         break;
                     }
                 } else {
-                    await this.sleep(2000);
+                    await this.sleep(1000);
 
                     this.updateCurrentPlayerHighlight(playerNum);
 
@@ -353,11 +353,10 @@ class Game {
             this.flipKittyOnDom();
         }
 
-        //TODO: If no one orders up, we need to loop through again to pick trump
-        console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
+        orderedUpBy = this.currentPlayer.playerNum;
 
         while (this.trickCount < 5) {
-            await this.sleep(2000);
+            await this.sleep(1000);
             this.clearAllPlayedZones();
 
             //for each player in playerOrder, play a card
@@ -395,7 +394,7 @@ class Game {
                 } else {
                     this.updateCurrentPlayerHighlight(playerNum);
 
-                    await this.sleep(2000);
+                    await this.sleep(1000);
                     this.playNpcCard(this.currentPlayer);
                 }
             }
@@ -476,6 +475,37 @@ class Game {
 
             await this.sleep(1000);
         }
+
+        const team1Tricks = this.teams[0].tricksTaken;
+        const team2Tricks = this.teams[1].tricksTaken;
+        const team1Ordered = orderedUpBy === 1 || orderedUpBy === 3;
+        const team2Ordered = orderedUpBy === 2 || orderedUpBy === 4;
+
+        //TODO need to handle going alone
+
+        if (team1Tricks > team2Tricks) {
+            if (team1Ordered) {
+                if (team1Tricks === 5) {
+                    this.teams[0].score = 2;
+                } else {
+                    this.teams[0].score = 1;
+                }
+            } else {
+                this.teams[0].score = 2;
+            }
+        } else {
+            if (team2Ordered) {
+                if (team2Tricks === 5) {
+                    this.teams[1].score = 2;
+                } else {
+                    this.teams[1].score = 1;
+                }
+            } else {
+                this.teams[1].score = 2;
+            }
+        }
+
+        this.renderScoreCount();
     }
 
     public getUserCardChoice() {
@@ -572,6 +602,11 @@ class Game {
     public renderTrickCount() {
         document.querySelectorAll('.team-1-tricks')[0].innerHTML = `${this.teams[0].tricksTaken}`;
         document.querySelectorAll('.team-2-tricks')[0].innerHTML = `${this.teams[1].tricksTaken}`;
+    }
+
+    public renderScoreCount() {
+        document.querySelectorAll('.team-1-score')[0].innerHTML = `${this.teams[0].score}`;
+        document.querySelectorAll('.team-2-score')[0].innerHTML = `${this.teams[1].score}`;
     }
 
     public updateCurrentPlayerHighlight(playerNum: number) {

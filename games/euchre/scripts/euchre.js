@@ -188,7 +188,7 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.playGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, isCalledTrump, _b, _c, playerNum, isStickTheDealer, result, orderAction, suit, _d, suit, orderAction, discardCard, discardCardIndex, discardCard, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1;
+            var dealer, isOrderedUp, orderedUpBy, _i, _a, playerNum, orderAction, orderAction, isCalledTrump, _b, _c, playerNum, isStickTheDealer, result, orderAction, suit, _d, suit, orderAction, discardCard, discardCardIndex, discardCard, topKitty, dealerDeckNode, cardHtml, _loop_1, this_1, team1Tricks, team2Tricks, team1Ordered, team2Ordered;
             var _this = this;
             var _e, _f;
             return __generator(this, function (_g) {
@@ -225,7 +225,7 @@ var Game = /** @class */ (function () {
                             this.renderOrderActionSelection(this.currentPlayer, orderAction);
                         }
                         return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, this.sleep(2000)];
+                    case 3: return [4 /*yield*/, this.sleep(1000)];
                     case 4:
                         _g.sent();
                         orderAction = this.npcOrderAction(this.currentPlayer);
@@ -250,7 +250,7 @@ var Game = /** @class */ (function () {
                         if (!!isOrderedUp) return [3 /*break*/, 14];
                         //if no one orders up, we need to loop through again to pick trump
                         console.log('NO ONE ORDERED UP');
-                        return [4 /*yield*/, this.sleep(2000)];
+                        return [4 /*yield*/, this.sleep(1000)];
                     case 7:
                         _g.sent();
                         this.clearAllPlayedZones();
@@ -289,7 +289,7 @@ var Game = /** @class */ (function () {
                             return [3 /*break*/, 13];
                         }
                         return [3 /*break*/, 12];
-                    case 10: return [4 /*yield*/, this.sleep(2000)];
+                    case 10: return [4 /*yield*/, this.sleep(1000)];
                     case 11:
                         _g.sent();
                         this.updateCurrentPlayerHighlight(playerNum);
@@ -344,13 +344,12 @@ var Game = /** @class */ (function () {
                         this.flipKittyOnDom();
                         _g.label = 18;
                     case 18:
-                        //TODO: If no one orders up, we need to loop through again to pick trump
-                        console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
+                        orderedUpBy = this.currentPlayer.playerNum;
                         _loop_1 = function () {
                             var _h, _j, playerNum, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayerNum, winningPlayer, winningTeam;
                             return __generator(this, function (_k) {
                                 switch (_k.label) {
-                                    case 0: return [4 /*yield*/, this_1.sleep(2000)];
+                                    case 0: return [4 /*yield*/, this_1.sleep(1000)];
                                     case 1:
                                         _k.sent();
                                         this_1.clearAllPlayedZones();
@@ -377,7 +376,7 @@ var Game = /** @class */ (function () {
                                         return [3 /*break*/, 6];
                                     case 4:
                                         this_1.updateCurrentPlayerHighlight(playerNum);
-                                        return [4 /*yield*/, this_1.sleep(2000)];
+                                        return [4 /*yield*/, this_1.sleep(1000)];
                                     case 5:
                                         _k.sent();
                                         this_1.playNpcCard(this_1.currentPlayer);
@@ -461,7 +460,40 @@ var Game = /** @class */ (function () {
                     case 20:
                         _g.sent();
                         return [3 /*break*/, 19];
-                    case 21: return [2 /*return*/];
+                    case 21:
+                        team1Tricks = this.teams[0].tricksTaken;
+                        team2Tricks = this.teams[1].tricksTaken;
+                        team1Ordered = orderedUpBy === 1 || orderedUpBy === 3;
+                        team2Ordered = orderedUpBy === 2 || orderedUpBy === 4;
+                        //TODO need to handle going alone
+                        if (team1Tricks > team2Tricks) {
+                            if (team1Ordered) {
+                                if (team1Tricks === 5) {
+                                    this.teams[0].score = 2;
+                                }
+                                else {
+                                    this.teams[0].score = 1;
+                                }
+                            }
+                            else {
+                                this.teams[0].score = 2;
+                            }
+                        }
+                        else {
+                            if (team2Ordered) {
+                                if (team2Tricks === 5) {
+                                    this.teams[1].score = 2;
+                                }
+                                else {
+                                    this.teams[1].score = 1;
+                                }
+                            }
+                            else {
+                                this.teams[1].score = 2;
+                            }
+                        }
+                        this.renderScoreCount();
+                        return [2 /*return*/];
                 }
             });
         });
@@ -542,6 +574,10 @@ var Game = /** @class */ (function () {
     Game.prototype.renderTrickCount = function () {
         document.querySelectorAll('.team-1-tricks')[0].innerHTML = "".concat(this.teams[0].tricksTaken);
         document.querySelectorAll('.team-2-tricks')[0].innerHTML = "".concat(this.teams[1].tricksTaken);
+    };
+    Game.prototype.renderScoreCount = function () {
+        document.querySelectorAll('.team-1-score')[0].innerHTML = "".concat(this.teams[0].score);
+        document.querySelectorAll('.team-2-score')[0].innerHTML = "".concat(this.teams[1].score);
     };
     Game.prototype.updateCurrentPlayerHighlight = function (playerNum) {
         document.querySelectorAll('.played-card-zone').forEach(function (zone) {
