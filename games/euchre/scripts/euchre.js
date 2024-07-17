@@ -158,6 +158,21 @@ var Game = /** @class */ (function () {
         this.renderKitty();
         this.setTrumpIconAndValue(this.trump);
     };
+    Game.prototype.nextRound = function () {
+        var _this = this;
+        this.deck = this.buildAndShuffleDeck();
+        this.kitty = this.dealDeck(this.deck, this.players);
+        //set trump to the top card of the kitty
+        this.trump = this.kitty[3].suit;
+        // update the isTrump property for each card in the players' hands
+        this.setTrumpOnDeck();
+        //sort player hands by suit and value, prioritizing trump
+        this.players.forEach(function (player) {
+            _this.sortPlayerHand(player);
+        });
+        this.startGame();
+        this.playGame();
+    };
     Game.prototype.setTrumpIconAndValue = function (suit) {
         document.querySelectorAll('#trump-icon')[0].className = "icon-".concat(suit.toLowerCase());
         document.querySelectorAll('.trump-value')[0].innerHTML = suit;
@@ -493,6 +508,14 @@ var Game = /** @class */ (function () {
                             }
                         }
                         this.renderScoreCount();
+                        //if both teams have less than 10 points, play another round
+                        if (this.teams[0].score < 10 || this.teams[1].score < 10) {
+                            this.nextRound();
+                        }
+                        else {
+                            //end game
+                            alert('GAME OVER');
+                        }
                         return [2 /*return*/];
                 }
             });

@@ -150,6 +150,26 @@ class Game {
         this.setTrumpIconAndValue(this.trump);
     }
 
+    public nextRound() {
+        this.deck = this.buildAndShuffleDeck();
+        this.kitty = this.dealDeck(this.deck, this.players);
+
+        //set trump to the top card of the kitty
+        this.trump = this.kitty[3].suit;
+
+        // update the isTrump property for each card in the players' hands
+        this.setTrumpOnDeck();
+
+        //sort player hands by suit and value, prioritizing trump
+        this.players.forEach(player => {
+            this.sortPlayerHand(player);
+        });
+
+        this.startGame();
+
+        this.playGame();
+    }
+
     public setTrumpIconAndValue(suit: Suit) {
         document.querySelectorAll('#trump-icon')[0].className = `icon-${suit.toLowerCase()}`;
         document.querySelectorAll('.trump-value')[0].innerHTML = suit;
@@ -506,6 +526,14 @@ class Game {
         }
 
         this.renderScoreCount();
+
+        //if both teams have less than 10 points, play another round
+        if (this.teams[0].score < 10 || this.teams[1].score < 10) {
+            this.nextRound();
+        } else {
+            //end game
+            alert('GAME OVER');
+        }
     }
 
     public getUserCardChoice() {
