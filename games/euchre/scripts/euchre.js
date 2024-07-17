@@ -77,6 +77,14 @@ var CardValue;
     CardValue["King"] = "K";
     CardValue["Ace"] = "A";
 })(CardValue || (CardValue = {}));
+var CardNonTrumpValue = {
+    '9': 9,
+    '10': 10,
+    J: 11,
+    Q: 12,
+    K: 13,
+    A: 14
+};
 var OrderAction;
 (function (OrderAction) {
     OrderAction["Pass"] = "Pass";
@@ -339,7 +347,7 @@ var Game = /** @class */ (function () {
                         //TODO: If no one orders up, we need to loop through again to pick trump
                         console.log('ORDERED UP BY ', this.currentPlayer.playerNum);
                         _loop_1 = function () {
-                            var _h, _j, playerNum, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayer, winningTeam;
+                            var _h, _j, playerNum, cardIndex, playedCard, playedCardNode, cardHtml, toRemove, playerDeckNode, winningCard, winningIndex, winningPlayerNum, winningPlayer, winningTeam;
                             return __generator(this, function (_k) {
                                 switch (_k.label) {
                                     case 0: return [4 /*yield*/, this_1.sleep(2000)];
@@ -380,7 +388,8 @@ var Game = /** @class */ (function () {
                                     case 7:
                                         winningCard = this_1.getWinningCard();
                                         winningIndex = this_1.currentTrick.findIndex(function (card) { return card === winningCard; });
-                                        winningPlayer = this_1.players.find(function (player) { return player.playIndex === winningIndex; });
+                                        winningPlayerNum = this_1.playerOrder[winningIndex];
+                                        winningPlayer = this_1.players.find(function (player) { return player.playerNum === winningPlayerNum; });
                                         console.log('WINNING PLAYER: ', winningPlayer.playerNum);
                                         winningTeam = this_1.teams.find(function (team) { return team.players.includes(winningPlayer); });
                                         winningTeam.tricksTaken++;
@@ -865,55 +874,126 @@ var Game = /** @class */ (function () {
             .querySelectorAll('.played-card-zone.player-4-played .card-wrapper')[0]) === null || _d === void 0 ? void 0 : _d.classList.add('player-4-take-trick-from-4');
     };
     Game.prototype.getWinningCard = function () {
+        var _this = this;
         var ledSuit = this.getLedSuit();
         var ledTrump = this.getLedTrump();
-        var winningCard = this.currentTrick[0];
-        for (var i = 1; i < this.currentTrick.length; i++) {
-            var card = this.currentTrick[i];
-            if (this.isCardTrump(card, this.trump) && !this.isCardTrump(winningCard, this.trump)) {
-                // if new card is trump and winning card is not, new card wins
-                winningCard = card;
+        // let winningCard = this.currentTrick[0];
+        console.log('TRICK', this.currentTrick);
+        //if right bower is played, it wins
+        var rightBower = this.currentTrick.find(function (card) {
+            if (card.value === CardValue.Jack && card.suit === _this.trump) {
+                return card;
             }
-            else if (this.isCardTrump(card, this.trump) &&
-                this.isCardTrump(winningCard, this.trump)) {
-                // if both cards are trump, compare values but right bower beats left bower beats other trump
-                if (card.value === CardValue.Jack && card.suit === this.trump) {
-                    // if new card is the right bower
-                    winningCard = card;
-                }
-                else if (winningCard.value === CardValue.Jack &&
-                    winningCard.suit === this.trump) {
-                    // if current winning card is the right bower
-                    continue;
-                }
-                else if (card.value === CardValue.Jack && this.isCardTrump(card, this.trump)) {
-                    // if new card is the left bower
-                    winningCard = card;
-                }
-                else if (winningCard.value === CardValue.Jack &&
-                    this.isCardTrump(card, this.trump)) {
-                    // if winning card is the left bower
-                    continue;
-                }
-                else if (card.value > winningCard.value) {
-                    // else compare the natural trump values
-                    winningCard = card;
-                }
+        });
+        if (rightBower)
+            return rightBower;
+        //if left bower is played, it wins
+        var leftBower = this.currentTrick.find(function (card) {
+            if (card.value === CardValue.Jack && card.isTrump && card.suit !== _this.trump) {
+                return card;
             }
-            else {
-                // if new card is led suit and winning card is not, new card wins
-                if (card.suit === ledSuit && winningCard.suit !== ledSuit) {
-                    winningCard = card;
-                }
-                else if (card.suit === ledSuit && winningCard.suit === ledSuit) {
-                    // if both cards are led suit, compare values
-                    if (card.value > winningCard.value) {
-                        winningCard = card;
-                    }
-                }
+        });
+        if (leftBower)
+            return leftBower;
+        //if ace of trump is played, it wins
+        var aceOfTrump = this.currentTrick.find(function (card) {
+            if (card.value === CardValue.Ace && card.suit === _this.trump) {
+                return card;
             }
+        });
+        if (aceOfTrump)
+            return aceOfTrump;
+        //if king of trump is played, it wins
+        var kingOfTrump = this.currentTrick.find(function (card) {
+            if (card.value === CardValue.King && card.suit === _this.trump) {
+                return card;
+            }
+        });
+        if (kingOfTrump)
+            return kingOfTrump;
+        //if queen of trump is played, it wins
+        var queenOfTrump = this.currentTrick.find(function (card) {
+            if (card.value === CardValue.Queen && card.suit === _this.trump) {
+                return card;
+            }
+        });
+        if (queenOfTrump)
+            return queenOfTrump;
+        //if ten of trump is played, it wins
+        var tenOfTrump = this.currentTrick.find(function (card) {
+            if (card.value === CardValue.Ten && card.suit === _this.trump) {
+                return card;
+            }
+        });
+        if (tenOfTrump)
+            return tenOfTrump;
+        //if nine of trump is played, it wins
+        var nineOfTrump = this.currentTrick.find(function (card) {
+            if (card.value === CardValue.Nine && card.suit === _this.trump) {
+                return card;
+            }
+        });
+        if (nineOfTrump)
+            return nineOfTrump;
+        //else highest card of led suit wins
+        var ledSuitCards = this.currentTrick.filter(function (card) { return card.suit === ledSuit; });
+        console.log('ledSuitCards', ledSuitCards);
+        if (ledSuitCards.length > 0) {
+            var winCard = ledSuitCards.reduce(function (a, b) {
+                console.log('a value', a.value);
+                console.log('b value', b.value);
+                console.log('CardNonTrumpValue[a.value]', CardNonTrumpValue[a.value]);
+                console.log('CardNonTrumpValue[b.value]', CardNonTrumpValue[b.value]);
+                return CardNonTrumpValue[a.value] > CardNonTrumpValue[b.value] ? a : b;
+            });
+            console.log('wining card', winCard);
+            return winCard;
         }
-        return winningCard;
+        // for (let i = 1; i < this.currentTrick.length; i++) {
+        //     const card = this.currentTrick[i];
+        //     if (this.isCardTrump(card, this.trump) && !this.isCardTrump(winningCard, this.trump)) {
+        //         // if new card is trump and winning card is not, new card wins
+        //         winningCard = card;
+        //     } else if (
+        //         this.isCardTrump(card, this.trump) &&
+        //         this.isCardTrump(winningCard, this.trump)
+        //     ) {
+        //         // if both cards are trump, compare values but right bower beats left bower beats other trump
+        //         if (card.value === CardValue.Jack && card.suit === this.trump) {
+        //             // if new card is the right bower
+        //             winningCard = card;
+        //         } else if (
+        //             winningCard.value === CardValue.Jack &&
+        //             winningCard.suit === this.trump
+        //         ) {
+        //             // if current winning card is the right bower
+        //             continue;
+        //         } else if (card.value === CardValue.Jack && this.isCardTrump(card, this.trump)) {
+        //             // if new card is the left bower
+        //             winningCard = card;
+        //         } else if (
+        //             winningCard.value === CardValue.Jack &&
+        //             this.isCardTrump(card, this.trump)
+        //         ) {
+        //             // if winning card is the left bower
+        //             continue;
+        //         } else if (card.value > winningCard.value) {
+        //             // else compare the natural trump values
+        //             winningCard = card;
+        //         }
+        //     } else {
+        //         // if new card is led suit and winning card is not, new card wins
+        //         if (card.suit === ledSuit && winningCard.suit !== ledSuit) {
+        //             winningCard = card;
+        //         } else if (card.suit === ledSuit && winningCard.suit === ledSuit) {
+        //             // if both cards are led suit, compare values
+        //             if (card.value > winningCard.value) {
+        //                 winningCard = card;
+        //             }
+        //         }
+        //     }
+        // }
+        // return winningCard;
     };
     Game.prototype.getLedSuit = function () {
         if (this.currentTrick.length === 0) {
