@@ -89,6 +89,7 @@ var Game = /** @class */ (function () {
         this.deckPosition = 0;
         this.timerInMs = 0;
         this.lastTimestamp = 0;
+        this.buttons = {};
         this.piles = [];
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -146,13 +147,15 @@ var Game = /** @class */ (function () {
         // Update the game state logic
         var _a, _b, _c, _d;
         // Check if the click is within the button's boundaries
-        if (((_a = this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= 0 &&
-            ((_b = this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= 100 &&
-            ((_c = this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= 700 &&
-            ((_d = this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= 750) {
-            console.log('Reload button clicked');
-            window.location.reload();
-            // Add your reload logic here
+        var reloadButton = this.buttons.reload;
+        if (reloadButton) {
+            if (((_a = this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= reloadButton.x &&
+                ((_b = this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= reloadButton.x + reloadButton.width &&
+                ((_c = this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= reloadButton.y &&
+                ((_d = this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= reloadButton.y + reloadButton.height) {
+                console.log('Reload button clicked');
+                window.location.reload();
+            }
         }
     };
     Game.prototype.render = function () {
@@ -162,9 +165,23 @@ var Game = /** @class */ (function () {
         this.renderReloadButton();
     };
     Game.prototype.renderReloadButton = function () {
+        var text = 'RELOAD';
+        var padding = 20; // Padding for the button
+        var textMetrics = this.ctx.measureText(text);
+        var textWidth = textMetrics.width;
+        var buttonWidth = textWidth + padding;
+        var buttonHeight = 50;
+        var x = 10;
+        var y = 730;
+        this.buttons.reload = {
+            x: x,
+            y: y,
+            width: buttonWidth,
+            height: buttonHeight
+        };
         this.ctx.fillStyle = '#30874b';
-        this.ctx.fillRect(0, 700, 100, 50);
-        this.printText('Reload', 10, 735);
+        this.ctx.fillRect(x, y, buttonWidth, buttonHeight);
+        this.printText(text, x + padding / 2, y + padding * 1.75);
     };
     /**
      * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A

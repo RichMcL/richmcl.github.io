@@ -114,6 +114,8 @@ class Game {
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
+    public buttons: { [key: string]: { x: number; y: number; width: number; height: number } } = {};
+
     public piles: Card[] = [];
 
     constructor() {
@@ -187,15 +189,19 @@ class Game {
         // Update the game state logic
 
         // Check if the click is within the button's boundaries
-        if (
-            this.clickCoordinates?.x >= 0 &&
-            this.clickCoordinates?.x <= 100 &&
-            this.clickCoordinates?.y >= 700 &&
-            this.clickCoordinates?.y <= 750
-        ) {
-            console.log('Reload button clicked');
-            window.location.reload();
-            // Add your reload logic here
+
+        const reloadButton = this.buttons.reload;
+
+        if (reloadButton) {
+            if (
+                this.clickCoordinates?.x >= reloadButton.x &&
+                this.clickCoordinates?.x <= reloadButton.x + reloadButton.width &&
+                this.clickCoordinates?.y >= reloadButton.y &&
+                this.clickCoordinates?.y <= reloadButton.y + reloadButton.height
+            ) {
+                console.log('Reload button clicked');
+                window.location.reload();
+            }
         }
     }
 
@@ -208,10 +214,26 @@ class Game {
     }
 
     public renderReloadButton() {
-        this.ctx.fillStyle = '#30874b';
-        this.ctx.fillRect(0, 700, 100, 50);
+        const text = 'RELOAD';
+        const padding = 20; // Padding for the button
+        const textMetrics = this.ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const buttonWidth = textWidth + padding;
+        const buttonHeight = 50;
+        const x = 10;
+        const y = 730;
 
-        this.printText('Reload', 10, 735);
+        this.buttons.reload = {
+            x,
+            y,
+            width: buttonWidth,
+            height: buttonHeight
+        };
+
+        this.ctx.fillStyle = '#30874b';
+        this.ctx.fillRect(x, y, buttonWidth, buttonHeight);
+
+        this.printText(text, x + padding / 2, y + padding * 1.75);
     }
 
     /**
