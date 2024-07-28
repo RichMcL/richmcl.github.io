@@ -63,12 +63,6 @@ interface Player {
     playIndex?: number;
 }
 
-interface Team {
-    players: Player[];
-    score: number;
-    tricksTaken: number;
-}
-
 const logger = (label = '', obj: any): void => {
     console.log(label);
     console.dir(obj, { depth: null, colors: true });
@@ -108,9 +102,13 @@ const cardValueToKey = (value: CardValue): string => {
 };
 
 class Game {
+    public gameRunning: boolean = true;
     public deck: Card[];
+    public deckPosition: number = 0;
+    public timerInMs: number = 0;
+    public lastTimestamp: number = 0;
 
-    public currentPlayer?: Player;
+    public piles: Card[] = [];
 
     constructor() {
         this.deck = this.buildAndShuffleDeck();
@@ -122,6 +120,44 @@ class Game {
         console.log('Game started', this);
 
         this.initializePileZones(4);
+
+        this.gameRunning = true;
+        this.lastTimestamp = performance.now();
+        this.gameLoop();
+    }
+
+    public gameLoop(timestamp: number = 0) {
+        if (!this.gameRunning) return;
+
+        const elapsed = timestamp - this.lastTimestamp;
+        this.lastTimestamp = timestamp;
+
+        // Increment the timer by the elapsed time
+        this.timerInMs += elapsed;
+
+        // Update game state
+        this.updateGameState();
+
+        // Render changes to the DOM
+        this.render();
+
+        // Request the next frame
+        requestAnimationFrame(ts => this.gameLoop(ts));
+    }
+
+    public updateGameState() {
+        // Update the game state logic
+    }
+
+    public render() {
+        // Render the updated state to the DOM
+        this.renderPileZones();
+        this.renderPlayerDeck();
+        this.renderTimer();
+    }
+
+    public pauseGame() {
+        this.gameRunning = false;
     }
 
     /* LOGIC FUNCTIONS */
@@ -146,15 +182,14 @@ class Game {
     }
 
     public initializePileZones(count: number): void {
-        //take the first 'n' cards from the deck and place them in the pile zones
-        const pileZones = this.deck.splice(0, count);
+        this.piles = this.deck.splice(0, count);
+    }
 
-        const pileZonesEl = document.querySelector('.pile-zones');
+    /* USER ACTION FUNCTIONS */
 
-        pileZones.forEach((card, index) => {
-            const cardHtml = this.buildCardHtml(card);
-            pileZonesEl.innerHTML += cardHtml;
-        });
+    public clickDeck(): void {
+        //on click of the deck, increment the deck position
+        this.deckPosition++;
     }
 
     /* RENDER FUNCTIONS */
@@ -165,6 +200,41 @@ class Game {
             <div class="card-face ${cardValueToKey(card.value)}-${card.suit.toLowerCase()}"></div>
         </div>
         `;
+    }
+
+    public renderTimer(): void {
+        const timerEl = document.querySelector('.timer-value');
+
+        const minutes = Math.floor(this.timerInMs / 60000)
+            .toString()
+            .padStart(2, '0');
+        const seconds = Math.floor((this.timerInMs % 60000) / 1000)
+            .toString()
+            .padStart(2, '0');
+        const tenths = Math.floor((this.timerInMs % 1000) / 100)
+            .toString()
+            .padStart(1, '0');
+
+        timerEl.innerHTML = `${minutes}:${seconds}.${tenths}`;
+    }
+
+    public renderPileZones(): void {
+        const pileZonesEl = document.querySelector('.pile-zones');
+        pileZonesEl.innerHTML = '';
+
+        this.piles.forEach((card, index) => {
+            const cardHtml = this.buildCardHtml(card);
+            pileZonesEl.innerHTML += cardHtml;
+        });
+    }
+
+    public renderPlayerDeck(): void {
+        const playerDeckEl = document.querySelector('.player-deck');
+
+        // Render the current position of the deck
+        const topCard = this.deck[this.deckPosition];
+        const topCardHtml = this.buildCardHtml(topCard);
+        playerDeckEl.innerHTML = topCardHtml;
     }
 
     // Sleep function using Promise and async/await
