@@ -84,6 +84,7 @@ var cardValueToKey = function (value) {
 var Game = /** @class */ (function () {
     function Game() {
         var _this = this;
+        this.clickCoordinates = { x: 0, y: 0 };
         this.gameRunning = true;
         this.deckPosition = 0;
         this.timerInMs = 0;
@@ -109,10 +110,17 @@ var Game = /** @class */ (function () {
         });
     };
     Game.prototype.startGame = function () {
+        var _this = this;
         console.log('Game started', this);
+        // Add click event listener
+        this.canvas.addEventListener('click', function (event) {
+            var rect = _this.canvas.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+            _this.clickCoordinates = { x: x, y: y };
+        });
         // this.initializePileZones(4);
-        this.deck = this.buildAndShuffleDeck();
-        console.log('Deck', this.deck);
+        this.deck = this.buildAndShuffleDeck(true);
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.gameLoop();
@@ -130,30 +138,80 @@ var Game = /** @class */ (function () {
         this.updateGameState();
         // Render changes to the DOM
         this.render();
+        this.clickCoordinates = null;
         // Request the next frame
         requestAnimationFrame(function (ts) { return _this.gameLoop(ts); });
     };
     Game.prototype.updateGameState = function () {
         // Update the game state logic
+        var _a, _b, _c, _d;
+        // Check if the click is within the button's boundaries
+        if (((_a = this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= 0 &&
+            ((_b = this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= 100 &&
+            ((_c = this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= 700 &&
+            ((_d = this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= 750) {
+            console.log('Reload button clicked');
+            window.location.reload();
+            // Add your reload logic here
+        }
     };
     Game.prototype.render = function () {
-        // Render the updated state to the DOM
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
-        // columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
-        // rows -> hearts, clubs, diamonds, spades,
+        this.renderFullDeck();
+        this.renderTimer();
+        this.renderReloadButton();
+    };
+    Game.prototype.renderReloadButton = function () {
+        this.ctx.fillStyle = '#30874b';
+        this.ctx.fillRect(0, 700, 100, 50);
+        this.printText('Reload', 10, 735);
+    };
+    /**
+     * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
+     * rows -> hearts, clubs, diamonds, spades,
+     */
+    Game.prototype.renderFullDeck = function () {
         var cardIndex = 0;
         for (var col = 0; col < 4; col++) {
             for (var row = 0; row < 13; row++) {
-                this.drawCard(this.deck[cardIndex], row * 71, col * 95);
+                this.drawCard(this.deck[cardIndex], row * 71 + 200, col * 95 + 100);
                 cardIndex++;
             }
         }
+    };
+    Game.prototype.renderTimer = function () {
+        var minutes = Math.floor(this.timerInMs / 60000)
+            .toString()
+            .padStart(2, '0');
+        var seconds = Math.floor((this.timerInMs % 60000) / 1000)
+            .toString()
+            .padStart(2, '0');
+        var tenths = Math.floor((this.timerInMs % 1000) / 100)
+            .toString()
+            .padStart(1, '0');
+        this.printText("Time: ".concat(minutes, ":").concat(seconds, ".").concat(tenths), 20, 60);
+    };
+    Game.prototype.printText = function (text, x, y) {
+        this.ctx.font = '20px Balatro';
+        this.ctx.fillStyle = 'white';
+        // Set shadow properties
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // Shadow color
+        this.ctx.shadowBlur = 4; // Blur level
+        this.ctx.shadowOffsetX = 2; // Horizontal offset
+        this.ctx.shadowOffsetY = 2; // Vertical offset
+        this.ctx.fillText(text, x, y);
+        // Reset shadow properties to avoid affecting other drawings
+        this.ctx.shadowColor = 'transparent';
+        this.ctx.shadowBlur = 0;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 0;
     };
     Game.prototype.pauseGame = function () {
         this.gameRunning = false;
     };
     /* LOGIC FUNCTIONS */
-    Game.prototype.buildAndShuffleDeck = function () {
+    Game.prototype.buildAndShuffleDeck = function (shuffle) {
+        if (shuffle === void 0) { shuffle = false; }
         var deck = [];
         for (var _i = 0, _a = Object.values(Suit); _i < _a.length; _i++) {
             var suit = _a[_i];
@@ -162,13 +220,14 @@ var Game = /** @class */ (function () {
                 deck.push({ suit: suit, value: value });
             }
         }
-        //Shuffle deck
-        // for (let i = 0; i < deck.length; i++) {
-        //     const j = Math.floor(Math.random() * deck.length);
-        //     const temp = deck[i];
-        //     deck[i] = deck[j];
-        //     deck[j] = temp;
-        // }
+        if (shuffle) {
+            for (var i = 0; i < deck.length; i++) {
+                var j = Math.floor(Math.random() * deck.length);
+                var temp = deck[i];
+                deck[i] = deck[j];
+                deck[j] = temp;
+            }
+        }
         return deck;
     };
     Game.prototype.initializePileZones = function (count) {
@@ -239,17 +298,6 @@ var Game = /** @class */ (function () {
         }
         this.ctx.drawImage(this.cardBackSpriteSheet, 71, 0, cardWidth, cardHeight, x, y, cardWidth, cardHeight);
         this.ctx.drawImage(this.cardFaceSpriteSheet, sx, sy, cardWidth, cardHeight, x, y, cardWidth, cardHeight);
-    };
-    Game.prototype.renderTimer = function () {
-        var minutes = Math.floor(this.timerInMs / 60000)
-            .toString()
-            .padStart(2, '0');
-        var seconds = Math.floor((this.timerInMs % 60000) / 1000)
-            .toString()
-            .padStart(2, '0');
-        var tenths = Math.floor((this.timerInMs % 1000) / 100)
-            .toString()
-            .padStart(1, '0');
     };
     // Sleep function using Promise and async/await
     Game.prototype.sleep = function (ms) {

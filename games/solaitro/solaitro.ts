@@ -106,6 +106,7 @@ class Game {
     public ctx: CanvasRenderingContext2D;
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
+    public clickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
 
     public gameRunning: boolean = true;
     public deck: Card[];
@@ -143,11 +144,18 @@ class Game {
     public startGame() {
         console.log('Game started', this);
 
+        // Add click event listener
+        this.canvas.addEventListener('click', event => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            this.clickCoordinates = { x, y };
+        });
+
         // this.initializePileZones(4);
 
-        this.deck = this.buildAndShuffleDeck();
-
-        console.log('Deck', this.deck);
+        this.deck = this.buildAndShuffleDeck(true);
 
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
@@ -169,27 +177,88 @@ class Game {
         // Render changes to the DOM
         this.render();
 
+        this.clickCoordinates = null;
+
         // Request the next frame
         requestAnimationFrame(ts => this.gameLoop(ts));
     }
 
     public updateGameState() {
         // Update the game state logic
+
+        // Check if the click is within the button's boundaries
+        if (
+            this.clickCoordinates?.x >= 0 &&
+            this.clickCoordinates?.x <= 100 &&
+            this.clickCoordinates?.y >= 700 &&
+            this.clickCoordinates?.y <= 750
+        ) {
+            console.log('Reload button clicked');
+            window.location.reload();
+            // Add your reload logic here
+        }
     }
 
     public render() {
-        // Render the updated state to the DOM
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
 
-        // columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
-        // rows -> hearts, clubs, diamonds, spades,
+        this.renderFullDeck();
+        this.renderTimer();
+        this.renderReloadButton();
+    }
+
+    public renderReloadButton() {
+        this.ctx.fillStyle = '#30874b';
+        this.ctx.fillRect(0, 700, 100, 50);
+
+        this.printText('Reload', 10, 735);
+    }
+
+    /**
+     * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
+     * rows -> hearts, clubs, diamonds, spades,
+     */
+    public renderFullDeck(): void {
         let cardIndex = 0;
         for (let col = 0; col < 4; col++) {
             for (let row = 0; row < 13; row++) {
-                this.drawCard(this.deck[cardIndex], row * 71, col * 95);
+                this.drawCard(this.deck[cardIndex], row * 71 + 200, col * 95 + 100);
                 cardIndex++;
             }
         }
+    }
+
+    public renderTimer(): void {
+        const minutes = Math.floor(this.timerInMs / 60000)
+            .toString()
+            .padStart(2, '0');
+        const seconds = Math.floor((this.timerInMs % 60000) / 1000)
+            .toString()
+            .padStart(2, '0');
+        const tenths = Math.floor((this.timerInMs % 1000) / 100)
+            .toString()
+            .padStart(1, '0');
+
+        this.printText(`Time: ${minutes}:${seconds}.${tenths}`, 20, 60);
+    }
+
+    public printText(text: string, x: number, y: number): void {
+        this.ctx.font = '20px Balatro';
+        this.ctx.fillStyle = 'white';
+
+        // Set shadow properties
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // Shadow color
+        this.ctx.shadowBlur = 4; // Blur level
+        this.ctx.shadowOffsetX = 2; // Horizontal offset
+        this.ctx.shadowOffsetY = 2; // Vertical offset
+
+        this.ctx.fillText(text, x, y);
+
+        // Reset shadow properties to avoid affecting other drawings
+        this.ctx.shadowColor = 'transparent';
+        this.ctx.shadowBlur = 0;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 0;
     }
 
     public pauseGame() {
@@ -198,7 +267,7 @@ class Game {
 
     /* LOGIC FUNCTIONS */
 
-    public buildAndShuffleDeck(): Card[] {
+    public buildAndShuffleDeck(shuffle = false): Card[] {
         let deck: Card[] = [];
 
         for (const suit of Object.values(Suit)) {
@@ -207,14 +276,14 @@ class Game {
             }
         }
 
-        //Shuffle deck
-
-        // for (let i = 0; i < deck.length; i++) {
-        //     const j = Math.floor(Math.random() * deck.length);
-        //     const temp = deck[i];
-        //     deck[i] = deck[j];
-        //     deck[j] = temp;
-        // }
+        if (shuffle) {
+            for (let i = 0; i < deck.length; i++) {
+                const j = Math.floor(Math.random() * deck.length);
+                const temp = deck[i];
+                deck[i] = deck[j];
+                deck[j] = temp;
+            }
+        }
 
         return deck;
     }
@@ -315,18 +384,6 @@ class Game {
             cardWidth,
             cardHeight
         );
-    }
-
-    public renderTimer(): void {
-        const minutes = Math.floor(this.timerInMs / 60000)
-            .toString()
-            .padStart(2, '0');
-        const seconds = Math.floor((this.timerInMs % 60000) / 1000)
-            .toString()
-            .padStart(2, '0');
-        const tenths = Math.floor((this.timerInMs % 1000) / 100)
-            .toString()
-            .padStart(1, '0');
     }
 
     // Sleep function using Promise and async/await
