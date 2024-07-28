@@ -203,7 +203,7 @@ var Game = /** @class */ (function () {
                 ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= obj.x + obj.width &&
                 ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= obj.y &&
                 ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= obj.y + obj.height) {
-                console.log('button clicked', obj);
+                window.location.reload();
             }
         });
         this.renderedCards.forEach(function (card) {

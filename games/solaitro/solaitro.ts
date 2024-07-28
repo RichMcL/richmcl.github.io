@@ -266,7 +266,7 @@ class Game {
                 this.clickCoordinates?.y >= obj.y &&
                 this.clickCoordinates?.y <= obj.y + obj.height
             ) {
-                console.log('button clicked', obj);
+                window.location.reload();
             }
         });
 
