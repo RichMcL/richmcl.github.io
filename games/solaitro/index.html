@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Solaitro</title>
+        <link rel="stylesheet" type="text/css" href="styles.css" />
+        <script src="scripts/layout-grid.js"></script>
+        <script src="scripts/debug.js"></script>
+        <script src="scripts/solaitro.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    </head>
+    <body>
+        <div id="game-board">
+            <div id="layout-grid"></div>
+            <div id="debug-menu" class="hidden">
+                <div class="theme-toggle-group">
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #6c6685"
+                        onclick="setTheme('base');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #a66202"
+                        onclick="setTheme('orange');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #0278a6"
+                        onclick="setTheme('lightblue');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #625df5"
+                        onclick="setTheme('blue');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #ffc65c"
+                        onclick="setTheme('lightyellow');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #30874b"
+                        onclick="setTheme('green');"
+                    >
+                    </span>
+                    <span
+                        class="theme-toggle"
+                        style="background-color: #b53434"
+                        onclick="setTheme('red');"
+                    >
+                    </span>
+                </div>
+
+                <button class="reload-button theme-button">RELOAD</button>
+                <button class="deal-button theme-button">DEAL</button>
+                <button class="scroll-button theme-button">TOGGLE SCROLL</button>
+                <button class="grid-button theme-button">TOGGLE GRID</button>
+                <button class="close-debug-button theme-button">CLOSE</button>
+            </div>
+
+            <div class="score-section">
+                <div class="score-box">
+                    <span class="score-box-label">Team 1<br />Score</span>
+                    <span class="score-box-value team-1-score">0</span>
+                </div>
+                <div class="score-box">
+                    <span class="score-box-label">Team 2<br />Score</span>
+                    <span class="score-box-value team-2-score">0</span>
+                </div>
+                <div class="score-box">
+                    <span class="score-box-label">Team 1<br />Tricks</span>
+                    <span class="score-box-value team-1-tricks">0</span>
+                </div>
+                <div class="score-box">
+                    <span class="score-box-label">Team 2<br />Tricks</span>
+                    <span class="score-box-value team-2-tricks">0</span>
+                </div>
+                <div class="score-box hidden">
+                    <span class="score-box-label">Dealer</span>
+                    <span class="dealer-box-value">Player 1</span>
+                </div>
+                <div class="score-box">
+                    <span class="score-box-label">Ordered<br />Up By</span>
+                    <span class="ordered-up-box-value">None</span>
+                </div>
+                <div class="score-box">
+                    <span class="score-box-label">Trump</span>
+                    <span class="trump-box-value">
+                        <div class="trump-value"></div>
+                        <span class="trump-icon-wrapper">
+                            <div id="trump-icon"></div>
+                        </span>
+                    </span>
+                </div>
+                <!-- 
+                <div class="dealer-chip">
+                    <span class="dealer-chip-text">DEAL</span>
+                    <div class="chip-white"></div>
+                </div> -->
+
+                <div class="player-1-order-actions hidden">
+                    <button class="pass-button theme-button">Pass</button>
+                    <button class="order-up-button theme-button">Order Up</button>
+                    <button class="alone-button theme-button">Alone</button>
+                </div>
+
+                <div class="player-1-call-trump hidden"></div>
+
+                <div class="kitty-wrapper"></div>
+
+                <div class="debug-section">
+                    <button class="reload-button theme-button reload-icon">&#8635;</button>
+                    <button class="debug-button theme-button">DEBUG</button>
+                </div>
+            </div>
+
+            <div class="player-1-name">PLAYER 1</div>
+
+            <div class="player-1-deck"></div>
+
+            <div class="played-card-zone player-1-played"></div>
+
+            <div class="player-1-dealer hidden">DEALER</div>
+
+            <div class="player-2-name">PLAYER 2</div>
+
+            <div class="player-2-deck"></div>
+
+            <div class="played-card-zone player-2-played"></div>
+
+            <div class="player-2-dealer hidden">DEALER</div>
+
+            <div class="player-3-name">PLAYER 3</div>
+
+            <div class="player-3-deck"></div>
+
+            <div class="played-card-zone player-3-played"></div>
+
+            <div class="player-3-dealer hidden">DEALER</div>
+
+            <div class="player-4-name">PLAYER 4</div>
+
+            <div class="player-4-deck"></div>
+
+            <div class="played-card-zone player-4-played"></div>
+
+            <div class="player-4-dealer hidden">DEALER</div>
+        </div>
+
+        <div style="display: none">
+            <h1>Icons</h1>
+            <div class="icon-hearts"></div>
+            <div class="icon-diamonds"></div>
+            <div class="icon-clubs"></div>
+            <div class="icon-spades"></div>
+
+            <h1>Full Deck</h1>
+            <div class="card-wrapper">
+                <div class="card-face two-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-hearts"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-hearts"></div>
+            </div>
+            <br />
+            <div class="card-wrapper">
+                <div class="card-face two-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-clubs"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-clubs"></div>
+            </div>
+            <br />
+            <div class="card-wrapper">
+                <div class="card-face two-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-diamonds"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-diamonds"></div>
+            </div>
+            <br />
+            <div class="card-wrapper">
+                <div class="card-face two-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face three-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face four-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face five-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face six-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face seven-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face eight-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face nine-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ten-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face jack-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face queen-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face king-spades"></div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <br />
+
+            <h1>Card Modifiers</h1>
+
+            <div class="card-wrapper red-deck"></div>
+            <div class="card-wrapper glass">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper wild">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper bonus">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper mult">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper steel">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper gold">
+                <div class="card-face ace-spades"></div>
+            </div>
+            <div class="card-wrapper lucky">
+                <div class="card-face ace-spades"></div>
+            </div>
+
+            <br />
+
+            <!-- <div class="kitty-wrapper">
+                <div class="card-wrapper red-deck"></div>
+                <div class="card-wrapper red-deck"></div>
+                <div class="card-wrapper red-deck"></div>
+                <div class="card-wrapper red-deck"></div>
+            </div> -->
+
+            <!-- <h1>Animations</h1>
+            <div class="card-wrapper rotate" style="margin-left: 20px">
+                <div class="card-face ace-spades"></div>
+            </div> -->
+        </div>
+    </body>
+</html>

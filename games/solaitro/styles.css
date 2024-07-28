@@ -1,0 +1,1502 @@
+:root {
+    --base: #6c6685;
+    --base-bg: #423e54;
+    --black: #3c4368;
+}
+
+:root.orange {
+    --base: #a66202;
+    --base-bg: #442801;
+    --black: #3c4368;
+}
+
+:root.lightblue {
+    --base: #0278a6;
+    --base-bg: #01364b;
+    --black: #3c4368;
+}
+:root.blue {
+    --base: #625df5;
+    --base-bg: #232155;
+    --black: #3c4368;
+}
+:root.lightyellow {
+    --base: #ffc65c;
+    --base-bg: #644e26;
+    --black: #3c4368;
+}
+:root.green {
+    --base: #30874b;
+    --base-bg: #153b21;
+    --black: #3c4368;
+}
+:root.red {
+    --base: #b53434;
+    --base-bg: #581a1a;
+    --black: #3c4368;
+}
+
+@font-face {
+    font-family: 'Balatro';
+    src: url('./fonts/balatro/balatro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    height: 100%;
+    /* background-color: #35654d; */
+    background-color: var(--base-bg);
+    font-family: 'Balatro', system-ui;
+
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 800px;
+    width: 1280px;
+    overflow: hidden;
+    font-family: 'Balatro', system-ui;
+}
+
+button {
+    font-family: 'Balatro', system-ui;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+h1 {
+    color: white;
+    margin-top: 0;
+}
+
+.press-start-2p-regular {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.balatro-font {
+    font-family: 'Balatro', system-ui;
+}
+
+.theme-toggle {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.theme-button {
+    background-color: var(--base);
+    border: none;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    outline: inherit;
+    box-shadow: 2px 2px 2px black;
+    border-radius: 5px;
+}
+
+.debug-section {
+    position: absolute;
+    width: 236px !important;
+    bottom: -5px;
+    display: flex;
+    gap: 8px;
+}
+
+.debug-section .reload-icon {
+    font-size: 26px;
+    padding: 0;
+    width: 60px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#debug-menu {
+    position: absolute;
+    width: 1280px;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    z-index: 100;
+    background: rgb(0 0 0 / 77%);
+}
+
+#debug-menu button{
+    padding: 20px; 
+    width: 150px;
+}
+
+/* DEBUG SECTION */
+
+#layout-grid {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+}
+
+#layout-grid .layout-grid-vline {
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    background-color: rgb(255 255 255 / 17%);
+}
+
+#layout-grid .layout-grid-hline {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: rgb(255 255 255 / 17%);
+}
+
+#layout-grid .layout-grid-vlabel {
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-family: monospace;
+    background-color: rgb(255 255 255 / 17%);
+    padding: 2px;
+
+}
+
+#layout-grid .layout-grid-hlabel {
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-family: monospace;
+    background-color: rgb(255 255 255 / 17%);
+    padding: 2px;
+}
+
+/* GAME BOARD */
+
+#game-board {
+    height: 800px;
+    width: 1280px;
+}
+
+.score-section {
+    position: absolute;
+    z-index: 1;
+    width: 250px;
+    height: 100%;
+    padding: 5px;
+    border-right: 2px solid var(--base);
+    background-color: #293a3a;
+    border-left: 2px solid var(--base);
+    margin-left: 20px;
+}
+
+.score-section button {
+    display: block;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+.score-box {
+    display: flex;
+    align-items: center;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    gap: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    background: var(--base);
+    text-shadow: 1px 1px 2px black;
+    width: 100%;
+    line-height: 1.2;
+}
+
+.score-box-label {
+    width: 80px;
+}
+
+.score-box-value {
+    font-size: 30px;
+    flex: 1;
+    background: rgb(0 0 0 / 35%);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.trump-box-value {
+    flex: 1;
+    background: rgb(0 0 0 / 35%);
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trump-box-value .trump-value {
+    margin-right: 10px;
+}
+
+.trump-icon-wrapper {
+    background: white;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.ordered-up-box-value, .dealer-box-value {
+    flex: 1;
+    background: rgb(0 0 0 / 35%);
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.player-1-order-actions {
+    position: absolute;
+    top: 426px;
+    width: 112px;
+    left: 697px;
+    background: white;
+    padding: 8px;
+    border-radius: 5px;
+    height: 148px;
+    z-index: 10;
+}
+
+.player-1-call-trump {
+    position: absolute;
+    top: 426px;
+    width: 112px;
+    left: 697px;
+    background: white;
+    padding: 8px;
+    border-radius: 5px;
+    height: 148px;
+    z-index: 10;
+}
+
+.player-1-name {
+    position: absolute;
+    left: 670px;
+    bottom: -3px;
+    background-color: var(--base);
+    color: white;
+    width: 180px;
+    text-align: center;
+    padding: 4px 0 6px;
+    font-size: 14px;
+    border-radius: 10px 10px 0 0;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
+}
+
+.player-1-deck {
+    bottom: 50px;
+    left: 375px;
+    position: absolute;
+    width: 805px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #00000024;
+    padding: 0 100px;
+    height: 141px;
+}
+
+.player-1-deck .card-wrapper {
+    margin-left: -10px;
+}
+
+@keyframes focus {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-15px);
+    }
+}
+
+
+.player-1-deck .card-wrapper:hover {
+    animation: focus 0.1s linear;
+    transform: translateY(-15px)
+}
+
+/* This fixes the bouncing when the cursor stays at the bottom of the card */
+.player-1-deck .card-wrapper:hover::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: -16px;
+    left: 0px;
+    right: 0px; 
+    z-index: -1;
+}
+
+
+.played-card-zone {
+    position: absolute;
+    border: 4px solid #cacaca;
+    background-color: #ffffff45;
+    height: 155px;
+    width: 120px;
+    border-radius: 9px;
+    padding-top: 2px;
+    padding-left: 2px;
+}
+
+.played-card-zone > .card-wrapper {
+    position: absolute;
+    top: 1px;
+}
+
+.played-card-zone.current-player {
+    border: 4px solid var(--base);
+}
+
+.player-1-played {
+    top: 422px;
+    left: 715px;
+}
+
+@keyframes player1TakeTrickFrom2{
+    to {
+      position: absolute;
+      transform: translateX(110px) translateY(320px);
+    }
+}
+
+
+@keyframes player1TakeTrickFrom3 {
+    to {
+      position: absolute;
+      transform: translateY(390px);
+    }
+}
+
+@keyframes player1TakeTrickFrom4 {
+    to {
+      position: absolute;
+      transform: translateX(-110px) translateY(320px);
+    }
+}
+
+.player-1-take-trick-from-2 {
+    animation: player1TakeTrickFrom2 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-1-take-trick-from-3 {
+    animation: player1TakeTrickFrom3 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-1-take-trick-from-4 {
+    animation: player1TakeTrickFrom4 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-1-dealer {
+    position: absolute;
+    top: 547px;
+    left: 719px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
+}
+
+.player-2-name {
+    position: absolute;
+    left: 269px;
+    top: 308px;
+    background-color: var(--base);
+    color: white;
+    height: 180px;
+    text-align: center;
+    padding: 4px;
+    font-size: 14px;
+    border-radius: 0px 10px 10px 0;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
+    border-left: none;
+
+}
+
+.player-2-deck {
+    position: absolute;
+    top: 255px;
+    left: 360px;
+    height: 375px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.player-2-deck .card-wrapper {
+    margin-top: -60px;
+    transform: rotate(90deg);
+}
+
+.player-2-played {
+    top: 320px;
+    left: 550px;
+}
+
+@keyframes player2TakeTrickFrom1 {
+    to {
+      position: absolute;
+      transform: translateX(-380px) translateY(-66px);
+    }
+}
+
+@keyframes player2TakeTrickFrom2 {
+    to {
+      position: absolute;
+      transform: translateX(-300px) translateY(0px);
+    }
+}
+
+@keyframes player2TakeTrickFrom3 {
+    to {
+      position: absolute;
+      transform: translateX(-380px) translateY(66px);
+    }
+}
+
+@keyframes player2TakeTrickFrom4 {
+    to {
+      position: absolute;
+      transform: translateX(-490px) translateY(0px);
+    }
+}
+
+.player-2-take-trick-from-1 {
+    animation: player2TakeTrickFrom1 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-2-take-trick-from-2 {
+    animation: player2TakeTrickFrom2 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-2-take-trick-from-3 {
+    animation: player2TakeTrickFrom3 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-2-take-trick-from-4 {
+    animation: player2TakeTrickFrom4 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-2-dealer {
+    position: absolute;
+    top: 445px;
+    left: 554px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
+}
+
+.player-3-name {
+    position: absolute;
+    left: 670px;
+    top: -2px;
+    background-color: var(--base);
+    color: white;
+    width: 180px;
+    text-align: center;
+    padding: 4px 0 6px;
+    font-size: 14px;
+    border-radius: 0px 0px 10px 10px;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
+}
+
+.player-3-deck {
+    left: 610px;
+    top: 50px;
+    position: absolute;
+    width: 375px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.player-3-deck .card-wrapper {
+    margin-left: -37px;
+}
+
+.player-3-played {
+    top: 220px;
+    left: 715px;
+}
+
+
+
+@keyframes player3TakeTrickFrom1 {
+    to {
+      position: absolute;
+      transform: translateY(-390px);
+    }
+}
+
+@keyframes player3TakeTrickFrom2 {
+    to {
+      position: absolute;
+      transform: translateX(110px) translateY(-320px);
+    }
+}
+
+@keyframes player3TakeTrickFrom4 {
+    to {
+      position: absolute;
+      transform: translateX(-110px) translateY(-320px);
+    }
+}
+
+.player-3-take-trick-from-1 {
+    animation: player3TakeTrickFrom1 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-3-take-trick-from-2 {
+    animation: player3TakeTrickFrom2 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-3-take-trick-from-4 {
+    animation: player3TakeTrickFrom4 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-3-dealer {
+    position: absolute;
+    top: 345px;
+    left: 719px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
+}
+
+.player-4-name {
+    position: absolute;
+    right: -2px;
+    top: 308px;
+    background-color: var(--base);
+    color: white;
+    height: 180px;
+    text-align: center;
+    padding: 4px;
+    font-size: 14px;
+    border-radius: 10px 0px 0px 10px;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    text-shadow: 1px 1px 2px black;
+    border: 2px solid #293a3a;
+
+}
+
+.player-4-deck {
+    position: absolute;
+    top: 255px;
+    right: 90px;
+    height: 375px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+}
+
+.player-4-deck .card-wrapper {
+    margin-top: -60px;
+    transform: rotate(270deg);
+}
+
+.player-4-played {
+    top: 320px;
+    left: 880px;
+    /* transform: rotate(270deg); */
+}
+
+@keyframes player4TakeTrickFrom1 {
+    to {
+      position: absolute;
+      transform: translateX(380px) translateY(-66px);
+    }
+}
+
+@keyframes player4TakeTrickFrom2 {
+    to {
+      position: absolute;
+      transform: translateX(490px) translateY(0px);
+    }
+}
+
+@keyframes player4TakeTrickFrom3 {
+    to {
+      position: absolute;
+      transform: translateX(380px) translateY(66px);
+    }
+}
+
+@keyframes player4TakeTrickFrom4 {
+    to {
+      position: absolute;
+      transform: translateX(300px) translateY(0px);
+    }
+}
+
+.player-4-take-trick-from-1 {
+    animation: player4TakeTrickFrom1 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-4-take-trick-from-2 {
+    animation: player4TakeTrickFrom2 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-4-take-trick-from-3 {
+    animation: player4TakeTrickFrom3 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-4-take-trick-from-4 {
+    animation: player4TakeTrickFrom4 .20s forwards linear; /* Adjust time as needed */
+}
+
+.player-4-dealer {
+    position: absolute;
+    top: 445px;
+    left: 884px;
+    background-color: white;
+    color: var(--black);
+    width: 112px;
+    text-align: center;
+    padding: 5px 0;
+    display: inline-block;
+    border-radius: 0 0 5px 5px;
+}
+
+.card-face {
+    display: inline-block;
+    width: 71px;
+    height: 95px;
+}
+
+.pass-card {
+    position: absolute;
+    background-color: white;
+    color: var(--black);
+    width: 113px;
+    text-align: center;
+    height: 148px;
+    padding-top: 60px;
+    border-radius: 5px;
+    margin: -3px;
+    font-size: 20px;
+}
+
+.card-wrapper {
+    background-image: url(img/card-backs-seals.png);
+    background-position: -71px 0px;
+    width: 71px;
+    height: 94px;
+    display: inline-block;
+    zoom: 1.5;
+}
+
+.card-wrapper.glass {
+    background-position: -355px -95px;
+    background-color: #878f96;
+    border-radius: 4px;
+}
+
+.card-wrapper.wild {
+    background-position: -213px -95px;
+    border-radius: 4px;
+}
+
+.card-wrapper.bonus {
+    background-position: -71px -95px;
+    border-radius: 4px;
+}
+
+.card-wrapper.mult {
+    background-position: -142px -95px;
+    border-radius: 4px;
+}
+
+.card-wrapper.steel {
+    background-position: -426px -95px;
+    border-radius: 4px;
+}
+
+.card-wrapper.gold {
+    background-position: -426px 0px;
+    border-radius: 4px;
+}
+.card-wrapper.lucky {
+    background-position: -284px -95px;
+    border-radius: 4px;
+}
+.card-wrapper.red-deck {
+    background-position: 0 -1px;
+    border-radius: 4px;
+}
+
+.kitty-wrapper .card-wrapper {
+    display: inline-block;
+    position: absolute;
+}
+
+.kitty-wrapper .card-wrapper:nth-child(1) {
+    margin-top: 9px;
+    margin-left: 9px;
+}
+.kitty-wrapper .card-wrapper:nth-child(2) {
+    margin-top: 6px;
+    margin-left: 6px;
+}
+.kitty-wrapper .card-wrapper:nth-child(3) {
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+#game-board .kitty-wrapper {
+    position: absolute;
+    top: 580px;
+    left: 65px;
+}
+
+/* Icons */
+.icon-hearts {
+    background-image: url('img/icons.png');
+    background-position: 0px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+.icon-diamonds {
+    background-image: url('img/icons.png');
+    background-position: -18px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+.icon-clubs {
+    background-image: url('img/icons.png');
+    background-position: -36px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+.icon-spades {
+    background-image: url('img/icons.png');
+    background-position: -54px -18px;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+
+/* Hearts */
+.two-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 0px;
+}
+.three-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px 0;
+}
+.four-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px 0;
+}
+.five-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px 0;
+}
+.six-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px 0;
+}
+.seven-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px 0;
+}
+.eight-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px 0;
+}
+.nine-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px 0;
+}
+.ten-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px 0;
+}
+.jack-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px 0;
+}
+.queen-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px 0;
+}
+.king-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px 0;
+}
+.ace-hearts {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px 0;
+}
+
+/* Clubs */
+.two-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 -95px;
+}
+.three-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px -95px;
+}
+.four-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px -95px;
+}
+.five-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px -95px;
+}
+.six-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px -95px;
+}
+.seven-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px -95px;
+}
+.eight-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px -95px;
+}
+.nine-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px -95px;
+}
+.ten-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px -95px;
+}
+.jack-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px -95px;
+}
+.queen-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px -95px;
+}
+.king-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px -95px;
+}
+.ace-clubs {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px -95px;
+}
+
+/* Diamonds */
+.two-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 -190px;
+}
+.three-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px -190px;
+}
+.four-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px -190px;
+}
+.five-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px -190px;
+}
+.six-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px -190px;
+}
+.seven-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px -190px;
+}
+.eight-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px -190px;
+}
+.nine-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px -190px;
+}
+.ten-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px -190px;
+}
+.jack-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px -190px;
+}
+.queen-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px -190px;
+}
+.king-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px -190px;
+}
+.ace-diamonds {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px -190px;
+}
+
+/* Spades */
+.two-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: 0 -285px;
+}
+.three-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -71px -285px;
+}
+.four-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -142px -285px;
+}
+.five-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -213px -285px;
+}
+.six-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -284px -285px;
+}
+.seven-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -355px -285px;
+}
+.eight-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -426px -285px;
+}
+.nine-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -497px -285px;
+}
+.ten-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -568px -285px;
+}
+.jack-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -639px -285px;
+}
+.queen-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -710px -285px;
+}
+.king-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -781px -285px;
+}
+.ace-spades {
+    background-image: url('img/deck-sprite-sheet.png');
+    background-position: -852px -285px;
+}
+
+/* Chips */
+.chip-white {
+    background-image: url('img/chips.png');
+    background-position: 0px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+
+}
+.chip-red {
+    background-image: url('img/chips.png');
+    background-position: -29px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-green {
+    background-image: url('img/chips.png');
+    background-position: -58px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-blue {
+    background-image: url('img/chips.png');
+    background-position: -87px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-black {
+    background-image: url('img/chips.png');
+    background-position: -116px 0px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-purple {
+    background-image: url('img/chips.png');
+    background-position: 0px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-orange {
+    background-image: url('img/chips.png');
+    background-position: -29px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-yellow {
+    background-image: url('img/chips.png');
+    background-position: -58px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-darkyellow {
+    background-image: url('img/chips.png');
+    background-position: -87px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+.chip-joker {
+    background-image: url('img/chips.png');
+    background-position: -116px -29px;
+    display: block;
+    height: 29px;
+    width: 29px;
+}
+
+.dealer-chip {
+    display: inline-block;
+    width: 29px;
+    zoom: 2;
+    position: relative;
+}
+
+.dealer-chip-text {
+    position: absolute;
+    top: 10px;
+    left: 7px;
+    font-size: 7px;
+}
+
+
+/* Animations */
+@keyframes rotating {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+.rotate {
+    animation: rotating 2s linear infinite;
+}
+
+@keyframes slightRotate1 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(2deg) translateY(-1px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(-2deg) translateY(1px);
+    }
+}
+@keyframes slightRotate2 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(-2deg) translateY(2px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(2deg) translateY(-2px);
+    }
+}
+
+@keyframes slightRotate3 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(3deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(-3deg) translateY(-3px);
+    }
+}
+
+@keyframes slightRotate4 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(-3deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(2deg) translateY(-3px);
+    }
+}
+@keyframes slightRotate5 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(-3deg) translateY(-3px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(2deg) translateY(3px);
+    }
+}
+
+
+.player-1-deck > :nth-child(5n+1) {
+    display: inline-block;
+    animation: slightRotate1 15s linear infinite;
+}
+.player-1-deck > :nth-child(5n+2) {
+    display: inline-block; 
+    animation: slightRotate2 15s linear infinite; 
+}
+.player-1-deck > :nth-child(5n+3) {
+    display: inline-block; 
+    animation: slightRotate3 14s linear infinite; 
+}
+.player-1-deck > :nth-child(5n+4) {
+    display: inline-block; 
+    animation: slightRotate4 18s linear infinite; 
+}
+.player-1-deck > :nth-child(5n+5) {
+    display: inline-block; 
+    animation: slightRotate5 16s linear infinite; 
+}
+
+@keyframes slightRotate1Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(92deg) translateY(-1px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(88deg) translateY(1px);
+    }
+}
+@keyframes slightRotate2Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(88deg) translateY(2px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(92deg) translateY(-2px);
+    }
+}
+@keyframes slightRotate3Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(93deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(87deg) translateY(-3px);
+    }
+}
+@keyframes slightRotate4Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(87deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(92deg) translateY(-3px);
+    }
+}
+@keyframes slightRotate5Player2 {
+    0%, 100% {
+      transform: rotate(90deg) translateY(0);
+    }
+    25% {
+      transform: rotate(87deg) translateY(-3px);
+    }
+    50% {
+      transform: rotate(90deg) translateY(0);
+    }
+    75% {
+      transform: rotate(92deg) translateY(3px);
+    }
+}
+/* 
+.player-2-deck > :nth-child(5n+1) {
+    display: inline-block;
+    animation: slightRotate1Player2 15s linear infinite;
+}
+.player-2-deck > :nth-child(5n+2) {
+    display: inline-block; 
+    animation: slightRotate2Player2 15s linear infinite; 
+}
+.player-2-deck > :nth-child(5n+3) {
+    display: inline-block;
+    animation: slightRotate3Player2 14s linear infinite;
+}
+.player-2-deck > :nth-child(5n+4) {
+    display: inline-block; 
+    animation: slightRotate4Player2 18s linear infinite;
+}
+.player-2-deck > :nth-child(5n+5) {
+    display: inline-block;
+    animation: slightRotate5Player2 16s linear infinite; 
+} */
+
+
+@keyframes slightRotate1Player3 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(-3deg) translateY(-3px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(2deg) translateY(3px);
+    }
+}
+@keyframes slightRotate2Player3 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(-3deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(2deg) translateY(-3px);
+    }
+}
+@keyframes slightRotate3Player3 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(3deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(-3deg) translateY(-3px);
+    }
+}
+@keyframes slightRotate4Player3 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(-2deg) translateY(2px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(2deg) translateY(-2px);
+    }
+}
+@keyframes slightRotate5Player3 {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    25% {
+      transform: rotate(2deg) translateY(-1px);
+    }
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+    75% {
+      transform: rotate(-2deg) translateY(1px);
+    }
+}
+
+/* 
+.player-3-deck > :nth-child(5n+1) {
+    display: inline-block;
+    animation: slightRotate1Player3 15s linear infinite; 
+}
+.player-3-deck > :nth-child(5n+2) {
+    display: inline-block;
+    animation: slightRotate2Player3 15s linear infinite;
+}
+.player-3-deck > :nth-child(5n+3) {
+    display: inline-block; 
+    animation: slightRotate3Player3 14s linear infinite; 
+}
+.player-3-deck > :nth-child(5n+4) {
+    display: inline-block; 
+    animation: slightRotate4Player3 18s linear infinite; 
+}
+.player-3-deck > :nth-child(5n+5) {
+    display: inline-block; 
+    animation: slightRotate5Player3 16s linear infinite;
+} */
+
+
+@keyframes slightRotate1Player4 {
+    0%, 100% {
+      transform: rotate(270deg) translateY(0);
+    }
+    25% {
+      transform: rotate(272deg) translateY(-1px);
+    }
+    50% {
+      transform: rotate(270deg) translateY(0);
+    }
+    75% {
+      transform: rotate(268deg) translateY(1px);
+    }
+}
+@keyframes slightRotate2Player4 {
+    0%, 100% {
+      transform: rotate(270deg) translateY(0);
+    }
+    25% {
+      transform: rotate(267deg) translateY(3px);
+    }
+    50% {
+      transform: rotate(270deg) translateY(0);
+    }
+    75% {
+      transform: rotate(272deg) translateY(-3px);
+    }
+}
+@keyframes slightRotate3Player4 {
+    0%, 100% {
+      transform: rotate(270deg) translateY(0);
+    }
+    25% {
+      transform: rotate(267deg) translateY(-3px);
+    }
+    50% {
+      transform: rotate(270deg) translateY(0);
+    }
+    75% {
+      transform: rotate(272deg) translateY(3px);
+    }
+}
+@keyframes slightRotate4Player4 {
+    0%, 100% {
+      transform: rotate(270deg) translateY(0);
+    }
+    25% {
+      transform: rotate(268deg) translateY(2px);
+    }
+    50% {
+      transform: rotate(270deg) translateY(0);
+    }
+    75% {
+      transform: rotate(272deg) translateY(-2px);
+    }
+}
+@keyframes slightRotate5Player4 {
+    0%, 100% {
+      transform: rotate(270deg) translateY(0);
+    }
+    25% {
+      transform: rotate(273deg) translateY(-3px);
+    }
+    50% {
+      transform: rotate(270deg) translateY(0);
+    }
+    75% {
+      transform: rotate(267deg) translateY(3px);
+    }
+}
+
+/* .player-4-deck > :nth-child(5n+1) {
+    display: inline-block;
+    animation: slightRotate1Player4 15s linear infinite;
+}
+.player-4-deck > :nth-child(5n+2) {
+    display: inline-block; 
+    animation: slightRotate2Player4 15s linear infinite; 
+}
+.player-4-deck > :nth-child(5n+3) {
+    display: inline-block;
+    animation: slightRotate3Player4 14s linear infinite; 
+}
+.player-4-deck > :nth-child(5n+4) {
+    display: inline-block; 
+    animation: slightRotate4Player4 18s linear infinite; 
+}
+.player-4-deck > :nth-child(5n+5) {
+    display: inline-block; 
+    animation: slightRotate5Player4 16s linear infinite;
+} */
