@@ -83,11 +83,15 @@ var cardValueToKey = function (value) {
 };
 var Game = /** @class */ (function () {
     function Game() {
+        var _this = this;
         this.gameRunning = true;
         this.deckPosition = 0;
         this.timerInMs = 0;
         this.lastTimestamp = 0;
         this.piles = [];
+        this.handlePileZoneClick = function (event) {
+            console.log('clicked at', _this.timerInMs);
+        };
         this.deck = this.buildAndShuffleDeck();
         this.startGame();
     }
@@ -177,6 +181,9 @@ var Game = /** @class */ (function () {
             var cardHtml = _this.buildCardHtml(card);
             pileZonesEl.innerHTML += cardHtml;
         });
+        //remove existing click event listeners
+        pileZonesEl.removeEventListener('click', this.handlePileZoneClick);
+        pileZonesEl.addEventListener('click', this.handlePileZoneClick);
     };
     Game.prototype.renderPlayerDeck = function () {
         var playerDeckEl = document.querySelector('.player-deck');

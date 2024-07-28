@@ -218,6 +218,10 @@ class Game {
         timerEl.innerHTML = `${minutes}:${seconds}.${tenths}`;
     }
 
+    public handlePileZoneClick = (event: Event) => {
+        console.log('clicked at', this.timerInMs);
+    };
+
     public renderPileZones(): void {
         const pileZonesEl = document.querySelector('.pile-zones');
         pileZonesEl.innerHTML = '';
@@ -226,6 +230,10 @@ class Game {
             const cardHtml = this.buildCardHtml(card);
             pileZonesEl.innerHTML += cardHtml;
         });
+
+        //remove existing click event listeners
+        pileZonesEl.removeEventListener('click', this.handlePileZoneClick);
+        pileZonesEl.addEventListener('click', this.handlePileZoneClick);
     }
 
     public renderPlayerDeck(): void {
