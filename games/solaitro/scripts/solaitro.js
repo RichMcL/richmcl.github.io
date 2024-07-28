@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var Suit;
 (function (Suit) {
     Suit["Spades"] = "Spades";
@@ -89,7 +100,8 @@ var Game = /** @class */ (function () {
         this.deckPosition = 0;
         this.timerInMs = 0;
         this.lastTimestamp = 0;
-        this.buttons = {};
+        this.buttons = [];
+        this.renderedCards = [];
         this.piles = [];
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -143,28 +155,7 @@ var Game = /** @class */ (function () {
         // Request the next frame
         requestAnimationFrame(function (ts) { return _this.gameLoop(ts); });
     };
-    Game.prototype.updateGameState = function () {
-        // Update the game state logic
-        var _a, _b, _c, _d;
-        // Check if the click is within the button's boundaries
-        var reloadButton = this.buttons.reload;
-        if (reloadButton) {
-            if (((_a = this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= reloadButton.x &&
-                ((_b = this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= reloadButton.x + reloadButton.width &&
-                ((_c = this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= reloadButton.y &&
-                ((_d = this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= reloadButton.y + reloadButton.height) {
-                console.log('Reload button clicked');
-                window.location.reload();
-            }
-        }
-    };
-    Game.prototype.render = function () {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
-        this.renderFullDeck();
-        this.renderTimer();
-        this.renderReloadButton();
-    };
-    Game.prototype.renderReloadButton = function () {
+    Game.prototype.createReloadButton = function () {
         var text = 'RELOAD';
         var padding = 20; // Padding for the button
         var textMetrics = this.ctx.measureText(text);
@@ -173,28 +164,78 @@ var Game = /** @class */ (function () {
         var buttonHeight = 50;
         var x = 10;
         var y = 730;
-        this.buttons.reload = {
+        this.buttons.push({
+            id: 'reload',
+            text: text,
+            padding: padding,
+            fillColor: '#30874b',
             x: x,
             y: y,
             width: buttonWidth,
             height: buttonHeight
-        };
-        this.ctx.fillStyle = '#30874b';
-        this.ctx.fillRect(x, y, buttonWidth, buttonHeight);
-        this.printText(text, x + padding / 2, y + padding * 1.75);
+        });
     };
     /**
      * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
      * rows -> hearts, clubs, diamonds, spades,
      */
-    Game.prototype.renderFullDeck = function () {
+    Game.prototype.createRenderedCards = function () {
         var cardIndex = 0;
         for (var col = 0; col < 4; col++) {
             for (var row = 0; row < 13; row++) {
-                this.drawCard(this.deck[cardIndex], row * 71 + 200, col * 95 + 100);
+                this.renderedCards.push(__assign(__assign({}, this.deck[cardIndex]), { x: row * 71 + 200, y: col * 95 + 100, width: 71, height: 95 }));
                 cardIndex++;
             }
         }
+    };
+    Game.prototype.updateGameState = function () {
+        // Update the game state logic
+        var _this = this;
+        this.buttons = [];
+        this.renderedCards = [];
+        this.renderedCards = [];
+        this.createReloadButton();
+        this.createRenderedCards();
+        //loop through objects and check if click is within the boundaries
+        this.buttons.forEach(function (obj) {
+            var _a, _b, _c, _d;
+            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= obj.x &&
+                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= obj.x + obj.width &&
+                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= obj.y &&
+                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= obj.y + obj.height) {
+                console.log('button clicked', obj);
+            }
+        });
+        this.renderedCards.forEach(function (card) {
+            var _a, _b, _c, _d;
+            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
+                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width &&
+                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
+                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height) {
+                _this.lastCardClicked = card;
+            }
+        });
+    };
+    Game.prototype.render = function () {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
+        this.renderFullDeck();
+        this.renderTimer();
+        this.renderLastCardClicked();
+        this.renderButtons();
+    };
+    Game.prototype.renderButtons = function () {
+        var _this = this;
+        this.buttons.forEach(function (button) {
+            _this.ctx.fillStyle = button.fillColor;
+            _this.ctx.fillRect(button.x, button.y, button.width, button.height);
+            _this.printText(button.text, button.x + button.padding / 2, button.y + button.padding * 1.75);
+        });
+    };
+    Game.prototype.renderFullDeck = function () {
+        var _this = this;
+        this.renderedCards.forEach(function (card) {
+            _this.drawCard(card, card.x, card.y);
+        });
     };
     Game.prototype.renderTimer = function () {
         var minutes = Math.floor(this.timerInMs / 60000)
@@ -207,6 +248,12 @@ var Game = /** @class */ (function () {
             .toString()
             .padStart(1, '0');
         this.printText("Time: ".concat(minutes, ":").concat(seconds, ".").concat(tenths), 20, 60);
+    };
+    Game.prototype.renderLastCardClicked = function () {
+        var card = this.lastCardClicked;
+        if (card) {
+            this.printText("Card: ".concat(card.value, " ").concat(SuitIcon[card.suit]), 20, 100);
+        }
     };
     Game.prototype.printText = function (text, x, y) {
         this.ctx.font = '20px Balatro';

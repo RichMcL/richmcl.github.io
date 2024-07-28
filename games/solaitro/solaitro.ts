@@ -52,6 +52,13 @@ interface Card {
     value: CardValue;
 }
 
+interface RenderedCard extends Card {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
 interface Player {
     playerNum: number;
     hand: Card[];
@@ -101,6 +108,17 @@ const cardValueToKey = (value: CardValue): string => {
     return '';
 };
 
+interface GameButton {
+    id: string;
+    text: string;
+    fillColor: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    padding: number;
+}
+
 class Game {
     public canvas: HTMLCanvasElement;
     public ctx: CanvasRenderingContext2D;
@@ -114,7 +132,9 @@ class Game {
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
-    public buttons: { [key: string]: { x: number; y: number; width: number; height: number } } = {};
+    public buttons: GameButton[] = [];
+    public renderedCards: RenderedCard[] = [];
+    public lastCardClicked: Card;
 
     public piles: Card[] = [];
 
@@ -185,35 +205,7 @@ class Game {
         requestAnimationFrame(ts => this.gameLoop(ts));
     }
 
-    public updateGameState() {
-        // Update the game state logic
-
-        // Check if the click is within the button's boundaries
-
-        const reloadButton = this.buttons.reload;
-
-        if (reloadButton) {
-            if (
-                this.clickCoordinates?.x >= reloadButton.x &&
-                this.clickCoordinates?.x <= reloadButton.x + reloadButton.width &&
-                this.clickCoordinates?.y >= reloadButton.y &&
-                this.clickCoordinates?.y <= reloadButton.y + reloadButton.height
-            ) {
-                console.log('Reload button clicked');
-                window.location.reload();
-            }
-        }
-    }
-
-    public render() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
-
-        this.renderFullDeck();
-        this.renderTimer();
-        this.renderReloadButton();
-    }
-
-    public renderReloadButton() {
+    public createReloadButton(): void {
         const text = 'RELOAD';
         const padding = 20; // Padding for the button
         const textMetrics = this.ctx.measureText(text);
@@ -223,31 +215,99 @@ class Game {
         const x = 10;
         const y = 730;
 
-        this.buttons.reload = {
+        this.buttons.push({
+            id: 'reload',
+            text,
+            padding,
+            fillColor: '#30874b',
             x,
             y,
             width: buttonWidth,
             height: buttonHeight
-        };
-
-        this.ctx.fillStyle = '#30874b';
-        this.ctx.fillRect(x, y, buttonWidth, buttonHeight);
-
-        this.printText(text, x + padding / 2, y + padding * 1.75);
+        });
     }
 
     /**
      * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
      * rows -> hearts, clubs, diamonds, spades,
      */
-    public renderFullDeck(): void {
+    public createRenderedCards(): void {
         let cardIndex = 0;
         for (let col = 0; col < 4; col++) {
             for (let row = 0; row < 13; row++) {
-                this.drawCard(this.deck[cardIndex], row * 71 + 200, col * 95 + 100);
+                this.renderedCards.push({
+                    ...this.deck[cardIndex],
+                    x: row * 71 + 200,
+                    y: col * 95 + 100,
+                    width: 71,
+                    height: 95
+                });
+
                 cardIndex++;
             }
         }
+    }
+
+    public updateGameState() {
+        // Update the game state logic
+
+        this.buttons = [];
+        this.renderedCards = [];
+        this.renderedCards = [];
+
+        this.createReloadButton();
+        this.createRenderedCards();
+
+        //loop through objects and check if click is within the boundaries
+        this.buttons.forEach(obj => {
+            if (
+                this.clickCoordinates?.x >= obj.x &&
+                this.clickCoordinates?.x <= obj.x + obj.width &&
+                this.clickCoordinates?.y >= obj.y &&
+                this.clickCoordinates?.y <= obj.y + obj.height
+            ) {
+                console.log('button clicked', obj);
+            }
+        });
+
+        this.renderedCards.forEach(card => {
+            if (
+                this.clickCoordinates?.x >= card.x &&
+                this.clickCoordinates?.x <= card.x + card.width &&
+                this.clickCoordinates?.y >= card.y &&
+                this.clickCoordinates?.y <= card.y + card.height
+            ) {
+                this.lastCardClicked = card;
+            }
+        });
+    }
+
+    public render() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
+
+        this.renderFullDeck();
+        this.renderTimer();
+        this.renderLastCardClicked();
+        this.renderButtons();
+    }
+
+    public renderButtons() {
+        this.buttons.forEach(button => {
+            this.ctx.fillStyle = button.fillColor;
+            this.ctx.fillRect(button.x, button.y, button.width, button.height);
+
+            this.printText(
+                button.text,
+                button.x + button.padding / 2,
+                button.y + button.padding * 1.75
+            );
+        });
+    }
+
+    public renderFullDeck(): void {
+        this.renderedCards.forEach(card => {
+            this.drawCard(card, card.x, card.y);
+        });
     }
 
     public renderTimer(): void {
@@ -262,6 +322,13 @@ class Game {
             .padStart(1, '0');
 
         this.printText(`Time: ${minutes}:${seconds}.${tenths}`, 20, 60);
+    }
+
+    public renderLastCardClicked(): void {
+        const card = this.lastCardClicked;
+        if (card) {
+            this.printText(`Card: ${card.value} ${SuitIcon[card.suit]}`, 20, 100);
+        }
     }
 
     public printText(text: string, x: number, y: number): void {
