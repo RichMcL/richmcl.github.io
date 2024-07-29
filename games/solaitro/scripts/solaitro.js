@@ -97,11 +97,12 @@ var Game = /** @class */ (function () {
         var _this = this;
         this.clickCoordinates = { x: 0, y: 0 };
         this.gameRunning = true;
-        this.deckPosition = 0;
+        this.deckIndex = 0;
         this.timerInMs = 0;
         this.lastTimestamp = 0;
         this.buttons = [];
         this.renderedCards = [];
+        this.isDealNewRound = true;
         this.piles = [];
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -133,7 +134,6 @@ var Game = /** @class */ (function () {
             _this.clickCoordinates = { x: x, y: y };
         });
         // this.initializePileZones(4);
-        this.deck = this.buildAndShuffleDeck(true);
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.gameLoop();
@@ -155,6 +155,71 @@ var Game = /** @class */ (function () {
         // Request the next frame
         requestAnimationFrame(function (ts) { return _this.gameLoop(ts); });
     };
+    Game.prototype.updateGameState = function () {
+        // Update the game state logic
+        var _this = this;
+        this.buttons = [];
+        this.renderedCards = [];
+        this.createPlayerCard();
+        this.createReloadButton();
+        this.createDealButton();
+        // this.createRenderedCards();
+        var clickedButton;
+        //loop through objects and check if click is within the boundaries
+        this.buttons.forEach(function (button) {
+            var _a, _b, _c, _d;
+            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
+                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
+                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
+                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
+                clickedButton = button;
+            }
+        });
+        if (clickedButton) {
+            switch (clickedButton.id) {
+                case 'reload':
+                    window.location.reload();
+                    break;
+                case 'deal':
+                    this.isDealNewRound = true;
+                    break;
+            }
+        }
+        var clickedCard;
+        this.renderedCards.forEach(function (card) {
+            var _a, _b, _c, _d;
+            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
+                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width &&
+                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
+                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height) {
+                clickedCard = card;
+            }
+        });
+        if (clickedCard) {
+            this.lastCardClicked = clickedCard;
+            switch (clickedCard.id) {
+                case 'player':
+                    console.log('Player card clicked', clickedCard);
+                    this.deckIndex += 3;
+                    if (this.deckIndex >= this.deck.length) {
+                        this.deckIndex = this.deckIndex - this.deck.length;
+                    }
+                    break;
+            }
+        }
+        if (this.isDealNewRound) {
+            this.deck = this.buildAndShuffleDeck(true);
+            this.isDealNewRound = false;
+        }
+    };
+    Game.prototype.createPlayerCard = function () {
+        var _a;
+        if (!((_a = this.deck) === null || _a === void 0 ? void 0 : _a.length)) {
+            return;
+        }
+        var card = this.deck[this.deckIndex];
+        this.renderedCards.push(__assign(__assign({}, card), { id: 'player', x: 605, y: 500, width: 71, height: 95 }));
+    };
     Game.prototype.createReloadButton = function () {
         var text = 'RELOAD';
         var padding = 20; // Padding for the button
@@ -175,50 +240,30 @@ var Game = /** @class */ (function () {
             height: buttonHeight
         });
     };
-    /**
-     * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
-     * rows -> hearts, clubs, diamonds, spades,
-     */
-    Game.prototype.createRenderedCards = function () {
-        var cardIndex = 0;
-        for (var col = 0; col < 4; col++) {
-            for (var row = 0; row < 13; row++) {
-                this.renderedCards.push(__assign(__assign({}, this.deck[cardIndex]), { x: row * 71 + 200, y: col * 95 + 100, width: 71, height: 95 }));
-                cardIndex++;
-            }
-        }
-    };
-    Game.prototype.updateGameState = function () {
-        // Update the game state logic
-        var _this = this;
-        this.buttons = [];
-        this.renderedCards = [];
-        this.renderedCards = [];
-        this.createReloadButton();
-        this.createRenderedCards();
-        //loop through objects and check if click is within the boundaries
-        this.buttons.forEach(function (obj) {
-            var _a, _b, _c, _d;
-            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= obj.x &&
-                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= obj.x + obj.width &&
-                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= obj.y &&
-                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= obj.y + obj.height) {
-                window.location.reload();
-            }
-        });
-        this.renderedCards.forEach(function (card) {
-            var _a, _b, _c, _d;
-            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
-                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width &&
-                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
-                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height) {
-                _this.lastCardClicked = card;
-            }
+    Game.prototype.createDealButton = function () {
+        var text = 'DEAL';
+        var padding = 20; // Padding for the button
+        var textMetrics = this.ctx.measureText(text);
+        var textWidth = textMetrics.width;
+        var buttonWidth = textWidth + padding;
+        var buttonHeight = 50;
+        var x = 10;
+        var y = 670;
+        this.buttons.push({
+            id: 'deal',
+            text: text,
+            padding: padding,
+            fillColor: '#30874b',
+            x: x,
+            y: y,
+            width: buttonWidth,
+            height: buttonHeight
         });
     };
     Game.prototype.render = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
-        this.renderFullDeck();
+        this.renderAllCards();
+        this.renderDeckIndex();
         this.renderTimer();
         this.renderLastCardClicked();
         this.renderButtons();
@@ -231,7 +276,11 @@ var Game = /** @class */ (function () {
             _this.printText(button.text, button.x + button.padding / 2, button.y + button.padding * 1.75);
         });
     };
-    Game.prototype.renderFullDeck = function () {
+    Game.prototype.renderDeckIndex = function () {
+        var _a;
+        this.printText("".concat(this.deckIndex, " / ").concat((_a = this.deck) === null || _a === void 0 ? void 0 : _a.length), 610, 630);
+    };
+    Game.prototype.renderAllCards = function () {
         var _this = this;
         this.renderedCards.forEach(function (card) {
             _this.drawCard(card, card.x, card.y);

@@ -53,6 +53,7 @@ interface Card {
 }
 
 interface RenderedCard extends Card {
+    id: string;
     x: number;
     y: number;
     width: number;
@@ -128,13 +129,14 @@ class Game {
 
     public gameRunning: boolean = true;
     public deck: Card[];
-    public deckPosition: number = 0;
+    public deckIndex: number = 0;
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
     public buttons: GameButton[] = [];
     public renderedCards: RenderedCard[] = [];
     public lastCardClicked: Card;
+    public isDealNewRound: boolean = true;
 
     public piles: Card[] = [];
 
@@ -177,8 +179,6 @@ class Game {
 
         // this.initializePileZones(4);
 
-        this.deck = this.buildAndShuffleDeck(true);
-
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.gameLoop();
@@ -205,6 +205,93 @@ class Game {
         requestAnimationFrame(ts => this.gameLoop(ts));
     }
 
+    public updateGameState() {
+        // Update the game state logic
+
+        this.buttons = [];
+        this.renderedCards = [];
+
+        this.createPlayerCard();
+        this.createReloadButton();
+        this.createDealButton();
+        // this.createRenderedCards();
+
+        let clickedButton;
+
+        //loop through objects and check if click is within the boundaries
+        this.buttons.forEach(button => {
+            if (
+                this.clickCoordinates?.x >= button.x &&
+                this.clickCoordinates?.x <= button.x + button.width &&
+                this.clickCoordinates?.y >= button.y &&
+                this.clickCoordinates?.y <= button.y + button.height
+            ) {
+                clickedButton = button;
+            }
+        });
+
+        if (clickedButton) {
+            switch (clickedButton.id) {
+                case 'reload':
+                    window.location.reload();
+                    break;
+                case 'deal':
+                    this.isDealNewRound = true;
+                    break;
+            }
+        }
+
+        let clickedCard;
+
+        this.renderedCards.forEach(card => {
+            if (
+                this.clickCoordinates?.x >= card.x &&
+                this.clickCoordinates?.x <= card.x + card.width &&
+                this.clickCoordinates?.y >= card.y &&
+                this.clickCoordinates?.y <= card.y + card.height
+            ) {
+                clickedCard = card;
+            }
+        });
+
+        if (clickedCard) {
+            this.lastCardClicked = clickedCard;
+
+            switch (clickedCard.id) {
+                case 'player':
+                    console.log('Player card clicked', clickedCard);
+                    this.deckIndex += 3;
+
+                    if (this.deckIndex >= this.deck.length) {
+                        this.deckIndex = this.deckIndex - this.deck.length;
+                    }
+
+                    break;
+            }
+        }
+
+        if (this.isDealNewRound) {
+            this.deck = this.buildAndShuffleDeck(true);
+            this.isDealNewRound = false;
+        }
+    }
+
+    public createPlayerCard(): void {
+        if (!this.deck?.length) {
+            return;
+        }
+
+        const card = this.deck[this.deckIndex];
+        this.renderedCards.push({
+            ...card,
+            id: 'player',
+            x: 605,
+            y: 500,
+            width: 71,
+            height: 95
+        });
+    }
+
     public createReloadButton(): void {
         const text = 'RELOAD';
         const padding = 20; // Padding for the button
@@ -227,65 +314,33 @@ class Game {
         });
     }
 
-    /**
-     * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
-     * rows -> hearts, clubs, diamonds, spades,
-     */
-    public createRenderedCards(): void {
-        let cardIndex = 0;
-        for (let col = 0; col < 4; col++) {
-            for (let row = 0; row < 13; row++) {
-                this.renderedCards.push({
-                    ...this.deck[cardIndex],
-                    x: row * 71 + 200,
-                    y: col * 95 + 100,
-                    width: 71,
-                    height: 95
-                });
+    public createDealButton(): void {
+        const text = 'DEAL';
+        const padding = 20; // Padding for the button
+        const textMetrics = this.ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const buttonWidth = textWidth + padding;
+        const buttonHeight = 50;
+        const x = 10;
+        const y = 670;
 
-                cardIndex++;
-            }
-        }
-    }
-
-    public updateGameState() {
-        // Update the game state logic
-
-        this.buttons = [];
-        this.renderedCards = [];
-        this.renderedCards = [];
-
-        this.createReloadButton();
-        this.createRenderedCards();
-
-        //loop through objects and check if click is within the boundaries
-        this.buttons.forEach(obj => {
-            if (
-                this.clickCoordinates?.x >= obj.x &&
-                this.clickCoordinates?.x <= obj.x + obj.width &&
-                this.clickCoordinates?.y >= obj.y &&
-                this.clickCoordinates?.y <= obj.y + obj.height
-            ) {
-                window.location.reload();
-            }
-        });
-
-        this.renderedCards.forEach(card => {
-            if (
-                this.clickCoordinates?.x >= card.x &&
-                this.clickCoordinates?.x <= card.x + card.width &&
-                this.clickCoordinates?.y >= card.y &&
-                this.clickCoordinates?.y <= card.y + card.height
-            ) {
-                this.lastCardClicked = card;
-            }
+        this.buttons.push({
+            id: 'deal',
+            text,
+            padding,
+            fillColor: '#30874b',
+            x,
+            y,
+            width: buttonWidth,
+            height: buttonHeight
         });
     }
 
     public render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
 
-        this.renderFullDeck();
+        this.renderAllCards();
+        this.renderDeckIndex();
         this.renderTimer();
         this.renderLastCardClicked();
         this.renderButtons();
@@ -304,7 +359,11 @@ class Game {
         });
     }
 
-    public renderFullDeck(): void {
+    public renderDeckIndex() {
+        this.printText(`${this.deckIndex} / ${this.deck?.length}`, 610, 630);
+    }
+
+    public renderAllCards(): void {
         this.renderedCards.forEach(card => {
             this.drawCard(card, card.x, card.y);
         });
@@ -479,6 +538,32 @@ class Game {
     public sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    /**
+     * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
+     * rows -> hearts, clubs, diamonds, spades,
+     */
+    // public createRenderedCards(): void {
+    //     if (!this.deck?.length) {
+    //         return;
+    //     }
+
+    //     let cardIndex = 0;
+    //     for (let col = 0; col < 4; col++) {
+    //         for (let row = 0; row < 13; row++) {
+    //             this.renderedCards.push({
+    //                 ...this.deck[cardIndex],
+    //                 id: this.deck[cardIndex].suit + this.deck[cardIndex].value,
+    //                 x: row * 71 + 200,
+    //                 y: col * 95 + 100,
+    //                 width: 71,
+    //                 height: 95
+    //             });
+
+    //             cardIndex++;
+    //         }
+    //     }
+    // }
 }
 
 (() => {
