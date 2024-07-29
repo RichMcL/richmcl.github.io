@@ -110,10 +110,13 @@ var Game = /** @class */ (function () {
         this.cardFaceSpriteSheet.src = 'img/deck-sprite-sheet.png';
         this.cardBackSpriteSheet = new Image();
         this.cardBackSpriteSheet.src = 'img/card-backs-seals.png';
+        this.iconSpriteSheet = new Image();
+        this.iconSpriteSheet.src = 'img/icons.png';
         // Wait for both images to load before starting the game
         Promise.all([
             this.loadImage(this.cardFaceSpriteSheet),
-            this.loadImage(this.cardBackSpriteSheet)
+            this.loadImage(this.cardBackSpriteSheet),
+            this.loadImage(this.iconSpriteSheet)
         ]).then(function () {
             _this.startGame();
         });
@@ -301,7 +304,8 @@ var Game = /** @class */ (function () {
     Game.prototype.renderLastCardClicked = function () {
         var card = this.lastCardClicked;
         if (card) {
-            this.printText("Card: ".concat(card.value, " ").concat(SuitIcon[card.suit]), 20, 100);
+            this.printText("Card: ".concat(card.value), 20, 100);
+            this.drawIcon(card.suit, 100, 83);
         }
     };
     Game.prototype.printText = function (text, x, y) {
@@ -351,7 +355,6 @@ var Game = /** @class */ (function () {
     Game.prototype.drawCard = function (card, x, y) {
         var cardWidth = 71; // Width of a single card in the sprite sheet
         var cardHeight = 95; // Height of a single card in the sprite sheet
-        var cardIndex = 0;
         var sy = 0;
         var sx = 0;
         switch (card.suit) {
@@ -411,6 +414,27 @@ var Game = /** @class */ (function () {
         }
         this.ctx.drawImage(this.cardBackSpriteSheet, 71, 0, cardWidth, cardHeight, x, y, cardWidth, cardHeight);
         this.ctx.drawImage(this.cardFaceSpriteSheet, sx, sy, cardWidth, cardHeight, x, y, cardWidth, cardHeight);
+    };
+    Game.prototype.drawIcon = function (suit, x, y) {
+        var iconWidth = 72 / 4;
+        var iconHeight = 74 / 4;
+        var sy = iconHeight;
+        var sx = 0;
+        switch (suit) {
+            case Suit.Hearts:
+                sx = iconWidth * 0;
+                break;
+            case Suit.Diamonds:
+                sx = iconWidth * 1;
+                break;
+            case Suit.Clubs:
+                sx = iconWidth * 2;
+                break;
+            case Suit.Spades:
+                sx = iconWidth * 3;
+                break;
+        }
+        this.ctx.drawImage(this.iconSpriteSheet, sx, sy, iconWidth, iconHeight, x, y, iconWidth, iconHeight);
     };
     // Sleep function using Promise and async/await
     Game.prototype.sleep = function (ms) {

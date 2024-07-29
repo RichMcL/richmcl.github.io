@@ -125,6 +125,7 @@ class Game {
     public ctx: CanvasRenderingContext2D;
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
+    public iconSpriteSheet: HTMLImageElement;
     public clickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
 
     public gameRunning: boolean = true;
@@ -150,10 +151,14 @@ class Game {
         this.cardBackSpriteSheet = new Image();
         this.cardBackSpriteSheet.src = 'img/card-backs-seals.png';
 
+        this.iconSpriteSheet = new Image();
+        this.iconSpriteSheet.src = 'img/icons.png';
+
         // Wait for both images to load before starting the game
         Promise.all([
             this.loadImage(this.cardFaceSpriteSheet),
-            this.loadImage(this.cardBackSpriteSheet)
+            this.loadImage(this.cardBackSpriteSheet),
+            this.loadImage(this.iconSpriteSheet)
         ]).then(() => {
             this.startGame();
         });
@@ -386,7 +391,8 @@ class Game {
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
-            this.printText(`Card: ${card.value} ${SuitIcon[card.suit]}`, 20, 100);
+            this.printText(`Card: ${card.value}`, 20, 100);
+            this.drawIcon(card.suit, 100, 83);
         }
     }
 
@@ -447,7 +453,6 @@ class Game {
     private drawCard(card: Card, x: number, y: number): void {
         const cardWidth = 71; // Width of a single card in the sprite sheet
         const cardHeight = 95; // Height of a single card in the sprite sheet
-        const cardIndex = 0;
 
         let sy = 0;
         let sx = 0;
@@ -531,6 +536,41 @@ class Game {
             y,
             cardWidth,
             cardHeight
+        );
+    }
+
+    public drawIcon(suit: Suit, x: number, y: number): void {
+        const iconWidth = 72 / 4;
+        const iconHeight = 74 / 4;
+
+        let sy = iconHeight;
+        let sx = 0;
+
+        switch (suit) {
+            case Suit.Hearts:
+                sx = iconWidth * 0;
+                break;
+            case Suit.Diamonds:
+                sx = iconWidth * 1;
+                break;
+            case Suit.Clubs:
+                sx = iconWidth * 2;
+                break;
+            case Suit.Spades:
+                sx = iconWidth * 3;
+                break;
+        }
+
+        this.ctx.drawImage(
+            this.iconSpriteSheet,
+            sx,
+            sy,
+            iconWidth,
+            iconHeight,
+            x,
+            y,
+            iconWidth,
+            iconHeight
         );
     }
 
