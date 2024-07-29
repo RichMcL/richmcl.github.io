@@ -305,7 +305,7 @@ var Game = /** @class */ (function () {
         var card = this.lastCardClicked;
         if (card) {
             this.printText("Card: ".concat(card.value), 20, 100);
-            this.drawIcon(card.suit, 100, 83);
+            this.drawIcon(card.suit, 110, 83);
         }
     };
     Game.prototype.printText = function (text, x, y) {
@@ -434,7 +434,23 @@ var Game = /** @class */ (function () {
                 sx = iconWidth * 3;
                 break;
         }
+        // this.ctx.fillRect(x - 2.5, y - 2.5, iconWidth + 5, iconHeight + 5);
+        this.drawRoundedRect(this.ctx, x - 2.5, y - 2.5, iconWidth + 5, iconHeight + 5, 5);
         this.ctx.drawImage(this.iconSpriteSheet, sx, sy, iconWidth, iconHeight, x, y, iconWidth, iconHeight);
+    };
+    Game.prototype.drawRoundedRect = function (ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.arcTo(x + width, y, x + width, y + radius, radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+        ctx.lineTo(x + radius, y + height);
+        ctx.arcTo(x, y + height, x, y + height - radius, radius);
+        ctx.lineTo(x, y + radius);
+        ctx.arcTo(x, y, x + radius, y, radius);
+        ctx.closePath();
+        ctx.fill();
     };
     // Sleep function using Promise and async/await
     Game.prototype.sleep = function (ms) {
