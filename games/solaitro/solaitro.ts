@@ -553,7 +553,7 @@ class Game {
     public renderMousePosition(): void {
         const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
-        this.printText(`Cursor: X ${x} | Y ${y}`, 20, 90);
+        this.printText(`Cursor: X ${x} | Y ${y}`, 170, 60);
     }
 
     public renderLastCardClicked(): void {

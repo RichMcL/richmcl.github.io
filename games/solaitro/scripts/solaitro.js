@@ -436,7 +436,7 @@ var Game = /** @class */ (function () {
     Game.prototype.renderMousePosition = function () {
         var x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         var y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
-        this.printText("Cursor: X ".concat(x, " | Y ").concat(y), 20, 90);
+        this.printText("Cursor: X ".concat(x, " | Y ").concat(y), 170, 60);
     };
     Game.prototype.renderLastCardClicked = function () {
         var card = this.lastCardClicked;
