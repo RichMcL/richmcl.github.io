@@ -138,6 +138,7 @@ var Game = /** @class */ (function () {
         this.scaledClickCoordinates = { x: 0, y: 0 };
         this.mouseCoordinates = { x: 0, y: 0 };
         this.scaledMouseCoordinates = { x: 0, y: 0 };
+        this.isMouseClicked = false;
         this.gameRunning = true;
         this.deckIndex = 0;
         this.timerInMs = 0;
@@ -179,6 +180,7 @@ var Game = /** @class */ (function () {
             var y = event.clientY - rect.top;
             _this.clickCoordinates = { x: x, y: y };
             _this.scaledClickCoordinates = { x: x / _this.scaleFactor, y: y / _this.scaleFactor };
+            _this.isMouseClicked = true;
         });
         document.addEventListener('mousemove', function (event) {
             var rect = _this.canvas.getBoundingClientRect();
@@ -208,35 +210,36 @@ var Game = /** @class */ (function () {
         this.updateGameState();
         // Render changes to the DOM
         this.render();
+        this.resetGameState();
         this.clickCoordinates = null;
         this.scaledClickCoordinates = null;
+        this.isMouseClicked = false;
         // Request the next frame
         requestAnimationFrame(function (ts) { return _this.gameLoop(ts); });
     };
     Game.prototype.updateGameState = function () {
         // Update the game state logic
         var _this = this;
-        this.buttons = [];
-        this.renderedCards = [];
         this.createPlayerCard();
         this.createReloadButton();
         this.createDealButton();
         this.createHitButton();
         this.createThemeButtons();
         // this.createRenderedCards();
-        var clickedButton;
+        var hoverButton;
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(function (button) {
             var _a, _b, _c, _d;
-            if (((_a = _this.scaledClickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
-                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
-                ((_c = _this.scaledClickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
-                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
-                clickedButton = button;
+            if (((_a = _this.scaledMouseCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
+                ((_b = _this.scaledMouseCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
+                ((_c = _this.scaledMouseCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
+                ((_d = _this.scaledMouseCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
+                hoverButton = button;
+                hoverButton.isHovered = true;
             }
         });
-        if (clickedButton) {
-            switch (clickedButton.id) {
+        if (hoverButton && this.isMouseClicked) {
+            switch (hoverButton.id) {
                 case 'reload':
                     window.location.reload();
                     break;
@@ -248,34 +251,35 @@ var Game = /** @class */ (function () {
                     break;
             }
         }
-        var clickedThemeButton;
+        var hoverThemeButton;
         this.themeButtons.forEach(function (button) {
             var _a, _b, _c, _d;
-            if (((_a = _this.scaledClickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
-                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
-                ((_c = _this.scaledClickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
-                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
-                clickedThemeButton = button;
+            if (((_a = _this.scaledMouseCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
+                ((_b = _this.scaledMouseCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
+                ((_c = _this.scaledMouseCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
+                ((_d = _this.scaledMouseCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
+                hoverThemeButton = button;
+                hoverThemeButton.isHovered = true;
             }
         });
-        if (clickedThemeButton) {
-            this.theme = clickedThemeButton.theme;
+        if (hoverThemeButton && this.isMouseClicked) {
+            this.theme = hoverThemeButton.theme;
         }
-        var clickedCard;
+        var hoverCard;
         this.renderedCards.forEach(function (card) {
             var _a, _b, _c, _d;
-            if (((_a = _this.scaledClickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
-                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width * card.scale &&
-                ((_c = _this.scaledClickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
-                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height * card.scale) {
-                clickedCard = card;
+            if (((_a = _this.scaledMouseCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
+                ((_b = _this.scaledMouseCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width * card.scale &&
+                ((_c = _this.scaledMouseCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
+                ((_d = _this.scaledMouseCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height * card.scale) {
+                hoverCard = card;
             }
         });
-        if (clickedCard) {
-            this.lastCardClicked = clickedCard;
-            switch (clickedCard.id) {
+        if (hoverCard && this.isMouseClicked) {
+            this.lastCardClicked = hoverCard;
+            switch (hoverCard.id) {
                 case 'player':
-                    console.log('Player card clicked', clickedCard);
+                    console.log('Player card clicked', hoverCard);
                     break;
             }
         }
@@ -283,6 +287,16 @@ var Game = /** @class */ (function () {
             this.deck = this.buildAndShuffleDeck(true);
             this.isDealNewRound = false;
         }
+    };
+    Game.prototype.resetGameState = function () {
+        this.buttons = [];
+        this.renderedCards = [];
+        this.buttons.forEach(function (button) {
+            button.isHovered = false;
+        });
+        this.themeButtons.forEach(function (button) {
+            button.isHovered = false;
+        });
     };
     Game.prototype.createPlayerCard = function () {
         var _a;
@@ -395,6 +409,12 @@ var Game = /** @class */ (function () {
             _this.ctx.fillStyle = button.fillColor;
             _this.ctx.fillRect(button.x, button.y, button.width, button.height);
             _this.printText(button.text, button.x + button.padding / 2, button.y + button.padding * 1.75);
+            // Draw a border around the button if it's hovered
+            if (button.isHovered) {
+                _this.ctx.strokeStyle = 'white';
+                _this.ctx.lineWidth = 2;
+                _this.ctx.strokeRect(button.x, button.y, button.width, button.height);
+            }
         });
     };
     Game.prototype.renderThemeButtons = function () {
@@ -402,9 +422,12 @@ var Game = /** @class */ (function () {
         this.themeButtons.forEach(function (button) {
             _this.ctx.fillStyle = button.fillColor;
             _this.ctx.fillRect(button.x, button.y, button.width, button.height);
-            _this.ctx.strokeStyle = 'white';
-            _this.ctx.lineWidth = 1;
-            _this.ctx.strokeRect(button.x, button.y, button.width, button.height);
+            // Draw a border around the button if it's hovered
+            if (button.isHovered) {
+                _this.ctx.strokeStyle = 'white';
+                _this.ctx.lineWidth = 2;
+                _this.ctx.strokeRect(button.x, button.y, button.width, button.height);
+            }
         });
     };
     Game.prototype.renderDeckIndex = function () {
