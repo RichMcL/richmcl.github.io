@@ -198,7 +198,8 @@ class Game {
 
     public buttons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
-    public renderedCards: RenderedCard[] = [];
+    public playerCard: RenderedCard;
+    // public renderedCards: RenderedCard[] = [];
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
 
@@ -264,7 +265,20 @@ class Game {
 
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
+
+        this.deck = this.buildAndShuffleDeck(true);
+        this.isDealNewRound = false;
+
+        this.initializeGameObjects();
         this.gameLoop();
+    }
+
+    public initializeGameObjects(): void {
+        this.createReloadButton();
+        this.createDealButton();
+        this.createHitButton();
+        this.createThemeButtons();
+        this.createPlayerCard();
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -284,24 +298,12 @@ class Game {
 
         this.resetGameState();
 
-        this.clickCoordinates = null;
-        this.scaledClickCoordinates = null;
-        this.isMouseClicked = false;
-
         // Request the next frame
         requestAnimationFrame(ts => this.gameLoop(ts));
     }
 
     public updateGameState() {
         // Update the game state logic
-
-        this.createPlayerCard();
-        this.createReloadButton();
-        this.createDealButton();
-        this.createHitButton();
-        this.createThemeButtons();
-        // this.createRenderedCards();
-
         let hoverButton: GameButton;
 
         //loop through objects and check if click is within the boundaries
@@ -351,7 +353,7 @@ class Game {
 
         let hoverCard;
 
-        this.renderedCards.forEach(card => {
+        [this.playerCard].forEach(card => {
             if (
                 this.scaledMouseCoordinates?.x >= card.x &&
                 this.scaledMouseCoordinates?.x <= card.x + card.width * card.scale &&
@@ -379,8 +381,9 @@ class Game {
     }
 
     public resetGameState(): void {
-        this.buttons = [];
-        this.renderedCards = [];
+        this.clickCoordinates = null;
+        this.scaledClickCoordinates = null;
+        this.isMouseClicked = false;
 
         this.buttons.forEach(button => {
             button.isHovered = false;
@@ -397,7 +400,7 @@ class Game {
         }
 
         const card = this.deck[this.deckIndex];
-        this.renderedCards.push({
+        this.playerCard = {
             ...card,
             id: 'player',
             x: 585,
@@ -405,7 +408,7 @@ class Game {
             width: 71,
             height: 95,
             scale: 1.5
-        });
+        };
     }
 
     public createReloadButton(): void {
@@ -413,13 +416,57 @@ class Game {
         const padding = 20; // Padding for the button
         const textMetrics = this.ctx.measureText(text);
         const textWidth = textMetrics.width;
-        const buttonWidth = textWidth + padding;
+        const buttonWidth = textWidth + padding * 2 + 5;
         const buttonHeight = 50;
         const x = 10;
         const y = 730;
 
         this.buttons.push({
             id: 'reload',
+            text,
+            padding,
+            fillColor: this.theme.base,
+            x,
+            y,
+            width: buttonWidth,
+            height: buttonHeight
+        });
+    }
+
+    public createDealButton(): void {
+        const text = 'DEAL';
+        const padding = 20; // Padding for the button
+        const textMetrics = this.ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const buttonWidth = textWidth + padding * 2;
+        const buttonHeight = 50;
+        const x = 10;
+        const y = 670;
+
+        this.buttons.push({
+            id: 'deal',
+            text,
+            padding,
+            fillColor: this.theme.base,
+            x,
+            y,
+            width: buttonWidth,
+            height: buttonHeight
+        });
+    }
+
+    public createHitButton(): void {
+        const text = 'HIT';
+        const padding = 20; // Padding for the button
+        const textMetrics = this.ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const buttonWidth = textWidth + padding * 2;
+        const buttonHeight = 50;
+        const x = 610;
+        const y = 390;
+
+        this.buttons.push({
+            id: 'hit',
             text,
             padding,
             fillColor: this.theme.base,
@@ -455,55 +502,11 @@ class Game {
         }
     }
 
-    public createDealButton(): void {
-        const text = 'DEAL';
-        const padding = 20; // Padding for the button
-        const textMetrics = this.ctx.measureText(text);
-        const textWidth = textMetrics.width;
-        const buttonWidth = textWidth + padding;
-        const buttonHeight = 50;
-        const x = 10;
-        const y = 670;
-
-        this.buttons.push({
-            id: 'deal',
-            text,
-            padding,
-            fillColor: this.theme.base,
-            x,
-            y,
-            width: buttonWidth,
-            height: buttonHeight
-        });
-    }
-
-    public createHitButton(): void {
-        const text = 'HIT';
-        const padding = 20; // Padding for the button
-        const textMetrics = this.ctx.measureText(text);
-        const textWidth = textMetrics.width;
-        const buttonWidth = textWidth + padding;
-        const buttonHeight = 50;
-        const x = 610;
-        const y = 390;
-
-        this.buttons.push({
-            id: 'hit',
-            text,
-            padding,
-            fillColor: this.theme.base,
-            x,
-            y,
-            width: buttonWidth,
-            height: buttonHeight
-        });
-    }
-
     public render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
 
         this.renderTheme();
-        this.renderAllCards();
+        this.renderPlayerCard();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderMousePosition();
@@ -559,10 +562,8 @@ class Game {
         this.printText(`${this.deckIndex} / ${this.deck?.length}`, x, 630);
     }
 
-    public renderAllCards(): void {
-        this.renderedCards.forEach(card => {
-            this.drawCard(card, card.x, card.y, card.scale);
-        });
+    public renderPlayerCard(): void {
+        this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
     }
 
     public renderTimer(): void {
@@ -645,6 +646,9 @@ class Game {
         if (this.deckIndex >= this.deck.length) {
             this.deckIndex = this.deckIndex - this.deck.length;
         }
+
+        this.playerCard.suit = this.deck[this.deckIndex].suit;
+        this.playerCard.value = this.deck[this.deckIndex].value;
     }
 
     public initializePileZones(count: number): void {
@@ -832,32 +836,6 @@ class Game {
         gameContainer.style.width = `${1280}px`;
         gameContainer.style.height = `${800}px`;
     }
-
-    /**
-     * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
-     * rows -> hearts, clubs, diamonds, spades,
-     */
-    // public createRenderedCards(): void {
-    //     if (!this.deck?.length) {
-    //         return;
-    //     }
-
-    //     let cardIndex = 0;
-    //     for (let col = 0; col < 4; col++) {
-    //         for (let row = 0; row < 13; row++) {
-    //             this.renderedCards.push({
-    //                 ...this.deck[cardIndex],
-    //                 id: this.deck[cardIndex].suit + this.deck[cardIndex].value,
-    //                 x: row * 71 + 200,
-    //                 y: col * 95 + 100,
-    //                 width: 71,
-    //                 height: 95
-    //             });
-
-    //             cardIndex++;
-    //         }
-    //     }
-    // }
 }
 
 (() => {

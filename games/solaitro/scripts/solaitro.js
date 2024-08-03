@@ -145,7 +145,6 @@ var Game = /** @class */ (function () {
         this.lastTimestamp = 0;
         this.buttons = [];
         this.themeButtons = [];
-        this.renderedCards = [];
         this.isDealNewRound = true;
         this.piles = [];
         this.canvas = document.getElementById('game-canvas');
@@ -195,7 +194,17 @@ var Game = /** @class */ (function () {
         });
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
+        this.deck = this.buildAndShuffleDeck(true);
+        this.isDealNewRound = false;
+        this.initializeGameObjects();
         this.gameLoop();
+    };
+    Game.prototype.initializeGameObjects = function () {
+        this.createReloadButton();
+        this.createDealButton();
+        this.createHitButton();
+        this.createThemeButtons();
+        this.createPlayerCard();
     };
     Game.prototype.gameLoop = function (timestamp) {
         var _this = this;
@@ -211,21 +220,12 @@ var Game = /** @class */ (function () {
         // Render changes to the DOM
         this.render();
         this.resetGameState();
-        this.clickCoordinates = null;
-        this.scaledClickCoordinates = null;
-        this.isMouseClicked = false;
         // Request the next frame
         requestAnimationFrame(function (ts) { return _this.gameLoop(ts); });
     };
     Game.prototype.updateGameState = function () {
-        // Update the game state logic
         var _this = this;
-        this.createPlayerCard();
-        this.createReloadButton();
-        this.createDealButton();
-        this.createHitButton();
-        this.createThemeButtons();
-        // this.createRenderedCards();
+        // Update the game state logic
         var hoverButton;
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(function (button) {
@@ -266,7 +266,7 @@ var Game = /** @class */ (function () {
             this.theme = hoverThemeButton.theme;
         }
         var hoverCard;
-        this.renderedCards.forEach(function (card) {
+        [this.playerCard].forEach(function (card) {
             var _a, _b, _c, _d;
             if (((_a = _this.scaledMouseCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
                 ((_b = _this.scaledMouseCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width * card.scale &&
@@ -289,8 +289,9 @@ var Game = /** @class */ (function () {
         }
     };
     Game.prototype.resetGameState = function () {
-        this.buttons = [];
-        this.renderedCards = [];
+        this.clickCoordinates = null;
+        this.scaledClickCoordinates = null;
+        this.isMouseClicked = false;
         this.buttons.forEach(function (button) {
             button.isHovered = false;
         });
@@ -304,19 +305,59 @@ var Game = /** @class */ (function () {
             return;
         }
         var card = this.deck[this.deckIndex];
-        this.renderedCards.push(__assign(__assign({}, card), { id: 'player', x: 585, y: 460, width: 71, height: 95, scale: 1.5 }));
+        this.playerCard = __assign(__assign({}, card), { id: 'player', x: 585, y: 460, width: 71, height: 95, scale: 1.5 });
     };
     Game.prototype.createReloadButton = function () {
         var text = 'RELOAD';
         var padding = 20; // Padding for the button
         var textMetrics = this.ctx.measureText(text);
         var textWidth = textMetrics.width;
-        var buttonWidth = textWidth + padding;
+        var buttonWidth = textWidth + padding * 2 + 5;
         var buttonHeight = 50;
         var x = 10;
         var y = 730;
         this.buttons.push({
             id: 'reload',
+            text: text,
+            padding: padding,
+            fillColor: this.theme.base,
+            x: x,
+            y: y,
+            width: buttonWidth,
+            height: buttonHeight
+        });
+    };
+    Game.prototype.createDealButton = function () {
+        var text = 'DEAL';
+        var padding = 20; // Padding for the button
+        var textMetrics = this.ctx.measureText(text);
+        var textWidth = textMetrics.width;
+        var buttonWidth = textWidth + padding * 2;
+        var buttonHeight = 50;
+        var x = 10;
+        var y = 670;
+        this.buttons.push({
+            id: 'deal',
+            text: text,
+            padding: padding,
+            fillColor: this.theme.base,
+            x: x,
+            y: y,
+            width: buttonWidth,
+            height: buttonHeight
+        });
+    };
+    Game.prototype.createHitButton = function () {
+        var text = 'HIT';
+        var padding = 20; // Padding for the button
+        var textMetrics = this.ctx.measureText(text);
+        var textWidth = textMetrics.width;
+        var buttonWidth = textWidth + padding * 2;
+        var buttonHeight = 50;
+        var x = 610;
+        var y = 390;
+        this.buttons.push({
+            id: 'hit',
             text: text,
             padding: padding,
             fillColor: this.theme.base,
@@ -349,50 +390,10 @@ var Game = /** @class */ (function () {
             i++;
         }
     };
-    Game.prototype.createDealButton = function () {
-        var text = 'DEAL';
-        var padding = 20; // Padding for the button
-        var textMetrics = this.ctx.measureText(text);
-        var textWidth = textMetrics.width;
-        var buttonWidth = textWidth + padding;
-        var buttonHeight = 50;
-        var x = 10;
-        var y = 670;
-        this.buttons.push({
-            id: 'deal',
-            text: text,
-            padding: padding,
-            fillColor: this.theme.base,
-            x: x,
-            y: y,
-            width: buttonWidth,
-            height: buttonHeight
-        });
-    };
-    Game.prototype.createHitButton = function () {
-        var text = 'HIT';
-        var padding = 20; // Padding for the button
-        var textMetrics = this.ctx.measureText(text);
-        var textWidth = textMetrics.width;
-        var buttonWidth = textWidth + padding;
-        var buttonHeight = 50;
-        var x = 610;
-        var y = 390;
-        this.buttons.push({
-            id: 'hit',
-            text: text,
-            padding: padding,
-            fillColor: this.theme.base,
-            x: x,
-            y: y,
-            width: buttonWidth,
-            height: buttonHeight
-        });
-    };
     Game.prototype.render = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
         this.renderTheme();
-        this.renderAllCards();
+        this.renderPlayerCard();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderMousePosition();
@@ -438,11 +439,8 @@ var Game = /** @class */ (function () {
         var x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
         this.printText("".concat(this.deckIndex, " / ").concat((_b = this.deck) === null || _b === void 0 ? void 0 : _b.length), x, 630);
     };
-    Game.prototype.renderAllCards = function () {
-        var _this = this;
-        this.renderedCards.forEach(function (card) {
-            _this.drawCard(card, card.x, card.y, card.scale);
-        });
+    Game.prototype.renderPlayerCard = function () {
+        this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
     };
     Game.prototype.renderTimer = function () {
         var minutes = Math.floor(this.timerInMs / 60000)
@@ -512,6 +510,8 @@ var Game = /** @class */ (function () {
         if (this.deckIndex >= this.deck.length) {
             this.deckIndex = this.deckIndex - this.deck.length;
         }
+        this.playerCard.suit = this.deck[this.deckIndex].suit;
+        this.playerCard.value = this.deck[this.deckIndex].value;
     };
     Game.prototype.initializePileZones = function (count) {
         this.piles = this.deck.splice(0, count);
