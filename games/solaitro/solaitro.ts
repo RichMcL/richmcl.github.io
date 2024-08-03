@@ -185,6 +185,9 @@ class Game {
     public clickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
     public scaledClickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
 
+    public mouseCoordinates: { x: number; y: number } = { x: 0, y: 0 };
+    public scaledMouseCoordinates: { x: number; y: number } = { x: 0, y: 0 };
+
     public gameRunning: boolean = true;
     public deck: Card[];
     public deckIndex: number = 0;
@@ -241,6 +244,20 @@ class Game {
             this.scaledClickCoordinates = { x: x / this.scaleFactor, y: y / this.scaleFactor };
         });
 
+        document.addEventListener('mousemove', event => {
+            const rect = this.canvas.getBoundingClientRect();
+
+            this.mouseCoordinates = {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
+
+            this.scaledMouseCoordinates = {
+                x: this.mouseCoordinates.x / this.scaleFactor,
+                y: this.mouseCoordinates.y / this.scaleFactor
+            };
+        });
+
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.gameLoop();
@@ -276,8 +293,9 @@ class Game {
 
         this.createPlayerCard();
         this.createReloadButton();
-        this.createThemeButtons();
         this.createDealButton();
+        this.createHitButton();
+        this.createThemeButtons();
         // this.createRenderedCards();
 
         let clickedButton;
@@ -301,6 +319,9 @@ class Game {
                     break;
                 case 'deal':
                     this.isDealNewRound = true;
+                    break;
+                case 'hit':
+                    this.hitCard();
                     break;
             }
         }
@@ -341,12 +362,6 @@ class Game {
             switch (clickedCard.id) {
                 case 'player':
                     console.log('Player card clicked', clickedCard);
-                    this.deckIndex += 3;
-
-                    if (this.deckIndex >= this.deck.length) {
-                        this.deckIndex = this.deckIndex - this.deck.length;
-                    }
-
                     break;
             }
         }
@@ -443,6 +458,28 @@ class Game {
         });
     }
 
+    public createHitButton(): void {
+        const text = 'HIT';
+        const padding = 20; // Padding for the button
+        const textMetrics = this.ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const buttonWidth = textWidth + padding;
+        const buttonHeight = 50;
+        const x = 610;
+        const y = 390;
+
+        this.buttons.push({
+            id: 'hit',
+            text,
+            padding,
+            fillColor: this.theme.base,
+            x,
+            y,
+            width: buttonWidth,
+            height: buttonHeight
+        });
+    }
+
     public render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
 
@@ -450,6 +487,7 @@ class Game {
         this.renderAllCards();
         this.renderDeckIndex();
         this.renderTimer();
+        this.renderMousePosition();
         this.renderLastCardClicked();
         this.renderButtons();
         this.renderThemeButtons();
@@ -512,6 +550,12 @@ class Game {
         this.printText(`Time: ${minutes}:${seconds}.${tenths}`, 20, 60);
     }
 
+    public renderMousePosition(): void {
+        const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
+        const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
+        this.printText(`Cursor: X ${x} | Y ${y}`, 20, 90);
+    }
+
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
@@ -564,6 +608,14 @@ class Game {
         }
 
         return deck;
+    }
+
+    public hitCard(): void {
+        this.deckIndex += 3;
+
+        if (this.deckIndex >= this.deck.length) {
+            this.deckIndex = this.deckIndex - this.deck.length;
+        }
     }
 
     public initializePileZones(count: number): void {

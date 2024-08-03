@@ -136,6 +136,8 @@ var Game = /** @class */ (function () {
         this.theme = Themes.default;
         this.clickCoordinates = { x: 0, y: 0 };
         this.scaledClickCoordinates = { x: 0, y: 0 };
+        this.mouseCoordinates = { x: 0, y: 0 };
+        this.scaledMouseCoordinates = { x: 0, y: 0 };
         this.gameRunning = true;
         this.deckIndex = 0;
         this.timerInMs = 0;
@@ -178,6 +180,17 @@ var Game = /** @class */ (function () {
             _this.clickCoordinates = { x: x, y: y };
             _this.scaledClickCoordinates = { x: x / _this.scaleFactor, y: y / _this.scaleFactor };
         });
+        document.addEventListener('mousemove', function (event) {
+            var rect = _this.canvas.getBoundingClientRect();
+            _this.mouseCoordinates = {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
+            _this.scaledMouseCoordinates = {
+                x: _this.mouseCoordinates.x / _this.scaleFactor,
+                y: _this.mouseCoordinates.y / _this.scaleFactor
+            };
+        });
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.gameLoop();
@@ -207,8 +220,9 @@ var Game = /** @class */ (function () {
         this.renderedCards = [];
         this.createPlayerCard();
         this.createReloadButton();
-        this.createThemeButtons();
         this.createDealButton();
+        this.createHitButton();
+        this.createThemeButtons();
         // this.createRenderedCards();
         var clickedButton;
         //loop through objects and check if click is within the boundaries
@@ -228,6 +242,9 @@ var Game = /** @class */ (function () {
                     break;
                 case 'deal':
                     this.isDealNewRound = true;
+                    break;
+                case 'hit':
+                    this.hitCard();
                     break;
             }
         }
@@ -259,10 +276,6 @@ var Game = /** @class */ (function () {
             switch (clickedCard.id) {
                 case 'player':
                     console.log('Player card clicked', clickedCard);
-                    this.deckIndex += 3;
-                    if (this.deckIndex >= this.deck.length) {
-                        this.deckIndex = this.deckIndex - this.deck.length;
-                    }
                     break;
             }
         }
@@ -342,12 +355,33 @@ var Game = /** @class */ (function () {
             height: buttonHeight
         });
     };
+    Game.prototype.createHitButton = function () {
+        var text = 'HIT';
+        var padding = 20; // Padding for the button
+        var textMetrics = this.ctx.measureText(text);
+        var textWidth = textMetrics.width;
+        var buttonWidth = textWidth + padding;
+        var buttonHeight = 50;
+        var x = 610;
+        var y = 390;
+        this.buttons.push({
+            id: 'hit',
+            text: text,
+            padding: padding,
+            fillColor: this.theme.base,
+            x: x,
+            y: y,
+            width: buttonWidth,
+            height: buttonHeight
+        });
+    };
     Game.prototype.render = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
         this.renderTheme();
         this.renderAllCards();
         this.renderDeckIndex();
         this.renderTimer();
+        this.renderMousePosition();
         this.renderLastCardClicked();
         this.renderButtons();
         this.renderThemeButtons();
@@ -399,6 +433,11 @@ var Game = /** @class */ (function () {
             .padStart(1, '0');
         this.printText("Time: ".concat(minutes, ":").concat(seconds, ".").concat(tenths), 20, 60);
     };
+    Game.prototype.renderMousePosition = function () {
+        var x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
+        var y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
+        this.printText("Cursor: X ".concat(x, " | Y ").concat(y), 20, 90);
+    };
     Game.prototype.renderLastCardClicked = function () {
         var card = this.lastCardClicked;
         if (card) {
@@ -444,6 +483,12 @@ var Game = /** @class */ (function () {
             }
         }
         return deck;
+    };
+    Game.prototype.hitCard = function () {
+        this.deckIndex += 3;
+        if (this.deckIndex >= this.deck.length) {
+            this.deckIndex = this.deckIndex - this.deck.length;
+        }
     };
     Game.prototype.initializePileZones = function (count) {
         this.piles = this.deck.splice(0, count);
