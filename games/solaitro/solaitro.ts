@@ -636,5 +636,35 @@ class Game {
     document.addEventListener('DOMContentLoaded', () => {
         const game = new Game();
         (window as any).game = game;
+
+        // Initial scale
+        scaleGame();
+
+        // Scale the game on window resize
+        window.addEventListener('resize', scaleGame);
     });
 })();
+
+function scaleGame() {
+    const gameAspectRatio = 1280 / 800;
+    const currentWidth = window.innerWidth;
+    const currentHeight = window.innerHeight;
+    const windowAspectRatio = currentWidth / currentHeight;
+    let scaleFactor;
+
+    // Determine the scale factor
+    if (windowAspectRatio > gameAspectRatio) {
+        // Window is wider than game aspect ratio
+        scaleFactor = currentHeight / 800;
+    } else {
+        // Window is narrower than game aspect ratio
+        scaleFactor = currentWidth / 1280;
+    }
+
+    // Apply the scale factor to the game container
+    const gameContainer = document.getElementById('game-canvas');
+    gameContainer.style.transform = `scale(${scaleFactor})`;
+    gameContainer.style.transformOrigin = 'top left';
+    gameContainer.style.width = `${1280}px`;
+    gameContainer.style.height = `${800}px`;
+}

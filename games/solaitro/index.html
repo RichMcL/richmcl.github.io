@@ -3,88 +3,10 @@
     <head>
         <title>Solaitro</title>
         <link rel="stylesheet" type="text/css" href="styles.css" />
-        <script src="scripts/layout-grid.js"></script>
-        <script src="scripts/debug.js"></script>
         <script src="scripts/solaitro.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     </head>
     <body>
         <canvas id="game-canvas" width="1280" height="800"></canvas>
-        <div id="game-board" hidden>
-            <div id="layout-grid"></div>
-            <div id="debug-menu" class="hidden">
-                <div class="theme-toggle-group">
-                    <span
-                        class="theme-toggle"
-                        style="background-color: #6c6685"
-                        onclick="setTheme('base');"
-                    >
-                    </span>
-                    <span
-                        class="theme-toggle"
-                        style="background-color: #a66202"
-                        onclick="setTheme('orange');"
-                    >
-                    </span>
-                    <span
-                        class="theme-toggle"
-                        style="background-color: #0278a6"
-                        onclick="setTheme('lightblue');"
-                    >
-                    </span>
-                    <span
-                        class="theme-toggle"
-                        style="background-color: #625df5"
-                        onclick="setTheme('blue');"
-                    >
-                    </span>
-                    <span
-                        class="theme-toggle"
-                        style="background-color: #ffc65c"
-                        onclick="setTheme('lightyellow');"
-                    >
-                    </span>
-                    <span
-                        class="theme-toggle"
-                        style="background-color: #30874b"
-                        onclick="setTheme('green');"
-                    >
-                    </span>
-                    <span
-                        class="theme-toggle"
-                        style="background-color: #b53434"
-                        onclick="setTheme('red');"
-                    >
-                    </span>
-                </div>
-
-                <button class="reload-button theme-button">RELOAD</button>
-                <button class="deal-button theme-button">DEAL</button>
-                <button class="scroll-button theme-button">TOGGLE SCROLL</button>
-                <button class="grid-button theme-button">TOGGLE GRID</button>
-                <button class="close-debug-button theme-button">CLOSE</button>
-            </div>
-
-            <div class="score-section">
-                <div class="score-box">
-                    <span class="score-box-label">Time</span>
-                    <span class="score-box-value timer-value">0</span>
-                </div>
-
-                <div class="score-box">
-                    <span class="score-box-label">Score</span>
-                    <span class="score-box-value team-1-score">0</span>
-                </div>
-
-                <div class="debug-section">
-                    <button class="reload-button theme-button reload-icon">&#8635;</button>
-                    <button class="debug-button theme-button">DEBUG</button>
-                </div>
-            </div>
-
-            <div class="pile-zones"></div>
-
-            <div class="player-deck"></div>
-        </div>
     </body>
 </html>

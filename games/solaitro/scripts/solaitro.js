@@ -462,5 +462,31 @@ var Game = /** @class */ (function () {
     document.addEventListener('DOMContentLoaded', function () {
         var game = new Game();
         window.game = game;
+        // Initial scale
+        scaleGame();
+        // Scale the game on window resize
+        window.addEventListener('resize', scaleGame);
     });
 })();
+function scaleGame() {
+    var gameAspectRatio = 1280 / 800;
+    var currentWidth = window.innerWidth;
+    var currentHeight = window.innerHeight;
+    var windowAspectRatio = currentWidth / currentHeight;
+    var scaleFactor;
+    // Determine the scale factor
+    if (windowAspectRatio > gameAspectRatio) {
+        // Window is wider than game aspect ratio
+        scaleFactor = currentHeight / 800;
+    }
+    else {
+        // Window is narrower than game aspect ratio
+        scaleFactor = currentWidth / 1280;
+    }
+    // Apply the scale factor to the game container
+    var gameContainer = document.getElementById('game-canvas');
+    gameContainer.style.transform = "scale(".concat(scaleFactor, ")");
+    gameContainer.style.transformOrigin = 'top left';
+    gameContainer.style.width = "".concat(1280, "px");
+    gameContainer.style.height = "".concat(800, "px");
+}
