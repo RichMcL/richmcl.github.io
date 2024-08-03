@@ -407,7 +407,7 @@ var Game = /** @class */ (function () {
     Game.prototype.renderButtons = function () {
         var _this = this;
         this.buttons.forEach(function (button) {
-            _this.ctx.fillStyle = button.fillColor;
+            _this.ctx.fillStyle = _this.theme.base;
             _this.ctx.fillRect(button.x, button.y, button.width, button.height);
             _this.printText(button.text, button.x + button.padding / 2, button.y + button.padding * 1.75);
             // Draw a border around the button if it's hovered

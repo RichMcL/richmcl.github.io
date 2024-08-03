@@ -521,7 +521,7 @@ class Game {
 
     public renderButtons() {
         this.buttons.forEach(button => {
-            this.ctx.fillStyle = button.fillColor;
+            this.ctx.fillStyle = this.theme.base;
             this.ctx.fillRect(button.x, button.y, button.width, button.height);
 
             this.printText(
