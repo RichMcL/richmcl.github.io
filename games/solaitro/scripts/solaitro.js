@@ -9,6 +9,43 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var Themes = {
+    default: {
+        base: '#6c6685',
+        background: '#423e54',
+        black: '#3c4368'
+    },
+    orange: {
+        base: '#a66202',
+        background: '#442801',
+        black: '#3c4368'
+    },
+    lightblue: {
+        base: '#0278a6',
+        background: '#01364b',
+        black: '#3c4368'
+    },
+    blue: {
+        base: '#625df5',
+        background: '#232155',
+        black: '#3c4368'
+    },
+    lightyellow: {
+        base: '#ffc65c',
+        background: '#644e26',
+        black: '#3c4368'
+    },
+    green: {
+        base: '#30874b',
+        background: '#153b21',
+        black: '#3c4368'
+    },
+    red: {
+        base: '#b53434',
+        background: '#581a1a',
+        black: '#3c4368'
+    }
+};
 var Suit;
 (function (Suit) {
     Suit["Spades"] = "Spades";
@@ -96,6 +133,7 @@ var Game = /** @class */ (function () {
     function Game() {
         var _this = this;
         this.gameAspectRatio = 1280 / 800;
+        this.theme = Themes.default;
         this.clickCoordinates = { x: 0, y: 0 };
         this.scaledClickCoordinates = { x: 0, y: 0 };
         this.gameRunning = true;
@@ -139,7 +177,6 @@ var Game = /** @class */ (function () {
             _this.clickCoordinates = { x: x, y: y };
             _this.scaledClickCoordinates = { x: x / _this.scaleFactor, y: y / _this.scaleFactor };
         });
-        // this.initializePileZones(4);
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.gameLoop();
@@ -172,12 +209,6 @@ var Game = /** @class */ (function () {
         this.createDealButton();
         // this.createRenderedCards();
         var clickedButton;
-        if (this.scaledClickCoordinates) {
-            console.log('Clicked at', this.clickCoordinates);
-            console.log('scaleFactor', this.scaleFactor);
-            console.log('Scaled click x', this.clickCoordinates.x / this.scaleFactor);
-            console.log('Scaled click y', this.clickCoordinates.y / this.scaleFactor);
-        }
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(function (button) {
             var _a, _b, _c, _d;
@@ -246,7 +277,7 @@ var Game = /** @class */ (function () {
             id: 'reload',
             text: text,
             padding: padding,
-            fillColor: '#30874b',
+            fillColor: this.theme.base,
             x: x,
             y: y,
             width: buttonWidth,
@@ -266,7 +297,7 @@ var Game = /** @class */ (function () {
             id: 'deal',
             text: text,
             padding: padding,
-            fillColor: '#30874b',
+            fillColor: this.theme.base,
             x: x,
             y: y,
             width: buttonWidth,
@@ -275,11 +306,15 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.render = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
+        this.renderTheme();
         this.renderAllCards();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderLastCardClicked();
         this.renderButtons();
+    };
+    Game.prototype.renderTheme = function () {
+        this.canvas.style.backgroundColor = this.theme.background;
     };
     Game.prototype.renderButtons = function () {
         var _this = this;

@@ -1,3 +1,47 @@
+interface Theme {
+    base: string;
+    background: string;
+    black: string;
+}
+
+const Themes: { [key: string]: Theme } = {
+    default: {
+        base: '#6c6685',
+        background: '#423e54',
+        black: '#3c4368'
+    },
+    orange: {
+        base: '#a66202',
+        background: '#442801',
+        black: '#3c4368'
+    },
+    lightblue: {
+        base: '#0278a6',
+        background: '#01364b',
+        black: '#3c4368'
+    },
+    blue: {
+        base: '#625df5',
+        background: '#232155',
+        black: '#3c4368'
+    },
+    lightyellow: {
+        base: '#ffc65c',
+        background: '#644e26',
+        black: '#3c4368'
+    },
+    green: {
+        base: '#30874b',
+        background: '#153b21',
+        black: '#3c4368'
+    },
+    red: {
+        base: '#b53434',
+        background: '#581a1a',
+        black: '#3c4368'
+    }
+};
+
 enum Suit {
     Spades = 'Spades',
     Clubs = 'Clubs',
@@ -126,6 +170,7 @@ class Game {
     public gameAspectRatio: number = 1280 / 800;
     public windowAspectRatio: number;
     public scaleFactor: number;
+    public theme: Theme = Themes.default;
 
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
@@ -188,8 +233,6 @@ class Game {
             this.scaledClickCoordinates = { x: x / this.scaleFactor, y: y / this.scaleFactor };
         });
 
-        // this.initializePileZones(4);
-
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.gameLoop();
@@ -229,13 +272,6 @@ class Game {
         // this.createRenderedCards();
 
         let clickedButton;
-
-        if (this.scaledClickCoordinates) {
-            console.log('Clicked at', this.clickCoordinates);
-            console.log('scaleFactor', this.scaleFactor);
-            console.log('Scaled click x', this.clickCoordinates.x / this.scaleFactor);
-            console.log('Scaled click y', this.clickCoordinates.y / this.scaleFactor);
-        }
 
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(button => {
@@ -325,7 +361,7 @@ class Game {
             id: 'reload',
             text,
             padding,
-            fillColor: '#30874b',
+            fillColor: this.theme.base,
             x,
             y,
             width: buttonWidth,
@@ -347,7 +383,7 @@ class Game {
             id: 'deal',
             text,
             padding,
-            fillColor: '#30874b',
+            fillColor: this.theme.base,
             x,
             y,
             width: buttonWidth,
@@ -358,11 +394,16 @@ class Game {
     public render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
 
+        this.renderTheme();
         this.renderAllCards();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderLastCardClicked();
         this.renderButtons();
+    }
+
+    public renderTheme() {
+        this.canvas.style.backgroundColor = this.theme.background;
     }
 
     public renderButtons() {
