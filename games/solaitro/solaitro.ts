@@ -123,10 +123,15 @@ interface GameButton {
 class Game {
     public canvas: HTMLCanvasElement;
     public ctx: CanvasRenderingContext2D;
+    public gameAspectRatio: number = 1280 / 800;
+    public windowAspectRatio: number;
+    public scaleFactor: number;
+
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
     public iconSpriteSheet: HTMLImageElement;
     public clickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
+    public scaledClickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
 
     public gameRunning: boolean = true;
     public deck: Card[];
@@ -180,6 +185,7 @@ class Game {
             const y = event.clientY - rect.top;
 
             this.clickCoordinates = { x, y };
+            this.scaledClickCoordinates = { x: x / this.scaleFactor, y: y / this.scaleFactor };
         });
 
         // this.initializePileZones(4);
@@ -205,6 +211,7 @@ class Game {
         this.render();
 
         this.clickCoordinates = null;
+        this.scaledClickCoordinates = null;
 
         // Request the next frame
         requestAnimationFrame(ts => this.gameLoop(ts));
@@ -223,13 +230,20 @@ class Game {
 
         let clickedButton;
 
+        if (this.scaledClickCoordinates) {
+            console.log('Clicked at', this.clickCoordinates);
+            console.log('scaleFactor', this.scaleFactor);
+            console.log('Scaled click x', this.clickCoordinates.x / this.scaleFactor);
+            console.log('Scaled click y', this.clickCoordinates.y / this.scaleFactor);
+        }
+
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(button => {
             if (
-                this.clickCoordinates?.x >= button.x &&
-                this.clickCoordinates?.x <= button.x + button.width &&
-                this.clickCoordinates?.y >= button.y &&
-                this.clickCoordinates?.y <= button.y + button.height
+                this.scaledClickCoordinates?.x >= button.x &&
+                this.scaledClickCoordinates?.x <= button.x + button.width &&
+                this.scaledClickCoordinates?.y >= button.y &&
+                this.scaledClickCoordinates?.y <= button.y + button.height
             ) {
                 clickedButton = button;
             }
@@ -250,10 +264,10 @@ class Game {
 
         this.renderedCards.forEach(card => {
             if (
-                this.clickCoordinates?.x >= card.x &&
-                this.clickCoordinates?.x <= card.x + card.width &&
-                this.clickCoordinates?.y >= card.y &&
-                this.clickCoordinates?.y <= card.y + card.height
+                this.scaledClickCoordinates?.x >= card.x &&
+                this.scaledClickCoordinates?.x <= card.x + card.width &&
+                this.scaledClickCoordinates?.y >= card.y &&
+                this.scaledClickCoordinates?.y <= card.y + card.height
             ) {
                 clickedCard = card;
             }
@@ -605,6 +619,29 @@ class Game {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    public scaleGame() {
+        console.log('Scaling game');
+        const currentWidth = window.innerWidth;
+        const currentHeight = window.innerHeight;
+        this.windowAspectRatio = currentWidth / currentHeight;
+
+        // Determine the scale factor
+        if (this.windowAspectRatio > this.gameAspectRatio) {
+            // Window is wider than game aspect ratio
+            this.scaleFactor = currentHeight / 800;
+        } else {
+            // Window is narrower than game aspect ratio
+            this.scaleFactor = currentWidth / 1280;
+        }
+
+        // Apply the scale factor to the game container
+        const gameContainer = document.getElementById('game-canvas');
+        gameContainer.style.transform = `scale(${this.scaleFactor})`;
+        gameContainer.style.transformOrigin = 'top left';
+        gameContainer.style.width = `${1280}px`;
+        gameContainer.style.height = `${800}px`;
+    }
+
     /**
      * columns -> 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A
      * rows -> hearts, clubs, diamonds, spades,
@@ -638,33 +675,9 @@ class Game {
         (window as any).game = game;
 
         // Initial scale
-        scaleGame();
+        game.scaleGame();
 
         // Scale the game on window resize
-        window.addEventListener('resize', scaleGame);
+        window.addEventListener('resize', () => game.scaleGame());
     });
 })();
-
-function scaleGame() {
-    const gameAspectRatio = 1280 / 800;
-    const currentWidth = window.innerWidth;
-    const currentHeight = window.innerHeight;
-    const windowAspectRatio = currentWidth / currentHeight;
-    let scaleFactor;
-
-    // Determine the scale factor
-    if (windowAspectRatio > gameAspectRatio) {
-        // Window is wider than game aspect ratio
-        scaleFactor = currentHeight / 800;
-    } else {
-        // Window is narrower than game aspect ratio
-        scaleFactor = currentWidth / 1280;
-    }
-
-    // Apply the scale factor to the game container
-    const gameContainer = document.getElementById('game-canvas');
-    gameContainer.style.transform = `scale(${scaleFactor})`;
-    gameContainer.style.transformOrigin = 'top left';
-    gameContainer.style.width = `${1280}px`;
-    gameContainer.style.height = `${800}px`;
-}

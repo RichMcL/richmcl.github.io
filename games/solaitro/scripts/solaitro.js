@@ -95,7 +95,9 @@ var cardValueToKey = function (value) {
 var Game = /** @class */ (function () {
     function Game() {
         var _this = this;
+        this.gameAspectRatio = 1280 / 800;
         this.clickCoordinates = { x: 0, y: 0 };
+        this.scaledClickCoordinates = { x: 0, y: 0 };
         this.gameRunning = true;
         this.deckIndex = 0;
         this.timerInMs = 0;
@@ -135,6 +137,7 @@ var Game = /** @class */ (function () {
             var x = event.clientX - rect.left;
             var y = event.clientY - rect.top;
             _this.clickCoordinates = { x: x, y: y };
+            _this.scaledClickCoordinates = { x: x / _this.scaleFactor, y: y / _this.scaleFactor };
         });
         // this.initializePileZones(4);
         this.gameRunning = true;
@@ -155,6 +158,7 @@ var Game = /** @class */ (function () {
         // Render changes to the DOM
         this.render();
         this.clickCoordinates = null;
+        this.scaledClickCoordinates = null;
         // Request the next frame
         requestAnimationFrame(function (ts) { return _this.gameLoop(ts); });
     };
@@ -168,13 +172,19 @@ var Game = /** @class */ (function () {
         this.createDealButton();
         // this.createRenderedCards();
         var clickedButton;
+        if (this.scaledClickCoordinates) {
+            console.log('Clicked at', this.clickCoordinates);
+            console.log('scaleFactor', this.scaleFactor);
+            console.log('Scaled click x', this.clickCoordinates.x / this.scaleFactor);
+            console.log('Scaled click y', this.clickCoordinates.y / this.scaleFactor);
+        }
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(function (button) {
             var _a, _b, _c, _d;
-            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
-                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
-                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
-                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
+            if (((_a = _this.scaledClickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
+                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
+                ((_c = _this.scaledClickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
+                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
                 clickedButton = button;
             }
         });
@@ -191,10 +201,10 @@ var Game = /** @class */ (function () {
         var clickedCard;
         this.renderedCards.forEach(function (card) {
             var _a, _b, _c, _d;
-            if (((_a = _this.clickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
-                ((_b = _this.clickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width &&
-                ((_c = _this.clickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
-                ((_d = _this.clickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height) {
+            if (((_a = _this.scaledClickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
+                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width &&
+                ((_c = _this.scaledClickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
+                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height) {
                 clickedCard = card;
             }
         });
@@ -456,6 +466,27 @@ var Game = /** @class */ (function () {
     Game.prototype.sleep = function (ms) {
         return new Promise(function (resolve) { return setTimeout(resolve, ms); });
     };
+    Game.prototype.scaleGame = function () {
+        console.log('Scaling game');
+        var currentWidth = window.innerWidth;
+        var currentHeight = window.innerHeight;
+        this.windowAspectRatio = currentWidth / currentHeight;
+        // Determine the scale factor
+        if (this.windowAspectRatio > this.gameAspectRatio) {
+            // Window is wider than game aspect ratio
+            this.scaleFactor = currentHeight / 800;
+        }
+        else {
+            // Window is narrower than game aspect ratio
+            this.scaleFactor = currentWidth / 1280;
+        }
+        // Apply the scale factor to the game container
+        var gameContainer = document.getElementById('game-canvas');
+        gameContainer.style.transform = "scale(".concat(this.scaleFactor, ")");
+        gameContainer.style.transformOrigin = 'top left';
+        gameContainer.style.width = "".concat(1280, "px");
+        gameContainer.style.height = "".concat(800, "px");
+    };
     return Game;
 }());
 (function () {
@@ -463,30 +494,8 @@ var Game = /** @class */ (function () {
         var game = new Game();
         window.game = game;
         // Initial scale
-        scaleGame();
+        game.scaleGame();
         // Scale the game on window resize
-        window.addEventListener('resize', scaleGame);
+        window.addEventListener('resize', function () { return game.scaleGame(); });
     });
 })();
-function scaleGame() {
-    var gameAspectRatio = 1280 / 800;
-    var currentWidth = window.innerWidth;
-    var currentHeight = window.innerHeight;
-    var windowAspectRatio = currentWidth / currentHeight;
-    var scaleFactor;
-    // Determine the scale factor
-    if (windowAspectRatio > gameAspectRatio) {
-        // Window is wider than game aspect ratio
-        scaleFactor = currentHeight / 800;
-    }
-    else {
-        // Window is narrower than game aspect ratio
-        scaleFactor = currentWidth / 1280;
-    }
-    // Apply the scale factor to the game container
-    var gameContainer = document.getElementById('game-canvas');
-    gameContainer.style.transform = "scale(".concat(scaleFactor, ")");
-    gameContainer.style.transformOrigin = 'top left';
-    gameContainer.style.width = "".concat(1280, "px");
-    gameContainer.style.height = "".concat(800, "px");
-}
