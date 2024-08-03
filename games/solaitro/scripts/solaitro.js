@@ -248,9 +248,9 @@ var Game = /** @class */ (function () {
         this.renderedCards.forEach(function (card) {
             var _a, _b, _c, _d;
             if (((_a = _this.scaledClickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
-                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width &&
+                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width * card.scale &&
                 ((_c = _this.scaledClickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
-                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height) {
+                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height * card.scale) {
                 clickedCard = card;
             }
         });
@@ -277,7 +277,7 @@ var Game = /** @class */ (function () {
             return;
         }
         var card = this.deck[this.deckIndex];
-        this.renderedCards.push(__assign(__assign({}, card), { id: 'player', x: 605, y: 500, width: 71, height: 95 }));
+        this.renderedCards.push(__assign(__assign({}, card), { id: 'player', x: 585, y: 460, width: 71, height: 95, scale: 1.5 }));
     };
     Game.prototype.createReloadButton = function () {
         var text = 'RELOAD';
@@ -368,6 +368,9 @@ var Game = /** @class */ (function () {
         this.themeButtons.forEach(function (button) {
             _this.ctx.fillStyle = button.fillColor;
             _this.ctx.fillRect(button.x, button.y, button.width, button.height);
+            _this.ctx.strokeStyle = 'white';
+            _this.ctx.lineWidth = 1;
+            _this.ctx.strokeRect(button.x, button.y, button.width, button.height);
         });
     };
     Game.prototype.renderDeckIndex = function () {
@@ -377,7 +380,7 @@ var Game = /** @class */ (function () {
     Game.prototype.renderAllCards = function () {
         var _this = this;
         this.renderedCards.forEach(function (card) {
-            _this.drawCard(card, card.x, card.y);
+            _this.drawCard(card, card.x, card.y, card.scale);
         });
     };
     Game.prototype.renderTimer = function () {
@@ -443,7 +446,8 @@ var Game = /** @class */ (function () {
     };
     /* USER ACTION FUNCTIONS */
     /* RENDER FUNCTIONS */
-    Game.prototype.drawCard = function (card, x, y) {
+    Game.prototype.drawCard = function (card, x, y, cardScale) {
+        if (cardScale === void 0) { cardScale = 1; }
         var cardWidth = 71; // Width of a single card in the sprite sheet
         var cardHeight = 95; // Height of a single card in the sprite sheet
         var sy = 0;
@@ -503,8 +507,8 @@ var Game = /** @class */ (function () {
                 sx = cardWidth * 12;
                 break;
         }
-        this.ctx.drawImage(this.cardBackSpriteSheet, 71, 0, cardWidth, cardHeight, x, y, cardWidth, cardHeight);
-        this.ctx.drawImage(this.cardFaceSpriteSheet, sx, sy, cardWidth, cardHeight, x, y, cardWidth, cardHeight);
+        this.ctx.drawImage(this.cardBackSpriteSheet, 71, 0, cardWidth, cardHeight, x, y, cardWidth * cardScale, cardHeight * cardScale);
+        this.ctx.drawImage(this.cardFaceSpriteSheet, sx, sy, cardWidth, cardHeight, x, y, cardWidth * cardScale, cardHeight * cardScale);
     };
     Game.prototype.drawIcon = function (suit, x, y) {
         var iconWidth = 72 / 4;

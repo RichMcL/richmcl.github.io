@@ -102,6 +102,7 @@ interface RenderedCard extends Card {
     y: number;
     width: number;
     height: number;
+    scale?: number;
 }
 
 interface Player {
@@ -326,9 +327,9 @@ class Game {
         this.renderedCards.forEach(card => {
             if (
                 this.scaledClickCoordinates?.x >= card.x &&
-                this.scaledClickCoordinates?.x <= card.x + card.width &&
+                this.scaledClickCoordinates?.x <= card.x + card.width * card.scale &&
                 this.scaledClickCoordinates?.y >= card.y &&
-                this.scaledClickCoordinates?.y <= card.y + card.height
+                this.scaledClickCoordinates?.y <= card.y + card.height * card.scale
             ) {
                 clickedCard = card;
             }
@@ -365,10 +366,11 @@ class Game {
         this.renderedCards.push({
             ...card,
             id: 'player',
-            x: 605,
-            y: 500,
+            x: 585,
+            y: 460,
             width: 71,
-            height: 95
+            height: 95,
+            scale: 1.5
         });
     }
 
@@ -474,6 +476,10 @@ class Game {
         this.themeButtons.forEach(button => {
             this.ctx.fillStyle = button.fillColor;
             this.ctx.fillRect(button.x, button.y, button.width, button.height);
+
+            this.ctx.strokeStyle = 'white';
+            this.ctx.lineWidth = 1;
+            this.ctx.strokeRect(button.x, button.y, button.width, button.height);
         });
     }
 
@@ -483,7 +489,7 @@ class Game {
 
     public renderAllCards(): void {
         this.renderedCards.forEach(card => {
-            this.drawCard(card, card.x, card.y);
+            this.drawCard(card, card.x, card.y, card.scale);
         });
     }
 
@@ -563,7 +569,7 @@ class Game {
 
     /* RENDER FUNCTIONS */
 
-    private drawCard(card: Card, x: number, y: number): void {
+    private drawCard(card: Card, x: number, y: number, cardScale = 1): void {
         const cardWidth = 71; // Width of a single card in the sprite sheet
         const cardHeight = 95; // Height of a single card in the sprite sheet
 
@@ -635,8 +641,8 @@ class Game {
             cardHeight,
             x,
             y,
-            cardWidth,
-            cardHeight
+            cardWidth * cardScale,
+            cardHeight * cardScale
         );
 
         this.ctx.drawImage(
@@ -647,8 +653,8 @@ class Game {
             cardHeight,
             x,
             y,
-            cardWidth,
-            cardHeight
+            cardWidth * cardScale,
+            cardHeight * cardScale
         );
     }
 
