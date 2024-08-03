@@ -141,6 +141,7 @@ var Game = /** @class */ (function () {
         this.timerInMs = 0;
         this.lastTimestamp = 0;
         this.buttons = [];
+        this.themeButtons = [];
         this.renderedCards = [];
         this.isDealNewRound = true;
         this.piles = [];
@@ -206,6 +207,7 @@ var Game = /** @class */ (function () {
         this.renderedCards = [];
         this.createPlayerCard();
         this.createReloadButton();
+        this.createThemeButtons();
         this.createDealButton();
         // this.createRenderedCards();
         var clickedButton;
@@ -228,6 +230,19 @@ var Game = /** @class */ (function () {
                     this.isDealNewRound = true;
                     break;
             }
+        }
+        var clickedThemeButton;
+        this.themeButtons.forEach(function (button) {
+            var _a, _b, _c, _d;
+            if (((_a = _this.scaledClickCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= button.x &&
+                ((_b = _this.scaledClickCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= button.x + button.width &&
+                ((_c = _this.scaledClickCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= button.y &&
+                ((_d = _this.scaledClickCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= button.y + button.height) {
+                clickedThemeButton = button;
+            }
+        });
+        if (clickedThemeButton) {
+            this.theme = clickedThemeButton.theme;
         }
         var clickedCard;
         this.renderedCards.forEach(function (card) {
@@ -284,6 +299,29 @@ var Game = /** @class */ (function () {
             height: buttonHeight
         });
     };
+    Game.prototype.createThemeButtons = function () {
+        var i = 0;
+        for (var _i = 0, _a = Object.keys(Themes); _i < _a.length; _i++) {
+            var theme = _a[_i];
+            var padding = 20; // Padding for the button
+            var buttonWidth = 50;
+            var buttonHeight = 50;
+            var x = 400 + i * (buttonWidth + padding);
+            var y = 700;
+            this.themeButtons.push({
+                id: 'theme',
+                text: '',
+                theme: Themes[theme],
+                padding: padding,
+                fillColor: Themes[theme].base,
+                x: x,
+                y: y,
+                width: buttonWidth,
+                height: buttonHeight
+            });
+            i++;
+        }
+    };
     Game.prototype.createDealButton = function () {
         var text = 'DEAL';
         var padding = 20; // Padding for the button
@@ -312,6 +350,7 @@ var Game = /** @class */ (function () {
         this.renderTimer();
         this.renderLastCardClicked();
         this.renderButtons();
+        this.renderThemeButtons();
     };
     Game.prototype.renderTheme = function () {
         this.canvas.style.backgroundColor = this.theme.background;
@@ -322,6 +361,13 @@ var Game = /** @class */ (function () {
             _this.ctx.fillStyle = button.fillColor;
             _this.ctx.fillRect(button.x, button.y, button.width, button.height);
             _this.printText(button.text, button.x + button.padding / 2, button.y + button.padding * 1.75);
+        });
+    };
+    Game.prototype.renderThemeButtons = function () {
+        var _this = this;
+        this.themeButtons.forEach(function (button) {
+            _this.ctx.fillStyle = button.fillColor;
+            _this.ctx.fillRect(button.x, button.y, button.width, button.height);
         });
     };
     Game.prototype.renderDeckIndex = function () {

@@ -164,6 +164,12 @@ interface GameButton {
     padding: number;
 }
 
+interface ThemeButton extends GameButton {
+    id: 'theme';
+    text: '';
+    theme: Theme;
+}
+
 class Game {
     public canvas: HTMLCanvasElement;
     public ctx: CanvasRenderingContext2D;
@@ -185,6 +191,7 @@ class Game {
     public lastTimestamp: number = 0;
 
     public buttons: GameButton[] = [];
+    public themeButtons: ThemeButton[] = [];
     public renderedCards: RenderedCard[] = [];
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
@@ -268,6 +275,7 @@ class Game {
 
         this.createPlayerCard();
         this.createReloadButton();
+        this.createThemeButtons();
         this.createDealButton();
         // this.createRenderedCards();
 
@@ -294,6 +302,23 @@ class Game {
                     this.isDealNewRound = true;
                     break;
             }
+        }
+
+        let clickedThemeButton;
+
+        this.themeButtons.forEach(button => {
+            if (
+                this.scaledClickCoordinates?.x >= button.x &&
+                this.scaledClickCoordinates?.x <= button.x + button.width &&
+                this.scaledClickCoordinates?.y >= button.y &&
+                this.scaledClickCoordinates?.y <= button.y + button.height
+            ) {
+                clickedThemeButton = button;
+            }
+        });
+
+        if (clickedThemeButton) {
+            this.theme = clickedThemeButton.theme;
         }
 
         let clickedCard;
@@ -369,6 +394,31 @@ class Game {
         });
     }
 
+    public createThemeButtons(): void {
+        let i = 0;
+        for (const theme of Object.keys(Themes)) {
+            const padding = 20; // Padding for the button
+            const buttonWidth = 50;
+            const buttonHeight = 50;
+            const x = 400 + i * (buttonWidth + padding);
+            const y = 700;
+
+            this.themeButtons.push({
+                id: 'theme',
+                text: '',
+                theme: Themes[theme],
+                padding,
+                fillColor: Themes[theme].base,
+                x,
+                y,
+                width: buttonWidth,
+                height: buttonHeight
+            });
+
+            i++;
+        }
+    }
+
     public createDealButton(): void {
         const text = 'DEAL';
         const padding = 20; // Padding for the button
@@ -400,6 +450,7 @@ class Game {
         this.renderTimer();
         this.renderLastCardClicked();
         this.renderButtons();
+        this.renderThemeButtons();
     }
 
     public renderTheme() {
@@ -416,6 +467,13 @@ class Game {
                 button.x + button.padding / 2,
                 button.y + button.padding * 1.75
             );
+        });
+    }
+
+    public renderThemeButtons() {
+        this.themeButtons.forEach(button => {
+            this.ctx.fillStyle = button.fillColor;
+            this.ctx.fillRect(button.x, button.y, button.width, button.height);
         });
     }
 
