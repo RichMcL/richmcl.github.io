@@ -484,7 +484,12 @@ class Game {
     }
 
     public renderDeckIndex() {
-        this.printText(`${this.deckIndex} / ${this.deck?.length}`, 610, 630);
+        const fixedWidth = 71 * 1.5; // Define the fixed width
+        const text = `${this.deckIndex} / ${this.deck?.length}`;
+        const textWidth = this.ctx.measureText(text).width;
+        const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
+
+        this.printText(`${this.deckIndex} / ${this.deck?.length}`, x, 630);
     }
 
     public renderAllCards(): void {

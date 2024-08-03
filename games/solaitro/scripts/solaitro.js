@@ -374,8 +374,12 @@ var Game = /** @class */ (function () {
         });
     };
     Game.prototype.renderDeckIndex = function () {
-        var _a;
-        this.printText("".concat(this.deckIndex, " / ").concat((_a = this.deck) === null || _a === void 0 ? void 0 : _a.length), 610, 630);
+        var _a, _b;
+        var fixedWidth = 71 * 1.5; // Define the fixed width
+        var text = "".concat(this.deckIndex, " / ").concat((_a = this.deck) === null || _a === void 0 ? void 0 : _a.length);
+        var textWidth = this.ctx.measureText(text).width;
+        var x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
+        this.printText("".concat(this.deckIndex, " / ").concat((_b = this.deck) === null || _b === void 0 ? void 0 : _b.length), x, 630);
     };
     Game.prototype.renderAllCards = function () {
         var _this = this;
