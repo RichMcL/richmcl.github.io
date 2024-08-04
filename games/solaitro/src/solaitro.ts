@@ -1,46 +1,4 @@
-interface Theme {
-    base: string;
-    background: string;
-    black: string;
-}
-
-const Themes: { [key: string]: Theme } = {
-    default: {
-        base: '#6c6685',
-        background: '#423e54',
-        black: '#3c4368'
-    },
-    orange: {
-        base: '#a66202',
-        background: '#442801',
-        black: '#3c4368'
-    },
-    lightblue: {
-        base: '#0278a6',
-        background: '#01364b',
-        black: '#3c4368'
-    },
-    blue: {
-        base: '#625df5',
-        background: '#232155',
-        black: '#3c4368'
-    },
-    lightyellow: {
-        base: '#ffc65c',
-        background: '#644e26',
-        black: '#3c4368'
-    },
-    green: {
-        base: '#30874b',
-        background: '#153b21',
-        black: '#3c4368'
-    },
-    red: {
-        base: '#b53434',
-        background: '#581a1a',
-        black: '#3c4368'
-    }
-};
+import { Theme, Themes } from './theme';
 
 enum Suit {
     Spades = 'Spades',
@@ -172,7 +130,7 @@ interface ThemeButton extends GameButton {
     theme: Theme;
 }
 
-class Game {
+export class Game {
     public canvas: HTMLCanvasElement;
     public ctx: CanvasRenderingContext2D;
     public gameAspectRatio: number = 1280 / 800;
@@ -337,7 +295,7 @@ class Game {
             }
         }
 
-        let hoverThemeButton;
+        let hoverThemeButton: ThemeButton;
 
         this.themeButtons.forEach(button => {
             if (
@@ -355,7 +313,7 @@ class Game {
             this.theme = hoverThemeButton.theme;
         }
 
-        let hoverCard;
+        let hoverCard: RenderedCard;
 
         [this.playerCard].forEach(card => {
             if (
@@ -378,7 +336,8 @@ class Game {
             }
         }
 
-        let hoverPile, hoverPileCard;
+        let hoverPile: RenderedCard[];
+        let hoverPileCard: RenderedCard;
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             const card = pile[pile.length - 1];
             if (
@@ -936,16 +895,3 @@ class Game {
         gameContainer.style.height = `${800}px`;
     }
 }
-
-(() => {
-    document.addEventListener('DOMContentLoaded', () => {
-        const game = new Game();
-        (window as any).game = game;
-
-        // Initial scale
-        game.scaleGame();
-
-        // Scale the game on window resize
-        window.addEventListener('resize', () => game.scaleGame());
-    });
-})();

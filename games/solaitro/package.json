@@ -4,7 +4,7 @@
     "description": "Euchre by Rich McLaughlin",
     "main": "main.js",
     "scripts": {
-        "build": "tsc",
+        "build": "webpack",
         "watch": "tsc --watch",
         "start": "electron-forge start",
         "package": "electron-forge package",
@@ -23,7 +23,10 @@
         "@electron/fuses": "^1.8.0",
         "@types/node": "^20.14.10",
         "electron": "^31.1.0",
-        "typescript": "^5.5.3"
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.5.3",
+        "webpack": "^5.93.0",
+        "webpack-cli": "^5.1.4"
     },
     "dependencies": {
         "electron-squirrel-startup": "^1.0.1"
