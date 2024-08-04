@@ -203,10 +203,10 @@ class Game {
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
 
-    public pile1: Card[] = [];
-    public pile2: Card[] = [];
-    public pile3: Card[] = [];
-    public pile4: Card[] = [];
+    public pile1: RenderedCard[] = [];
+    public pile2: RenderedCard[] = [];
+    public pile3: RenderedCard[] = [];
+    public pile4: RenderedCard[] = [];
 
     constructor() {
         this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -376,6 +376,44 @@ class Game {
                     console.log('Player card clicked', hoverCard);
                     break;
             }
+        }
+
+        let hoverPile, hoverPileCard;
+        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
+            const card = pile[pile.length - 1];
+            if (
+                this.scaledMouseCoordinates?.x >= card.x &&
+                this.scaledMouseCoordinates?.x <= card.x + card.width * card.scale &&
+                this.scaledMouseCoordinates?.y >= card.y &&
+                this.scaledMouseCoordinates?.y <= card.y + card.height * card.scale
+            ) {
+                hoverPile = pile;
+                hoverPileCard = card;
+            }
+        });
+
+        if (hoverPileCard && this.isMouseClicked) {
+            console.log('Pile click pile', hoverPile);
+            console.log('Pile click card', hoverPileCard);
+
+            hoverPile.push({
+                ...hoverPileCard,
+                suit: this.playerCard.suit,
+                value: this.playerCard.value
+            });
+
+            // Remove the card at deckIndex from deck
+            this.deck.splice(this.deckIndex, 1);
+
+            if (this.deckIndex === 0) {
+                this.deckIndex = 2;
+            } else {
+                this.deckIndex--;
+            }
+
+            // Set the playerCard to the next card in the deck
+            this.playerCard.suit = this.deck[this.deckIndex].suit;
+            this.playerCard.value = this.deck[this.deckIndex].value;
         }
 
         if (this.isDealNewRound) {
@@ -565,7 +603,7 @@ class Game {
         const textWidth = this.ctx.measureText(text).width;
         const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        this.printText(`${this.deckIndex} / ${this.deck?.length}`, x, 630);
+        this.printText(`${this.deckIndex + 1}  / ${this.deck?.length}`, x, 630);
     }
 
     public renderPlayerCard(): void {
@@ -583,10 +621,39 @@ class Game {
         const margin = 40;
         const startingX = 260;
 
-        this.drawCard(pile1[pile1.length - 1], startingX + cardWidth * 1 + 0 * margin, y, 1.5);
-        this.drawCard(pile2[pile2.length - 1], startingX + cardWidth * 2 + 1 * margin, y, 1.5);
-        this.drawCard(pile3[pile3.length - 1], startingX + cardWidth * 3 + 2 * margin, y, 1.5);
-        this.drawCard(pile4[pile4.length - 1], startingX + cardWidth * 4 + 3 * margin, y, 1.5);
+        //TODO do these calculations when the card is added to the pile, not on each render
+        const pile1Card = pile1[pile1.length - 1];
+        pile1Card.width = 71;
+        pile1Card.height = 95;
+        pile1Card.x = startingX + cardWidth * 1 + 0 * margin;
+        pile1Card.y = y;
+        pile1Card.scale = 1.5;
+
+        const pile2Card = pile2[pile2.length - 1];
+        pile2Card.width = 71;
+        pile2Card.height = 95;
+        pile2Card.x = startingX + cardWidth * 2 + 1 * margin;
+        pile2Card.y = y;
+        pile2Card.scale = 1.5;
+
+        const pile3Card = pile3[pile3.length - 1];
+        pile3Card.width = 71;
+        pile3Card.height = 95;
+        pile3Card.x = startingX + cardWidth * 3 + 2 * margin;
+        pile3Card.y = y;
+        pile3Card.scale = 1.5;
+
+        const pile4Card = pile4[pile4.length - 1];
+        pile4Card.width = 71;
+        pile4Card.height = 95;
+        pile4Card.x = startingX + cardWidth * 4 + 3 * margin;
+        pile4Card.y = y;
+        pile4Card.scale = 1.5;
+
+        this.drawCard(pile1Card, pile1Card.x, pile1Card.y, pile1Card.scale);
+        this.drawCard(pile2Card, pile2Card.x, pile2Card.y, pile2Card.scale);
+        this.drawCard(pile3Card, pile3Card.x, pile3Card.y, pile3Card.scale);
+        this.drawCard(pile4Card, pile4Card.x, pile4Card.y, pile4Card.scale);
     }
 
     public renderTimer(): void {
@@ -670,15 +737,10 @@ class Game {
         this.pile4 = [];
 
         // Pop the first 4 cards from the deck and add them to the piles
-        this.pile1.push(this.deck.pop());
-        this.pile2.push(this.deck.pop());
-        this.pile3.push(this.deck.pop());
-        this.pile4.push(this.deck.pop());
-
-        console.log('Pile 1:', this.pile1);
-        console.log('Pile 2:', this.pile2);
-        console.log('Pile 3:', this.pile3);
-        console.log('Pile 4:', this.pile4);
+        this.pile1.push(this.deck.pop() as RenderedCard);
+        this.pile2.push(this.deck.pop() as RenderedCard);
+        this.pile3.push(this.deck.pop() as RenderedCard);
+        this.pile4.push(this.deck.pop() as RenderedCard);
     }
 
     public hitCard(): void {

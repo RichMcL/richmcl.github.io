@@ -287,6 +287,34 @@ var Game = /** @class */ (function () {
                     break;
             }
         }
+        var hoverPile, hoverPileCard;
+        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(function (pile) {
+            var _a, _b, _c, _d;
+            var card = pile[pile.length - 1];
+            if (((_a = _this.scaledMouseCoordinates) === null || _a === void 0 ? void 0 : _a.x) >= card.x &&
+                ((_b = _this.scaledMouseCoordinates) === null || _b === void 0 ? void 0 : _b.x) <= card.x + card.width * card.scale &&
+                ((_c = _this.scaledMouseCoordinates) === null || _c === void 0 ? void 0 : _c.y) >= card.y &&
+                ((_d = _this.scaledMouseCoordinates) === null || _d === void 0 ? void 0 : _d.y) <= card.y + card.height * card.scale) {
+                hoverPile = pile;
+                hoverPileCard = card;
+            }
+        });
+        if (hoverPileCard && this.isMouseClicked) {
+            console.log('Pile click pile', hoverPile);
+            console.log('Pile click card', hoverPileCard);
+            hoverPile.push(__assign(__assign({}, hoverPileCard), { suit: this.playerCard.suit, value: this.playerCard.value }));
+            // Remove the card at deckIndex from deck
+            this.deck.splice(this.deckIndex, 1);
+            if (this.deckIndex === 0) {
+                this.deckIndex = 2;
+            }
+            else {
+                this.deckIndex--;
+            }
+            // Set the playerCard to the next card in the deck
+            this.playerCard.suit = this.deck[this.deckIndex].suit;
+            this.playerCard.value = this.deck[this.deckIndex].value;
+        }
         if (this.isDealNewRound) {
             this.deck = this.buildAndShuffleDeck(true);
             this.initializePiles();
@@ -443,7 +471,7 @@ var Game = /** @class */ (function () {
         var text = "".concat(this.deckIndex, " / ").concat((_a = this.deck) === null || _a === void 0 ? void 0 : _a.length);
         var textWidth = this.ctx.measureText(text).width;
         var x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
-        this.printText("".concat(this.deckIndex, " / ").concat((_b = this.deck) === null || _b === void 0 ? void 0 : _b.length), x, 630);
+        this.printText("".concat(this.deckIndex + 1, "  / ").concat((_b = this.deck) === null || _b === void 0 ? void 0 : _b.length), x, 630);
     };
     Game.prototype.renderPlayerCard = function () {
         this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
@@ -457,10 +485,35 @@ var Game = /** @class */ (function () {
         var cardWidth = 71 * 1.5;
         var margin = 40;
         var startingX = 260;
-        this.drawCard(pile1[pile1.length - 1], startingX + cardWidth * 1 + 0 * margin, y, 1.5);
-        this.drawCard(pile2[pile2.length - 1], startingX + cardWidth * 2 + 1 * margin, y, 1.5);
-        this.drawCard(pile3[pile3.length - 1], startingX + cardWidth * 3 + 2 * margin, y, 1.5);
-        this.drawCard(pile4[pile4.length - 1], startingX + cardWidth * 4 + 3 * margin, y, 1.5);
+        //TODO do these calculations when the card is added to the pile, not on each render
+        var pile1Card = pile1[pile1.length - 1];
+        pile1Card.width = 71;
+        pile1Card.height = 95;
+        pile1Card.x = startingX + cardWidth * 1 + 0 * margin;
+        pile1Card.y = y;
+        pile1Card.scale = 1.5;
+        var pile2Card = pile2[pile2.length - 1];
+        pile2Card.width = 71;
+        pile2Card.height = 95;
+        pile2Card.x = startingX + cardWidth * 2 + 1 * margin;
+        pile2Card.y = y;
+        pile2Card.scale = 1.5;
+        var pile3Card = pile3[pile3.length - 1];
+        pile3Card.width = 71;
+        pile3Card.height = 95;
+        pile3Card.x = startingX + cardWidth * 3 + 2 * margin;
+        pile3Card.y = y;
+        pile3Card.scale = 1.5;
+        var pile4Card = pile4[pile4.length - 1];
+        pile4Card.width = 71;
+        pile4Card.height = 95;
+        pile4Card.x = startingX + cardWidth * 4 + 3 * margin;
+        pile4Card.y = y;
+        pile4Card.scale = 1.5;
+        this.drawCard(pile1Card, pile1Card.x, pile1Card.y, pile1Card.scale);
+        this.drawCard(pile2Card, pile2Card.x, pile2Card.y, pile2Card.scale);
+        this.drawCard(pile3Card, pile3Card.x, pile3Card.y, pile3Card.scale);
+        this.drawCard(pile4Card, pile4Card.x, pile4Card.y, pile4Card.scale);
     };
     Game.prototype.renderTimer = function () {
         var minutes = Math.floor(this.timerInMs / 60000)
@@ -535,10 +588,6 @@ var Game = /** @class */ (function () {
         this.pile2.push(this.deck.pop());
         this.pile3.push(this.deck.pop());
         this.pile4.push(this.deck.pop());
-        console.log('Pile 1:', this.pile1);
-        console.log('Pile 2:', this.pile2);
-        console.log('Pile 3:', this.pile3);
-        console.log('Pile 4:', this.pile4);
     };
     Game.prototype.hitCard = function () {
         this.deckIndex += 3;
