@@ -203,7 +203,10 @@ class Game {
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
 
-    public piles: Card[] = [];
+    public pile1: Card[] = [];
+    public pile2: Card[] = [];
+    public pile3: Card[] = [];
+    public pile4: Card[] = [];
 
     constructor() {
         this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -267,6 +270,7 @@ class Game {
         this.lastTimestamp = performance.now();
 
         this.deck = this.buildAndShuffleDeck(true);
+        this.initializePiles();
         this.isDealNewRound = false;
 
         this.initializeGameObjects();
@@ -376,6 +380,7 @@ class Game {
 
         if (this.isDealNewRound) {
             this.deck = this.buildAndShuffleDeck(true);
+            this.initializePiles();
             this.isDealNewRound = false;
         }
     }
@@ -507,6 +512,7 @@ class Game {
 
         this.renderTheme();
         this.renderPlayerCard();
+        this.renderPiles();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderMousePosition();
@@ -564,6 +570,23 @@ class Game {
 
     public renderPlayerCard(): void {
         this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
+    }
+
+    public renderPiles(): void {
+        const y = 200;
+        const pile1 = this.pile1;
+        const pile2 = this.pile2;
+        const pile3 = this.pile3;
+        const pile4 = this.pile4;
+
+        const cardWidth = 71 * 1.5;
+        const margin = 40;
+        const startingX = 260;
+
+        this.drawCard(pile1[pile1.length - 1], startingX + cardWidth * 1 + 0 * margin, y, 1.5);
+        this.drawCard(pile2[pile2.length - 1], startingX + cardWidth * 2 + 1 * margin, y, 1.5);
+        this.drawCard(pile3[pile3.length - 1], startingX + cardWidth * 3 + 2 * margin, y, 1.5);
+        this.drawCard(pile4[pile4.length - 1], startingX + cardWidth * 4 + 3 * margin, y, 1.5);
     }
 
     public renderTimer(): void {
@@ -640,6 +663,24 @@ class Game {
         return deck;
     }
 
+    public initializePiles(): void {
+        this.pile1 = [];
+        this.pile2 = [];
+        this.pile3 = [];
+        this.pile4 = [];
+
+        // Pop the first 4 cards from the deck and add them to the piles
+        this.pile1.push(this.deck.pop());
+        this.pile2.push(this.deck.pop());
+        this.pile3.push(this.deck.pop());
+        this.pile4.push(this.deck.pop());
+
+        console.log('Pile 1:', this.pile1);
+        console.log('Pile 2:', this.pile2);
+        console.log('Pile 3:', this.pile3);
+        console.log('Pile 4:', this.pile4);
+    }
+
     public hitCard(): void {
         this.deckIndex += 3;
 
@@ -649,10 +690,6 @@ class Game {
 
         this.playerCard.suit = this.deck[this.deckIndex].suit;
         this.playerCard.value = this.deck[this.deckIndex].value;
-    }
-
-    public initializePileZones(count: number): void {
-        this.piles = this.deck.splice(0, count);
     }
 
     /* USER ACTION FUNCTIONS */

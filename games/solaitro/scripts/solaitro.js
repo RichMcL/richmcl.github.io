@@ -146,7 +146,10 @@ var Game = /** @class */ (function () {
         this.buttons = [];
         this.themeButtons = [];
         this.isDealNewRound = true;
-        this.piles = [];
+        this.pile1 = [];
+        this.pile2 = [];
+        this.pile3 = [];
+        this.pile4 = [];
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.cardFaceSpriteSheet = new Image();
@@ -195,6 +198,7 @@ var Game = /** @class */ (function () {
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
         this.deck = this.buildAndShuffleDeck(true);
+        this.initializePiles();
         this.isDealNewRound = false;
         this.initializeGameObjects();
         this.gameLoop();
@@ -285,6 +289,7 @@ var Game = /** @class */ (function () {
         }
         if (this.isDealNewRound) {
             this.deck = this.buildAndShuffleDeck(true);
+            this.initializePiles();
             this.isDealNewRound = false;
         }
     };
@@ -394,6 +399,7 @@ var Game = /** @class */ (function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
         this.renderTheme();
         this.renderPlayerCard();
+        this.renderPiles();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderMousePosition();
@@ -441,6 +447,20 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.renderPlayerCard = function () {
         this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
+    };
+    Game.prototype.renderPiles = function () {
+        var y = 200;
+        var pile1 = this.pile1;
+        var pile2 = this.pile2;
+        var pile3 = this.pile3;
+        var pile4 = this.pile4;
+        var cardWidth = 71 * 1.5;
+        var margin = 40;
+        var startingX = 260;
+        this.drawCard(pile1[pile1.length - 1], startingX + cardWidth * 1 + 0 * margin, y, 1.5);
+        this.drawCard(pile2[pile2.length - 1], startingX + cardWidth * 2 + 1 * margin, y, 1.5);
+        this.drawCard(pile3[pile3.length - 1], startingX + cardWidth * 3 + 2 * margin, y, 1.5);
+        this.drawCard(pile4[pile4.length - 1], startingX + cardWidth * 4 + 3 * margin, y, 1.5);
     };
     Game.prototype.renderTimer = function () {
         var minutes = Math.floor(this.timerInMs / 60000)
@@ -505,6 +525,21 @@ var Game = /** @class */ (function () {
         }
         return deck;
     };
+    Game.prototype.initializePiles = function () {
+        this.pile1 = [];
+        this.pile2 = [];
+        this.pile3 = [];
+        this.pile4 = [];
+        // Pop the first 4 cards from the deck and add them to the piles
+        this.pile1.push(this.deck.pop());
+        this.pile2.push(this.deck.pop());
+        this.pile3.push(this.deck.pop());
+        this.pile4.push(this.deck.pop());
+        console.log('Pile 1:', this.pile1);
+        console.log('Pile 2:', this.pile2);
+        console.log('Pile 3:', this.pile3);
+        console.log('Pile 4:', this.pile4);
+    };
     Game.prototype.hitCard = function () {
         this.deckIndex += 3;
         if (this.deckIndex >= this.deck.length) {
@@ -512,9 +547,6 @@ var Game = /** @class */ (function () {
         }
         this.playerCard.suit = this.deck[this.deckIndex].suit;
         this.playerCard.value = this.deck[this.deckIndex].value;
-    };
-    Game.prototype.initializePileZones = function (count) {
-        this.piles = this.deck.splice(0, count);
     };
     /* USER ACTION FUNCTIONS */
     /* RENDER FUNCTIONS */
