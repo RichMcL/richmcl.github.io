@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
     entry: './src/index.ts', // Adjust the entry point as needed
+    mode: 'development',
     module: {
         rules: [
             {

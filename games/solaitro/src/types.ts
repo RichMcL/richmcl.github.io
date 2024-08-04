@@ -1,4 +1,5 @@
 import { Theme } from './theme';
+import { buildAndShuffleDeck } from './util';
 
 export enum Suit {
     Spades = 'Spades',
@@ -81,13 +82,50 @@ export interface RenderedCard extends Card {
     scale?: number;
 }
 
-export interface Player {
-    playerNum: number;
+export interface RenderConfig {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    scale: number;
+}
+
+export class Player {
     hand: Card[];
-    team: number;
-    isPlayer: boolean;
-    isDealer: boolean;
-    isPlayerTeammate: boolean;
-    dealIndex?: number;
-    playIndex?: number;
+    handIndex: number;
+
+    renderConfig: RenderConfig = {
+        x: 585,
+        y: 460,
+        width: 71,
+        height: 95,
+        scale: 1.5
+    };
+
+    constructor() {
+        this.hand = buildAndShuffleDeck();
+        this.handIndex = 0;
+    }
+
+    getCurrentCard(): Card {
+        return this.hand[this.handIndex];
+    }
+
+    hit(): void {
+        this.handIndex += 3;
+
+        if (this.handIndex >= this.hand.length) {
+            this.handIndex = this.handIndex - this.hand.length;
+        }
+    }
+
+    removeTopCard(): void {
+        this.hand.splice(this.handIndex, 1);
+
+        if (this.handIndex === 0) {
+            this.handIndex = 2;
+        } else {
+            this.handIndex--;
+        }
+    }
 }

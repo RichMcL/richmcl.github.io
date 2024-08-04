@@ -1,5 +1,6 @@
 import { Theme, Themes } from './theme';
-import { Card, CardValue, GameButton, RenderedCard, Suit, ThemeButton } from './types';
+import { Card, CardValue, GameButton, Player, RenderedCard, Suit, ThemeButton } from './types';
+import { buildAndShuffleDeck } from './util';
 
 export class Game {
     public canvas: HTMLCanvasElement;
@@ -8,6 +9,8 @@ export class Game {
     public windowAspectRatio: number;
     public scaleFactor: number;
     public theme: Theme = Themes.default;
+
+    public player: Player = new Player();
 
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
@@ -20,15 +23,11 @@ export class Game {
     public isMouseClicked: boolean = false;
 
     public gameRunning: boolean = true;
-    public deck: Card[];
-    public deckIndex: number = 0;
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
     public buttons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
-    public playerCard: RenderedCard;
-    // public renderedCards: RenderedCard[] = [];
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
 
@@ -98,7 +97,7 @@ export class Game {
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
 
-        this.deck = this.buildAndShuffleDeck(true);
+        this.player.hand = buildAndShuffleDeck(true);
         this.initializePiles();
         this.isDealNewRound = false;
 
@@ -184,27 +183,29 @@ export class Game {
             this.theme = hoverThemeButton.theme;
         }
 
-        let hoverCard: RenderedCard;
+        let hoverCard: Card;
 
-        [this.playerCard].forEach(card => {
-            if (
-                this.scaledMouseCoordinates?.x >= card.x &&
-                this.scaledMouseCoordinates?.x <= card.x + card.width * card.scale &&
-                this.scaledMouseCoordinates?.y >= card.y &&
-                this.scaledMouseCoordinates?.y <= card.y + card.height * card.scale
-            ) {
-                hoverCard = card;
-            }
-        });
+        if (
+            this.scaledMouseCoordinates?.x >= this.player.renderConfig.x &&
+            this.scaledMouseCoordinates?.x <=
+                this.player.renderConfig.x +
+                    this.player.renderConfig.width * this.player.renderConfig.scale &&
+            this.scaledMouseCoordinates?.y >= this.player.renderConfig.y &&
+            this.scaledMouseCoordinates?.y <=
+                this.player.renderConfig.y +
+                    this.player.renderConfig.height * this.player.renderConfig.scale
+        ) {
+            hoverCard = this.player.getCurrentCard();
+        }
 
         if (hoverCard && this.isMouseClicked) {
             this.lastCardClicked = hoverCard;
 
-            switch (hoverCard.id) {
-                case 'player':
-                    console.log('Player card clicked', hoverCard);
-                    break;
-            }
+            // switch (hoverCard.id) {
+            //     case 'player':
+            //         console.log('Player card clicked', hoverCard);
+            //         break;
+            // }
         }
 
         let hoverPile: RenderedCard[];
@@ -228,26 +229,15 @@ export class Game {
 
             hoverPile.push({
                 ...hoverPileCard,
-                suit: this.playerCard.suit,
-                value: this.playerCard.value
+                suit: this.player.getCurrentCard().suit,
+                value: this.player.getCurrentCard().value
             });
 
-            // Remove the card at deckIndex from deck
-            this.deck.splice(this.deckIndex, 1);
-
-            if (this.deckIndex === 0) {
-                this.deckIndex = 2;
-            } else {
-                this.deckIndex--;
-            }
-
-            // Set the playerCard to the next card in the deck
-            this.playerCard.suit = this.deck[this.deckIndex].suit;
-            this.playerCard.value = this.deck[this.deckIndex].value;
+            this.player.removeTopCard();
         }
 
         if (this.isDealNewRound) {
-            this.deck = this.buildAndShuffleDeck(true);
+            this.player.hand = buildAndShuffleDeck(true);
             this.initializePiles();
             this.isDealNewRound = false;
         }
@@ -268,20 +258,7 @@ export class Game {
     }
 
     public createPlayerCard(): void {
-        if (!this.deck?.length) {
-            return;
-        }
-
-        const card = this.deck[this.deckIndex];
-        this.playerCard = {
-            ...card,
-            id: 'player',
-            x: 585,
-            y: 460,
-            width: 71,
-            height: 95,
-            scale: 1.5
-        };
+        this.player = new Player();
     }
 
     public createReloadButton(): void {
@@ -429,15 +406,24 @@ export class Game {
 
     public renderDeckIndex() {
         const fixedWidth = 71 * 1.5; // Define the fixed width
-        const text = `${this.deckIndex} / ${this.deck?.length}`;
+        const text = `${this.player.handIndex} / ${this.player.hand?.length}`;
         const textWidth = this.ctx.measureText(text).width;
         const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        this.printText(`${this.deckIndex + 1}  / ${this.deck?.length}`, x, 630);
+        this.printText(`${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 630);
     }
 
     public renderPlayerCard(): void {
-        this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
+        // this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
+
+        const renderConfig = this.player.renderConfig;
+
+        this.drawCard(
+            this.player.getCurrentCard(),
+            renderConfig.x,
+            renderConfig.y,
+            renderConfig.scale
+        );
     }
 
     public renderPiles(): void {
@@ -539,27 +525,6 @@ export class Game {
 
     /* LOGIC FUNCTIONS */
 
-    public buildAndShuffleDeck(shuffle = false): Card[] {
-        let deck: Card[] = [];
-
-        for (const suit of Object.values(Suit)) {
-            for (const value of Object.values(CardValue)) {
-                deck.push({ suit, value });
-            }
-        }
-
-        if (shuffle) {
-            for (let i = 0; i < deck.length; i++) {
-                const j = Math.floor(Math.random() * deck.length);
-                const temp = deck[i];
-                deck[i] = deck[j];
-                deck[j] = temp;
-            }
-        }
-
-        return deck;
-    }
-
     public initializePiles(): void {
         this.pile1 = [];
         this.pile2 = [];
@@ -567,21 +532,14 @@ export class Game {
         this.pile4 = [];
 
         // Pop the first 4 cards from the deck and add them to the piles
-        this.pile1.push(this.deck.pop() as RenderedCard);
-        this.pile2.push(this.deck.pop() as RenderedCard);
-        this.pile3.push(this.deck.pop() as RenderedCard);
-        this.pile4.push(this.deck.pop() as RenderedCard);
+        this.pile1.push(this.player.hand.pop() as RenderedCard);
+        this.pile2.push(this.player.hand.pop() as RenderedCard);
+        this.pile3.push(this.player.hand.pop() as RenderedCard);
+        this.pile4.push(this.player.hand.pop() as RenderedCard);
     }
 
     public hitCard(): void {
-        this.deckIndex += 3;
-
-        if (this.deckIndex >= this.deck.length) {
-            this.deckIndex = this.deckIndex - this.deck.length;
-        }
-
-        this.playerCard.suit = this.deck[this.deckIndex].suit;
-        this.playerCard.value = this.deck[this.deckIndex].value;
+        this.player.hit();
     }
 
     /* USER ACTION FUNCTIONS */
