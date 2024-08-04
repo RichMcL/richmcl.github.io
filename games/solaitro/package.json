@@ -5,7 +5,7 @@
     "main": "main.js",
     "scripts": {
         "build": "webpack",
-        "watch": "tsc --watch",
+        "watch": "webpack --watch",
         "start": "electron-forge start",
         "package": "electron-forge package",
         "make": "electron-forge make"
