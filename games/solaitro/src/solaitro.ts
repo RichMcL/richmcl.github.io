@@ -1,5 +1,14 @@
 import { Theme, Themes } from './theme';
-import { Card, CardValue, GameButton, Player, RenderedCard, Suit, ThemeButton } from './types';
+import {
+    Card,
+    CardValue,
+    GameButton,
+    Pile,
+    Player,
+    RenderedCard,
+    Suit,
+    ThemeButton
+} from './types';
 import { buildAndShuffleDeck } from './util';
 
 export class Game {
@@ -11,6 +20,11 @@ export class Game {
     public theme: Theme = Themes.default;
 
     public player: Player = new Player();
+
+    public pile1: Pile = new Pile('pile1');
+    public pile2: Pile = new Pile('pile2');
+    public pile3: Pile = new Pile('pile3');
+    public pile4: Pile = new Pile('pile4');
 
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
@@ -30,11 +44,6 @@ export class Game {
     public themeButtons: ThemeButton[] = [];
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
-
-    public pile1: RenderedCard[] = [];
-    public pile2: RenderedCard[] = [];
-    public pile3: RenderedCard[] = [];
-    public pile4: RenderedCard[] = [];
 
     constructor() {
         this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -97,7 +106,6 @@ export class Game {
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
 
-        this.player.hand = buildAndShuffleDeck(true);
         this.initializePiles();
         this.isDealNewRound = false;
 
@@ -110,7 +118,6 @@ export class Game {
         this.createDealButton();
         this.createHitButton();
         this.createThemeButtons();
-        this.createPlayerCard();
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -200,23 +207,20 @@ export class Game {
 
         if (hoverCard && this.isMouseClicked) {
             this.lastCardClicked = hoverCard;
-
-            // switch (hoverCard.id) {
-            //     case 'player':
-            //         console.log('Player card clicked', hoverCard);
-            //         break;
-            // }
+            console.log('Player card clicked', hoverCard);
         }
 
-        let hoverPile: RenderedCard[];
-        let hoverPileCard: RenderedCard;
+        let hoverPile: Pile;
+        let hoverPileCard: Card;
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            const card = pile[pile.length - 1];
+            const card = pile.getTopCard();
             if (
-                this.scaledMouseCoordinates?.x >= card.x &&
-                this.scaledMouseCoordinates?.x <= card.x + card.width * card.scale &&
-                this.scaledMouseCoordinates?.y >= card.y &&
-                this.scaledMouseCoordinates?.y <= card.y + card.height * card.scale
+                this.scaledMouseCoordinates?.x >= pile.renderConfig.x &&
+                this.scaledMouseCoordinates?.x <=
+                    pile.renderConfig.x + pile.renderConfig.width * pile.renderConfig.scale &&
+                this.scaledMouseCoordinates?.y >= pile.renderConfig.y &&
+                this.scaledMouseCoordinates?.y <=
+                    pile.renderConfig.y + pile.renderConfig.height * pile.renderConfig.scale
             ) {
                 hoverPile = pile;
                 hoverPileCard = card;
@@ -227,7 +231,7 @@ export class Game {
             console.log('Pile click pile', hoverPile);
             console.log('Pile click card', hoverPileCard);
 
-            hoverPile.push({
+            hoverPile.pushCard({
                 ...hoverPileCard,
                 suit: this.player.getCurrentCard().suit,
                 value: this.player.getCurrentCard().value
@@ -255,10 +259,6 @@ export class Game {
         this.themeButtons.forEach(button => {
             button.isHovered = false;
         });
-    }
-
-    public createPlayerCard(): void {
-        this.player = new Player();
     }
 
     public createReloadButton(): void {
@@ -414,8 +414,6 @@ export class Game {
     }
 
     public renderPlayerCard(): void {
-        // this.drawCard(this.playerCard, this.playerCard.x, this.playerCard.y, this.playerCard.scale);
-
         const renderConfig = this.player.renderConfig;
 
         this.drawCard(
@@ -427,49 +425,35 @@ export class Game {
     }
 
     public renderPiles(): void {
-        const y = 200;
-        const pile1 = this.pile1;
-        const pile2 = this.pile2;
-        const pile3 = this.pile3;
-        const pile4 = this.pile4;
+        const pile1Card = this.pile1.getTopCard();
+        const pile2Card = this.pile2.getTopCard();
+        const pile3Card = this.pile3.getTopCard();
+        const pile4Card = this.pile4.getTopCard();
 
-        const cardWidth = 71 * 1.5;
-        const margin = 40;
-        const startingX = 260;
-
-        //TODO do these calculations when the card is added to the pile, not on each render
-        const pile1Card = pile1[pile1.length - 1];
-        pile1Card.width = 71;
-        pile1Card.height = 95;
-        pile1Card.x = startingX + cardWidth * 1 + 0 * margin;
-        pile1Card.y = y;
-        pile1Card.scale = 1.5;
-
-        const pile2Card = pile2[pile2.length - 1];
-        pile2Card.width = 71;
-        pile2Card.height = 95;
-        pile2Card.x = startingX + cardWidth * 2 + 1 * margin;
-        pile2Card.y = y;
-        pile2Card.scale = 1.5;
-
-        const pile3Card = pile3[pile3.length - 1];
-        pile3Card.width = 71;
-        pile3Card.height = 95;
-        pile3Card.x = startingX + cardWidth * 3 + 2 * margin;
-        pile3Card.y = y;
-        pile3Card.scale = 1.5;
-
-        const pile4Card = pile4[pile4.length - 1];
-        pile4Card.width = 71;
-        pile4Card.height = 95;
-        pile4Card.x = startingX + cardWidth * 4 + 3 * margin;
-        pile4Card.y = y;
-        pile4Card.scale = 1.5;
-
-        this.drawCard(pile1Card, pile1Card.x, pile1Card.y, pile1Card.scale);
-        this.drawCard(pile2Card, pile2Card.x, pile2Card.y, pile2Card.scale);
-        this.drawCard(pile3Card, pile3Card.x, pile3Card.y, pile3Card.scale);
-        this.drawCard(pile4Card, pile4Card.x, pile4Card.y, pile4Card.scale);
+        this.drawCard(
+            pile1Card,
+            this.pile1.renderConfig.x,
+            this.pile1.renderConfig.y,
+            this.pile1.renderConfig.scale
+        );
+        this.drawCard(
+            pile2Card,
+            this.pile2.renderConfig.x,
+            this.pile2.renderConfig.y,
+            this.pile2.renderConfig.scale
+        );
+        this.drawCard(
+            pile3Card,
+            this.pile3.renderConfig.x,
+            this.pile3.renderConfig.y,
+            this.pile3.renderConfig.scale
+        );
+        this.drawCard(
+            pile4Card,
+            this.pile4.renderConfig.x,
+            this.pile4.renderConfig.y,
+            this.pile4.renderConfig.scale
+        );
     }
 
     public renderTimer(): void {
@@ -526,16 +510,11 @@ export class Game {
     /* LOGIC FUNCTIONS */
 
     public initializePiles(): void {
-        this.pile1 = [];
-        this.pile2 = [];
-        this.pile3 = [];
-        this.pile4 = [];
-
         // Pop the first 4 cards from the deck and add them to the piles
-        this.pile1.push(this.player.hand.pop() as RenderedCard);
-        this.pile2.push(this.player.hand.pop() as RenderedCard);
-        this.pile3.push(this.player.hand.pop() as RenderedCard);
-        this.pile4.push(this.player.hand.pop() as RenderedCard);
+        this.pile1.pushCard(this.player.hand.pop() as RenderedCard);
+        this.pile2.pushCard(this.player.hand.pop() as RenderedCard);
+        this.pile3.pushCard(this.player.hand.pop() as RenderedCard);
+        this.pile4.pushCard(this.player.hand.pop() as RenderedCard);
     }
 
     public hitCard(): void {
