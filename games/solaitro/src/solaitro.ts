@@ -2,10 +2,10 @@ import { Theme, Themes } from './theme';
 import {
     Card,
     CardValue,
+    Coordindates,
     GameButton,
     Pile,
     Player,
-    RenderedCard,
     Suit,
     ThemeButton
 } from './types';
@@ -29,11 +29,11 @@ export class Game {
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
     public iconSpriteSheet: HTMLImageElement;
-    public clickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
-    public scaledClickCoordinates: { x: number; y: number } = { x: 0, y: 0 };
+    public clickCoordinates: Coordindates = { x: 0, y: 0 };
+    public scaledClickCoordinates: Coordindates = { x: 0, y: 0 };
 
-    public mouseCoordinates: { x: number; y: number } = { x: 0, y: 0 };
-    public scaledMouseCoordinates: { x: number; y: number } = { x: 0, y: 0 };
+    public mouseCoordinates: Coordindates = { x: 0, y: 0 };
+    public scaledMouseCoordinates: Coordindates = { x: 0, y: 0 };
     public isMouseClicked: boolean = false;
 
     public gameRunning: boolean = true;
@@ -511,10 +511,10 @@ export class Game {
 
     public initializePiles(): void {
         // Pop the first 4 cards from the deck and add them to the piles
-        this.pile1.pushCard(this.player.hand.pop() as RenderedCard);
-        this.pile2.pushCard(this.player.hand.pop() as RenderedCard);
-        this.pile3.pushCard(this.player.hand.pop() as RenderedCard);
-        this.pile4.pushCard(this.player.hand.pop() as RenderedCard);
+        this.pile1.pushCard(this.player.hand.pop());
+        this.pile2.pushCard(this.player.hand.pop());
+        this.pile3.pushCard(this.player.hand.pop());
+        this.pile4.pushCard(this.player.hand.pop());
     }
 
     public hitCard(): void {

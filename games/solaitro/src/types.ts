@@ -1,6 +1,11 @@
 import { Theme } from './theme';
 import { buildAndShuffleDeck } from './util';
 
+export interface Coordindates {
+    x: number;
+    y: number;
+}
+
 export enum Suit {
     Spades = 'Spades',
     Clubs = 'Clubs',
@@ -71,15 +76,6 @@ export interface ThemeButton extends GameButton {
     id: 'theme';
     text: '';
     theme: Theme;
-}
-
-export interface RenderedCard extends Card {
-    id: string;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    scale?: number;
 }
 
 export interface RenderConfig {
