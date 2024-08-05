@@ -237,7 +237,6 @@ export class Game {
         }
 
         if (hoverPileCard && this.isMouseClicked) {
-            console.log('Pile click pile', hoverPile);
             console.log('Pile click card', hoverPileCard);
 
             hoverPile.pushCard({
@@ -437,11 +436,16 @@ export class Game {
         const textWidth = this.ctx.measureText(text).width;
         const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        this.printText(`${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 630);
+        this.printText(`${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
     }
 
     public renderPlayerCard(): void {
         const renderConfig = this.player.renderConfig;
+
+        // Render blank cards behind the player card
+        for (let i = 3; i > 0; i--) {
+            this.drawCardBack(renderConfig.x + 5 * i, renderConfig.y + 5 * i, renderConfig.scale);
+        }
 
         this.drawCard(
             this.player.getCurrentCard(),
@@ -566,7 +570,7 @@ export class Game {
 
     /* RENDER FUNCTIONS */
 
-    private drawCard(card: Card, x: number, y: number, cardScale = 1): void {
+    public drawCard(card: Card, x: number, y: number, cardScale = 1): void {
         const cardWidth = 71; // Width of a single card in the sprite sheet
         const cardHeight = 95; // Height of a single card in the sprite sheet
 
@@ -646,6 +650,23 @@ export class Game {
             this.cardFaceSpriteSheet,
             sx,
             sy,
+            cardWidth,
+            cardHeight,
+            x,
+            y,
+            cardWidth * cardScale,
+            cardHeight * cardScale
+        );
+    }
+
+    public drawCardBack(x: number, y: number, cardScale = 1): void {
+        const cardWidth = 71; // Width of a single card in the sprite sheet
+        const cardHeight = 95; // Height of a single card in the sprite sheet
+
+        this.ctx.drawImage(
+            this.cardBackSpriteSheet,
+            0,
+            0,
             cardWidth,
             cardHeight,
             x,

@@ -1,4 +1,4 @@
-import { blackSuits, Card, CardNumericValue, redSuits } from './types';
+import { blackSuits, Card, CardNumericValue, CardValue, redSuits } from './types';
 
 /**
  * For a move to be valid, any one rule must pass, but each requirement of that rule must pass
@@ -34,6 +34,11 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
 
     [SingleRuleKey.oneLower]: (playerCard: Card, pileCard: Card) => {
         if (CardNumericValue[pileCard.value] - CardNumericValue[playerCard.value] === 1) {
+            return true;
+        }
+
+        // Alows the pile to wrap
+        if (pileCard.value === CardValue.Ace && playerCard.value === CardValue.Two) {
             return true;
         }
 

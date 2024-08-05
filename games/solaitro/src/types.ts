@@ -99,7 +99,7 @@ export class Player {
     };
 
     constructor() {
-        this.hand = buildAndShuffleDeck();
+        this.hand = buildAndShuffleDeck(true);
         this.handIndex = 0;
     }
 
