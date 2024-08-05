@@ -1,3 +1,4 @@
+import { doesAnyRulePass, Rule, RuleInfo, RuleNames } from './rules';
 import { Theme, Themes } from './theme';
 import {
     Card,
@@ -25,6 +26,8 @@ export class Game {
     public pile2: Pile = new Pile('pile2');
     public pile3: Pile = new Pile('pile3');
     public pile4: Pile = new Pile('pile4');
+
+    public ruleNames: RuleNames[] = [RuleNames.klondike];
 
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
@@ -222,8 +225,10 @@ export class Game {
                 this.scaledMouseCoordinates?.y <=
                     pile.renderConfig.y + pile.renderConfig.height * pile.renderConfig.scale
             ) {
-                hoverPile = pile;
-                hoverPileCard = card;
+                if (doesAnyRulePass(this.ruleNames, this.player.getCurrentCard(), card)) {
+                    hoverPile = pile;
+                    hoverPileCard = card;
+                }
             }
         });
 
