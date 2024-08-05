@@ -369,6 +369,7 @@ export class Game {
 
         this.renderTheme();
         this.renderSidebar();
+        this.renderRuleSidebar();
         this.renderPlayerCard();
         this.renderPiles();
         this.renderDeckIndex();
@@ -384,16 +385,43 @@ export class Game {
     }
 
     public renderSidebar() {
-        this.ctx.fillStyle = '#293a3a';
-        this.ctx.fillRect(20, 0, 250, 800);
+        const x = 20;
 
         // Left border
         this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(17, 0, 3, 800);
+        this.ctx.fillRect(x - 3, 0, 3, 800);
+
+        this.ctx.fillStyle = '#293a3a';
+        this.ctx.fillRect(x, 0, 250, 800);
 
         // Right border
         this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(270, 0, 3, 800);
+        this.ctx.fillRect(x + 250, 0, 3, 800);
+    }
+
+    public renderRuleSidebar() {
+        const x = 1007;
+
+        // Left border
+        this.ctx.fillStyle = this.theme.base;
+        this.ctx.fillRect(x - 3, 0, 3, 800);
+
+        this.ctx.fillStyle = '#293a3a';
+        this.ctx.fillRect(x, 0, 250, 800);
+
+        // Right border
+        this.ctx.fillStyle = this.theme.base;
+        this.ctx.fillRect(x + 250, 0, 3, 800);
+
+        this.printText('Rules', x + 30, 40);
+
+        //iterate over the riles an print their descriptions
+
+        let y = 80;
+        for (const rule of this.ruleNames) {
+            const ruleInfo = RuleInfo[rule];
+            this.printText(`- ${ruleInfo.name}`, x + 30, y);
+        }
     }
 
     public renderButtons() {
