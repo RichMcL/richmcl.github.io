@@ -515,8 +515,8 @@ export class Game {
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
-            this.printText(`Card: ${card.value}`, 20, 100);
-            this.drawIcon(card.suit, 110, 83);
+            this.printText(`Card: ${card.value}`, 30, 120);
+            this.drawIcon(card.suit, 120, 103);
         }
     }
 
