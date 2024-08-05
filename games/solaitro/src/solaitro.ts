@@ -268,7 +268,7 @@ export class Game {
         const textWidth = textMetrics.width;
         const buttonWidth = textWidth + padding * 2 + 5;
         const buttonHeight = 50;
-        const x = 10;
+        const x = 30;
         const y = 730;
 
         this.buttons.push({
@@ -290,7 +290,7 @@ export class Game {
         const textWidth = textMetrics.width;
         const buttonWidth = textWidth + padding * 2;
         const buttonHeight = 50;
-        const x = 10;
+        const x = 30;
         const y = 670;
 
         this.buttons.push({
@@ -356,6 +356,7 @@ export class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
 
         this.renderTheme();
+        this.renderSidebar();
         this.renderPlayerCard();
         this.renderPiles();
         this.renderDeckIndex();
@@ -368,6 +369,19 @@ export class Game {
 
     public renderTheme() {
         this.canvas.style.backgroundColor = this.theme.background;
+    }
+
+    public renderSidebar() {
+        this.ctx.fillStyle = '#293a3a';
+        this.ctx.fillRect(20, 0, 250, 800);
+
+        // Left border
+        this.ctx.fillStyle = this.theme.base;
+        this.ctx.fillRect(17, 0, 3, 800);
+
+        // Right border
+        this.ctx.fillStyle = this.theme.base;
+        this.ctx.fillRect(270, 0, 3, 800);
     }
 
     public renderButtons() {
@@ -467,13 +481,13 @@ export class Game {
             .toString()
             .padStart(1, '0');
 
-        this.printText(`Time: ${minutes}:${seconds}.${tenths}`, 20, 60);
+        this.printText(`Time: ${minutes}:${seconds}.${tenths}`, 30, 40);
     }
 
     public renderMousePosition(): void {
         const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
-        this.printText(`Cursor: X ${x} | Y ${y}`, 170, 60);
+        this.printText(`Cursor: X ${x} | Y ${y}`, 30, 80);
     }
 
     public renderLastCardClicked(): void {
