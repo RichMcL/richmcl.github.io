@@ -376,6 +376,7 @@ export class Game {
         this.renderRuleSidebar();
         this.renderPlayerCard();
         this.renderPiles();
+        this.renderPileCounts();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderScore();
@@ -503,6 +504,7 @@ export class Game {
             this.pile1.renderConfig.y,
             this.pile1.renderConfig.scale
         );
+
         this.drawCard(
             pile2Card,
             this.pile2.renderConfig.x,
@@ -534,6 +536,16 @@ export class Game {
                     pile.renderConfig.height * pile.renderConfig.scale
                 );
             }
+        });
+    }
+
+    public renderPileCounts(): void {
+        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
+            this.printText(
+                `[ ${pile.cards.length} ]`,
+                pile.renderConfig.x + pile.renderConfig.width / 2,
+                pile.renderConfig.y + pile.renderConfig.height * pile.renderConfig.scale + 30
+            );
         });
     }
 

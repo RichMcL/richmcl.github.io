@@ -129,7 +129,7 @@ export class Player {
 export const PilesRenderConfig: { [key: string]: RenderConfig } = {
     pile1: {
         x: 366.5,
-        y: 200,
+        y: 70,
         width: 71,
         height: 95,
         scale: 1.5
@@ -137,7 +137,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
 
     pile2: {
         x: 513,
-        y: 200,
+        y: 70,
         width: 71,
         height: 95,
         scale: 1.5
@@ -145,7 +145,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
 
     pile3: {
         x: 659.5,
-        y: 200,
+        y: 70,
         width: 71,
         height: 95,
         scale: 1.5
@@ -153,7 +153,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
 
     pile4: {
         x: 806,
-        y: 200,
+        y: 70,
         width: 71,
         height: 95,
         scale: 1.5
