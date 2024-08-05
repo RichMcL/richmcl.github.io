@@ -562,7 +562,7 @@ export class Game {
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             if (pile.isHovered) {
                 this.ctx.strokeStyle = 'white';
-                this.ctx.lineWidth = 2;
+                this.ctx.lineWidth = 3;
                 this.ctx.strokeRect(
                     pile.renderConfig.x,
                     pile.renderConfig.y,
