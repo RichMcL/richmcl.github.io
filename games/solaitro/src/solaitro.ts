@@ -44,6 +44,7 @@ export class Game {
     public lastTimestamp: number = 0;
 
     public score = 0;
+    public streak = 0;
 
     public buttons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
@@ -119,6 +120,7 @@ export class Game {
     }
 
     public initializeGameObjects(): void {
+        this.createFreeButton();
         this.createReloadButton();
         this.createDealButton();
         this.createHitButton();
@@ -170,6 +172,14 @@ export class Game {
                     break;
                 case 'deal':
                     this.isDealNewRound = true;
+                    break;
+                case 'free':
+                    //toggle RuleNames.free
+                    if (this.ruleNames.includes(RuleNames.free)) {
+                        this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.free);
+                    } else {
+                        this.ruleNames.push(RuleNames.free);
+                    }
                     break;
                 case 'hit':
                     this.hitCard();
@@ -250,6 +260,7 @@ export class Game {
             this.player.removeTopCard();
 
             this.score += 10;
+            this.streak++;
         }
 
         if (this.isDealNewRound) {
@@ -289,6 +300,28 @@ export class Game {
 
         this.buttons.push({
             id: 'reload',
+            text,
+            padding,
+            fillColor: this.theme.base,
+            x,
+            y,
+            width: buttonWidth,
+            height: buttonHeight
+        });
+    }
+
+    public createFreeButton(): void {
+        const text = 'FREE';
+        const padding = 20; // Padding for the button
+        const textMetrics = this.ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const buttonWidth = textWidth + padding * 2;
+        const buttonHeight = 50;
+        const x = 1100;
+        const y = 670;
+
+        this.buttons.push({
+            id: 'free',
             text,
             padding,
             fillColor: this.theme.base,
@@ -380,6 +413,7 @@ export class Game {
         this.renderDeckIndex();
         this.renderTimer();
         this.renderScore();
+        this.renderStreak();
         this.renderMousePosition();
         this.renderLastCardClicked();
         this.renderButtons();
@@ -567,6 +601,10 @@ export class Game {
         this.printText(`Score: ${this.score}`, 30, 80);
     }
 
+    public renderStreak(): void {
+        this.printText(`Streak: ${this.streak}`, 30, 120);
+    }
+
     public renderMousePosition(): void {
         const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
@@ -615,6 +653,7 @@ export class Game {
     }
 
     public hitCard(): void {
+        this.streak = 0;
         this.player.hit();
     }
 
