@@ -227,6 +227,10 @@ export class Game {
             }
         });
 
+        if (hoverPile) {
+            hoverPile.isHovered = true;
+        }
+
         if (hoverPileCard && this.isMouseClicked) {
             console.log('Pile click pile', hoverPile);
             console.log('Pile click card', hoverPileCard);
@@ -251,6 +255,10 @@ export class Game {
         this.clickCoordinates = null;
         this.scaledClickCoordinates = null;
         this.isMouseClicked = false;
+
+        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
+            pile.isHovered = false;
+        });
 
         this.buttons.forEach(button => {
             button.isHovered = false;
@@ -468,6 +476,20 @@ export class Game {
             this.pile4.renderConfig.y,
             this.pile4.renderConfig.scale
         );
+
+        // Draw a border around the pile if it's hovered
+        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
+            if (pile.isHovered) {
+                this.ctx.strokeStyle = 'white';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(
+                    pile.renderConfig.x,
+                    pile.renderConfig.y,
+                    pile.renderConfig.width * pile.renderConfig.scale,
+                    pile.renderConfig.height * pile.renderConfig.scale
+                );
+            }
+        });
     }
 
     public renderTimer(): void {

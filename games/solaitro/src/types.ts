@@ -163,6 +163,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
 export class Pile {
     cards: Card[];
     renderConfig: RenderConfig;
+    isHovered: boolean;
 
     constructor(pileName: string) {
         this.cards = [];
