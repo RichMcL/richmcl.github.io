@@ -27,7 +27,7 @@ export class Game {
     public pile3: Pile = new Pile('pile3');
     public pile4: Pile = new Pile('pile4');
 
-    public ruleNames: RuleNames[] = [RuleNames.klondike];
+    public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike];
 
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
@@ -421,6 +421,9 @@ export class Game {
         for (const rule of this.ruleNames) {
             const ruleInfo = RuleInfo[rule];
             this.printText(`- ${ruleInfo.name}`, x + 30, y);
+            y += 30;
+            this.printText(`  ${ruleInfo.description}`, x + 30, y, 15);
+            y += 40;
         }
     }
 
@@ -557,8 +560,8 @@ export class Game {
         }
     }
 
-    public printText(text: string, x: number, y: number): void {
-        this.ctx.font = '20px Balatro';
+    public printText(text: string, x: number, y: number, fontSize = 20): void {
+        this.ctx.font = `${fontSize}px Balatro`;
         this.ctx.fillStyle = 'white';
 
         // Set shadow properties

@@ -12,11 +12,13 @@ export interface Rule {
 
 export enum SingleRuleKey {
     oppositeColor = 'oppositeColor',
-    oneLower = 'oneLower'
+    oneLower = 'oneLower',
+    oneHigher = 'oneHigher'
 }
 
 export enum RuleNames {
-    klondike = 'klondike'
+    klondike = 'klondike',
+    reverseKlondike = 'reverseKlondike'
 }
 
 export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) => boolean } = {
@@ -43,14 +45,33 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
         }
 
         return false;
+    },
+
+    [SingleRuleKey.oneHigher]: (playerCard: Card, pileCard: Card) => {
+        if (CardNumericValue[playerCard.value] - CardNumericValue[pileCard.value] === 1) {
+            return true;
+        }
+
+        // Alows the pile to wrap
+        if (playerCard.value === CardValue.Two && pileCard.value === CardValue.Ace) {
+            return true;
+        }
+
+        return false;
     }
 };
 
 export const RuleInfo: { [key in RuleNames]: Rule } = {
     [RuleNames.klondike]: {
         name: 'Klondike',
-        description: 'Klondike rules',
+        description: 'Opp. color and one lower',
         rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneLower]
+    },
+
+    [RuleNames.reverseKlondike]: {
+        name: 'Reverse Klondike',
+        description: 'Opp. color and one higher',
+        rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneHigher]
     }
 };
 
