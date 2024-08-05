@@ -43,6 +43,8 @@ export class Game {
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
+    public score = 0;
+
     public buttons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
     public lastCardClicked: Card;
@@ -246,6 +248,8 @@ export class Game {
             });
 
             this.player.removeTopCard();
+
+            this.score += 10;
         }
 
         if (this.isDealNewRound) {
@@ -374,6 +378,7 @@ export class Game {
         this.renderPiles();
         this.renderDeckIndex();
         this.renderTimer();
+        this.renderScore();
         this.renderMousePosition();
         this.renderLastCardClicked();
         this.renderButtons();
@@ -546,10 +551,14 @@ export class Game {
         this.printText(`Time: ${minutes}:${seconds}.${tenths}`, 30, 40);
     }
 
+    public renderScore(): void {
+        this.printText(`Score: ${this.score}`, 30, 80);
+    }
+
     public renderMousePosition(): void {
         const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
-        this.printText(`Cursor: X ${x} | Y ${y}`, 30, 80);
+        this.printText(`Cursor: X ${x} | Y ${y}`, 30, 640);
     }
 
     public renderLastCardClicked(): void {

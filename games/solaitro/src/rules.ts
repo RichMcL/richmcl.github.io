@@ -40,7 +40,7 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
         }
 
         // Alows the pile to wrap
-        if (pileCard.value === CardValue.Ace && playerCard.value === CardValue.Two) {
+        if (pileCard.value === CardValue.Two && playerCard.value === CardValue.Ace) {
             return true;
         }
 
@@ -53,7 +53,7 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
         }
 
         // Alows the pile to wrap
-        if (playerCard.value === CardValue.Two && pileCard.value === CardValue.Ace) {
+        if (pileCard.value === CardValue.Ace && playerCard.value === CardValue.Two) {
             return true;
         }
 
