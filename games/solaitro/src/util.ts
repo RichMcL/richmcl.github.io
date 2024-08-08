@@ -53,3 +53,29 @@ export const buildAndShuffleDeck = (shuffle = false): Card[] => {
 
     return deck;
 };
+
+export const printText = (
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    x: number,
+    y: number,
+    fontSize = 20,
+    color = 'white'
+): void => {
+    ctx.font = `${fontSize}px Balatro`;
+    ctx.fillStyle = color;
+
+    // Set shadow properties
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // Shadow color
+    ctx.shadowBlur = 4; // Blur level
+    ctx.shadowOffsetX = 2; // Horizontal offset
+    ctx.shadowOffsetY = 2; // Vertical offset
+
+    ctx.fillText(text, x, y);
+
+    // Reset shadow properties to avoid affecting other drawings
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+};

@@ -5,12 +5,14 @@ import {
     CardValue,
     Coordindates,
     GameButton,
+    GameComponent,
     Pile,
     Player,
+    ScoreGraphic,
     Suit,
     ThemeButton
 } from './types';
-import { buildAndShuffleDeck } from './util';
+import { buildAndShuffleDeck, printText } from './util';
 
 export class Game {
     public canvas: HTMLCanvasElement;
@@ -28,6 +30,7 @@ export class Game {
     public pile4: Pile = new Pile('pile4');
 
     public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike];
+    public gameComponents: GameComponent[] = [];
 
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
@@ -149,6 +152,12 @@ export class Game {
     }
 
     public updateGameState() {
+        //remove all gameComponents with deleteMe set to true
+        this.gameComponents = this.gameComponents.filter(component => !component.deleteMe);
+
+        //update each gameComponent
+        this.gameComponents.forEach(component => component.update());
+
         // Update the game state logic
         let hoverButton: GameButton;
 
@@ -261,6 +270,8 @@ export class Game {
 
             this.score += 10;
             this.streak++;
+
+            this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 610, y: 300 }, 10));
         }
 
         if (this.isDealNewRound) {
@@ -418,6 +429,10 @@ export class Game {
         this.renderLastCardClicked();
         this.renderButtons();
         this.renderThemeButtons();
+
+        for (const component of this.gameComponents) {
+            component.render();
+        }
     }
 
     public renderTheme() {
@@ -453,16 +468,16 @@ export class Game {
         this.ctx.fillStyle = this.theme.base;
         this.ctx.fillRect(x + 250, 0, 3, 800);
 
-        this.printText('Rules', x + 30, 40);
+        printText(this.ctx, 'Rules', x + 30, 40);
 
         //iterate over the riles an print their descriptions
 
         let y = 80;
         for (const rule of this.ruleNames) {
             const ruleInfo = RuleInfo[rule];
-            this.printText(`- ${ruleInfo.name}`, x + 30, y);
+            printText(this.ctx, `- ${ruleInfo.name}`, x + 30, y);
             y += 30;
-            this.printText(`  ${ruleInfo.description}`, x + 30, y, 15);
+            printText(this.ctx, `  ${ruleInfo.description}`, x + 30, y, 15);
             y += 40;
         }
     }
@@ -472,7 +487,8 @@ export class Game {
             this.ctx.fillStyle = this.theme.base;
             this.ctx.fillRect(button.x, button.y, button.width, button.height);
 
-            this.printText(
+            printText(
+                this.ctx,
                 button.text,
                 button.x + button.padding / 2,
                 button.y + button.padding * 1.75
@@ -507,7 +523,7 @@ export class Game {
         const textWidth = this.ctx.measureText(text).width;
         const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        this.printText(`${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
+        printText(this.ctx, `${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
     }
 
     public renderPlayerCard(): void {
@@ -575,7 +591,8 @@ export class Game {
 
     public renderPileCounts(): void {
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            this.printText(
+            printText(
+                this.ctx,
                 `[ ${pile.cards.length} ]`,
                 pile.renderConfig.x + pile.renderConfig.width / 2,
                 pile.renderConfig.y + pile.renderConfig.height * pile.renderConfig.scale + 30
@@ -594,48 +611,29 @@ export class Game {
             .toString()
             .padStart(1, '0');
 
-        this.printText(`Time: ${minutes}:${seconds}.${tenths}`, 30, 40);
+        printText(this.ctx, `Time: ${minutes}:${seconds}.${tenths}`, 30, 40);
     }
 
     public renderScore(): void {
-        this.printText(`Score: ${this.score}`, 30, 80);
+        printText(this.ctx, `Score: ${this.score}`, 30, 80);
     }
 
     public renderStreak(): void {
-        this.printText(`Streak: ${this.streak}`, 30, 120);
+        printText(this.ctx, `Streak: ${this.streak}`, 30, 120);
     }
 
     public renderMousePosition(): void {
         const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
-        this.printText(`Cursor: X ${x} | Y ${y}`, 30, 640);
+        printText(this.ctx, `Cursor: X ${x} | Y ${y}`, 30, 640);
     }
 
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
-            this.printText(`Card: ${card.value}`, 30, 120);
+            printText(this.ctx, `Card: ${card.value}`, 30, 120);
             this.drawIcon(card.suit, 120, 103);
         }
-    }
-
-    public printText(text: string, x: number, y: number, fontSize = 20): void {
-        this.ctx.font = `${fontSize}px Balatro`;
-        this.ctx.fillStyle = 'white';
-
-        // Set shadow properties
-        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // Shadow color
-        this.ctx.shadowBlur = 4; // Blur level
-        this.ctx.shadowOffsetX = 2; // Horizontal offset
-        this.ctx.shadowOffsetY = 2; // Vertical offset
-
-        this.ctx.fillText(text, x, y);
-
-        // Reset shadow properties to avoid affecting other drawings
-        this.ctx.shadowColor = 'transparent';
-        this.ctx.shadowBlur = 0;
-        this.ctx.shadowOffsetX = 0;
-        this.ctx.shadowOffsetY = 0;
     }
 
     public pauseGame() {
