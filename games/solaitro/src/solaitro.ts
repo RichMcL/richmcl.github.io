@@ -1,4 +1,7 @@
-import { doesAnyRulePass, Rule, RuleInfo, RuleNames } from './rules';
+import { Pile } from './pile';
+import { Player } from './player';
+import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
+import { ScoreGraphic } from './score-graphic';
 import { Theme, Themes } from './theme';
 import {
     Card,
@@ -6,9 +9,6 @@ import {
     Coordindates,
     GameButton,
     GameComponent,
-    Pile,
-    Player,
-    ScoreGraphic,
     Suit,
     ThemeButton
 } from './types';
