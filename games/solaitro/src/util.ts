@@ -54,6 +54,103 @@ export const buildAndShuffleDeck = (shuffle = false): Card[] => {
     return deck;
 };
 
+export const drawCard = (
+    ctx: CanvasRenderingContext2D,
+    cardFaceSpriteSheet: HTMLImageElement,
+    cardBackSpriteSheet: HTMLImageElement,
+    card: Card,
+    x: number,
+    y: number,
+    cardScale = 1
+): void => {
+    const cardWidth = 71; // Width of a single card in the sprite sheet
+    const cardHeight = 95; // Height of a single card in the sprite sheet
+
+    let sy = 0;
+    let sx = 0;
+
+    switch (card.suit) {
+        case Suit.Hearts:
+            sy = cardHeight * 0;
+            break;
+        case Suit.Clubs:
+            sy = cardHeight * 1;
+            break;
+        case Suit.Diamonds:
+            sy = cardHeight * 2;
+            break;
+        case Suit.Spades:
+            sy = cardHeight * 3;
+            break;
+    }
+
+    switch (card.value) {
+        case CardValue.Two:
+            sx = cardWidth * 0;
+            break;
+        case CardValue.Three:
+            sx = cardWidth * 1;
+            break;
+        case CardValue.Four:
+            sx = cardWidth * 2;
+            break;
+        case CardValue.Five:
+            sx = cardWidth * 3;
+            break;
+        case CardValue.Six:
+            sx = cardWidth * 4;
+            break;
+        case CardValue.Seven:
+            sx = cardWidth * 5;
+            break;
+        case CardValue.Eight:
+            sx = cardWidth * 6;
+            break;
+        case CardValue.Nine:
+            sx = cardWidth * 7;
+            break;
+        case CardValue.Ten:
+            sx = cardWidth * 8;
+            break;
+        case CardValue.Jack:
+            sx = cardWidth * 9;
+            break;
+        case CardValue.Queen:
+            sx = cardWidth * 10;
+            break;
+        case CardValue.King:
+            sx = cardWidth * 11;
+            break;
+        case CardValue.Ace:
+            sx = cardWidth * 12;
+            break;
+    }
+
+    ctx.drawImage(
+        cardBackSpriteSheet,
+        71,
+        0,
+        cardWidth,
+        cardHeight,
+        x,
+        y,
+        cardWidth * cardScale,
+        cardHeight * cardScale
+    );
+
+    ctx.drawImage(
+        cardFaceSpriteSheet,
+        sx,
+        sy,
+        cardWidth,
+        cardHeight,
+        x,
+        y,
+        cardWidth * cardScale,
+        cardHeight * cardScale
+    );
+};
+
 export const printText = (
     ctx: CanvasRenderingContext2D,
     text: string,

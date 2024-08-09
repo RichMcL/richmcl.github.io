@@ -1,4 +1,5 @@
-import { Card, RenderConfig } from './types';
+import { Card, Coordinates, GameComponent, RenderConfig } from './types';
+import { drawCard } from './util';
 
 export const PilesRenderConfig: { [key: string]: RenderConfig } = {
     pile1: {
@@ -50,14 +51,45 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
     }
 };
 
-export class Pile {
+export class Pile extends GameComponent {
     cards: Card[];
     renderConfig: RenderConfig;
-    isHovered: boolean;
 
-    constructor(pileName: string) {
+    constructor(
+        ctx: CanvasRenderingContext2D,
+        coordinates: Coordinates,
+        private cardFaceSpriteSheet: HTMLImageElement,
+        private cardBackSpriteSheet: HTMLImageElement,
+        private pileName: string
+    ) {
+        super(ctx, coordinates);
         this.cards = [];
         this.renderConfig = PilesRenderConfig[pileName];
+    }
+
+    update(): void {}
+
+    render(): void {
+        drawCard(
+            this.ctx,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
+            this.getTopCard(),
+            this.renderConfig.coordinates.x,
+            this.renderConfig.coordinates.y,
+            this.renderConfig.scale
+        );
+
+        if (this.isHovered) {
+            this.ctx.strokeStyle = 'white';
+            this.ctx.lineWidth = 3;
+            this.ctx.strokeRect(
+                this.renderConfig.coordinates.x,
+                this.renderConfig.coordinates.y,
+                this.renderConfig.size.width * this.renderConfig.scale,
+                this.renderConfig.size.height * this.renderConfig.scale
+            );
+        }
     }
 
     getTopCard(): Card {

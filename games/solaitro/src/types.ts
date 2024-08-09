@@ -94,6 +94,7 @@ export abstract class GameComponent {
     render(): void {}
 
     deleteMe = false;
+    isHovered = false;
 
     constructor(public ctx: CanvasRenderingContext2D, public coordinates: Coordinates) {}
 }

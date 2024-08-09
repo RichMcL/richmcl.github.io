@@ -1,4 +1,4 @@
-import { Pile } from './pile';
+import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
 import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
 import { ScoreGraphic } from './score-graphic';
@@ -24,10 +24,10 @@ export class Game {
 
     public player: Player = new Player();
 
-    public pile1: Pile = new Pile('pile1');
-    public pile2: Pile = new Pile('pile2');
-    public pile3: Pile = new Pile('pile3');
-    public pile4: Pile = new Pile('pile4');
+    public pile1: Pile;
+    public pile2: Pile;
+    public pile3: Pile;
+    public pile4: Pile;
 
     public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike];
     public gameComponents: GameComponent[] = [];
@@ -589,49 +589,8 @@ export class Game {
     }
 
     public renderPiles(): void {
-        const pile1Card = this.pile1.getTopCard();
-        const pile2Card = this.pile2.getTopCard();
-        const pile3Card = this.pile3.getTopCard();
-        const pile4Card = this.pile4.getTopCard();
-
-        this.drawCard(
-            pile1Card,
-            this.pile1.renderConfig.coordinates.x,
-            this.pile1.renderConfig.coordinates.y,
-            this.pile1.renderConfig.scale
-        );
-
-        this.drawCard(
-            pile2Card,
-            this.pile2.renderConfig.coordinates.x,
-            this.pile2.renderConfig.coordinates.y,
-            this.pile2.renderConfig.scale
-        );
-        this.drawCard(
-            pile3Card,
-            this.pile3.renderConfig.coordinates.x,
-            this.pile3.renderConfig.coordinates.y,
-            this.pile3.renderConfig.scale
-        );
-        this.drawCard(
-            pile4Card,
-            this.pile4.renderConfig.coordinates.x,
-            this.pile4.renderConfig.coordinates.y,
-            this.pile4.renderConfig.scale
-        );
-
-        // Draw a border around the pile if it's hovered
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            if (pile.isHovered) {
-                this.ctx.strokeStyle = 'white';
-                this.ctx.lineWidth = 3;
-                this.ctx.strokeRect(
-                    pile.renderConfig.coordinates.x,
-                    pile.renderConfig.coordinates.y,
-                    pile.renderConfig.size.width * pile.renderConfig.scale,
-                    pile.renderConfig.size.height * pile.renderConfig.scale
-                );
-            }
+            pile.render();
         });
     }
 
@@ -691,6 +650,35 @@ export class Game {
     /* LOGIC FUNCTIONS */
 
     public initializePiles(): void {
+        this.pile1 = new Pile(
+            this.ctx,
+            PilesRenderConfig.pile1.coordinates,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
+            'pile1'
+        );
+        this.pile2 = new Pile(
+            this.ctx,
+            PilesRenderConfig.pile2.coordinates,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
+            'pile2'
+        );
+        this.pile3 = new Pile(
+            this.ctx,
+            PilesRenderConfig.pile3.coordinates,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
+            'pile3'
+        );
+        this.pile4 = new Pile(
+            this.ctx,
+            PilesRenderConfig.pile4.coordinates,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
+            'pile4'
+        );
+
         // Pop the first 4 cards from the deck and add them to the piles
         this.pile1.pushCard(this.player.hand.pop());
         this.pile2.pushCard(this.player.hand.pop());
