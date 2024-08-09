@@ -6,6 +6,11 @@ export interface Coordindates {
     y: number;
 }
 
+export interface Size {
+    width: number;
+    height: number;
+}
+
 export enum Suit {
     Spades = 'Spades',
     Clubs = 'Clubs',
@@ -64,10 +69,11 @@ export interface GameButton {
     id: string;
     text: string;
     fillColor: string;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    /**
+     * Coordinates of the top left corner of the button
+     */
+    coordinates: Coordindates;
+    size: Size;
     padding: number;
     isHovered?: boolean;
 }
@@ -89,6 +95,7 @@ export interface RenderConfig {
 export abstract class GameComponent {
     update(): void {}
     render(): void {}
+
     deleteMe = false;
 
     constructor(public ctx: CanvasRenderingContext2D, public coordinates: Coordindates) {}

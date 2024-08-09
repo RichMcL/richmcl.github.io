@@ -164,10 +164,10 @@ export class Game {
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(button => {
             if (
-                this.scaledMouseCoordinates?.x >= button.x &&
-                this.scaledMouseCoordinates?.x <= button.x + button.width &&
-                this.scaledMouseCoordinates?.y >= button.y &&
-                this.scaledMouseCoordinates?.y <= button.y + button.height
+                this.scaledMouseCoordinates?.x >= button.coordinates.x &&
+                this.scaledMouseCoordinates?.x <= button.coordinates.x + button.size.width &&
+                this.scaledMouseCoordinates?.y >= button.coordinates.y &&
+                this.scaledMouseCoordinates?.y <= button.coordinates.y + button.size.height
             ) {
                 hoverButton = button;
                 hoverButton.isHovered = true;
@@ -200,10 +200,10 @@ export class Game {
 
         this.themeButtons.forEach(button => {
             if (
-                this.scaledMouseCoordinates?.x >= button.x &&
-                this.scaledMouseCoordinates?.x <= button.x + button.width &&
-                this.scaledMouseCoordinates?.y >= button.y &&
-                this.scaledMouseCoordinates?.y <= button.y + button.height
+                this.scaledMouseCoordinates?.x >= button.coordinates.x &&
+                this.scaledMouseCoordinates?.x <= button.coordinates.x + button.size.width &&
+                this.scaledMouseCoordinates?.y >= button.coordinates.y &&
+                this.scaledMouseCoordinates?.y <= button.coordinates.y + button.size.height
             ) {
                 hoverThemeButton = button;
                 hoverThemeButton.isHovered = true;
@@ -314,10 +314,14 @@ export class Game {
             text,
             padding,
             fillColor: this.theme.base,
-            x,
-            y,
-            width: buttonWidth,
-            height: buttonHeight
+            coordinates: {
+                x,
+                y
+            },
+            size: {
+                width: buttonWidth,
+                height: buttonHeight
+            }
         });
     }
 
@@ -336,10 +340,14 @@ export class Game {
             text,
             padding,
             fillColor: this.theme.base,
-            x,
-            y,
-            width: buttonWidth,
-            height: buttonHeight
+            coordinates: {
+                x,
+                y
+            },
+            size: {
+                width: buttonWidth,
+                height: buttonHeight
+            }
         });
     }
 
@@ -358,10 +366,14 @@ export class Game {
             text,
             padding,
             fillColor: this.theme.base,
-            x,
-            y,
-            width: buttonWidth,
-            height: buttonHeight
+            coordinates: {
+                x,
+                y
+            },
+            size: {
+                width: buttonWidth,
+                height: buttonHeight
+            }
         });
     }
 
@@ -380,10 +392,14 @@ export class Game {
             text,
             padding,
             fillColor: this.theme.base,
-            x,
-            y,
-            width: buttonWidth,
-            height: buttonHeight
+            coordinates: {
+                x,
+                y
+            },
+            size: {
+                width: buttonWidth,
+                height: buttonHeight
+            }
         });
     }
 
@@ -402,10 +418,14 @@ export class Game {
                 theme: Themes[theme],
                 padding,
                 fillColor: Themes[theme].base,
-                x,
-                y,
-                width: buttonWidth,
-                height: buttonHeight
+                coordinates: {
+                    x,
+                    y
+                },
+                size: {
+                    width: buttonWidth,
+                    height: buttonHeight
+                }
             });
 
             i++;
@@ -485,20 +505,30 @@ export class Game {
     public renderButtons() {
         this.buttons.forEach(button => {
             this.ctx.fillStyle = this.theme.base;
-            this.ctx.fillRect(button.x, button.y, button.width, button.height);
+            this.ctx.fillRect(
+                button.coordinates.x,
+                button.coordinates.y,
+                button.size.width,
+                button.size.height
+            );
 
             printText(
                 this.ctx,
                 button.text,
-                button.x + button.padding / 2,
-                button.y + button.padding * 1.75
+                button.coordinates.x + button.padding / 2,
+                button.coordinates.y + button.padding * 1.75
             );
 
             // Draw a border around the button if it's hovered
             if (button.isHovered) {
                 this.ctx.strokeStyle = 'white';
                 this.ctx.lineWidth = 2;
-                this.ctx.strokeRect(button.x, button.y, button.width, button.height);
+                this.ctx.strokeRect(
+                    button.coordinates.x,
+                    button.coordinates.y,
+                    button.size.width,
+                    button.size.height
+                );
             }
         });
     }
@@ -506,13 +536,23 @@ export class Game {
     public renderThemeButtons() {
         this.themeButtons.forEach(button => {
             this.ctx.fillStyle = button.fillColor;
-            this.ctx.fillRect(button.x, button.y, button.width, button.height);
+            this.ctx.fillRect(
+                button.coordinates.x,
+                button.coordinates.y,
+                button.size.width,
+                button.size.height
+            );
 
             // Draw a border around the button if it's hovered
             if (button.isHovered) {
                 this.ctx.strokeStyle = 'white';
                 this.ctx.lineWidth = 2;
-                this.ctx.strokeRect(button.x, button.y, button.width, button.height);
+                this.ctx.strokeRect(
+                    button.coordinates.x,
+                    button.coordinates.y,
+                    button.size.width,
+                    button.size.height
+                );
             }
         });
     }
@@ -631,8 +671,8 @@ export class Game {
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
-            printText(this.ctx, `Card: ${card.value}`, 30, 120);
-            this.drawIcon(card.suit, 120, 103);
+            printText(this.ctx, `Card: ${card.value}`, 30, 160);
+            this.drawIcon(card.suit, 120, 143);
         }
     }
 
