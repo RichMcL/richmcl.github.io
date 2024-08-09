@@ -6,7 +6,7 @@ import { Theme, Themes } from './theme';
 import {
     Card,
     CardValue,
-    Coordindates,
+    Coordinates,
     GameButton,
     GameComponent,
     Suit,
@@ -35,11 +35,11 @@ export class Game {
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
     public iconSpriteSheet: HTMLImageElement;
-    public clickCoordinates: Coordindates = { x: 0, y: 0 };
-    public scaledClickCoordinates: Coordindates = { x: 0, y: 0 };
+    public clickCoordinates: Coordinates = { x: 0, y: 0 };
+    public scaledClickCoordinates: Coordinates = { x: 0, y: 0 };
 
-    public mouseCoordinates: Coordindates = { x: 0, y: 0 };
-    public scaledMouseCoordinates: Coordindates = { x: 0, y: 0 };
+    public mouseCoordinates: Coordinates = { x: 0, y: 0 };
+    public scaledMouseCoordinates: Coordinates = { x: 0, y: 0 };
     public isMouseClicked: boolean = false;
 
     public gameRunning: boolean = true;
@@ -217,14 +217,14 @@ export class Game {
         let hoverCard: Card;
 
         if (
-            this.scaledMouseCoordinates?.x >= this.player.renderConfig.x &&
+            this.scaledMouseCoordinates?.x >= this.player.renderConfig.coordinates.x &&
             this.scaledMouseCoordinates?.x <=
-                this.player.renderConfig.x +
-                    this.player.renderConfig.width * this.player.renderConfig.scale &&
-            this.scaledMouseCoordinates?.y >= this.player.renderConfig.y &&
+                this.player.renderConfig.coordinates.x +
+                    this.player.renderConfig.size.width * this.player.renderConfig.scale &&
+            this.scaledMouseCoordinates?.y >= this.player.renderConfig.coordinates.y &&
             this.scaledMouseCoordinates?.y <=
-                this.player.renderConfig.y +
-                    this.player.renderConfig.height * this.player.renderConfig.scale
+                this.player.renderConfig.coordinates.y +
+                    this.player.renderConfig.size.height * this.player.renderConfig.scale
         ) {
             hoverCard = this.player.getCurrentCard();
         }
@@ -239,12 +239,14 @@ export class Game {
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             const card = pile.getTopCard();
             if (
-                this.scaledMouseCoordinates?.x >= pile.renderConfig.x &&
+                this.scaledMouseCoordinates?.x >= pile.renderConfig.coordinates.x &&
                 this.scaledMouseCoordinates?.x <=
-                    pile.renderConfig.x + pile.renderConfig.width * pile.renderConfig.scale &&
-                this.scaledMouseCoordinates?.y >= pile.renderConfig.y &&
+                    pile.renderConfig.coordinates.x +
+                        pile.renderConfig.size.width * pile.renderConfig.scale &&
+                this.scaledMouseCoordinates?.y >= pile.renderConfig.coordinates.y &&
                 this.scaledMouseCoordinates?.y <=
-                    pile.renderConfig.y + pile.renderConfig.height * pile.renderConfig.scale
+                    pile.renderConfig.coordinates.y +
+                        pile.renderConfig.size.height * pile.renderConfig.scale
             ) {
                 if (doesAnyRulePass(this.ruleNames, this.player.getCurrentCard(), card)) {
                     hoverPile = pile;
@@ -571,13 +573,17 @@ export class Game {
 
         // Render blank cards behind the player card
         for (let i = 3; i > 0; i--) {
-            this.drawCardBack(renderConfig.x + 5 * i, renderConfig.y + 5 * i, renderConfig.scale);
+            this.drawCardBack(
+                renderConfig.coordinates.x + 5 * i,
+                renderConfig.coordinates.y + 5 * i,
+                renderConfig.scale
+            );
         }
 
         this.drawCard(
             this.player.getCurrentCard(),
-            renderConfig.x,
-            renderConfig.y,
+            renderConfig.coordinates.x,
+            renderConfig.coordinates.y,
             renderConfig.scale
         );
     }
@@ -590,27 +596,27 @@ export class Game {
 
         this.drawCard(
             pile1Card,
-            this.pile1.renderConfig.x,
-            this.pile1.renderConfig.y,
+            this.pile1.renderConfig.coordinates.x,
+            this.pile1.renderConfig.coordinates.y,
             this.pile1.renderConfig.scale
         );
 
         this.drawCard(
             pile2Card,
-            this.pile2.renderConfig.x,
-            this.pile2.renderConfig.y,
+            this.pile2.renderConfig.coordinates.x,
+            this.pile2.renderConfig.coordinates.y,
             this.pile2.renderConfig.scale
         );
         this.drawCard(
             pile3Card,
-            this.pile3.renderConfig.x,
-            this.pile3.renderConfig.y,
+            this.pile3.renderConfig.coordinates.x,
+            this.pile3.renderConfig.coordinates.y,
             this.pile3.renderConfig.scale
         );
         this.drawCard(
             pile4Card,
-            this.pile4.renderConfig.x,
-            this.pile4.renderConfig.y,
+            this.pile4.renderConfig.coordinates.x,
+            this.pile4.renderConfig.coordinates.y,
             this.pile4.renderConfig.scale
         );
 
@@ -620,10 +626,10 @@ export class Game {
                 this.ctx.strokeStyle = 'white';
                 this.ctx.lineWidth = 3;
                 this.ctx.strokeRect(
-                    pile.renderConfig.x,
-                    pile.renderConfig.y,
-                    pile.renderConfig.width * pile.renderConfig.scale,
-                    pile.renderConfig.height * pile.renderConfig.scale
+                    pile.renderConfig.coordinates.x,
+                    pile.renderConfig.coordinates.y,
+                    pile.renderConfig.size.width * pile.renderConfig.scale,
+                    pile.renderConfig.size.height * pile.renderConfig.scale
                 );
             }
         });
@@ -634,8 +640,10 @@ export class Game {
             printText(
                 this.ctx,
                 `[ ${pile.cards.length} ]`,
-                pile.renderConfig.x + pile.renderConfig.width / 2,
-                pile.renderConfig.y + pile.renderConfig.height * pile.renderConfig.scale + 30
+                pile.renderConfig.coordinates.x + pile.renderConfig.size.width / 2,
+                pile.renderConfig.coordinates.y +
+                    pile.renderConfig.size.height * pile.renderConfig.scale +
+                    30
             );
         });
     }

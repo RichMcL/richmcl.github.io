@@ -6,10 +6,14 @@ export class Player {
     handIndex: number;
 
     renderConfig: RenderConfig = {
-        x: 585,
-        y: 460,
-        width: 71,
-        height: 95,
+        coordinates: {
+            x: 585,
+            y: 460
+        },
+        size: {
+            width: 71,
+            height: 95
+        },
         scale: 1.5
     };
 

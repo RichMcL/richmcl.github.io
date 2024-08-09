@@ -1,11 +1,11 @@
-import { Coordindates, GameComponent } from './types';
+import { Coordinates, GameComponent } from './types';
 import { printText } from './util';
 
 export class ScoreGraphic extends GameComponent {
     public ttl: number = 60;
     public color = 'white';
 
-    constructor(ctx: CanvasRenderingContext2D, coordinates: Coordindates, public score: number) {
+    constructor(ctx: CanvasRenderingContext2D, coordinates: Coordinates, public score: number) {
         super(ctx, coordinates);
     }
 

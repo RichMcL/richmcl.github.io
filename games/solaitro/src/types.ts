@@ -1,7 +1,6 @@
 import { Theme } from './theme';
-import { printText } from './util';
 
-export interface Coordindates {
+export interface Coordinates {
     x: number;
     y: number;
 }
@@ -72,7 +71,7 @@ export interface GameButton {
     /**
      * Coordinates of the top left corner of the button
      */
-    coordinates: Coordindates;
+    coordinates: Coordinates;
     size: Size;
     padding: number;
     isHovered?: boolean;
@@ -85,10 +84,8 @@ export interface ThemeButton extends GameButton {
 }
 
 export interface RenderConfig {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    coordinates: Coordinates;
+    size: Size;
     scale: number;
 }
 
@@ -98,5 +95,5 @@ export abstract class GameComponent {
 
     deleteMe = false;
 
-    constructor(public ctx: CanvasRenderingContext2D, public coordinates: Coordindates) {}
+    constructor(public ctx: CanvasRenderingContext2D, public coordinates: Coordinates) {}
 }

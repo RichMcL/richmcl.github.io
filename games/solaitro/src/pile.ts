@@ -2,34 +2,50 @@ import { Card, RenderConfig } from './types';
 
 export const PilesRenderConfig: { [key: string]: RenderConfig } = {
     pile1: {
-        x: 366.5,
-        y: 70,
-        width: 71,
-        height: 95,
+        coordinates: {
+            x: 366.5,
+            y: 70
+        },
+        size: {
+            width: 71,
+            height: 95
+        },
         scale: 1.5
     },
 
     pile2: {
-        x: 513,
-        y: 70,
-        width: 71,
-        height: 95,
+        coordinates: {
+            x: 513,
+            y: 70
+        },
+        size: {
+            width: 71,
+            height: 95
+        },
         scale: 1.5
     },
 
     pile3: {
-        x: 659.5,
-        y: 70,
-        width: 71,
-        height: 95,
+        coordinates: {
+            x: 659.5,
+            y: 70
+        },
+        size: {
+            width: 71,
+            height: 95
+        },
         scale: 1.5
     },
 
     pile4: {
-        x: 806,
-        y: 70,
-        width: 71,
-        height: 95,
+        coordinates: {
+            x: 806,
+            y: 70
+        },
+        size: {
+            width: 71,
+            height: 95
+        },
         scale: 1.5
     }
 };
