@@ -1,12 +1,15 @@
 import {
+    createCloseDialogButton,
     createDealButton,
     createFreeButtton,
     createHitButton,
+    createOpenDialogButton,
     createReloadButton,
     createThemeButtons,
     GameButton,
     ThemeButton
 } from './button';
+import { DefaultDialogRenderConfig, Dialog } from './dialog';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
 import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
@@ -59,6 +62,9 @@ export class Game {
 
     public buttons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
+    public dialog: Dialog;
+    public dialogCloseButton: GameButton;
+
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
 
@@ -137,7 +143,11 @@ export class Game {
         this.buttons.push(createFreeButtton(this.ctx, this.theme));
         this.buttons.push(createDealButton(this.ctx, this.theme));
         this.buttons.push(createHitButton(this.ctx, this.theme));
+        this.buttons.push(createOpenDialogButton(this.ctx, this.theme));
         this.themeButtons = createThemeButtons(this.ctx);
+
+        this.dialog = new Dialog(this.ctx, DefaultDialogRenderConfig.coordinates);
+        this.dialogCloseButton = createCloseDialogButton(this.ctx, this.theme);
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -183,6 +193,11 @@ export class Game {
             }
         });
 
+        if (this.dialogCloseButton.isHoveredOver(this.scaledMouseCoordinates)) {
+            hoverButton = this.dialogCloseButton;
+            this.dialogCloseButton.isHovered = true;
+        }
+
         if (hoverButton && this.isMouseClicked) {
             switch (hoverButton.id) {
                 case 'reload':
@@ -201,6 +216,12 @@ export class Game {
                     break;
                 case 'hit':
                     this.hitCard();
+                    break;
+                case 'dialog-open':
+                    this.dialog.visible = true;
+                    break;
+                case 'dialog-close':
+                    this.dialog.visible = false;
                     break;
             }
         }
@@ -290,6 +311,8 @@ export class Game {
         this.themeButtons.forEach(button => {
             button.reset();
         });
+
+        this.dialogCloseButton.reset();
     }
 
     public render() {
@@ -316,6 +339,11 @@ export class Game {
 
         for (const component of this.gameComponents) {
             component.render();
+        }
+
+        if (this.dialog.visible) {
+            this.dialog.render();
+            this.dialogCloseButton.render();
         }
     }
 

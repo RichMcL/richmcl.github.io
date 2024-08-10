@@ -188,6 +188,48 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
     );
 };
 
+export const createOpenDialogButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'OPEN';
+    const padding = 20; // Padding for the button
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding * 2;
+    const buttonHeight = 50;
+    const x = 1100;
+    const y = 740;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'dialog-open',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createCloseDialogButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'CLOSE';
+    const padding = 20; // Padding for the button
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding * 2;
+    const buttonHeight = 50;
+    const x = 1000;
+    const y = 570;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'dialog-close',
+        text,
+        padding,
+        theme
+    );
+};
+
 export const createThemeButtons = (ctx: CanvasRenderingContext2D): ThemeButton[] => {
     const themeButtons: ThemeButton[] = [];
     let i = 0;
