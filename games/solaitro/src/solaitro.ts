@@ -168,6 +168,10 @@ export class Game {
         //update each gameComponent
         this.gameComponents.forEach(component => component.update());
 
+        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
+            pile.update();
+        });
+
         // Update the game state logic
         let hoverButton: GameButton;
 
