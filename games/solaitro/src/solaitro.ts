@@ -1,17 +1,10 @@
+import { GameButton, ThemeButton } from './button';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
 import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Theme, Themes } from './theme';
-import {
-    Card,
-    CardValue,
-    Coordinates,
-    GameButton,
-    GameComponent,
-    Suit,
-    ThemeButton
-} from './types';
+import { Card, CardValue, Coordinates, GameComponent, Suit } from './types';
 import {
     buildAndShuffleDeck,
     drawCard,
@@ -122,9 +115,6 @@ export class Game {
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
 
-        this.player = new Player(this.ctx, this.cardFaceSpriteSheet, this.cardBackSpriteSheet);
-
-        this.initializePiles();
         this.isDealNewRound = false;
 
         this.initializeGameObjects();
@@ -132,6 +122,9 @@ export class Game {
     }
 
     public initializeGameObjects(): void {
+        this.player = new Player(this.ctx, this.cardFaceSpriteSheet, this.cardBackSpriteSheet);
+
+        this.initializePiles();
         this.createFreeButton();
         this.createReloadButton();
         this.createDealButton();
@@ -320,20 +313,17 @@ export class Game {
         const x = 30;
         const y = 730;
 
-        this.buttons.push({
-            id: 'reload',
+        const reloadButton = new GameButton(
+            this.ctx,
+            { x, y },
+            { width: buttonWidth, height: buttonHeight },
+            'reload',
             text,
             padding,
-            fillColor: this.theme.base,
-            coordinates: {
-                x,
-                y
-            },
-            size: {
-                width: buttonWidth,
-                height: buttonHeight
-            }
-        });
+            this.theme.base
+        );
+
+        this.buttons.push(reloadButton);
     }
 
     public createFreeButton(): void {
@@ -346,20 +336,17 @@ export class Game {
         const x = 1100;
         const y = 670;
 
-        this.buttons.push({
-            id: 'free',
+        const freeButton = new GameButton(
+            this.ctx,
+            { x, y },
+            { width: buttonWidth, height: buttonHeight },
+            'free',
             text,
             padding,
-            fillColor: this.theme.base,
-            coordinates: {
-                x,
-                y
-            },
-            size: {
-                width: buttonWidth,
-                height: buttonHeight
-            }
-        });
+            this.theme.base
+        );
+
+        this.buttons.push(freeButton);
     }
 
     public createDealButton(): void {
@@ -372,20 +359,16 @@ export class Game {
         const x = 30;
         const y = 670;
 
-        this.buttons.push({
-            id: 'deal',
+        const dealButton = new GameButton(
+            this.ctx,
+            { x, y },
+            { width: buttonWidth, height: buttonHeight },
+            'deal',
             text,
             padding,
-            fillColor: this.theme.base,
-            coordinates: {
-                x,
-                y
-            },
-            size: {
-                width: buttonWidth,
-                height: buttonHeight
-            }
-        });
+            this.theme.base
+        );
+        this.buttons.push(dealButton);
     }
 
     public createHitButton(): void {
@@ -398,20 +381,17 @@ export class Game {
         const x = 610;
         const y = 390;
 
-        this.buttons.push({
-            id: 'hit',
+        const hitButton = new GameButton(
+            this.ctx,
+            { x, y },
+            { width: buttonWidth, height: buttonHeight },
+            'hit',
             text,
             padding,
-            fillColor: this.theme.base,
-            coordinates: {
-                x,
-                y
-            },
-            size: {
-                width: buttonWidth,
-                height: buttonHeight
-            }
-        });
+            this.theme.base
+        );
+
+        this.buttons.push(hitButton);
     }
 
     public createThemeButtons(): void {
@@ -423,21 +403,16 @@ export class Game {
             const x = 400 + i * (buttonWidth + padding);
             const y = 700;
 
-            this.themeButtons.push({
-                id: 'theme',
-                text: '',
-                theme: Themes[theme],
+            const themeButton = new ThemeButton(
+                this.ctx,
+                { x, y },
+                { width: buttonWidth, height: buttonHeight },
                 padding,
-                fillColor: Themes[theme].base,
-                coordinates: {
-                    x,
-                    y
-                },
-                size: {
-                    width: buttonWidth,
-                    height: buttonHeight
-                }
-            });
+                Themes[theme].base,
+                Themes[theme]
+            );
+
+            this.themeButtons.push(themeButton);
 
             i++;
         }

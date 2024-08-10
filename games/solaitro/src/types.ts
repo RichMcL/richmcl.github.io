@@ -64,25 +64,6 @@ export interface Card {
 export const blackSuits = [Suit.Spades, Suit.Clubs];
 export const redSuits = [Suit.Diamonds, Suit.Hearts];
 
-export interface GameButton {
-    id: string;
-    text: string;
-    fillColor: string;
-    /**
-     * Coordinates of the top left corner of the button
-     */
-    coordinates: Coordinates;
-    size: Size;
-    padding: number;
-    isHovered?: boolean;
-}
-
-export interface ThemeButton extends GameButton {
-    id: 'theme';
-    text: '';
-    theme: Theme;
-}
-
 export interface RenderConfig {
     coordinates: Coordinates;
     size: Size;
