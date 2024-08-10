@@ -173,12 +173,7 @@ export class Game {
 
         //loop through objects and check if click is within the boundaries
         this.buttons.forEach(button => {
-            if (
-                this.scaledMouseCoordinates?.x >= button.coordinates.x &&
-                this.scaledMouseCoordinates?.x <= button.coordinates.x + button.size.width &&
-                this.scaledMouseCoordinates?.y >= button.coordinates.y &&
-                this.scaledMouseCoordinates?.y <= button.coordinates.y + button.size.height
-            ) {
+            if (button.isHoveredOver(this.scaledMouseCoordinates)) {
                 hoverButton = button;
                 hoverButton.isHovered = true;
             }
@@ -209,12 +204,7 @@ export class Game {
         let hoverThemeButton: ThemeButton;
 
         this.themeButtons.forEach(button => {
-            if (
-                this.scaledMouseCoordinates?.x >= button.coordinates.x &&
-                this.scaledMouseCoordinates?.x <= button.coordinates.x + button.size.width &&
-                this.scaledMouseCoordinates?.y >= button.coordinates.y &&
-                this.scaledMouseCoordinates?.y <= button.coordinates.y + button.size.height
-            ) {
+            if (button.isHoveredOver(this.scaledMouseCoordinates)) {
                 hoverThemeButton = button;
                 hoverThemeButton.isHovered = true;
             }
@@ -231,16 +221,7 @@ export class Game {
 
         let hoverCard: Card;
 
-        if (
-            this.scaledMouseCoordinates?.x >= this.player.renderConfig.coordinates.x &&
-            this.scaledMouseCoordinates?.x <=
-                this.player.renderConfig.coordinates.x +
-                    this.player.renderConfig.size.width * this.player.renderConfig.scale &&
-            this.scaledMouseCoordinates?.y >= this.player.renderConfig.coordinates.y &&
-            this.scaledMouseCoordinates?.y <=
-                this.player.renderConfig.coordinates.y +
-                    this.player.renderConfig.size.height * this.player.renderConfig.scale
-        ) {
+        if (this.player.isHoveredOver(this.scaledMouseCoordinates)) {
             hoverCard = this.player.getCurrentCard();
         }
 
@@ -253,16 +234,7 @@ export class Game {
         let hoverPileCard: Card;
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             const card = pile.getTopCard();
-            if (
-                this.scaledMouseCoordinates?.x >= pile.renderConfig.coordinates.x &&
-                this.scaledMouseCoordinates?.x <=
-                    pile.renderConfig.coordinates.x +
-                        pile.renderConfig.size.width * pile.renderConfig.scale &&
-                this.scaledMouseCoordinates?.y >= pile.renderConfig.coordinates.y &&
-                this.scaledMouseCoordinates?.y <=
-                    pile.renderConfig.coordinates.y +
-                        pile.renderConfig.size.height * pile.renderConfig.scale
-            ) {
+            if (pile.isHoveredOver(this.scaledMouseCoordinates)) {
                 if (doesAnyRulePass(this.ruleNames, this.player.getCurrentCard(), card)) {
                     hoverPile = pile;
                     hoverPileCard = card;
@@ -304,15 +276,15 @@ export class Game {
         this.isMouseClicked = false;
 
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            pile.isHovered = false;
+            pile.reset();
         });
 
         this.buttons.forEach(button => {
-            button.isHovered = false;
+            button.reset();
         });
 
         this.themeButtons.forEach(button => {
-            button.isHovered = false;
+            button.reset();
         });
     }
 
@@ -322,8 +294,12 @@ export class Game {
         this.renderTheme();
         this.renderSidebar();
         this.renderRuleSidebar();
+
         this.player.render();
-        this.renderPiles();
+        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
+            pile.render();
+        });
+
         this.renderDeckIndex();
         this.renderTimer();
         this.renderScore();
@@ -393,12 +369,6 @@ export class Game {
         const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
         printText(this.ctx, `${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
-    }
-
-    public renderPiles(): void {
-        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            pile.render();
-        });
     }
 
     public renderTimer(): void {

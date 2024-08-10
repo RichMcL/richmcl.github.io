@@ -73,9 +73,25 @@ export interface RenderConfig {
 export abstract class GameComponent {
     update(): void {}
     render(): void {}
+    reset(): void {}
+
+    renderConfig: RenderConfig;
 
     deleteMe = false;
     isHovered = false;
 
     constructor(public ctx: CanvasRenderingContext2D, public coordinates: Coordinates) {}
+
+    isHoveredOver(scaledMouseCoordinates: Coordinates): boolean {
+        return (
+            scaledMouseCoordinates?.x >= this.renderConfig.coordinates.x &&
+            scaledMouseCoordinates?.x <=
+                this.renderConfig.coordinates.x +
+                    this.renderConfig.size.width * this.renderConfig.scale &&
+            scaledMouseCoordinates?.y >= this.renderConfig.coordinates.y &&
+            scaledMouseCoordinates?.y <=
+                this.renderConfig.coordinates.y +
+                    this.renderConfig.size.height * this.renderConfig.scale
+        );
+    }
 }

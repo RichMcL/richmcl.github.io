@@ -101,6 +101,10 @@ export class Pile extends GameComponent {
         );
     }
 
+    reset(): void {
+        this.isHovered = false;
+    }
+
     getTopCard(): Card {
         return this.cards[this.cards.length - 1];
     }

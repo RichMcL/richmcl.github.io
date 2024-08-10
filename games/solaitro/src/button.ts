@@ -54,6 +54,10 @@ export class GameButton extends GameComponent {
         }
     }
 
+    reset(): void {
+        this.isHovered = false;
+    }
+
     setTheme(theme: Theme): void {
         this.theme = theme;
     }
