@@ -1,5 +1,6 @@
 import { Theme, Themes } from './theme';
 import { Coordinates, GameComponent, RenderConfig, Size } from './types';
+import { printText } from './util';
 
 export class GameButton extends GameComponent {
     renderConfig: RenderConfig;
@@ -11,7 +12,7 @@ export class GameButton extends GameComponent {
         public id: string,
         public text: string,
         public padding: number,
-        public fillColor: string
+        public theme: Theme
     ) {
         super(ctx, coordinates);
         this.renderConfig = {
@@ -23,7 +24,39 @@ export class GameButton extends GameComponent {
 
     update(): void {}
 
-    render(): void {}
+    render(): void {
+        this.ctx.fillStyle = this.theme.base;
+
+        this.ctx.fillRect(
+            this.coordinates.x,
+            this.coordinates.y,
+            this.size.width,
+            this.size.height
+        );
+
+        printText(
+            this.ctx,
+            this.text,
+            this.coordinates.x + this.padding / 2,
+            this.coordinates.y + this.padding * 1.75
+        );
+
+        // Draw a border around the button if it's hovered
+        if (this.isHovered) {
+            this.ctx.strokeStyle = 'white';
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeRect(
+                this.coordinates.x,
+                this.coordinates.y,
+                this.size.width,
+                this.size.height
+            );
+        }
+    }
+
+    setTheme(theme: Theme): void {
+        this.theme = theme;
+    }
 }
 
 export class ThemeButton extends GameButton {
@@ -32,10 +65,9 @@ export class ThemeButton extends GameButton {
         coordinates: Coordinates,
         public size: Size,
         public padding: number,
-        public fillColor: string,
         public theme: Theme
     ) {
-        super(ctx, coordinates, size, 'theme', '', padding, fillColor);
+        super(ctx, coordinates, size, 'theme', '', padding, null);
         this.renderConfig = {
             coordinates,
             size,
@@ -44,7 +76,28 @@ export class ThemeButton extends GameButton {
     }
 
     update(): void {}
-    render(): void {}
+
+    render(): void {
+        this.ctx.fillStyle = this.theme.base;
+        this.ctx.fillRect(
+            this.coordinates.x,
+            this.coordinates.y,
+            this.size.width,
+            this.size.height
+        );
+
+        // Draw a border around the button if it's hovered
+        if (this.isHovered) {
+            this.ctx.strokeStyle = 'white';
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeRect(
+                this.coordinates.x,
+                this.coordinates.y,
+                this.size.width,
+                this.size.height
+            );
+        }
+    }
 }
 
 export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
@@ -64,7 +117,7 @@ export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) 
         'reload',
         text,
         padding,
-        theme.base
+        theme
     );
 };
 
@@ -85,7 +138,7 @@ export const createDealButton = (ctx: CanvasRenderingContext2D, theme: Theme) =>
         'deal',
         text,
         padding,
-        theme.base
+        theme
     );
 };
 
@@ -106,7 +159,7 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
         'hit',
         text,
         padding,
-        theme.base
+        theme
     );
 };
 
@@ -127,7 +180,7 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
         'free',
         text,
         padding,
-        theme.base
+        theme
     );
 };
 
@@ -147,7 +200,6 @@ export const createThemeButtons = (ctx: CanvasRenderingContext2D): ThemeButton[]
             { x, y },
             { width: buttonWidth, height: buttonHeight },
             padding,
-            Themes[theme].base,
             Themes[theme]
         );
 

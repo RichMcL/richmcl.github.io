@@ -222,6 +222,11 @@ export class Game {
 
         if (hoverThemeButton && this.isMouseClicked) {
             this.theme = hoverThemeButton.theme;
+
+            // Set the theme on the buttons
+            this.buttons.forEach(button => {
+                button.theme = this.theme;
+            });
         }
 
         let hoverCard: Card;
@@ -325,8 +330,9 @@ export class Game {
         this.renderStreak();
         this.renderMousePosition();
         this.renderLastCardClicked();
-        this.renderButtons();
-        this.renderThemeButtons();
+        this.buttons.forEach(button => button.render());
+
+        this.themeButtons.forEach(button => button.render());
 
         for (const component of this.gameComponents) {
             component.render();
@@ -378,61 +384,6 @@ export class Game {
             printText(this.ctx, `  ${ruleInfo.description}`, x + 30, y, 15);
             y += 40;
         }
-    }
-
-    public renderButtons() {
-        this.buttons.forEach(button => {
-            this.ctx.fillStyle = this.theme.base;
-            this.ctx.fillRect(
-                button.coordinates.x,
-                button.coordinates.y,
-                button.size.width,
-                button.size.height
-            );
-
-            printText(
-                this.ctx,
-                button.text,
-                button.coordinates.x + button.padding / 2,
-                button.coordinates.y + button.padding * 1.75
-            );
-
-            // Draw a border around the button if it's hovered
-            if (button.isHovered) {
-                this.ctx.strokeStyle = 'white';
-                this.ctx.lineWidth = 2;
-                this.ctx.strokeRect(
-                    button.coordinates.x,
-                    button.coordinates.y,
-                    button.size.width,
-                    button.size.height
-                );
-            }
-        });
-    }
-
-    public renderThemeButtons() {
-        this.themeButtons.forEach(button => {
-            this.ctx.fillStyle = button.fillColor;
-            this.ctx.fillRect(
-                button.coordinates.x,
-                button.coordinates.y,
-                button.size.width,
-                button.size.height
-            );
-
-            // Draw a border around the button if it's hovered
-            if (button.isHovered) {
-                this.ctx.strokeStyle = 'white';
-                this.ctx.lineWidth = 2;
-                this.ctx.strokeRect(
-                    button.coordinates.x,
-                    button.coordinates.y,
-                    button.size.width,
-                    button.size.height
-                );
-            }
-        });
     }
 
     public renderDeckIndex() {
