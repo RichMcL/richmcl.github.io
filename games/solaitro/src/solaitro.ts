@@ -362,15 +362,6 @@ export class Game {
         }
     }
 
-    // public renderDeckIndex() {
-    //     const fixedWidth = 71 * 1.5; // Define the fixed width
-    //     const text = `${this.player.handIndex} / ${this.player.hand?.length}`;
-    //     const textWidth = this.ctx.measureText(text).width;
-    //     const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
-
-    //     printText(this.ctx, `${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
-    // }
-
     public renderTimer(): void {
         const minutes = Math.floor(this.timerInMs / 60000)
             .toString()

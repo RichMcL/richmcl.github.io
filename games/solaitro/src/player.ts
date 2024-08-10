@@ -1,9 +1,9 @@
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
-import { buildAndShuffleDeck, drawCard, drawCardBack } from './util';
+import { buildAndShuffleDeck, drawCard, drawCardBack, printText } from './util';
 
 const PlayerRenderConfig: RenderConfig = {
     coordinates: {
-        x: 635,
+        x: 535,
         y: 460
     },
     size: {
@@ -41,7 +41,7 @@ export class Player extends GameComponent {
             drawCardBack(
                 this.ctx,
                 this.cardBackSpriteSheet,
-                this.renderConfig.coordinates.x - 150 + i * 5,
+                this.renderConfig.coordinates.x + 150 + i * 5,
                 this.renderConfig.coordinates.y + 5 * (i - 1),
                 this.renderConfig.scale
             );
@@ -58,11 +58,32 @@ export class Player extends GameComponent {
                 this.cardFaceSpriteSheet,
                 this.cardBackSpriteSheet,
                 this.playPile[i],
-                this.renderConfig.coordinates.x + i * 30,
+                this.renderConfig.coordinates.x - i * 45,
                 this.renderConfig.coordinates.y,
                 this.renderConfig.scale
             );
         }
+
+        this.renderDrawPileSize();
+        this.renderPlayPileSize();
+    }
+
+    public renderPlayPileSize(): void {
+        const fixedWidth = 71 * 1.5; // Define the fixed width
+        const text = `${this.playPile?.length}`;
+        const textWidth = this.ctx.measureText(text).width;
+        const x = 495 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
+
+        printText(this.ctx, text, x, 645);
+    }
+
+    public renderDrawPileSize(): void {
+        const fixedWidth = 71 * 1.5; // Define the fixed width
+        const text = `${this.drawPile?.length}`;
+        const textWidth = this.ctx.measureText(text).width;
+        const x = 685 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
+
+        printText(this.ctx, text, x, 645);
     }
 
     getTopPlayCard(): Card {
@@ -70,10 +91,18 @@ export class Player extends GameComponent {
     }
 
     hit(): void {
-        console.log('hit');
+        if (this.drawPile.length === 0) {
+            this.drawPile = this.playPile;
+            this.playPile = [];
+        }
+
         //pop 3 cards of the draw pile and add to the top of the stack
         for (let i = 0; i < 3; i++) {
-            this.playPile.unshift(this.drawPile.pop());
+            const topOfDrawPile = this.drawPile.pop();
+
+            if (topOfDrawPile) {
+                this.playPile.unshift(topOfDrawPile);
+            }
         }
     }
 
