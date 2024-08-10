@@ -12,7 +12,14 @@ import {
     Suit,
     ThemeButton
 } from './types';
-import { buildAndShuffleDeck, printText } from './util';
+import {
+    buildAndShuffleDeck,
+    drawCard,
+    drawCardBack,
+    drawIcon,
+    drawRoundedRect,
+    printText
+} from './util';
 
 export class Game {
     public canvas: HTMLCanvasElement;
@@ -442,7 +449,6 @@ export class Game {
         this.renderRuleSidebar();
         this.renderPlayerCard();
         this.renderPiles();
-        this.renderPileCounts();
         this.renderDeckIndex();
         this.renderTimer();
         this.renderScore();
@@ -573,14 +579,19 @@ export class Game {
 
         // Render blank cards behind the player card
         for (let i = 3; i > 0; i--) {
-            this.drawCardBack(
+            drawCardBack(
+                this.ctx,
+                this.cardBackSpriteSheet,
                 renderConfig.coordinates.x + 5 * i,
                 renderConfig.coordinates.y + 5 * i,
                 renderConfig.scale
             );
         }
 
-        this.drawCard(
+        drawCard(
+            this.ctx,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
             this.player.getCurrentCard(),
             renderConfig.coordinates.x,
             renderConfig.coordinates.y,
@@ -591,19 +602,6 @@ export class Game {
     public renderPiles(): void {
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             pile.render();
-        });
-    }
-
-    public renderPileCounts(): void {
-        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            printText(
-                this.ctx,
-                `[ ${pile.cards.length} ]`,
-                pile.renderConfig.coordinates.x + pile.renderConfig.size.width / 2,
-                pile.renderConfig.coordinates.y +
-                    pile.renderConfig.size.height * pile.renderConfig.scale +
-                    30
-            );
         });
     }
 
@@ -639,7 +637,7 @@ export class Game {
         const card = this.lastCardClicked;
         if (card) {
             printText(this.ctx, `Card: ${card.value}`, 30, 160);
-            this.drawIcon(card.suit, 120, 143);
+            drawIcon(this.ctx, this.iconSpriteSheet, card.suit, 120, 143);
         }
     }
 
@@ -694,173 +692,6 @@ export class Game {
     /* USER ACTION FUNCTIONS */
 
     /* RENDER FUNCTIONS */
-
-    public drawCard(card: Card, x: number, y: number, cardScale = 1): void {
-        const cardWidth = 71; // Width of a single card in the sprite sheet
-        const cardHeight = 95; // Height of a single card in the sprite sheet
-
-        let sy = 0;
-        let sx = 0;
-
-        switch (card.suit) {
-            case Suit.Hearts:
-                sy = cardHeight * 0;
-                break;
-            case Suit.Clubs:
-                sy = cardHeight * 1;
-                break;
-            case Suit.Diamonds:
-                sy = cardHeight * 2;
-                break;
-            case Suit.Spades:
-                sy = cardHeight * 3;
-                break;
-        }
-
-        switch (card.value) {
-            case CardValue.Two:
-                sx = cardWidth * 0;
-                break;
-            case CardValue.Three:
-                sx = cardWidth * 1;
-                break;
-            case CardValue.Four:
-                sx = cardWidth * 2;
-                break;
-            case CardValue.Five:
-                sx = cardWidth * 3;
-                break;
-            case CardValue.Six:
-                sx = cardWidth * 4;
-                break;
-            case CardValue.Seven:
-                sx = cardWidth * 5;
-                break;
-            case CardValue.Eight:
-                sx = cardWidth * 6;
-                break;
-            case CardValue.Nine:
-                sx = cardWidth * 7;
-                break;
-            case CardValue.Ten:
-                sx = cardWidth * 8;
-                break;
-            case CardValue.Jack:
-                sx = cardWidth * 9;
-                break;
-            case CardValue.Queen:
-                sx = cardWidth * 10;
-                break;
-            case CardValue.King:
-                sx = cardWidth * 11;
-                break;
-            case CardValue.Ace:
-                sx = cardWidth * 12;
-                break;
-        }
-
-        this.ctx.drawImage(
-            this.cardBackSpriteSheet,
-            71,
-            0,
-            cardWidth,
-            cardHeight,
-            x,
-            y,
-            cardWidth * cardScale,
-            cardHeight * cardScale
-        );
-
-        this.ctx.drawImage(
-            this.cardFaceSpriteSheet,
-            sx,
-            sy,
-            cardWidth,
-            cardHeight,
-            x,
-            y,
-            cardWidth * cardScale,
-            cardHeight * cardScale
-        );
-    }
-
-    public drawCardBack(x: number, y: number, cardScale = 1): void {
-        const cardWidth = 71; // Width of a single card in the sprite sheet
-        const cardHeight = 95; // Height of a single card in the sprite sheet
-
-        this.ctx.drawImage(
-            this.cardBackSpriteSheet,
-            0,
-            0,
-            cardWidth,
-            cardHeight,
-            x,
-            y,
-            cardWidth * cardScale,
-            cardHeight * cardScale
-        );
-    }
-
-    public drawIcon(suit: Suit, x: number, y: number): void {
-        const iconWidth = 72 / 4;
-        const iconHeight = 74 / 4;
-
-        let sy = iconHeight;
-        let sx = 0;
-
-        switch (suit) {
-            case Suit.Hearts:
-                sx = iconWidth * 0;
-                break;
-            case Suit.Diamonds:
-                sx = iconWidth * 1;
-                break;
-            case Suit.Clubs:
-                sx = iconWidth * 2;
-                break;
-            case Suit.Spades:
-                sx = iconWidth * 3;
-                break;
-        }
-
-        // this.ctx.fillRect(x - 2.5, y - 2.5, iconWidth + 5, iconHeight + 5);
-
-        this.drawRoundedRect(this.ctx, x - 2.5, y - 2.5, iconWidth + 5, iconHeight + 5, 5);
-
-        this.ctx.drawImage(
-            this.iconSpriteSheet,
-            sx,
-            sy,
-            iconWidth,
-            iconHeight,
-            x,
-            y,
-            iconWidth,
-            iconHeight
-        );
-    }
-
-    public drawRoundedRect(
-        ctx: CanvasRenderingContext2D,
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        radius: number
-    ): void {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.arcTo(x + width, y, x + width, y + radius, radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
-        ctx.lineTo(x + radius, y + height);
-        ctx.arcTo(x, y + height, x, y + height - radius, radius);
-        ctx.lineTo(x, y + radius);
-        ctx.arcTo(x, y, x + radius, y, radius);
-        ctx.closePath();
-        ctx.fill();
-    }
 
     public scaleGame() {
         console.log('Scaling game');

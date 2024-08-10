@@ -151,6 +151,29 @@ export const drawCard = (
     );
 };
 
+export const drawCardBack = (
+    ctx: CanvasRenderingContext2D,
+    cardBackSpriteSheet: HTMLImageElement,
+    x: number,
+    y: number,
+    cardScale = 1
+): void => {
+    const cardWidth = 71; // Width of a single card in the sprite sheet
+    const cardHeight = 95; // Height of a single card in the sprite sheet
+
+    ctx.drawImage(
+        cardBackSpriteSheet,
+        0,
+        0,
+        cardWidth,
+        cardHeight,
+        x,
+        y,
+        cardWidth * cardScale,
+        cardHeight * cardScale
+    );
+};
+
 export const printText = (
     ctx: CanvasRenderingContext2D,
     text: string,
@@ -175,4 +198,59 @@ export const printText = (
     ctx.shadowBlur = 0;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
+};
+
+export const drawIcon = (
+    ctx: CanvasRenderingContext2D,
+    iconSpriteSheet: HTMLImageElement,
+    suit: Suit,
+    x: number,
+    y: number
+): void => {
+    const iconWidth = 72 / 4;
+    const iconHeight = 74 / 4;
+
+    let sy = iconHeight;
+    let sx = 0;
+
+    switch (suit) {
+        case Suit.Hearts:
+            sx = iconWidth * 0;
+            break;
+        case Suit.Diamonds:
+            sx = iconWidth * 1;
+            break;
+        case Suit.Clubs:
+            sx = iconWidth * 2;
+            break;
+        case Suit.Spades:
+            sx = iconWidth * 3;
+            break;
+    }
+
+    drawRoundedRect(ctx, x - 2.5, y - 2.5, iconWidth + 5, iconHeight + 5, 5);
+
+    ctx.drawImage(iconSpriteSheet, sx, sy, iconWidth, iconHeight, x, y, iconWidth, iconHeight);
+};
+
+export const drawRoundedRect = (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    radius: number
+): void => {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.arcTo(x + width, y, x + width, y + radius, radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+    ctx.lineTo(x + radius, y + height);
+    ctx.arcTo(x, y + height, x, y + height - radius, radius);
+    ctx.lineTo(x, y + radius);
+    ctx.arcTo(x, y, x + radius, y, radius);
+    ctx.closePath();
+    ctx.fill();
 };

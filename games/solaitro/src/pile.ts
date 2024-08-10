@@ -1,5 +1,5 @@
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
-import { drawCard } from './util';
+import { drawCard, printText } from './util';
 
 export const PilesRenderConfig: { [key: string]: RenderConfig } = {
     pile1: {
@@ -90,6 +90,15 @@ export class Pile extends GameComponent {
                 this.renderConfig.size.height * this.renderConfig.scale
             );
         }
+
+        printText(
+            this.ctx,
+            `[ ${this.cards.length} ]`,
+            this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
+            this.renderConfig.coordinates.y +
+                this.renderConfig.size.height * this.renderConfig.scale +
+                30
+        );
     }
 
     getTopCard(): Card {
