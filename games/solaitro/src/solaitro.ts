@@ -1,4 +1,12 @@
-import { GameButton, ThemeButton } from './button';
+import {
+    createDealButton,
+    createFreeButtton,
+    createHitButton,
+    createReloadButton,
+    createThemeButtons,
+    GameButton,
+    ThemeButton
+} from './button';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
 import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
@@ -125,11 +133,11 @@ export class Game {
         this.player = new Player(this.ctx, this.cardFaceSpriteSheet, this.cardBackSpriteSheet);
 
         this.initializePiles();
-        this.createFreeButton();
-        this.createReloadButton();
-        this.createDealButton();
-        this.createHitButton();
-        this.createThemeButtons();
+        this.buttons.push(createReloadButton(this.ctx, this.theme));
+        this.buttons.push(createFreeButtton(this.ctx, this.theme));
+        this.buttons.push(createDealButton(this.ctx, this.theme));
+        this.buttons.push(createHitButton(this.ctx, this.theme));
+        this.themeButtons = createThemeButtons(this.ctx);
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -301,121 +309,6 @@ export class Game {
         this.themeButtons.forEach(button => {
             button.isHovered = false;
         });
-    }
-
-    public createReloadButton(): void {
-        const text = 'RELOAD';
-        const padding = 20; // Padding for the button
-        const textMetrics = this.ctx.measureText(text);
-        const textWidth = textMetrics.width;
-        const buttonWidth = textWidth + padding * 2 + 5;
-        const buttonHeight = 50;
-        const x = 30;
-        const y = 730;
-
-        const reloadButton = new GameButton(
-            this.ctx,
-            { x, y },
-            { width: buttonWidth, height: buttonHeight },
-            'reload',
-            text,
-            padding,
-            this.theme.base
-        );
-
-        this.buttons.push(reloadButton);
-    }
-
-    public createFreeButton(): void {
-        const text = 'FREE';
-        const padding = 20; // Padding for the button
-        const textMetrics = this.ctx.measureText(text);
-        const textWidth = textMetrics.width;
-        const buttonWidth = textWidth + padding * 2;
-        const buttonHeight = 50;
-        const x = 1100;
-        const y = 670;
-
-        const freeButton = new GameButton(
-            this.ctx,
-            { x, y },
-            { width: buttonWidth, height: buttonHeight },
-            'free',
-            text,
-            padding,
-            this.theme.base
-        );
-
-        this.buttons.push(freeButton);
-    }
-
-    public createDealButton(): void {
-        const text = 'DEAL';
-        const padding = 20; // Padding for the button
-        const textMetrics = this.ctx.measureText(text);
-        const textWidth = textMetrics.width;
-        const buttonWidth = textWidth + padding * 2;
-        const buttonHeight = 50;
-        const x = 30;
-        const y = 670;
-
-        const dealButton = new GameButton(
-            this.ctx,
-            { x, y },
-            { width: buttonWidth, height: buttonHeight },
-            'deal',
-            text,
-            padding,
-            this.theme.base
-        );
-        this.buttons.push(dealButton);
-    }
-
-    public createHitButton(): void {
-        const text = 'HIT';
-        const padding = 20; // Padding for the button
-        const textMetrics = this.ctx.measureText(text);
-        const textWidth = textMetrics.width;
-        const buttonWidth = textWidth + padding * 2;
-        const buttonHeight = 50;
-        const x = 610;
-        const y = 390;
-
-        const hitButton = new GameButton(
-            this.ctx,
-            { x, y },
-            { width: buttonWidth, height: buttonHeight },
-            'hit',
-            text,
-            padding,
-            this.theme.base
-        );
-
-        this.buttons.push(hitButton);
-    }
-
-    public createThemeButtons(): void {
-        let i = 0;
-        for (const theme of Object.keys(Themes)) {
-            const padding = 20; // Padding for the button
-            const buttonWidth = 50;
-            const buttonHeight = 50;
-            const x = 400 + i * (buttonWidth + padding);
-            const y = 700;
-
-            const themeButton = new ThemeButton(
-                this.ctx,
-                { x, y },
-                { width: buttonWidth, height: buttonHeight },
-                padding,
-                Themes[theme].base,
-                Themes[theme]
-            );
-
-            this.themeButtons.push(themeButton);
-
-            i++;
-        }
     }
 
     public render() {
