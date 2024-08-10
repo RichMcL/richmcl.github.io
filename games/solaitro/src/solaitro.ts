@@ -227,7 +227,7 @@ export class Game {
 
         if (hoverCard && this.isMouseClicked) {
             this.lastCardClicked = hoverCard;
-            console.log('Player card clicked', hoverCard);
+            console.log('Play pile clicked', hoverCard);
         }
 
         let hoverPile: Pile;

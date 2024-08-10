@@ -13,6 +13,18 @@ const PlayerRenderConfig: RenderConfig = {
     scale: 1.5
 };
 
+const DrawPileRenderConfig: RenderConfig = {
+    coordinates: {
+        x: 675,
+        y: 460
+    },
+    size: {
+        width: 71,
+        height: 95
+    },
+    scale: 1.5
+};
+
 export class Player extends GameComponent {
     drawPile: Card[] = [];
     playPile: Card[] = [];
@@ -41,9 +53,9 @@ export class Player extends GameComponent {
             drawCardBack(
                 this.ctx,
                 this.cardBackSpriteSheet,
-                this.renderConfig.coordinates.x + 150 + i * 5,
-                this.renderConfig.coordinates.y + 5 * (i - 1),
-                this.renderConfig.scale
+                DrawPileRenderConfig.coordinates.x + i * 5,
+                DrawPileRenderConfig.coordinates.y + 5 * (i - 1),
+                DrawPileRenderConfig.scale
             );
         }
 
