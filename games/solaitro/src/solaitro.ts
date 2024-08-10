@@ -29,7 +29,7 @@ export class Game {
     public scaleFactor: number;
     public theme: Theme = Themes.default;
 
-    public player: Player = new Player();
+    public player: Player;
 
     public pile1: Pile;
     public pile2: Pile;
@@ -121,6 +121,8 @@ export class Game {
 
         this.gameRunning = true;
         this.lastTimestamp = performance.now();
+
+        this.player = new Player(this.ctx, this.cardFaceSpriteSheet, this.cardBackSpriteSheet);
 
         this.initializePiles();
         this.isDealNewRound = false;
@@ -447,7 +449,7 @@ export class Game {
         this.renderTheme();
         this.renderSidebar();
         this.renderRuleSidebar();
-        this.renderPlayerCard();
+        this.player.render();
         this.renderPiles();
         this.renderDeckIndex();
         this.renderTimer();
@@ -572,31 +574,6 @@ export class Game {
         const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
         printText(this.ctx, `${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
-    }
-
-    public renderPlayerCard(): void {
-        const renderConfig = this.player.renderConfig;
-
-        // Render blank cards behind the player card
-        for (let i = 3; i > 0; i--) {
-            drawCardBack(
-                this.ctx,
-                this.cardBackSpriteSheet,
-                renderConfig.coordinates.x + 5 * i,
-                renderConfig.coordinates.y + 5 * i,
-                renderConfig.scale
-            );
-        }
-
-        drawCard(
-            this.ctx,
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
-            this.player.getCurrentCard(),
-            renderConfig.coordinates.x,
-            renderConfig.coordinates.y,
-            renderConfig.scale
-        );
     }
 
     public renderPiles(): void {

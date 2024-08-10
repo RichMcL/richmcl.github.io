@@ -1,25 +1,58 @@
-import { Card, RenderConfig } from './types';
-import { buildAndShuffleDeck } from './util';
+import { Card, Coordinates, GameComponent, RenderConfig } from './types';
+import { buildAndShuffleDeck, drawCard, drawCardBack } from './util';
 
-export class Player {
+const PlayerRenderConfig: RenderConfig = {
+    coordinates: {
+        x: 585,
+        y: 460
+    },
+    size: {
+        width: 71,
+        height: 95
+    },
+    scale: 1.5
+};
+
+export class Player extends GameComponent {
     hand: Card[];
     handIndex: number;
 
-    renderConfig: RenderConfig = {
-        coordinates: {
-            x: 585,
-            y: 460
-        },
-        size: {
-            width: 71,
-            height: 95
-        },
-        scale: 1.5
-    };
+    renderConfig: RenderConfig;
 
-    constructor() {
+    constructor(
+        ctx: CanvasRenderingContext2D,
+        private cardFaceSpriteSheet: HTMLImageElement,
+        private cardBackSpriteSheet: HTMLImageElement
+    ) {
+        super(ctx, PlayerRenderConfig.coordinates);
         this.hand = buildAndShuffleDeck(true);
         this.handIndex = 0;
+        this.renderConfig = PlayerRenderConfig;
+    }
+
+    update(): void {}
+
+    render(): void {
+        // Render blank cards behind the player card
+        for (let i = 3; i > 0; i--) {
+            drawCardBack(
+                this.ctx,
+                this.cardBackSpriteSheet,
+                this.renderConfig.coordinates.x + 5 * i,
+                this.renderConfig.coordinates.y + 5 * i,
+                this.renderConfig.scale
+            );
+        }
+
+        drawCard(
+            this.ctx,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
+            this.getCurrentCard(),
+            this.renderConfig.coordinates.x,
+            this.renderConfig.coordinates.y,
+            this.renderConfig.scale
+        );
     }
 
     getCurrentCard(): Card {
