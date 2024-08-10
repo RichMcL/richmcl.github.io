@@ -82,7 +82,7 @@ export class Player extends GameComponent {
 
     public renderPlayPileSize(): void {
         const fixedWidth = 71 * 1.5; // Define the fixed width
-        const text = `${this.playPile?.length}`;
+        const text = `[ ${this.playPile?.length} ]`;
         const textWidth = this.ctx.measureText(text).width;
         const x = 495 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
@@ -91,7 +91,7 @@ export class Player extends GameComponent {
 
     public renderDrawPileSize(): void {
         const fixedWidth = 71 * 1.5; // Define the fixed width
-        const text = `${this.drawPile?.length}`;
+        const text = `[ ${this.drawPile?.length} ] `;
         const textWidth = this.ctx.measureText(text).width;
         const x = 685 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
