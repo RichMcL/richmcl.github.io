@@ -24,10 +24,12 @@ export enum RuleNames {
 }
 
 export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) => boolean } = {
-    [SingleRuleKey.free]: () => true,
+    [SingleRuleKey.free]: (playerCard: Card) => (playerCard ? true : false),
 
     [SingleRuleKey.oppositeColor]: (playerCard: Card, pileCard: Card) => {
-        if (blackSuits.includes(playerCard.suit) && redSuits.includes(pileCard.suit)) {
+        if (!playerCard || !pileCard) return false;
+
+        if (blackSuits.includes(playerCard?.suit) && redSuits.includes(pileCard.suit)) {
             return true;
         }
 
@@ -39,6 +41,8 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
     },
 
     [SingleRuleKey.oneLower]: (playerCard: Card, pileCard: Card) => {
+        if (!playerCard || !pileCard) return false;
+
         if (CardNumericValue[pileCard.value] - CardNumericValue[playerCard.value] === 1) {
             return true;
         }
@@ -52,6 +56,8 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
     },
 
     [SingleRuleKey.oneHigher]: (playerCard: Card, pileCard: Card) => {
+        if (!playerCard || !pileCard) return false;
+
         if (CardNumericValue[playerCard.value] - CardNumericValue[pileCard.value] === 1) {
             return true;
         }

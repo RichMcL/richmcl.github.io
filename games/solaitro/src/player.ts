@@ -3,7 +3,7 @@ import { buildAndShuffleDeck, drawCard, drawCardBack } from './util';
 
 const PlayerRenderConfig: RenderConfig = {
     coordinates: {
-        x: 585,
+        x: 635,
         y: 460
     },
     size: {
@@ -14,8 +14,8 @@ const PlayerRenderConfig: RenderConfig = {
 };
 
 export class Player extends GameComponent {
-    hand: Card[];
-    handIndex: number;
+    drawPile: Card[] = [];
+    playPile: Card[] = [];
 
     renderConfig: RenderConfig;
 
@@ -25,55 +25,59 @@ export class Player extends GameComponent {
         private cardBackSpriteSheet: HTMLImageElement
     ) {
         super(ctx, PlayerRenderConfig.coordinates);
-        this.hand = buildAndShuffleDeck(true);
-        this.handIndex = 0;
+        this.drawPile = buildAndShuffleDeck(true);
+        this.hit();
+
+        console.log('player pile', this.playPile);
+
         this.renderConfig = PlayerRenderConfig;
     }
 
     update(): void {}
 
     render(): void {
-        // Render blank cards behind the player card
+        // Render deck to represent draw pile
         for (let i = 3; i > 0; i--) {
             drawCardBack(
                 this.ctx,
                 this.cardBackSpriteSheet,
-                this.renderConfig.coordinates.x + 5 * i,
-                this.renderConfig.coordinates.y + 5 * i,
+                this.renderConfig.coordinates.x - 150 + i * 5,
+                this.renderConfig.coordinates.y + 5 * (i - 1),
                 this.renderConfig.scale
             );
         }
 
-        drawCard(
-            this.ctx,
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
-            this.getCurrentCard(),
-            this.renderConfig.coordinates.x,
-            this.renderConfig.coordinates.y,
-            this.renderConfig.scale
-        );
+        //Render the top 3 cards of the play pile
+        for (let i = 2; i >= 0; i--) {
+            if (!this.playPile[i]) {
+                continue;
+            }
+
+            drawCard(
+                this.ctx,
+                this.cardFaceSpriteSheet,
+                this.cardBackSpriteSheet,
+                this.playPile[i],
+                this.renderConfig.coordinates.x + i * 30,
+                this.renderConfig.coordinates.y,
+                this.renderConfig.scale
+            );
+        }
     }
 
-    getCurrentCard(): Card {
-        return this.hand[this.handIndex];
+    getTopPlayCard(): Card {
+        return this.playPile[0];
     }
 
     hit(): void {
-        this.handIndex += 3;
-
-        if (this.handIndex >= this.hand.length) {
-            this.handIndex = this.handIndex - this.hand.length;
+        console.log('hit');
+        //pop 3 cards of the draw pile and add to the top of the stack
+        for (let i = 0; i < 3; i++) {
+            this.playPile.unshift(this.drawPile.pop());
         }
     }
 
-    removeTopCard(): void {
-        this.hand.splice(this.handIndex, 1);
-
-        if (this.handIndex === 0) {
-            this.handIndex = 2;
-        } else {
-            this.handIndex--;
-        }
+    removeTopPlayCard(): void {
+        this.playPile.shift();
     }
 }

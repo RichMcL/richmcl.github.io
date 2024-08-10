@@ -222,7 +222,7 @@ export class Game {
         let hoverCard: Card;
 
         if (this.player.isHoveredOver(this.scaledMouseCoordinates)) {
-            hoverCard = this.player.getCurrentCard();
+            hoverCard = this.player.getTopPlayCard();
         }
 
         if (hoverCard && this.isMouseClicked) {
@@ -235,7 +235,7 @@ export class Game {
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             const card = pile.getTopCard();
             if (pile.isHoveredOver(this.scaledMouseCoordinates)) {
-                if (doesAnyRulePass(this.ruleNames, this.player.getCurrentCard(), card)) {
+                if (doesAnyRulePass(this.ruleNames, this.player.getTopPlayCard(), card)) {
                     hoverPile = pile;
                     hoverPileCard = card;
                 }
@@ -251,11 +251,11 @@ export class Game {
 
             hoverPile.pushCard({
                 ...hoverPileCard,
-                suit: this.player.getCurrentCard().suit,
-                value: this.player.getCurrentCard().value
+                suit: this.player.getTopPlayCard().suit,
+                value: this.player.getTopPlayCard().value
             });
 
-            this.player.removeTopCard();
+            this.player.removeTopPlayCard();
 
             this.score += 10;
             this.streak++;
@@ -264,7 +264,7 @@ export class Game {
         }
 
         if (this.isDealNewRound) {
-            this.player.hand = buildAndShuffleDeck(true);
+            this.player.drawPile = buildAndShuffleDeck(true);
             this.initializePiles();
             this.isDealNewRound = false;
         }
@@ -300,7 +300,7 @@ export class Game {
             pile.render();
         });
 
-        this.renderDeckIndex();
+        // this.renderDeckIndex();
         this.renderTimer();
         this.renderScore();
         this.renderStreak();
@@ -362,14 +362,14 @@ export class Game {
         }
     }
 
-    public renderDeckIndex() {
-        const fixedWidth = 71 * 1.5; // Define the fixed width
-        const text = `${this.player.handIndex} / ${this.player.hand?.length}`;
-        const textWidth = this.ctx.measureText(text).width;
-        const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
+    // public renderDeckIndex() {
+    //     const fixedWidth = 71 * 1.5; // Define the fixed width
+    //     const text = `${this.player.handIndex} / ${this.player.hand?.length}`;
+    //     const textWidth = this.ctx.measureText(text).width;
+    //     const x = 585 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        printText(this.ctx, `${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
-    }
+    //     printText(this.ctx, `${this.player.handIndex + 1}  / ${this.player.hand?.length}`, x, 645);
+    // }
 
     public renderTimer(): void {
         const minutes = Math.floor(this.timerInMs / 60000)
@@ -444,10 +444,10 @@ export class Game {
         );
 
         // Pop the first 4 cards from the deck and add them to the piles
-        this.pile1.pushCard(this.player.hand.pop());
-        this.pile2.pushCard(this.player.hand.pop());
-        this.pile3.pushCard(this.player.hand.pop());
-        this.pile4.pushCard(this.player.hand.pop());
+        this.pile1.pushCard(this.player.drawPile.pop());
+        this.pile2.pushCard(this.player.drawPile.pop());
+        this.pile3.pushCard(this.player.drawPile.pop());
+        this.pile4.pushCard(this.player.drawPile.pop());
     }
 
     public hitCard(): void {
