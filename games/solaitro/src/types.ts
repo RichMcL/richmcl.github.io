@@ -94,4 +94,8 @@ export abstract class GameComponent {
                     this.renderConfig.size.height * this.renderConfig.scale
         );
     }
+
+    getCoordinatesCopy(): Coordinates {
+        return { ...this.coordinates };
+    }
 }

@@ -180,4 +180,8 @@ export class Pile extends GameComponent {
     popCard(): Card {
         return this.cards.pop();
     }
+
+    getCoordinatesCopy(): Coordinates {
+        return { ...this.coordinates };
+    }
 }

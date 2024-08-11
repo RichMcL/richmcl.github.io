@@ -9,6 +9,7 @@ import {
     GameButton,
     ThemeButton
 } from './button';
+import { CardAnimation } from './card-animation';
 import { DefaultDialogRenderConfig, Dialog } from './dialog';
 import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
@@ -293,6 +294,19 @@ export class Game {
 
         if (hoverPileCard && this.isMouseClicked) {
             console.log('Pile click card', hoverPileCard);
+
+            hoverPile.coordinates;
+
+            this.gameComponents.push(
+                new CardAnimation(
+                    this.ctx,
+                    this.player.getCoordinatesCopy(),
+                    hoverPile.getCoordinatesCopy(),
+                    this.cardFaceSpriteSheet,
+                    this.cardBackSpriteSheet,
+                    this.player.getTopPlayCard()
+                )
+            );
 
             hoverPile.pushCard({
                 ...hoverPileCard,
