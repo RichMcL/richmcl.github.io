@@ -264,9 +264,10 @@ export class Game {
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             const card = pile.getTopCard();
             if (pile.isHoveredOver(this.scaledMouseCoordinates)) {
+                hoverPile = pile;
                 if (doesAnyRulePass(this.ruleNames, this.player.getTopPlayCard(), card)) {
-                    hoverPile = pile;
                     hoverPileCard = card;
+                    hoverPile.isValid = true;
                 }
             }
         });

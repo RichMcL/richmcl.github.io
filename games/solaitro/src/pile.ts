@@ -56,10 +56,14 @@ export class Pile extends GameComponent {
     cards: Card[];
     renderConfig: RenderConfig;
 
+    isValid: boolean = false;
+
     // Random angle between -3 and 3 degrees in radians
     private initialRotationAngle = (Math.random() * 6 - 3) * (Math.PI / 180);
     private rotationAngle = this.initialRotationAngle;
-    private rotationSpeed = 0.005;
+
+    // Random starting rotation direction
+    private rotationSpeed = 0.005 * (Math.random() < 0.5 ? 1 : -1);
 
     private time = 0;
 
@@ -131,6 +135,8 @@ export class Pile extends GameComponent {
     }
 
     staticRender(): void {
+        const scale = this.isHovered ? this.renderConfig.scale * 1.025 : this.renderConfig.scale;
+
         drawCard(
             this.ctx,
             this.cardFaceSpriteSheet,
@@ -138,23 +144,24 @@ export class Pile extends GameComponent {
             this.getTopCard(),
             this.renderConfig.coordinates.x,
             this.renderConfig.coordinates.y,
-            this.renderConfig.scale
+            scale
         );
 
-        if (this.isHovered) {
+        if (this.isValid) {
             this.ctx.strokeStyle = 'white';
             this.ctx.lineWidth = 3;
             this.ctx.strokeRect(
                 this.renderConfig.coordinates.x,
                 this.renderConfig.coordinates.y,
-                this.renderConfig.size.width * this.renderConfig.scale,
-                this.renderConfig.size.height * this.renderConfig.scale
+                this.renderConfig.size.width * scale,
+                this.renderConfig.size.height * scale
             );
         }
     }
 
     reset(): void {
         this.isHovered = false;
+        this.isValid = false;
     }
 
     getTopCard(): Card {
