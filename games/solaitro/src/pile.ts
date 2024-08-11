@@ -137,13 +137,18 @@ export class Pile extends GameComponent {
     staticRender(): void {
         const scale = this.isHovered ? this.renderConfig.scale * 1.025 : this.renderConfig.scale;
 
+        // bump cards up on hover
+        const yPos = this.isHovered
+            ? this.renderConfig.coordinates.y - 5
+            : this.renderConfig.coordinates.y;
+
         drawCard(
             this.ctx,
             this.cardFaceSpriteSheet,
             this.cardBackSpriteSheet,
             this.getTopCard(),
             this.renderConfig.coordinates.x,
-            this.renderConfig.coordinates.y,
+            yPos,
             scale
         );
 
@@ -152,7 +157,7 @@ export class Pile extends GameComponent {
             this.ctx.lineWidth = 3;
             this.ctx.strokeRect(
                 this.renderConfig.coordinates.x,
-                this.renderConfig.coordinates.y,
+                yPos,
                 this.renderConfig.size.width * scale,
                 this.renderConfig.size.height * scale
             );
