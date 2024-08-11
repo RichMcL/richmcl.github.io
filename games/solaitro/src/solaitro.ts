@@ -267,7 +267,7 @@ export class Game {
                 hoverPile = pile;
                 if (doesAnyRulePass(this.ruleNames, this.player.getTopPlayCard(), card)) {
                     hoverPileCard = card;
-                    hoverPile.isValid = true;
+                    hoverPile.canPlay = true;
                 }
             }
         });

@@ -56,7 +56,7 @@ export class Pile extends GameComponent {
     cards: Card[];
     renderConfig: RenderConfig;
 
-    isValid: boolean = false;
+    canPlay: boolean = false;
 
     // Random angle between -3 and 3 degrees in radians
     private initialRotationAngle = (Math.random() * 6 - 3) * (Math.PI / 180);
@@ -147,7 +147,7 @@ export class Pile extends GameComponent {
             scale
         );
 
-        if (this.isValid) {
+        if (this.canPlay) {
             this.ctx.strokeStyle = 'white';
             this.ctx.lineWidth = 3;
             this.ctx.strokeRect(
@@ -161,7 +161,7 @@ export class Pile extends GameComponent {
 
     reset(): void {
         this.isHovered = false;
-        this.isValid = false;
+        this.canPlay = false;
     }
 
     getTopCard(): Card {
