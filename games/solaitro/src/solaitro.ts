@@ -201,6 +201,14 @@ export class Game {
 
         //loop through objects and check if click is within the boundaries
 
+        // TODO - Don't need to do this every loop, just when it changes
+        this.buttons.forEach(button => {
+            button.theme = this.theme;
+        });
+        this.debugButtons.forEach(button => {
+            button.theme = this.theme;
+        });
+
         if (this.dialog.visible) {
             this.debugButtons.forEach(button => {
                 if (button.isHoveredOver(this.scaledMouseCoordinates)) {
@@ -220,11 +228,6 @@ export class Game {
 
             if (hoverThemeButton && this.isMouseClicked) {
                 this.theme = hoverThemeButton.theme;
-
-                // Set the theme on the buttons
-                this.buttons.forEach(button => {
-                    button.theme = this.theme;
-                });
             }
         } else {
             this.buttons.forEach(button => {
