@@ -306,7 +306,13 @@ export class Game {
             this.score += pointsForMove;
             this.streak++;
 
-            this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 610, y: 300 }, pointsForMove));
+            // in the middle of the pile
+            const scoreX =
+                hoverPile.renderConfig.coordinates.x + hoverPile.renderConfig.size.width / 2;
+
+            this.gameComponents.push(
+                new ScoreGraphic(this.ctx, { x: scoreX, y: 300 }, pointsForMove)
+            );
         }
 
         if (this.score >= Levels[this.currentLevel].scoreToBeat) {
