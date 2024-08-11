@@ -104,9 +104,14 @@ export class Player extends GameComponent {
     }
 
     hit(): void {
-        if (this.drawPile.length === 0) {
+        if (this.shufflesRemaining === 0 && this.drawPile.length === 0) {
+            return;
+        }
+
+        if (this.drawPile.length === 0 && this.shufflesRemaining > 0) {
             this.drawPile = this.playPile;
             this.playPile = [];
+            this.shufflesRemaining--;
         }
 
         //pop 3 cards of the draw pile and add to the top of the stack

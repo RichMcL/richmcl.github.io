@@ -356,10 +356,7 @@ export class Game {
             pile.render();
         });
 
-        this.renderTimer();
-        this.renderScore();
-        this.renderStreak();
-        this.renderLevel();
+        this.renderSidebarStats();
 
         this.renderMousePosition();
         this.renderLastCardClicked();
@@ -425,7 +422,10 @@ export class Game {
         }
     }
 
-    public renderTimer(): void {
+    public renderSidebarStats(): void {
+        const level = Levels[this.currentLevel];
+        const lines = [];
+
         const minutes = Math.floor(this.timerInMs / 60000)
             .toString()
             .padStart(2, '0');
@@ -436,22 +436,20 @@ export class Game {
             .toString()
             .padStart(1, '0');
 
-        printText(this.ctx, `Time: ${minutes}:${seconds}.${tenths}`, 30, 40);
-    }
+        lines.push(`Time: ${minutes}:${seconds}.${tenths}`);
+        lines.push('');
+        lines.push(`Shuffles: ${this.player.shufflesRemaining}`);
+        lines.push(`Score: ${this.score}`);
+        lines.push(`Streak: ${this.streak}`);
+        lines.push('');
+        lines.push(`Level: ${level.name}`);
+        lines.push(`Score to Beat: ${level.scoreToBeat}`);
 
-    public renderScore(): void {
-        printText(this.ctx, `Score: ${this.score}`, 30, 80);
-    }
-
-    public renderStreak(): void {
-        printText(this.ctx, `Streak: ${this.streak}`, 30, 120);
-    }
-
-    public renderLevel(): void {
-        const level = Levels[this.currentLevel];
-
-        printText(this.ctx, `Level: ${level.name}`, 30, 160);
-        printText(this.ctx, `Score to Beat: ${level.scoreToBeat}`, 30, 200);
+        let y = 40;
+        lines.forEach(line => {
+            printText(this.ctx, line, 30, y);
+            y += 40;
+        });
     }
 
     public renderMousePosition(): void {
