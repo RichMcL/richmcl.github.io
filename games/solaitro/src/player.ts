@@ -28,7 +28,8 @@ const DrawPileRenderConfig: RenderConfig = {
 export class Player extends GameComponent {
     drawPile: Card[] = [];
     playPile: Card[] = [];
-    shufflesRemaining = 3;
+    startingShuffles = 3;
+    shufflesRemaining = this.startingShuffles;
 
     renderConfig: RenderConfig;
 

@@ -201,14 +201,6 @@ export class Game {
 
         //loop through objects and check if click is within the boundaries
 
-        // TODO - Don't need to do this every loop, just when it changes
-        this.buttons.forEach(button => {
-            button.theme = this.theme;
-        });
-        this.debugButtons.forEach(button => {
-            button.theme = this.theme;
-        });
-
         if (this.dialog.visible) {
             this.debugButtons.forEach(button => {
                 if (button.isHoveredOver(this.scaledMouseCoordinates)) {
@@ -318,28 +310,33 @@ export class Game {
         }
 
         if (this.score >= Levels[this.currentLevel].scoreToBeat) {
-            this.player.drawPile = buildAndShuffleDeck(true);
-            this.initializePiles();
-            this.player.playPile = [];
-            this.player.hit();
-
-            this.isDealNewRound = false;
-            this.score = 0;
-            this.currentLevel++;
-
-            //increment the theme the next object in the map
-            const themeKeys = Object.keys(Themes);
-            const currentThemeIndex = themeKeys.indexOf(this.theme.name);
-            const nextThemeIndex = currentThemeIndex + 1;
-            const nextTheme = themeKeys[nextThemeIndex % themeKeys.length];
-
-            if (nextThemeIndex > themeKeys.length - 1) {
-                this.theme = Themes.default;
-            }
-
-            this.theme = Themes[nextTheme];
-            this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 540, y: 350 }, 'Next Level!'));
+            this.goToNextLevel();
         }
+    }
+
+    public goToNextLevel() {
+        this.player.drawPile = buildAndShuffleDeck(true);
+        this.initializePiles();
+        this.player.playPile = [];
+        this.player.hit();
+
+        this.isDealNewRound = false;
+        this.score = 0;
+        this.currentLevel++;
+
+        //increment the theme the next object in the map
+        const themeKeys = Object.keys(Themes);
+        const currentThemeIndex = themeKeys.indexOf(this.theme.name);
+        const nextThemeIndex = currentThemeIndex + 1;
+        const nextTheme = themeKeys[nextThemeIndex % themeKeys.length];
+
+        if (nextThemeIndex > themeKeys.length - 1) {
+            this.theme = Themes.default;
+        }
+
+        this.changeTheme(Themes[nextTheme]);
+        this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 540, y: 350 }, 'Next Level!'));
+        this.player.shufflesRemaining = this.player.startingShuffles;
     }
 
     public resetGameState(): void {
@@ -541,6 +538,18 @@ export class Game {
         const streak = this.streak;
 
         return baseScore + streak * 5;
+    }
+
+    public changeTheme(theme: Theme): void {
+        this.theme = theme;
+
+        this.buttons.forEach(button => {
+            button.theme = this.theme;
+        });
+
+        this.debugButtons.forEach(button => {
+            button.theme = this.theme;
+        });
     }
 
     /* USER ACTION FUNCTIONS */
