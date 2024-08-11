@@ -107,9 +107,11 @@ export class ThemeButton extends GameButton {
 export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'RELOAD';
     const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding * 2 + 5;
+    const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 400;
     const y = 480;
@@ -128,9 +130,11 @@ export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) 
 export const createDealButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'DEAL';
     const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding * 2;
+    const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 540;
     const y = 480;
@@ -149,9 +153,11 @@ export const createDealButton = (ctx: CanvasRenderingContext2D, theme: Theme) =>
 export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'HIT';
     const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding * 2;
+    const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 710;
     const y = 490;
@@ -170,9 +176,11 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
 export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'FREE';
     const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding * 2;
+    const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 650;
     const y = 480;
@@ -191,9 +199,11 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
 export const createOpenDialogButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'DEBUG';
     const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding * 2;
+    const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 1100;
     const y = 720;
@@ -212,9 +222,11 @@ export const createOpenDialogButton = (ctx: CanvasRenderingContext2D, theme: The
 export const createCloseDialogButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'CLOSE';
     const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding * 2;
+    const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 1000;
     const y = 570;
