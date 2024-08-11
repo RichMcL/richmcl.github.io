@@ -10,6 +10,7 @@ import {
     ThemeButton
 } from './button';
 import { DefaultDialogRenderConfig, Dialog } from './dialog';
+import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
 import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
@@ -25,6 +26,8 @@ export class Game {
     public windowAspectRatio: number;
     public scaleFactor: number;
     public theme: Theme = Themes.default;
+
+    public currentLevel = 0;
 
     public player: Player;
 
@@ -79,7 +82,8 @@ export class Game {
         Promise.all([
             this.loadImage(this.cardFaceSpriteSheet),
             this.loadImage(this.cardBackSpriteSheet),
-            this.loadImage(this.iconSpriteSheet)
+            this.loadImage(this.iconSpriteSheet),
+            this.loadFont('Balatro', '../fonts/balatro/balatro.ttf')
         ]).then(() => {
             this.startGame();
         });
@@ -88,6 +92,22 @@ export class Game {
     private loadImage(image: HTMLImageElement): Promise<void> {
         return new Promise(resolve => {
             image.onload = () => resolve();
+        });
+    }
+
+    // Function to load the custom font
+    private loadFont(fontName: string, fontUrl: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const font = new FontFace(fontName, `url(${fontUrl})`);
+            font.load()
+                .then(loadedFont => {
+                    // Add the font to the document
+                    (document.fonts as any).add(loadedFont);
+                    resolve();
+                })
+                .catch(error => {
+                    reject(error);
+                });
         });
     }
 
@@ -336,10 +356,11 @@ export class Game {
             pile.render();
         });
 
-        // this.renderDeckIndex();
         this.renderTimer();
         this.renderScore();
         this.renderStreak();
+        this.renderLevel();
+
         this.renderMousePosition();
         this.renderLastCardClicked();
         this.buttons.forEach(button => button.render());
@@ -426,6 +447,13 @@ export class Game {
         printText(this.ctx, `Streak: ${this.streak}`, 30, 120);
     }
 
+    public renderLevel(): void {
+        const level = Levels[this.currentLevel];
+
+        printText(this.ctx, `Level: ${level.name}`, 30, 160);
+        printText(this.ctx, `Score to Beat: ${level.scoreToBeat}`, 30, 200);
+    }
+
     public renderMousePosition(): void {
         const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
@@ -435,8 +463,8 @@ export class Game {
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
-            printText(this.ctx, `Card: ${card.value}`, 30, 160);
-            drawIcon(this.ctx, this.iconSpriteSheet, card.suit, 120, 143);
+            printText(this.ctx, `Card: ${card.value}`, 30, 740);
+            drawIcon(this.ctx, this.iconSpriteSheet, card.suit, 120, 723);
         }
     }
 
