@@ -4,7 +4,7 @@ import { buildAndShuffleDeck, drawCard, drawCardBack, printText } from './util';
 const PlayerRenderConfig: RenderConfig = {
     coordinates: {
         x: 535,
-        y: 460
+        y: 560
     },
     size: {
         width: 71,
@@ -16,7 +16,7 @@ const PlayerRenderConfig: RenderConfig = {
 const DrawPileRenderConfig: RenderConfig = {
     coordinates: {
         x: 675,
-        y: 460
+        y: 560
     },
     size: {
         width: 71,
@@ -86,7 +86,7 @@ export class Player extends GameComponent {
         const textWidth = this.ctx.measureText(text).width;
         const x = 495 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        printText(this.ctx, text, x, 645);
+        printText(this.ctx, text, x, 745);
     }
 
     public renderDrawPileSize(): void {
@@ -95,7 +95,7 @@ export class Player extends GameComponent {
         const textWidth = this.ctx.measureText(text).width;
         const x = 685 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        printText(this.ctx, text, x, 645);
+        printText(this.ctx, text, x, 745);
     }
 
     getTopPlayCard(): Card {

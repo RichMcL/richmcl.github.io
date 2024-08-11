@@ -181,19 +181,39 @@ export class Game {
 
         //loop through objects and check if click is within the boundaries
 
-        this.buttons.forEach(button => {
-            if (button.isHoveredOver(this.scaledMouseCoordinates)) {
-                hoverButton = button;
-                hoverButton.isHovered = true;
-            }
-        });
+        if (this.dialog.visible) {
+            this.debugButtons.forEach(button => {
+                if (button.isHoveredOver(this.scaledMouseCoordinates)) {
+                    hoverButton = button;
+                    hoverButton.isHovered = true;
+                }
+            });
 
-        this.debugButtons.forEach(button => {
-            if (button.isHoveredOver(this.scaledMouseCoordinates)) {
-                hoverButton = button;
-                hoverButton.isHovered = true;
+            let hoverThemeButton: ThemeButton;
+
+            this.themeButtons.forEach(button => {
+                if (button.isHoveredOver(this.scaledMouseCoordinates)) {
+                    hoverThemeButton = button;
+                    hoverThemeButton.isHovered = true;
+                }
+            });
+
+            if (hoverThemeButton && this.isMouseClicked) {
+                this.theme = hoverThemeButton.theme;
+
+                // Set the theme on the buttons
+                this.buttons.forEach(button => {
+                    button.theme = this.theme;
+                });
             }
-        });
+        } else {
+            this.buttons.forEach(button => {
+                if (button.isHoveredOver(this.scaledMouseCoordinates)) {
+                    hoverButton = button;
+                    hoverButton.isHovered = true;
+                }
+            });
+        }
 
         if (this.dialogCloseButton.isHoveredOver(this.scaledMouseCoordinates)) {
             hoverButton = this.dialogCloseButton;
@@ -226,24 +246,6 @@ export class Game {
                     this.dialog.visible = false;
                     break;
             }
-        }
-
-        let hoverThemeButton: ThemeButton;
-
-        this.themeButtons.forEach(button => {
-            if (button.isHoveredOver(this.scaledMouseCoordinates)) {
-                hoverThemeButton = button;
-                hoverThemeButton.isHovered = true;
-            }
-        });
-
-        if (hoverThemeButton && this.isMouseClicked) {
-            this.theme = hoverThemeButton.theme;
-
-            // Set the theme on the buttons
-            this.buttons.forEach(button => {
-                button.theme = this.theme;
-            });
         }
 
         let hoverCard: Card;

@@ -153,8 +153,8 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding * 2;
     const buttonHeight = 50;
-    const x = 610;
-    const y = 390;
+    const x = 710;
+    const y = 490;
 
     return new GameButton(
         ctx,
