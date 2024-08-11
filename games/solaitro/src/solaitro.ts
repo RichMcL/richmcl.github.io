@@ -83,7 +83,7 @@ export class Game {
             this.loadImage(this.cardFaceSpriteSheet),
             this.loadImage(this.cardBackSpriteSheet),
             this.loadImage(this.iconSpriteSheet),
-            this.loadFont('Balatro', '../fonts/balatro/balatro.ttf')
+            this.loadFont('Balatro', 'fonts/balatro/balatro.ttf')
         ]).then(() => {
             this.startGame();
         });
