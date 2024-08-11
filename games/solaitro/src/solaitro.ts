@@ -36,7 +36,7 @@ export class Game {
     public pile3: Pile;
     public pile4: Pile;
 
-    public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike];
+    public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike, RuleNames.free];
     public gameComponents: GameComponent[] = [];
 
     public cardFaceSpriteSheet: HTMLImageElement;
@@ -314,10 +314,27 @@ export class Game {
             this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 610, y: 300 }, pointsForMove));
         }
 
-        if (this.isDealNewRound) {
+        if (this.score >= Levels[this.currentLevel].scoreToBeat) {
             this.player.drawPile = buildAndShuffleDeck(true);
             this.initializePiles();
+            this.player.playPile = [];
+            this.player.hit();
+
             this.isDealNewRound = false;
+            this.score = 0;
+            this.currentLevel++;
+
+            //increment the theme the next object in the map
+            const themeKeys = Object.keys(Themes);
+            const currentThemeIndex = themeKeys.indexOf(this.theme.name);
+            const nextThemeIndex = currentThemeIndex + 1;
+            const nextTheme = themeKeys[nextThemeIndex % themeKeys.length];
+
+            if (nextThemeIndex > themeKeys.length - 1) {
+                this.theme = Themes.default;
+            }
+
+            this.theme = Themes[nextTheme];
         }
     }
 
