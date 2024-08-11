@@ -5,7 +5,11 @@ export class ScoreGraphic extends GameComponent {
     public ttl: number = 90;
     public color = 'white';
 
-    constructor(ctx: CanvasRenderingContext2D, coordinates: Coordinates, public score: number) {
+    constructor(
+        ctx: CanvasRenderingContext2D,
+        coordinates: Coordinates,
+        public score: string | number
+    ) {
         super(ctx, coordinates);
     }
 

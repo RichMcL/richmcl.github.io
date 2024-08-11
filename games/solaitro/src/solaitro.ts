@@ -335,6 +335,7 @@ export class Game {
             }
 
             this.theme = Themes[nextTheme];
+            this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 540, y: 350 }, 'Next Level!'));
         }
     }
 
