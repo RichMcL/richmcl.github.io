@@ -31,6 +31,9 @@ export class Player extends GameComponent {
     startingShuffles = 3;
     shufflesRemaining = this.startingShuffles;
 
+    playPileVisibleSize = 3;
+    playPileStartingSize = 3;
+
     renderConfig: RenderConfig;
 
     constructor(
@@ -61,8 +64,8 @@ export class Player extends GameComponent {
             );
         }
 
-        //Render the top 3 cards of the play pile
-        for (let i = 2; i >= 0; i--) {
+        //Render the top playPileVisibleSize cards of the play pile
+        for (let i = this.playPileVisibleSize - 1; i >= 0; i--) {
             if (!this.playPile[i]) {
                 continue;
             }
@@ -115,8 +118,8 @@ export class Player extends GameComponent {
             this.shufflesRemaining--;
         }
 
-        //pop 3 cards of the draw pile and add to the top of the stack
-        for (let i = 0; i < 3; i++) {
+        //pop playPileStartingSize cards of the draw pile and add to the top of the stack
+        for (let i = 0; i < this.playPileStartingSize; i++) {
             const topOfDrawPile = this.drawPile.pop();
 
             if (topOfDrawPile) {
