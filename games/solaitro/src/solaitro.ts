@@ -402,6 +402,7 @@ export class Game {
 
     public renderTheme() {
         this.canvas.style.backgroundColor = this.theme.background;
+        document.body.style.backgroundColor = this.theme.black;
     }
 
     public renderSidebar() {
@@ -580,7 +581,6 @@ export class Game {
         // Apply the scale factor to the game container
         const gameContainer = document.getElementById('game-canvas');
         gameContainer.style.transform = `scale(${this.scaleFactor})`;
-        gameContainer.style.transformOrigin = 'top left';
         gameContainer.style.width = `${1280}px`;
         gameContainer.style.height = `${800}px`;
     }
