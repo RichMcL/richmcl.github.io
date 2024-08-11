@@ -31,7 +31,7 @@ export class Dialog extends GameComponent {
         // Save the current context state
         this.ctx.save();
 
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
         this.ctx.fillRect(
             this.coordinates.x,
             this.coordinates.y,

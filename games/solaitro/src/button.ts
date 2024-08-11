@@ -111,8 +111,8 @@ export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) 
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding * 2 + 5;
     const buttonHeight = 50;
-    const x = 30;
-    const y = 730;
+    const x = 400;
+    const y = 480;
 
     return new GameButton(
         ctx,
@@ -132,8 +132,8 @@ export const createDealButton = (ctx: CanvasRenderingContext2D, theme: Theme) =>
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding * 2;
     const buttonHeight = 50;
-    const x = 30;
-    const y = 670;
+    const x = 540;
+    const y = 480;
 
     return new GameButton(
         ctx,
@@ -174,8 +174,8 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding * 2;
     const buttonHeight = 50;
-    const x = 1100;
-    const y = 670;
+    const x = 650;
+    const y = 480;
 
     return new GameButton(
         ctx,
@@ -189,14 +189,14 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
 };
 
 export const createOpenDialogButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
-    const text = 'OPEN';
+    const text = 'DEBUG';
     const padding = 20; // Padding for the button
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding * 2;
     const buttonHeight = 50;
     const x = 1100;
-    const y = 740;
+    const y = 720;
 
     return new GameButton(
         ctx,
@@ -239,7 +239,7 @@ export const createThemeButtons = (ctx: CanvasRenderingContext2D): ThemeButton[]
         const buttonWidth = 50;
         const buttonHeight = 50;
         const x = 400 + i * (buttonWidth + padding);
-        const y = 700;
+        const y = 570;
 
         const themeButton = new ThemeButton(
             ctx,

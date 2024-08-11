@@ -15,15 +15,8 @@ import { Player } from './player';
 import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Theme, Themes } from './theme';
-import { Card, CardValue, Coordinates, GameComponent, Suit } from './types';
-import {
-    buildAndShuffleDeck,
-    drawCard,
-    drawCardBack,
-    drawIcon,
-    drawRoundedRect,
-    printText
-} from './util';
+import { Card, Coordinates, GameComponent } from './types';
+import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
     public canvas: HTMLCanvasElement;
@@ -61,6 +54,7 @@ export class Game {
     public streak = 0;
 
     public buttons: GameButton[] = [];
+    public debugButtons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
     public dialog: Dialog;
     public dialogCloseButton: GameButton;
@@ -139,9 +133,9 @@ export class Game {
         this.player = new Player(this.ctx, this.cardFaceSpriteSheet, this.cardBackSpriteSheet);
 
         this.initializePiles();
-        this.buttons.push(createReloadButton(this.ctx, this.theme));
-        this.buttons.push(createFreeButtton(this.ctx, this.theme));
-        this.buttons.push(createDealButton(this.ctx, this.theme));
+        this.debugButtons.push(createReloadButton(this.ctx, this.theme));
+        this.debugButtons.push(createFreeButtton(this.ctx, this.theme));
+        this.debugButtons.push(createDealButton(this.ctx, this.theme));
         this.buttons.push(createHitButton(this.ctx, this.theme));
         this.buttons.push(createOpenDialogButton(this.ctx, this.theme));
         this.themeButtons = createThemeButtons(this.ctx);
@@ -186,7 +180,15 @@ export class Game {
         let hoverButton: GameButton;
 
         //loop through objects and check if click is within the boundaries
+
         this.buttons.forEach(button => {
+            if (button.isHoveredOver(this.scaledMouseCoordinates)) {
+                hoverButton = button;
+                hoverButton.isHovered = true;
+            }
+        });
+
+        this.debugButtons.forEach(button => {
             if (button.isHoveredOver(this.scaledMouseCoordinates)) {
                 hoverButton = button;
                 hoverButton.isHovered = true;
@@ -308,6 +310,10 @@ export class Game {
             button.reset();
         });
 
+        this.debugButtons.forEach(button => {
+            button.reset();
+        });
+
         this.themeButtons.forEach(button => {
             button.reset();
         });
@@ -335,14 +341,15 @@ export class Game {
         this.renderLastCardClicked();
         this.buttons.forEach(button => button.render());
 
-        this.themeButtons.forEach(button => button.render());
-
         for (const component of this.gameComponents) {
             component.render();
         }
 
         if (this.dialog.visible) {
             this.dialog.render();
+            this.themeButtons.forEach(button => button.render());
+            this.debugButtons.forEach(button => button.render());
+
             this.dialogCloseButton.render();
         }
     }
@@ -419,7 +426,7 @@ export class Game {
     public renderMousePosition(): void {
         const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
         const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
-        printText(this.ctx, `Cursor: X ${x} | Y ${y}`, 30, 640);
+        printText(this.ctx, `Cursor: X ${x} | Y ${y}`, 30, 780);
     }
 
     public renderLastCardClicked(): void {
