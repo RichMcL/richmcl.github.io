@@ -307,10 +307,11 @@ export class Game {
 
             this.player.removeTopPlayCard();
 
-            this.score += 10;
+            const pointsForMove = this.calculateScore();
+            this.score += pointsForMove;
             this.streak++;
 
-            this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 610, y: 300 }, 10));
+            this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 610, y: 300 }, pointsForMove));
         }
 
         if (this.isDealNewRound) {
@@ -512,6 +513,13 @@ export class Game {
     public hitCard(): void {
         this.streak = 0;
         this.player.hit();
+    }
+
+    public calculateScore(): number {
+        const baseScore = 10;
+        const streak = this.streak;
+
+        return baseScore + streak * 5;
     }
 
     /* USER ACTION FUNCTIONS */
