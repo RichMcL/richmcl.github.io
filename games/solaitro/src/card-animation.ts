@@ -27,10 +27,6 @@ export class CardAnimation extends GameComponent {
         // determine rate of change for x and y based no ttl
         this.xRateOfChange = (this.coordinates.x - this.endingCoordinates.x) / this.ttl;
         this.yRateOfChange = (this.coordinates.y - this.endingCoordinates.y) / this.ttl;
-
-        console.log('xRateOfChange', this.xRateOfChange);
-        console.log('yRateOfChange', this.yRateOfChange);
-        console.log('this.renderConfig.coordinates', this.renderConfig);
     }
 
     update(): void {

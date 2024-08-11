@@ -297,7 +297,7 @@ export class Game {
 
             hoverPile.coordinates;
 
-            this.gameComponents.push(
+            hoverPile.addCardAnimation(
                 new CardAnimation(
                     this.ctx,
                     this.player.getCoordinatesCopy(),

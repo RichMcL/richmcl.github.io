@@ -1,3 +1,4 @@
+import { CardAnimation } from './card-animation';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
 import { drawCard, printText } from './util';
 
@@ -55,6 +56,7 @@ export class Pile extends GameComponent {
     static ANIMATION_ENABLED = true;
     cards: Card[];
     renderConfig: RenderConfig;
+    cardAnimations: CardAnimation[] = [];
 
     canPlay: boolean = false;
 
@@ -86,6 +88,10 @@ export class Pile extends GameComponent {
         // Calculate the oscillating angle using a sine wave and add the initial angle
         const oscillatingAngle = Math.sin(this.time) * (3 * (Math.PI / 180)); // Convert degrees to radians
         this.rotationAngle = this.initialRotationAngle + oscillatingAngle;
+
+        this.cardAnimations.forEach(animation => animation.update());
+
+        this.deleteDeadCardAnimations();
     }
 
     render(): void {
@@ -103,6 +109,8 @@ export class Pile extends GameComponent {
                 this.renderConfig.size.height * this.renderConfig.scale +
                 30
         );
+
+        this.cardAnimations.forEach(animation => animation.render());
     }
 
     animationRender(): void {
@@ -142,11 +150,14 @@ export class Pile extends GameComponent {
             ? this.renderConfig.coordinates.y - 5
             : this.renderConfig.coordinates.y;
 
+        // Don't render the actual top card until it "lands"
+        const card = this.getCardFromTop(this.cardAnimations.length);
+
         drawCard(
             this.ctx,
             this.cardFaceSpriteSheet,
             this.cardBackSpriteSheet,
-            this.getTopCard(),
+            card,
             this.renderConfig.coordinates.x,
             yPos,
             scale
@@ -173,12 +184,23 @@ export class Pile extends GameComponent {
         return this.cards[this.cards.length - 1];
     }
 
+    getCardFromTop(index: number): Card {
+        return this.cards[this.cards.length - 1 - index];
+    }
     pushCard(card: Card): void {
         this.cards.push(card);
     }
 
     popCard(): Card {
         return this.cards.pop();
+    }
+
+    addCardAnimation(cardAnimation: CardAnimation): void {
+        this.cardAnimations.push(cardAnimation);
+    }
+
+    deleteDeadCardAnimations(): void {
+        this.cardAnimations = this.cardAnimations.filter(cardAnimation => !cardAnimation.deleteMe);
     }
 
     getCoordinatesCopy(): Coordinates {
