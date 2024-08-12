@@ -174,6 +174,24 @@ export const drawCardBack = (
     );
 };
 
+export const drawCardOutline = (
+    ctx: CanvasRenderingContext2D,
+    cardX: number,
+    cardY: number,
+    cardScaledWidth: number,
+    cardScaledHeight: number
+) => {
+    const padding = 3;
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(
+        cardX - padding,
+        cardY - padding,
+        cardScaledWidth + padding * 2,
+        cardScaledHeight + padding * 2
+    );
+};
+
 export const printText = (
     ctx: CanvasRenderingContext2D,
     text: string,

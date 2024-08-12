@@ -1,6 +1,6 @@
 import { CardAnimation } from './card-animation';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
-import { drawCard, printText } from './util';
+import { drawCard, drawCardOutline, printText } from './util';
 
 export const PilesRenderConfig: { [key: string]: RenderConfig } = {
     pile1: {
@@ -163,10 +163,10 @@ export class Pile extends GameComponent {
             scale
         );
 
+        // Draw a border around the pile if it can play
         if (this.canPlay) {
-            this.ctx.strokeStyle = 'white';
-            this.ctx.lineWidth = 3;
-            this.ctx.strokeRect(
+            drawCardOutline(
+                this.ctx,
                 this.renderConfig.coordinates.x,
                 yPos,
                 this.renderConfig.size.width * scale,
