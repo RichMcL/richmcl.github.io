@@ -187,6 +187,10 @@ export class Game {
     }
 
     public updateGameState() {
+        if (this.score >= Levels[this.currentLevel].scoreToBeat && !this.isActiveAnimations()) {
+            this.goToNextLevel();
+        }
+
         //remove all gameComponents with deleteMe set to true
         this.gameComponents = this.gameComponents.filter(component => !component.deleteMe);
 
@@ -327,10 +331,6 @@ export class Game {
             this.gameComponents.push(
                 new ScoreGraphic(this.ctx, { x: scoreX, y: 300 }, pointsForMove)
             );
-        }
-
-        if (this.score >= Levels[this.currentLevel].scoreToBeat) {
-            this.goToNextLevel();
         }
     }
 
@@ -571,6 +571,19 @@ export class Game {
         this.debugButtons.forEach(button => {
             button.theme = this.theme;
         });
+    }
+
+    public isActiveAnimations(): boolean {
+        let active = false;
+
+        for (const pile of [this.pile1, this.pile2, this.pile3, this.pile4]) {
+            if (pile.cardAnimations.length > 0) {
+                active = true;
+                break;
+            }
+        }
+
+        return active || this.gameComponents.some(component => component instanceof CardAnimation);
     }
 
     /* USER ACTION FUNCTIONS */
