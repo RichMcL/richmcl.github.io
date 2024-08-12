@@ -201,6 +201,8 @@ export class Game {
             pile.update();
         });
 
+        this.player.update();
+
         // Update the game state logic
         let hoverButton: GameButton;
 

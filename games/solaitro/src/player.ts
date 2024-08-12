@@ -1,3 +1,4 @@
+import { CardAnimation } from './card-animation';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
 import { buildAndShuffleDeck, drawCard, drawCardBack, printText } from './util';
 
@@ -30,6 +31,7 @@ export class Player extends GameComponent {
     playPile: Card[] = [];
     startingShuffles = 3;
     shufflesRemaining = this.startingShuffles;
+    cardAnimations: CardAnimation[] = [];
 
     playPileVisibleSize = 3;
     playPileStartingSize = 3;
@@ -50,7 +52,11 @@ export class Player extends GameComponent {
         this.renderConfig = PlayerRenderConfig;
     }
 
-    update(): void {}
+    update(): void {
+        this.cardAnimations.forEach(animation => animation.update());
+
+        this.deleteDeadCardAnimations();
+    }
 
     render(): void {
         // Render deck to represent draw pile
@@ -64,8 +70,17 @@ export class Player extends GameComponent {
             );
         }
 
+        // Don't render the actual cards until they "land"
+        let renderStartIndex = this.playPileVisibleSize - 1;
+        let renderEndIndex = 0;
+
+        if (this.cardAnimations.length > 0) {
+            renderStartIndex += this.cardAnimations.length;
+            renderEndIndex += this.cardAnimations.length;
+        }
+
         //Render the top playPileVisibleSize cards of the play pile
-        for (let i = this.playPileVisibleSize - 1; i >= 0; i--) {
+        for (let i = renderStartIndex; i >= renderEndIndex; i--) {
             if (!this.playPile[i]) {
                 continue;
             }
@@ -75,7 +90,7 @@ export class Player extends GameComponent {
                 this.cardFaceSpriteSheet,
                 this.cardBackSpriteSheet,
                 this.playPile[i],
-                this.renderConfig.coordinates.x - i * 45,
+                this.renderConfig.coordinates.x - (i - this.cardAnimations.length) * 45,
                 this.renderConfig.coordinates.y,
                 this.renderConfig.scale
             );
@@ -83,6 +98,8 @@ export class Player extends GameComponent {
 
         this.renderDrawPileSize();
         this.renderPlayPileSize();
+
+        this.cardAnimations.forEach(animation => animation.render());
     }
 
     public renderPlayPileSize(): void {
@@ -119,16 +136,48 @@ export class Player extends GameComponent {
         }
 
         //pop playPileStartingSize cards of the draw pile and add to the top of the stack
+        let animationIndex = this.playPileStartingSize - 1;
         for (let i = 0; i < this.playPileStartingSize; i++) {
             const topOfDrawPile = this.drawPile.pop();
 
             if (topOfDrawPile) {
                 this.playPile.unshift(topOfDrawPile);
+
+                this.addCardAnimation(
+                    new CardAnimation(
+                        this.ctx,
+                        {
+                            x: DrawPileRenderConfig.coordinates.x,
+                            y: DrawPileRenderConfig.coordinates.y
+                        },
+                        {
+                            x: PlayerRenderConfig.coordinates.x - animationIndex * 45,
+                            y: PlayerRenderConfig.coordinates.y
+                        },
+                        this.cardFaceSpriteSheet,
+                        this.cardBackSpriteSheet,
+                        topOfDrawPile,
+                        15
+                    )
+                );
             }
+            animationIndex--;
         }
     }
 
     removeTopPlayCard(): void {
         this.playPile.shift();
+    }
+
+    addCardAnimation(cardAnimation: CardAnimation): void {
+        this.cardAnimations.push(cardAnimation);
+    }
+
+    deleteDeadCardAnimations(): void {
+        this.cardAnimations = this.cardAnimations.filter(cardAnimation => !cardAnimation.deleteMe);
+    }
+
+    getCoordinatesCopy(): Coordinates {
+        return { ...this.coordinates };
     }
 }

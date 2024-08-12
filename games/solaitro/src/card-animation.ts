@@ -2,7 +2,6 @@ import { Card, Coordinates, GameComponent } from './types';
 import { drawCard } from './util';
 
 export class CardAnimation extends GameComponent {
-    public ttl: number = 15;
     public xRateOfChange: number = 0;
     public yRateOfChange: number = 0;
 
@@ -12,7 +11,8 @@ export class CardAnimation extends GameComponent {
         private endingCoordinates: Coordinates,
         private cardFaceSpriteSheet: HTMLImageElement,
         private cardBackSpriteSheet: HTMLImageElement,
-        private card: Card
+        private card: Card,
+        private ttl: number = 15
     ) {
         super(ctx, coordinates);
 
