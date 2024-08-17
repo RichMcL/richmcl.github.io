@@ -34,7 +34,7 @@ export class Player extends GameComponent {
     cardAnimations: CardAnimation[] = [];
 
     playPileVisibleSize = 3;
-    playPileStartingSize = 3;
+    playPileDrawSize = 3;
 
     renderConfig: RenderConfig;
 
@@ -136,8 +136,8 @@ export class Player extends GameComponent {
         }
 
         //pop playPileStartingSize cards of the draw pile and add to the top of the stack
-        let animationIndex = this.playPileStartingSize - 1;
-        for (let i = 0; i < this.playPileStartingSize; i++) {
+        let animationIndex = this.playPileDrawSize - 1;
+        for (let i = 0; i < this.playPileDrawSize; i++) {
             const topOfDrawPile = this.drawPile.pop();
 
             if (topOfDrawPile) {
@@ -179,5 +179,41 @@ export class Player extends GameComponent {
 
     getCoordinatesCopy(): Coordinates {
         return { ...this.coordinates };
+    }
+
+    incrementPlayPileVisibleSize(): void {
+        this.playPileVisibleSize++;
+    }
+
+    decrementPlayPileVisibleSize(): void {
+        if (this.playPileVisibleSize === 0) {
+            return;
+        }
+
+        this.playPileVisibleSize--;
+    }
+
+    incrementPlayPileDrawSize(): void {
+        this.playPileDrawSize++;
+    }
+
+    decrementPlayPileDrawSize(): void {
+        if (this.playPileDrawSize === 0) {
+            return;
+        }
+
+        this.playPileDrawSize--;
+    }
+
+    incrementShuffles(): void {
+        this.shufflesRemaining++;
+    }
+
+    decrementShuffles(): void {
+        if (this.shufflesRemaining === 0) {
+            return;
+        }
+
+        this.shufflesRemaining--;
     }
 }

@@ -104,6 +104,144 @@ export class ThemeButton extends GameButton {
     }
 }
 
+export const createDecrementPlayPileButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'Play Pile -';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 400;
+    const y = 410;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'decrement-play-pile',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createIncrementPlayPileButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'Play Pile +';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 540;
+    const y = 410;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'increment-play-pile',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createDecrementDrawSizeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'Draw Size -';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 400;
+    const y = 270;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'decrement-draw-size',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createIncrementDrawSizeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'Draw Size +';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 540;
+    const y = 270;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'increment-draw-size',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createDecrementShufflesButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'Shuffles -';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 400;
+    const y = 340;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'decrement-shuffles',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createIncrementShufflesButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'Shuffles +';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 540;
+    const y = 340;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'increment-shuffles',
+        text,
+        padding,
+        theme
+    );
+};
+
 export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'RELOAD';
     const padding = 20; // Padding for the button

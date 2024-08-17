@@ -1,8 +1,14 @@
 import {
     createCloseDialogButton,
     createDealButton,
+    createDecrementDrawSizeButton,
+    createDecrementPlayPileButton,
+    createDecrementShufflesButton,
     createFreeButtton,
     createHitButton,
+    createIncrementDrawSizeButton,
+    createIncrementPlayPileButton,
+    createIncrementShufflesButton,
     createOpenDialogButton,
     createReloadButton,
     createThemeButtons,
@@ -154,6 +160,12 @@ export class Game {
         this.player = new Player(this.ctx, this.cardFaceSpriteSheet, this.cardBackSpriteSheet);
 
         this.initializePiles();
+        this.debugButtons.push(createDecrementDrawSizeButton(this.ctx, this.theme));
+        this.debugButtons.push(createIncrementDrawSizeButton(this.ctx, this.theme));
+        this.debugButtons.push(createDecrementShufflesButton(this.ctx, this.theme));
+        this.debugButtons.push(createIncrementShufflesButton(this.ctx, this.theme));
+        this.debugButtons.push(createDecrementPlayPileButton(this.ctx, this.theme));
+        this.debugButtons.push(createIncrementPlayPileButton(this.ctx, this.theme));
         this.debugButtons.push(createReloadButton(this.ctx, this.theme));
         this.debugButtons.push(createFreeButtton(this.ctx, this.theme));
         this.debugButtons.push(createDealButton(this.ctx, this.theme));
@@ -260,6 +272,24 @@ export class Game {
                     break;
                 case 'hit':
                     this.hitCard();
+                    break;
+                case 'increment-draw-size':
+                    this.player.incrementPlayPileDrawSize();
+                    break;
+                case 'decrement-draw-size':
+                    this.player.decrementPlayPileDrawSize();
+                    break;
+                case 'increment-shuffles':
+                    this.player.incrementShuffles();
+                    break;
+                case 'decrement-shuffles':
+                    this.player.decrementShuffles();
+                    break;
+                case 'increment-play-pile':
+                    this.player.incrementPlayPileVisibleSize();
+                    break;
+                case 'decrement-play-pile':
+                    this.player.decrementPlayPileVisibleSize();
                     break;
                 case 'dialog-open':
                     this.dialog.visible = true;
@@ -481,6 +511,8 @@ export class Game {
         lines.push(`Time: ${minutes}:${seconds}.${tenths}`);
         lines.push('');
         lines.push(`Shuffles: ${this.player.shufflesRemaining}`);
+        lines.push(`Play Pile Size: ${this.player.playPileVisibleSize}`);
+        lines.push(`Draw Pile Size: ${this.player.playPileDrawSize}`);
         lines.push(`Score: ${this.score}`);
         lines.push(`Streak: ${this.streak}`);
         lines.push('');
