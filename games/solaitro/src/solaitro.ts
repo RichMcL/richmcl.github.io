@@ -14,6 +14,7 @@ import {
     createOpenDialogButton,
     createReloadButton,
     createReverseKlondikeButton,
+    createSameValueButton,
     createThemeButtons,
     GameButton,
     ThemeButton
@@ -169,6 +170,7 @@ export class Game {
         this.debugButtons.push(createIncrementShufflesButton(this.ctx, this.theme));
         this.debugButtons.push(createDecrementPlayPileButton(this.ctx, this.theme));
         this.debugButtons.push(createIncrementPlayPileButton(this.ctx, this.theme));
+        this.debugButtons.push(createSameValueButton(this.ctx, this.theme));
         this.debugButtons.push(createFlushButton(this.ctx, this.theme));
         this.debugButtons.push(createKlondikeButton(this.ctx, this.theme));
         this.debugButtons.push(createReverseKlondikeButton(this.ctx, this.theme));
@@ -300,6 +302,16 @@ export class Game {
                         this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.flush);
                     } else {
                         this.ruleNames.push(RuleNames.flush);
+                    }
+                    break;
+                case 'same-value':
+                    //toggle RuleNames.sameValue
+                    if (this.ruleNames.includes(RuleNames.sameValue)) {
+                        this.ruleNames = this.ruleNames.filter(
+                            rule => rule !== RuleNames.sameValue
+                        );
+                    } else {
+                        this.ruleNames.push(RuleNames.sameValue);
                     }
                     break;
                 case 'hit':

@@ -15,6 +15,7 @@ export enum SingleRuleKey {
     oppositeColor = 'oppositeColor',
     sameColor = 'sameColor',
     sameSuit = 'sameSuit',
+    sameValue = 'sameValue',
     oneLower = 'oneLower',
     oneHigher = 'oneHigher'
 }
@@ -23,7 +24,8 @@ export enum RuleNames {
     klondike = 'klondike',
     reverseKlondike = 'reverseKlondike',
     flush = 'flush',
-    free = 'free'
+    free = 'free',
+    sameValue = 'sameValue'
 }
 
 export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) => boolean } = {
@@ -61,6 +63,12 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
         if (!playerCard || !pileCard) return false;
 
         return playerCard.suit === pileCard.suit;
+    },
+
+    [SingleRuleKey.sameValue]: (playerCard: Card, pileCard: Card) => {
+        if (!playerCard || !pileCard) return false;
+
+        return playerCard.value === pileCard.value;
     },
 
     [SingleRuleKey.oneLower]: (playerCard: Card, pileCard: Card) => {
@@ -117,6 +125,12 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         name: 'Reverse Klondike',
         description: 'Opp. color and one higher',
         rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneHigher]
+    },
+
+    [RuleNames.sameValue]: {
+        name: 'Same Value',
+        description: 'Same value',
+        rules: [SingleRuleKey.sameValue]
     }
 };
 

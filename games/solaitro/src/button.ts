@@ -311,6 +311,29 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
     );
 };
 
+export const createSameValueButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'SAME VALUE';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 800;
+    const y = 240;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'same-value',
+        text,
+        padding,
+        theme
+    );
+};
+
 export const createFlushButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'FLUSH';
     const padding = 20; // Padding for the button
