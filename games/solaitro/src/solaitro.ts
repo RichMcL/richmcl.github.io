@@ -26,6 +26,7 @@ import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
 import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
 import { ScoreGraphic } from './score-graphic';
+import { Scorebar } from './scorebar';
 import { Theme, Themes } from './theme';
 import { Card, Coordinates, GameComponent } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
@@ -46,6 +47,8 @@ export class Game {
     public pile2: Pile;
     public pile3: Pile;
     public pile4: Pile;
+
+    public scorebar: Scorebar;
 
     public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike, RuleNames.free];
     public gameComponents: GameComponent[] = [];
@@ -183,6 +186,10 @@ export class Game {
 
         this.dialog = new Dialog(this.ctx, DefaultDialogRenderConfig.coordinates);
         this.dialogCloseButton = createCloseDialogButton(this.ctx, this.theme);
+
+        this.scorebar = new Scorebar(this.ctx);
+
+        this.gameComponents.push(this.scorebar);
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -400,6 +407,8 @@ export class Game {
             this.score += pointsForMove;
             this.streak++;
 
+            this.scorebar.setScoreToReach(this.score);
+
             // in the middle of the pile
             const scoreX =
                 hoverPile.renderConfig.coordinates.x + hoverPile.renderConfig.size.width / 2;
@@ -433,6 +442,9 @@ export class Game {
         this.changeTheme(Themes[nextTheme]);
         this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 540, y: 350 }, 'Next Level!'));
         this.player.shufflesRemaining = this.player.startingShuffles;
+
+        this.scorebar.reset();
+        this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
     }
 
     public resetGameState(): void {
