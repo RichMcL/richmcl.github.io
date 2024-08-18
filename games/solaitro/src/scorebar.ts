@@ -1,4 +1,5 @@
 import { Coordinates, GameComponent } from './types';
+import { printText } from './util';
 
 export class Scorebar extends GameComponent {
     private scoreToReach = 0;
@@ -58,6 +59,16 @@ export class Scorebar extends GameComponent {
             this.coordinates.y,
             3,
             this.renderConfig.size.height
+        );
+
+        //render the score at the top of the bar
+        printText(
+            this.ctx,
+            `${this.renderedScore}`,
+            this.coordinates.x + this.renderConfig.size.width + 10,
+            this.renderConfig.size.height - scoreHeight + 10,
+            20,
+            'white'
         );
     }
 
