@@ -1,3 +1,4 @@
+import { text } from 'stream/consumers';
 import { Coordinates, GameComponent } from './types';
 import { printText } from './util';
 
@@ -36,7 +37,7 @@ export class Scorebar extends GameComponent {
             this.renderConfig.size.height
         );
 
-        let completedRatio = this.renderedScore / this.maxScore;
+        let completedRatio = this.getCompletedRatio();
 
         if (completedRatio > 1) {
             completedRatio = 1;
@@ -62,11 +63,16 @@ export class Scorebar extends GameComponent {
         );
 
         //render the score at the top of the bar
+        let textY = this.renderConfig.size.height - scoreHeight + 10;
+
+        if (textY < 30) {
+            textY = 30;
+        }
         printText(
             this.ctx,
             `${this.renderedScore}`,
             this.coordinates.x + this.renderConfig.size.width + 10,
-            this.renderConfig.size.height - scoreHeight + 10,
+            textY,
             20,
             'white'
         );
@@ -83,5 +89,13 @@ export class Scorebar extends GameComponent {
 
     setMaxScore(maxScore: number): void {
         this.maxScore = maxScore;
+    }
+
+    getCompletedRatio(): number {
+        return this.renderedScore / this.maxScore;
+    }
+
+    isAnimationComplete(): boolean {
+        return this.renderedScore >= this.scoreToReach;
     }
 }

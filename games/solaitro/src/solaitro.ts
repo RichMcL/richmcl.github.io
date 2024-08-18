@@ -214,7 +214,11 @@ export class Game {
     }
 
     public updateGameState() {
-        if (this.score >= Levels[this.currentLevel].scoreToBeat && !this.isActiveAnimations()) {
+        if (
+            this.score >= Levels[this.currentLevel].scoreToBeat &&
+            !this.isActiveAnimations() &&
+            this.scorebar.isAnimationComplete()
+        ) {
             this.goToNextLevel();
         }
 
