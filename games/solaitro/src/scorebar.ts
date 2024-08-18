@@ -29,7 +29,7 @@ export class Scorebar extends GameComponent {
 
     render(): void {
         // Left border
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = '#eeeeee';
         this.ctx.fillRect(
             this.coordinates.x - 3,
             this.coordinates.y,
@@ -45,6 +45,14 @@ export class Scorebar extends GameComponent {
 
         const scoreHeight = completedRatio * 780;
 
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(
+            this.coordinates.x,
+            this.coordinates.y,
+            this.renderConfig.size.width,
+            this.renderConfig.size.height
+        );
+
         this.ctx.fillStyle = '#77dd77';
         this.ctx.fillRect(
             this.coordinates.x,
@@ -54,7 +62,7 @@ export class Scorebar extends GameComponent {
         );
 
         // Right border
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = '#eeeeee';
         this.ctx.fillRect(
             this.coordinates.x + this.renderConfig.size.width,
             this.coordinates.y,
