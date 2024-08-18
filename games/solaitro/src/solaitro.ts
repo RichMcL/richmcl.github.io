@@ -4,13 +4,16 @@ import {
     createDecrementDrawSizeButton,
     createDecrementPlayPileButton,
     createDecrementShufflesButton,
+    createFlushButton,
     createFreeButtton,
     createHitButton,
     createIncrementDrawSizeButton,
     createIncrementPlayPileButton,
     createIncrementShufflesButton,
+    createKlondikeButton,
     createOpenDialogButton,
     createReloadButton,
+    createReverseKlondikeButton,
     createThemeButtons,
     GameButton,
     ThemeButton
@@ -166,6 +169,9 @@ export class Game {
         this.debugButtons.push(createIncrementShufflesButton(this.ctx, this.theme));
         this.debugButtons.push(createDecrementPlayPileButton(this.ctx, this.theme));
         this.debugButtons.push(createIncrementPlayPileButton(this.ctx, this.theme));
+        this.debugButtons.push(createFlushButton(this.ctx, this.theme));
+        this.debugButtons.push(createKlondikeButton(this.ctx, this.theme));
+        this.debugButtons.push(createReverseKlondikeButton(this.ctx, this.theme));
         this.debugButtons.push(createReloadButton(this.ctx, this.theme));
         this.debugButtons.push(createFreeButtton(this.ctx, this.theme));
         this.debugButtons.push(createDealButton(this.ctx, this.theme));
@@ -268,6 +274,32 @@ export class Game {
                         this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.free);
                     } else {
                         this.ruleNames.push(RuleNames.free);
+                    }
+                    break;
+                case 'klondike':
+                    //toggle RuleNames.klondike
+                    if (this.ruleNames.includes(RuleNames.klondike)) {
+                        this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.klondike);
+                    } else {
+                        this.ruleNames.push(RuleNames.klondike);
+                    }
+                    break;
+                case 'reverse-klondike':
+                    //toggle RuleNames.reverseKlondike
+                    if (this.ruleNames.includes(RuleNames.reverseKlondike)) {
+                        this.ruleNames = this.ruleNames.filter(
+                            rule => rule !== RuleNames.reverseKlondike
+                        );
+                    } else {
+                        this.ruleNames.push(RuleNames.reverseKlondike);
+                    }
+                    break;
+                case 'flush':
+                    //toggle RuleNames.flush
+                    if (this.ruleNames.includes(RuleNames.flush)) {
+                        this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.flush);
+                    } else {
+                        this.ruleNames.push(RuleNames.flush);
                     }
                     break;
                 case 'hit':
@@ -485,6 +517,8 @@ export class Game {
         //iterate over the riles an print their descriptions
 
         let y = 80;
+
+        this.ruleNames.sort();
         for (const rule of this.ruleNames) {
             const ruleInfo = RuleInfo[rule];
             printText(this.ctx, `- ${ruleInfo.name}`, x + 30, y);

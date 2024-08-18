@@ -13,6 +13,8 @@ export interface Rule {
 export enum SingleRuleKey {
     free = 'free',
     oppositeColor = 'oppositeColor',
+    sameColor = 'sameColor',
+    sameSuit = 'sameSuit',
     oneLower = 'oneLower',
     oneHigher = 'oneHigher'
 }
@@ -20,6 +22,7 @@ export enum SingleRuleKey {
 export enum RuleNames {
     klondike = 'klondike',
     reverseKlondike = 'reverseKlondike',
+    flush = 'flush',
     free = 'free'
 }
 
@@ -38,6 +41,26 @@ export const RuleFunctions: { [key: string]: (playerCard: Card, pileCard: Card) 
         }
 
         return false;
+    },
+
+    [SingleRuleKey.sameColor]: (playerCard: Card, pileCard: Card) => {
+        if (!playerCard || !pileCard) return false;
+
+        if (blackSuits.includes(playerCard?.suit) && blackSuits.includes(pileCard.suit)) {
+            return true;
+        }
+
+        if (redSuits.includes(playerCard.suit) && redSuits.includes(pileCard.suit)) {
+            return true;
+        }
+
+        return false;
+    },
+
+    [SingleRuleKey.sameSuit]: (playerCard: Card, pileCard: Card) => {
+        if (!playerCard || !pileCard) return false;
+
+        return playerCard.suit === pileCard.suit;
     },
 
     [SingleRuleKey.oneLower]: (playerCard: Card, pileCard: Card) => {
@@ -76,6 +99,12 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         name: 'Free',
         description: 'Everything is valid',
         rules: [SingleRuleKey.free]
+    },
+
+    [RuleNames.flush]: {
+        name: 'Flush',
+        description: 'Same suit',
+        rules: [SingleRuleKey.sameSuit]
     },
 
     [RuleNames.klondike]: {

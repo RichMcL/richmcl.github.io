@@ -311,6 +311,75 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
     );
 };
 
+export const createFlushButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'FLUSH';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 800;
+    const y = 300;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'flush',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createReverseKlondikeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'REV. KLONDIKE';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 800;
+    const y = 360;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'reverse-klondike',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createKlondikeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'KLONDIKE';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 800;
+    const y = 420;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'klondike',
+        text,
+        padding,
+        theme
+    );
+};
+
 export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
     const text = 'FREE';
     const padding = 20; // Padding for the button
@@ -320,7 +389,7 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 650;
+    const x = 800;
     const y = 480;
 
     return new GameButton(
