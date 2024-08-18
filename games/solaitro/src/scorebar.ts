@@ -12,7 +12,7 @@ export class Scorebar extends GameComponent {
         this.renderConfig = {
             coordinates,
             size: {
-                width: 10,
+                width: 20,
                 height: 780
             },
             scale: 1
