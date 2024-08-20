@@ -33,6 +33,7 @@ import {
 } from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Scorebar } from './scorebar';
+import { Swirl } from './swirl';
 import { Theme, Themes } from './theme';
 import { Card, Coordinates, GameComponent } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
@@ -107,6 +108,8 @@ export class Game {
         ]).then(() => {
             this.startGame();
         });
+
+        new Swirl().doSwirl();
     }
 
     private loadImage(image: HTMLImageElement): Promise<void> {
@@ -521,7 +524,7 @@ export class Game {
     }
 
     public renderTheme() {
-        this.canvas.style.backgroundColor = this.theme.background;
+        // this.canvas.style.backgroundColor = this.theme.background;
         document.body.style.backgroundColor = this.theme.black;
     }
 
@@ -713,5 +716,11 @@ export class Game {
         gameContainer.style.transform = `scale(${this.scaleFactor})`;
         gameContainer.style.width = `${1280}px`;
         gameContainer.style.height = `${800}px`;
+
+        // Apply the scale factor to the game container
+        const bgontainer = document.getElementById('bg-canvas');
+        bgontainer.style.transform = `scale(${this.scaleFactor})`;
+        bgontainer.style.width = `${1280}px`;
+        bgontainer.style.height = `${800}px`;
     }
 }
