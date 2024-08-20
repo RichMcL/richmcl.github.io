@@ -110,9 +110,9 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         name: 'Free',
         description: 'Everything is valid',
         rules: [SingleRuleKey.free],
-        baseScore: 1,
+        baseScore: 10,
         plusMultiplier: 1,
-        timesMultiplier: 1
+        timesMultiplier: 2
     },
 
     [RuleNames.flush]: {
@@ -191,7 +191,7 @@ export const calculateScoreForRules = (rules: RuleNames[], streak: number): numb
 
     const timesMultiplier = rules.reduce((multiplier, ruleName) => {
         return multiplier * RuleInfo[ruleName].timesMultiplier;
-    }, 0);
+    }, 1);
 
-    return baseScore + (plusMultiplier + streak) * timesMultiplier;
+    return baseScore * (plusMultiplier + streak) * timesMultiplier;
 };
