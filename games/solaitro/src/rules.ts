@@ -8,6 +8,9 @@ export interface Rule {
     name: string;
     description: string;
     rules: SingleRuleKey[];
+    baseScore?: number;
+    plusMultiplier?: number;
+    timesMultiplier?: number;
 }
 
 export enum SingleRuleKey {
@@ -106,31 +109,46 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
     [RuleNames.free]: {
         name: 'Free',
         description: 'Everything is valid',
-        rules: [SingleRuleKey.free]
+        rules: [SingleRuleKey.free],
+        baseScore: 1,
+        plusMultiplier: 1,
+        timesMultiplier: 1
     },
 
     [RuleNames.flush]: {
         name: 'Flush',
         description: 'Same suit',
-        rules: [SingleRuleKey.sameSuit]
+        rules: [SingleRuleKey.sameSuit],
+        baseScore: 5,
+        plusMultiplier: 1,
+        timesMultiplier: 1
     },
 
     [RuleNames.klondike]: {
         name: 'Klondike',
         description: 'Opp. color and one lower',
-        rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneLower]
+        rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneLower],
+        baseScore: 10,
+        plusMultiplier: 1,
+        timesMultiplier: 1
     },
 
     [RuleNames.reverseKlondike]: {
         name: 'Reverse Klondike',
         description: 'Opp. color and one higher',
-        rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneHigher]
+        rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneHigher],
+        baseScore: 10,
+        plusMultiplier: 1,
+        timesMultiplier: 1
     },
 
     [RuleNames.sameValue]: {
         name: 'Same Value',
         description: 'Same value',
-        rules: [SingleRuleKey.sameValue]
+        rules: [SingleRuleKey.sameValue],
+        baseScore: 10,
+        plusMultiplier: 1,
+        timesMultiplier: 1
     }
 };
 
@@ -150,4 +168,30 @@ export const doesAnyRulePass = (
     pileCard: Card
 ): boolean => {
     return ruleNames.some(ruleName => doesSingleRulePass(RuleInfo[ruleName], playerCard, pileCard));
+};
+
+export const getAllPassingRules = (
+    rulesNames: RuleNames[],
+    playerCard: Card,
+    pileCard: Card
+): RuleNames[] => {
+    return Object.values(rulesNames).filter(ruleName =>
+        doesSingleRulePass(RuleInfo[ruleName], playerCard, pileCard)
+    );
+};
+
+export const calculateScoreForRules = (rules: RuleNames[], streak: number): number => {
+    const baseScore = rules.reduce((score, ruleName) => {
+        return score + RuleInfo[ruleName].baseScore;
+    }, 0);
+
+    const plusMultiplier = rules.reduce((multiplier, ruleName) => {
+        return multiplier + RuleInfo[ruleName].plusMultiplier;
+    }, 0);
+
+    const timesMultiplier = rules.reduce((multiplier, ruleName) => {
+        return multiplier * RuleInfo[ruleName].timesMultiplier;
+    }, 0);
+
+    return baseScore + (plusMultiplier + streak) * timesMultiplier;
 };

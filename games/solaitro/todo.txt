@@ -1,3 +1,3 @@
-Change the score to a progress bar
+
 Move the score (both base points and multiplier to the rules)
 Each rule that fire those points apply

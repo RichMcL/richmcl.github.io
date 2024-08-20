@@ -76,6 +76,7 @@ export class Scorebar extends GameComponent {
         if (textY < 30) {
             textY = 30;
         }
+
         printText(
             this.ctx,
             `${this.renderedScore}`,

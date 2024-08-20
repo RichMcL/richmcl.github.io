@@ -24,7 +24,13 @@ import { DefaultDialogRenderConfig, Dialog } from './dialog';
 import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
-import { doesAnyRulePass, RuleInfo, RuleNames } from './rules';
+import {
+    calculateScoreForRules,
+    doesAnyRulePass,
+    getAllPassingRules,
+    RuleInfo,
+    RuleNames
+} from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Scorebar } from './scorebar';
 import { Theme, Themes } from './theme';
@@ -405,12 +411,20 @@ export class Game {
                 value: this.player.getTopPlayCard().value
             });
 
-            this.player.removeTopPlayCard();
+            //get all passing rules
+            const passingRules = getAllPassingRules(
+                this.ruleNames,
+                this.player.getTopPlayCard(),
+                hoverPileCard
+            );
 
-            const pointsForMove = this.calculateScore();
+            console.log('Passing rules', passingRules);
+
+            const pointsForMove = calculateScoreForRules(passingRules, this.streak);
             this.score += pointsForMove;
             this.streak++;
 
+            this.player.removeTopPlayCard();
             this.scorebar.setScoreToReach(this.score);
 
             // in the middle of the pile
@@ -648,13 +662,6 @@ export class Game {
     public hitCard(): void {
         this.streak = 0;
         this.player.hit();
-    }
-
-    public calculateScore(): number {
-        const baseScore = 10;
-        const streak = this.streak;
-
-        return baseScore + streak * 5;
     }
 
     public changeTheme(theme: Theme): void {
