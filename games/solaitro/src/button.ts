@@ -4,6 +4,7 @@ import { printText } from './util';
 
 export class GameButton extends GameComponent {
     renderConfig: RenderConfig;
+    borderRadius = 5;
 
     constructor(
         ctx: CanvasRenderingContext2D,
@@ -25,14 +26,23 @@ export class GameButton extends GameComponent {
     update(): void {}
 
     render(): void {
+        this.renderDropShadow();
         this.ctx.fillStyle = this.theme.base;
 
-        this.ctx.fillRect(
-            this.coordinates.x,
-            this.coordinates.y,
-            this.size.width,
-            this.size.height
-        );
+        const x = this.coordinates.x;
+        const y = this.coordinates.y;
+        const width = this.size.width;
+        const height = this.size.height;
+        const radius = this.borderRadius; // Adjust the radius as needed
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(x + radius, y);
+        this.ctx.arcTo(x + width, y, x + width, y + height, radius);
+        this.ctx.arcTo(x + width, y + height, x, y + height, radius);
+        this.ctx.arcTo(x, y + height, x, y, radius);
+        this.ctx.arcTo(x, y, x + width, y, radius);
+        this.ctx.closePath();
+        this.ctx.fill();
 
         printText(
             this.ctx,
@@ -43,15 +53,49 @@ export class GameButton extends GameComponent {
 
         // Draw a border around the button if it's hovered
         if (this.isHovered) {
-            this.ctx.strokeStyle = 'white';
-            this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(
-                this.coordinates.x,
-                this.coordinates.y,
-                this.size.width,
-                this.size.height
-            );
+            this.renderOutline();
         }
+    }
+
+    renderDropShadow(): void {
+        this.ctx.save();
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+
+        const x = this.renderConfig.coordinates.x;
+        const y = this.renderConfig.coordinates.y;
+        const width = this.renderConfig.size.width * this.renderConfig.scale;
+        const height = this.renderConfig.size.height * this.renderConfig.scale;
+        const radius = this.borderRadius; // Adjust the radius as needed
+
+        // Determine the shadow offset based on the element's position relative to the center
+        const shadowOffsetX = 5; // Reduced horizontal offset
+        const shadowOffsetY = 5; // Fixed vertical offset
+
+        // Apply the shadow offset
+        const shadowX = x + shadowOffsetX;
+        const shadowY = y + shadowOffsetY;
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(shadowX + radius, shadowY);
+        this.ctx.arcTo(shadowX + width, shadowY, shadowX + width, shadowY + height, radius);
+        this.ctx.arcTo(shadowX + width, shadowY + height, shadowX, shadowY + height, radius);
+        this.ctx.arcTo(shadowX, shadowY + height, shadowX, shadowY, radius);
+        this.ctx.arcTo(shadowX, shadowY, shadowX + width, shadowY, radius);
+        this.ctx.closePath();
+        this.ctx.fill();
+
+        this.ctx.restore();
+    }
+
+    renderOutline(): void {
+        this.ctx.strokeStyle = 'white';
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(
+            this.coordinates.x,
+            this.coordinates.y,
+            this.size.width,
+            this.size.height
+        );
     }
 
     reset(): void {
