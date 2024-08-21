@@ -7,8 +7,6 @@ export class Swirl {
             canvas.getContext('webgl') ||
             (canvas.getContext('experimental-webgl') as WebGLRenderingContext);
 
-        console.log('gl', gl);
-
         if (!gl) {
             console.error('WebGL not supported');
             throw 'WebGL not supported';

@@ -268,7 +268,7 @@ export class Game {
             });
 
             if (hoverThemeButton && this.isMouseClicked) {
-                this.theme = hoverThemeButton.theme;
+                this.changeTheme(hoverThemeButton.theme);
             }
         } else {
             this.buttons.forEach(button => {
@@ -680,6 +680,8 @@ export class Game {
         this.debugButtons.forEach(button => {
             button.theme = this.theme;
         });
+
+        this.dialogCloseButton.theme = this.theme;
     }
 
     public isActiveAnimations(): boolean {
