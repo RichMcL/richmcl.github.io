@@ -1,8 +1,6 @@
 export class Swirl {
     doSwirl() {
         const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement;
-        console.log('canvas', canvas);
-        // const gl = canvas.getContext('webgl');
         const gl =
             canvas.getContext('webgl') ||
             (canvas.getContext('experimental-webgl') as WebGLRenderingContext);
@@ -42,8 +40,8 @@ export class Swirl {
 
             // Perturbation function
             vec2 perturb(vec2 pos, float time) {
-                float perturbX = sin(pos.y * 10.0 + time * 0.5) * 0.05;
-                float perturbY = cos(pos.x * 10.0 + time * 0.5) * 0.05;
+                float perturbX = sin(pos.y * 10.0 + time * 0.1) * 0.1; // Reduced frequency
+                float perturbY = cos(pos.x * 10.0 + time * 0.1) * 0.1; // Reduced frequency
                 return pos + vec2(perturbX, perturbY);
             }
 
@@ -56,17 +54,21 @@ export class Swirl {
                 vec2 center = vec2(0.5, 0.5);
                 vec2 pos = pixelatedUV - center;
                 pos = perturb(pos, uTime); // Apply perturbation
-                float angle = atan(pos.y, pos.x);
+
+                // Apply rotation
+                float angle = atan(pos.y, pos.x) + uTime * 0.1; // Rotate over time
                 float radius = length(pos);
-                float swirl = sin(angle * 10.0 + uTime * 0.5) * 0.5 + 0.5; // Slowed down
-                float curve = sin(radius * 10.0 - uTime * 0.5) * 0.5 + 0.5; // Slowed down
-                float colorFactor = sin(radius * 20.0 + angle * 5.0 - uTime * 0.5) * 0.5 + 0.5; // Slowed down
+                vec2 rotatedPos = vec2(cos(angle), sin(angle)) * radius;
+
+                float swirl = sin(angle * 10.0 + uTime * 0.1) * 0.5 + 0.5; // Reduced frequency
+                float curve = sin(radius * 10.0 - uTime * 0.1) * 0.5 + 0.5; // Reduced frequency
+                float colorFactor = sin(radius * 20.0 + angle * 5.0 - uTime * 0.5) * 0.5 + 0.5; // Reduced frequency
+
                 vec3 color1 = vec3(0.0, 0.5, 0.0); // Dark green
                 vec3 color2 = vec3(0.0, 1.0, 0.0); // Green
                 vec3 color3 = vec3(0.5, 1.0, 0.5); // Light green
                 vec3 color = mix(color1, color2, swirl);
                 color = mix(color, color3, colorFactor);
-                color = mix(color, vec3(0.0, 0.75, 0.0), curve); // Medium green
                 gl_FragColor = vec4(color, 1.0);
             }
         `;
