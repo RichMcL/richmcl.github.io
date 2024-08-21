@@ -1,13 +1,15 @@
 import { text } from 'stream/consumers';
 import { Coordinates, GameComponent } from './types';
 import { printText } from './util';
+import { Theme } from './theme';
 
 export class Scorebar extends GameComponent {
     private scoreToReach = 0;
     private renderedScore = 0;
     private maxScore = 100;
+    private incrementer = 1;
 
-    constructor(ctx: CanvasRenderingContext2D) {
+    constructor(ctx: CanvasRenderingContext2D, private theme: Theme) {
         const coordinates = { x: 290, y: 10 };
         super(ctx, coordinates);
 
@@ -23,7 +25,10 @@ export class Scorebar extends GameComponent {
 
     update(): void {
         if (this.renderedScore < this.scoreToReach) {
-            this.renderedScore += 1;
+            this.renderedScore += this.incrementer;
+            this.incrementer += 0.05;
+        } else {
+            this.incrementer = 1;
         }
     }
 
@@ -53,7 +58,7 @@ export class Scorebar extends GameComponent {
             this.renderConfig.size.height
         );
 
-        this.ctx.fillStyle = '#77dd77';
+        this.ctx.fillStyle = this.theme.base;
         this.ctx.fillRect(
             this.coordinates.x,
             this.coordinates.y + this.renderConfig.size.height,
@@ -79,7 +84,7 @@ export class Scorebar extends GameComponent {
 
         printText(
             this.ctx,
-            `${this.renderedScore}`,
+            `${Math.floor(this.renderedScore)}`,
             this.coordinates.x + this.renderConfig.size.width + 10,
             textY,
             20,
@@ -94,6 +99,7 @@ export class Scorebar extends GameComponent {
     reset(): void {
         this.renderedScore = 0;
         this.scoreToReach = 0;
+        this.incrementer = 1;
     }
 
     setMaxScore(maxScore: number): void {
@@ -106,5 +112,9 @@ export class Scorebar extends GameComponent {
 
     isAnimationComplete(): boolean {
         return this.renderedScore >= this.scoreToReach;
+    }
+
+    setTheme(theme: Theme): void {
+        this.theme = theme;
     }
 }

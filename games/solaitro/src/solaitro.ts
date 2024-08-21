@@ -198,7 +198,8 @@ export class Game {
         this.dialog = new Dialog(this.ctx, DefaultDialogRenderConfig.coordinates);
         this.dialogCloseButton = createCloseDialogButton(this.ctx, this.theme);
 
-        this.scorebar = new Scorebar(this.ctx);
+        this.scorebar = new Scorebar(this.ctx, this.theme);
+        this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
 
         this.gameComponents.push(this.scorebar);
     }
@@ -678,6 +679,7 @@ export class Game {
     public changeTheme(theme: Theme): void {
         this.theme = theme;
         this.swirl.doSwirl(SwirlThemes[theme.name]);
+        this.scorebar.setTheme(theme);
 
         this.buttons.forEach(button => {
             button.theme = this.theme;
