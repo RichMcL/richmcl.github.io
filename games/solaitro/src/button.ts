@@ -88,14 +88,23 @@ export class GameButton extends GameComponent {
     }
 
     renderOutline(): void {
+        const x = this.coordinates.x;
+        const y = this.coordinates.y;
+        const width = this.size.width;
+        const height = this.size.height;
+        const radius = this.borderRadius; // Use the same border radius as the element
+
+        // Draw the outline with the same rounded corners
         this.ctx.strokeStyle = 'white';
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeRect(
-            this.coordinates.x,
-            this.coordinates.y,
-            this.size.width,
-            this.size.height
-        );
+        this.ctx.lineWidth = 3;
+        this.ctx.beginPath();
+        this.ctx.moveTo(x + radius, y);
+        this.ctx.arcTo(x + width, y, x + width, y + height, radius);
+        this.ctx.arcTo(x + width, y + height, x, y + height, radius);
+        this.ctx.arcTo(x, y + height, x, y, radius);
+        this.ctx.arcTo(x, y, x + width, y, radius);
+        this.ctx.closePath();
+        this.ctx.stroke();
     }
 
     reset(): void {

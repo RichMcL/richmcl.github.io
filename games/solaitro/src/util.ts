@@ -182,14 +182,25 @@ export const drawCardOutline = (
     cardScaledHeight: number
 ) => {
     const padding = 3;
+    const radius = 5; // Adjust the radius as needed
+
     ctx.strokeStyle = 'white';
     ctx.lineWidth = 3;
-    ctx.strokeRect(
-        cardX - padding,
-        cardY - padding,
-        cardScaledWidth + padding * 2,
-        cardScaledHeight + padding * 2
-    );
+
+    const x = cardX - padding;
+    const y = cardY - padding;
+    const width = cardScaledWidth + padding * 2;
+    const height = cardScaledHeight + padding * 2;
+
+    // Draw the rounded rectangle outline
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + width, y, x + width, y + height, radius);
+    ctx.arcTo(x + width, y + height, x, y + height, radius);
+    ctx.arcTo(x, y + height, x, y, radius);
+    ctx.arcTo(x, y, x + width, y, radius);
+    ctx.closePath();
+    ctx.stroke();
 };
 
 export const printText = (
