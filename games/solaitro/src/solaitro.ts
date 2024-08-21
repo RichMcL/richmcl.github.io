@@ -500,6 +500,7 @@ export class Game {
         this.renderTheme();
         this.renderSidebar();
         this.renderRuleSidebar();
+        this.renderPileShadow();
 
         this.player.render();
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
@@ -528,6 +529,11 @@ export class Game {
     public renderTheme() {
         // this.canvas.style.backgroundColor = this.theme.background;
         document.body.style.backgroundColor = this.theme.black;
+    }
+
+    public renderPileShadow(): void {
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        this.ctx.fillRect(330, 70, 620, 180);
     }
 
     public renderSidebar() {

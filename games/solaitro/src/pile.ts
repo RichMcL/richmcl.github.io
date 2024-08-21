@@ -95,6 +95,8 @@ export class Pile extends GameComponent {
     }
 
     render(): void {
+        this.renderDropShadow();
+
         if (Pile.ANIMATION_ENABLED) {
             this.animationRender();
         } else {
@@ -173,6 +175,49 @@ export class Pile extends GameComponent {
                 this.renderConfig.size.height * scale
             );
         }
+    }
+
+    renderDropShadow(): void {
+        this.ctx.save();
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+
+        const x = this.renderConfig.coordinates.x;
+        const y = this.renderConfig.coordinates.y;
+        const width = this.renderConfig.size.width * this.renderConfig.scale;
+        const height = this.renderConfig.size.height * this.renderConfig.scale;
+        const radius = 10; // Adjust the radius as needed
+
+        // Calculate the center of the canvas
+        const canvasCenterX = this.ctx.canvas.width / 2;
+
+        // Determine the shadow offset based on the element's position relative to the center
+        const shadowOffsetX = (x + width / 2 - canvasCenterX) * -0.03; // Reduced horizontal offset
+        const shadowOffsetY = 8; // Fixed vertical offset
+
+        // Apply the shadow offset
+        const shadowX = x + shadowOffsetX;
+        const shadowY = y + shadowOffsetY;
+
+        // Calculate the center of the element
+        const elementCenterX = x + width / 2;
+        const elementCenterY = y + height / 2;
+
+        // Apply rotation
+        this.ctx.translate(elementCenterX, elementCenterY);
+        this.ctx.rotate(this.rotationAngle);
+
+        this.ctx.translate(-elementCenterX, -elementCenterY);
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(shadowX + radius, shadowY);
+        this.ctx.arcTo(shadowX + width, shadowY, shadowX + width, shadowY + height, radius);
+        this.ctx.arcTo(shadowX + width, shadowY + height, shadowX, shadowY + height, radius);
+        this.ctx.arcTo(shadowX, shadowY + height, shadowX, shadowY, radius);
+        this.ctx.arcTo(shadowX, shadowY, shadowX + width, shadowY, radius);
+        this.ctx.closePath();
+        this.ctx.fill();
+
+        this.ctx.restore();
     }
 
     reset(): void {
