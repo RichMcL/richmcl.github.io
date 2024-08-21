@@ -37,6 +37,9 @@ export class Swirl {
             uniform float uTime;
             varying vec2 vTextureCoord;
 
+            // Pixelation parameters
+            uniform float pixelSize; // Size of the pixelation grid
+
             // Perturbation function
             vec2 perturb(vec2 pos, float time) {
                 float perturbX = sin(pos.y * 10.0 + time * 0.5) * 0.05;
@@ -46,8 +49,12 @@ export class Swirl {
 
             void main(void) {
                 vec2 uv = vTextureCoord;
+
+                // Apply pixelation effect
+                vec2 pixelatedUV = floor(uv / pixelSize) * pixelSize;
+
                 vec2 center = vec2(0.5, 0.5);
-                vec2 pos = uv - center;
+                vec2 pos = pixelatedUV - center;
                 pos = perturb(pos, uTime); // Apply perturbation
                 float angle = atan(pos.y, pos.x);
                 float radius = length(pos);
@@ -105,11 +112,13 @@ export class Swirl {
         gl.enableVertexAttribArray(vertexPosition);
 
         const uTime = gl.getUniformLocation(shaderProgram, 'uTime');
+        const uPixelSize = gl.getUniformLocation(shaderProgram, 'pixelSize'); // Get the location of the pixelSize uniform
 
         function render(time: number) {
             gl.clear(gl.COLOR_BUFFER_BIT);
 
             gl.uniform1f(uTime, time * 0.001);
+            gl.uniform1f(uPixelSize, 0.005); // Set the pixelSize uniform value
 
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
