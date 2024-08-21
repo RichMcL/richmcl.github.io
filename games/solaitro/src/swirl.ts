@@ -1,5 +1,7 @@
+import { SwirlTheme } from './theme';
+
 export class Swirl {
-    doSwirl() {
+    doSwirl(swirlTheme: SwirlTheme) {
         const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement;
         const gl =
             canvas.getContext('webgl') ||
@@ -64,9 +66,9 @@ export class Swirl {
                 float curve = sin(radius * 10.0 - uTime * 0.1) * 0.5 + 0.5; // Reduced frequency
                 float colorFactor = sin(radius * 20.0 + angle * 5.0 - uTime * 0.5) * 0.5 + 0.5; // Reduced frequency
 
-                vec3 color1 = vec3(0.0, 0.5, 0.0); // Dark green
-                vec3 color2 = vec3(0.0, 1.0, 0.0); // Green
-                vec3 color3 = vec3(0.5, 1.0, 0.5); // Light green
+                vec3 color1 = vec3(${swirlTheme.dark}); // Dark green
+                vec3 color2 = vec3(${swirlTheme.base}); // Green
+                vec3 color3 = vec3(${swirlTheme.light}); // Light green
                 vec3 color = mix(color1, color2, swirl);
                 color = mix(color, color3, colorFactor);
                 gl_FragColor = vec4(color, 1.0);

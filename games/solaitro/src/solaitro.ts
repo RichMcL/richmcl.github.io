@@ -34,7 +34,7 @@ import {
 import { ScoreGraphic } from './score-graphic';
 import { Scorebar } from './scorebar';
 import { Swirl } from './swirl';
-import { Theme, Themes } from './theme';
+import { SwirlThemes, Theme, Themes } from './theme';
 import { Card, Coordinates, GameComponent } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
@@ -45,6 +45,8 @@ export class Game {
     public windowAspectRatio: number;
     public scaleFactor: number;
     public theme: Theme = Themes.default;
+
+    public swirl = new Swirl();
 
     public currentLevel = 0;
 
@@ -109,7 +111,7 @@ export class Game {
             this.startGame();
         });
 
-        new Swirl().doSwirl();
+        this.swirl.doSwirl(SwirlThemes.default);
     }
 
     private loadImage(image: HTMLImageElement): Promise<void> {
@@ -669,6 +671,7 @@ export class Game {
 
     public changeTheme(theme: Theme): void {
         this.theme = theme;
+        this.swirl.doSwirl(SwirlThemes[theme.name]);
 
         this.buttons.forEach(button => {
             button.theme = this.theme;
