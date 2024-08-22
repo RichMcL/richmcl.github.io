@@ -102,7 +102,7 @@ export class DeckDialog extends GameComponent {
                 x += cardWidth + spacing;
             });
 
-            y += 105;
+            y += 90;
         });
     }
 }
