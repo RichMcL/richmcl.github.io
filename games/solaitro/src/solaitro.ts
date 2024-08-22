@@ -1,6 +1,7 @@
 import {
     createCloseDialogButton,
     createDealButton,
+    createDeckButton,
     createDecrementDrawSizeButton,
     createDecrementPlayPileButton,
     createDecrementShufflesButton,
@@ -20,6 +21,7 @@ import {
     ThemeButton
 } from './button';
 import { CardAnimation } from './card-animation';
+import { DeckDialog } from './deck-dialog';
 import { DefaultDialogRenderConfig, Dialog } from './dialog';
 import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
@@ -192,6 +194,7 @@ export class Game {
         this.debugButtons.push(createFreeButtton(this.ctx, this.theme));
         this.debugButtons.push(createDealButton(this.ctx, this.theme));
         this.buttons.push(createHitButton(this.ctx, this.theme));
+        this.buttons.push(createDeckButton(this.ctx, this.theme));
         this.buttons.push(createOpenDialogButton(this.ctx, this.theme));
         this.themeButtons = createThemeButtons(this.ctx);
 
@@ -363,6 +366,12 @@ export class Game {
                     break;
                 case 'dialog-close':
                     this.dialog.visible = false;
+                    this.gameComponents = this.gameComponents.filter(
+                        component => !(component instanceof DeckDialog)
+                    );
+                    break;
+                case 'deck-dialog-open':
+                    this.openDeckDialog();
                     break;
             }
         }
@@ -523,6 +532,10 @@ export class Game {
             this.themeButtons.forEach(button => button.render());
             this.debugButtons.forEach(button => button.render());
 
+            this.dialogCloseButton.render();
+        }
+
+        if (this.gameComponents.some(component => component instanceof DeckDialog)) {
             this.dialogCloseButton.render();
         }
     }
@@ -726,6 +739,19 @@ export class Game {
         }
 
         return active || this.gameComponents.some(component => component instanceof CardAnimation);
+    }
+
+    public openDeckDialog(): void {
+        console.log('open1');
+        const deckDialog = new DeckDialog(
+            this.ctx,
+            DefaultDialogRenderConfig.coordinates,
+            this.cardFaceSpriteSheet,
+            this.cardBackSpriteSheet,
+            this.player.drawPile
+        );
+
+        this.gameComponents.push(deckDialog);
     }
 
     /* USER ACTION FUNCTIONS */

@@ -350,14 +350,37 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 710;
-    const y = 490;
+    const x = 835;
+    const y = 570;
 
     return new GameButton(
         ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'hit',
+        text,
+        padding,
+        theme
+    );
+};
+
+export const createDeckButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+    const text = 'DECK';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '20px Balatro';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 835;
+    const y = 640;
+
+    return new GameButton(
+        ctx,
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'deck-dialog-open',
         text,
         padding,
         theme
