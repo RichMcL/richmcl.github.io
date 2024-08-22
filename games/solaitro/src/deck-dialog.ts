@@ -4,21 +4,26 @@ import { Card, CardNumericValue, Coordinates, GameComponent } from './types';
 
 export class DeckDialog extends GameComponent {
     cardComponents: CardComponent[] = [];
+    allCards: Card[] = [];
 
     constructor(
         ctx: CanvasRenderingContext2D,
         coordinates: Coordinates,
         private cardFaceSpriteSheet: HTMLImageElement,
         private cardBackSpriteSheet: HTMLImageElement,
+        private playPile: Card[],
         private drawPile: Card[]
     ) {
         super(ctx, coordinates);
 
         //clone deck
         this.drawPile = JSON.parse(JSON.stringify(this.drawPile));
+        this.allCards.push(...this.drawPile);
+        this.playPile = JSON.parse(JSON.stringify(this.playPile));
+        this.allCards.push(...this.playPile);
 
         // Sort deck by suit and value
-        this.drawPile.sort((a, b) => {
+        this.allCards.sort((a, b) => {
             if (a.suit === b.suit) {
                 return CardNumericValue[a.value] - CardNumericValue[b.value];
             }
@@ -29,7 +34,11 @@ export class DeckDialog extends GameComponent {
         this.createCardComponents();
     }
 
-    update(): void {}
+    update(): void {
+        this.cardComponents.forEach(cardComponent => {
+            cardComponent.update();
+        });
+    }
 
     render(): void {
         this.renderDialogBackground();
@@ -61,7 +70,7 @@ export class DeckDialog extends GameComponent {
         let currentSuit = this.drawPile[0].suit;
 
         // Group cards by suit
-        const suits = this.drawPile.reduce((acc, card) => {
+        const suits = this.allCards.reduce((acc, card) => {
             if (!acc[card.suit]) {
                 acc[card.suit] = [];
             }
@@ -72,7 +81,7 @@ export class DeckDialog extends GameComponent {
         Object.keys(suits).forEach(suit => {
             const cards = suits[suit];
             const cardWidth = 71 * 1.5; // Card width * scale
-            const dialogWidth = DefaultDialogRenderConfig.size.width - 50; // Adjust for padding
+            const dialogWidth = DefaultDialogRenderConfig.size.width - 20; // Adjust for padding
             const totalCardWidth = cards.length * cardWidth;
             const totalSpacing = dialogWidth - totalCardWidth;
             const spacing = totalSpacing / (cards.length - 1); // Reduce the spacing between cards

@@ -742,13 +742,13 @@ export class Game {
     }
 
     public openDeckDialog(): void {
-        console.log('open1');
         const deckDialog = new DeckDialog(
             this.ctx,
             DefaultDialogRenderConfig.coordinates,
             this.cardFaceSpriteSheet,
             this.cardBackSpriteSheet,
-            this.player.drawPile
+            this.player.drawPile,
+            this.player.playPile
         );
 
         this.gameComponents.push(deckDialog);
