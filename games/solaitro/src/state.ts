@@ -10,6 +10,10 @@ export class State {
     private static clickCoordinates = { x: 0, y: 0 } as Coordinates;
     private static scaledClickCoordinates = { x: 0, y: 0 } as Coordinates;
 
+    private static cardFaceSpriteSheet: HTMLImageElement;
+    private static cardBackSpriteSheet: HTMLImageElement;
+    private static iconSpriteSheet: HTMLImageElement;
+
     static setMouseCoordinates(coordinates: Coordinates): void {
         State.mouseCoordinates = coordinates;
         State.scaledMouseCoordinates = {
@@ -61,5 +65,29 @@ export class State {
 
     static isMouseClick(): boolean {
         return State.mouseClick;
+    }
+
+    static setCardFaceSpriteSheet(cardFaceSpriteSheet: HTMLImageElement): void {
+        State.cardFaceSpriteSheet = cardFaceSpriteSheet;
+    }
+
+    static getCardFaceSpriteSheet(): HTMLImageElement {
+        return State.cardFaceSpriteSheet;
+    }
+
+    static setCardBackSpriteSheet(cardBackSpriteSheet: HTMLImageElement): void {
+        State.cardBackSpriteSheet = cardBackSpriteSheet;
+    }
+
+    static getCardBackSpriteSheet(): HTMLImageElement {
+        return State.cardBackSpriteSheet;
+    }
+
+    static setIconSpriteSheet(iconSpriteSheet: HTMLImageElement): void {
+        State.iconSpriteSheet = iconSpriteSheet;
+    }
+
+    static getIconSpriteSheet(): HTMLImageElement {
+        return State.iconSpriteSheet;
     }
 }

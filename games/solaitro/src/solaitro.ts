@@ -64,10 +64,6 @@ export class Game {
     public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike, RuleNames.free];
     public gameComponents: GameComponent[] = [];
 
-    public cardFaceSpriteSheet: HTMLImageElement;
-    public cardBackSpriteSheet: HTMLImageElement;
-    public iconSpriteSheet: HTMLImageElement;
-
     public gameRunning: boolean = true;
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
@@ -88,20 +84,26 @@ export class Game {
         this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
         this.ctx = this.canvas.getContext('2d');
 
-        this.cardFaceSpriteSheet = new Image();
-        this.cardFaceSpriteSheet.src = 'img/deck-sprite-sheet.png';
+        const cardFaceSpriteSheet = new Image();
+        cardFaceSpriteSheet.src = 'img/deck-sprite-sheet.png';
 
-        this.cardBackSpriteSheet = new Image();
-        this.cardBackSpriteSheet.src = 'img/card-backs-seals.png';
+        State.setCardFaceSpriteSheet(cardFaceSpriteSheet);
 
-        this.iconSpriteSheet = new Image();
-        this.iconSpriteSheet.src = 'img/icons.png';
+        const cardBackSpriteSheet = new Image();
+        cardBackSpriteSheet.src = 'img/card-backs-seals.png';
+
+        State.setCardBackSpriteSheet(cardBackSpriteSheet);
+
+        const iconSpriteSheet = new Image();
+        iconSpriteSheet.src = 'img/icons.png';
+
+        State.setIconSpriteSheet(iconSpriteSheet);
 
         // Wait for both images to load before starting the game
         Promise.all([
-            this.loadImage(this.cardFaceSpriteSheet),
-            this.loadImage(this.cardBackSpriteSheet),
-            this.loadImage(this.iconSpriteSheet),
+            this.loadImage(cardFaceSpriteSheet),
+            this.loadImage(cardBackSpriteSheet),
+            this.loadImage(iconSpriteSheet),
             this.loadFont('Balatro', 'fonts/balatro/balatro.ttf')
         ]).then(() => {
             this.startGame();
@@ -166,7 +168,11 @@ export class Game {
     }
 
     public initializeGameObjects(): void {
-        this.player = new Player(this.ctx, this.cardFaceSpriteSheet, this.cardBackSpriteSheet);
+        this.player = new Player(
+            this.ctx,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet()
+        );
 
         this.initializePiles();
         this.debugButtons.push(createDecrementDrawSizeButton(this.ctx, this.theme));
@@ -403,8 +409,8 @@ export class Game {
                     this.ctx,
                     this.player.getCoordinatesCopy(),
                     hoverPile.getCoordinatesCopy(),
-                    this.cardFaceSpriteSheet,
-                    this.cardBackSpriteSheet,
+                    State.getCardFaceSpriteSheet(),
+                    State.getCardBackSpriteSheet(),
                     this.player.getTopPlayCard()
                 )
             );
@@ -648,7 +654,7 @@ export class Game {
         const card = this.lastCardClicked;
         if (card) {
             printText(this.ctx, `Card: ${card.value}`, 30, 740);
-            drawIcon(this.ctx, this.iconSpriteSheet, card.suit, 120, 723);
+            drawIcon(this.ctx, State.getIconSpriteSheet(), card.suit, 120, 723);
         }
     }
 
@@ -662,29 +668,29 @@ export class Game {
         this.pile1 = new Pile(
             this.ctx,
             PilesRenderConfig.pile1.coordinates,
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             'pile1'
         );
         this.pile2 = new Pile(
             this.ctx,
             PilesRenderConfig.pile2.coordinates,
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             'pile2'
         );
         this.pile3 = new Pile(
             this.ctx,
             PilesRenderConfig.pile3.coordinates,
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             'pile3'
         );
         this.pile4 = new Pile(
             this.ctx,
             PilesRenderConfig.pile4.coordinates,
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             'pile4'
         );
 
@@ -733,8 +739,8 @@ export class Game {
         const deckDialog = new DeckDialog(
             this.ctx,
             DefaultDialogRenderConfig.coordinates,
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             this.player.drawPile,
             this.player.playPile
         );
