@@ -46,7 +46,7 @@ export class Game {
 
     public currentLevel = 0;
 
-    public player: Player;
+    // public player: Player;
 
     public pile1: Pile;
     public pile2: Pile;
@@ -55,8 +55,8 @@ export class Game {
 
     public scorebar: Scorebar;
 
-    public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike, RuleNames.free];
-    public gameComponents: GameComponent[] = [];
+    // public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike, RuleNames.free];
+    // public gameComponents: GameComponent[] = [];
 
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
@@ -65,7 +65,6 @@ export class Game {
     public debugButtons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
     public dialog: Dialog;
-    public dialogCloseButton: GameButton;
 
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
@@ -135,7 +134,6 @@ export class Game {
 
             State.setClickCoordinates({ x, y });
 
-            // this.isMouseClicked = true;
             State.setMouseClick(true);
         });
 
@@ -158,7 +156,11 @@ export class Game {
     }
 
     public initializeGameObjects(): void {
-        this.player = new Player();
+        State.addRule(RuleNames.klondike);
+        State.addRule(RuleNames.reverseKlondike);
+        State.addRule(RuleNames.free);
+
+        State.setPlayer(new Player());
 
         this.initializePiles();
         this.debugButtons.push(createDecrementDrawSizeButton());
@@ -180,12 +182,11 @@ export class Game {
         this.themeButtons = createThemeButtons();
 
         this.dialog = new Dialog(DefaultDialogRenderConfig.coordinates);
-        this.dialogCloseButton = createCloseDialogButton();
 
         this.scorebar = new Scorebar(State.getTheme());
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
 
-        this.gameComponents.push(this.scorebar);
+        State.addGameComponent(this.scorebar);
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -219,16 +220,20 @@ export class Game {
         }
 
         //remove all gameComponents with deleteMe set to true
-        this.gameComponents = this.gameComponents.filter(component => !component.deleteMe);
+        State.removeAllDeletedGameComponents();
 
         //update each gameComponent
-        this.gameComponents.forEach(component => component.update());
+        State.getGameComponents().forEach(component => component.update());
 
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             pile.update();
         });
 
-        this.player.update();
+        State.getPlayer().update();
+
+        this.buttons.forEach(button => {
+            button.update();
+        });
 
         // Update the game state logic
         let hoverButton: GameButton;
@@ -237,7 +242,7 @@ export class Game {
 
         if (this.dialog.visible) {
             this.debugButtons.forEach(button => {
-                if (button.isHoveredOver(State.getScaledMouseCoordinates())) {
+                if (button.isHoveredOver()) {
                     hoverButton = button;
                     hoverButton.isHovered = true;
                 }
@@ -246,7 +251,7 @@ export class Game {
             let hoverThemeButton: ThemeButton;
 
             this.themeButtons.forEach(button => {
-                if (button.isHoveredOver(State.getScaledMouseCoordinates())) {
+                if (button.isHoveredOver()) {
                     hoverThemeButton = button;
                     hoverThemeButton.isHovered = true;
                 }
@@ -255,112 +260,12 @@ export class Game {
             if (hoverThemeButton && State.isMouseClick()) {
                 this.changeTheme(hoverThemeButton.theme);
             }
-        } else {
-            this.buttons.forEach(button => {
-                if (button.isHoveredOver(State.getScaledMouseCoordinates())) {
-                    hoverButton = button;
-                    hoverButton.isHovered = true;
-                }
-            });
-        }
-
-        if (this.dialogCloseButton.isHoveredOver(State.getScaledMouseCoordinates())) {
-            hoverButton = this.dialogCloseButton;
-            this.dialogCloseButton.isHovered = true;
-        }
-
-        if (hoverButton && State.isMouseClick()) {
-            switch (hoverButton.id) {
-                case 'reload':
-                    window.location.reload();
-                    break;
-                case 'deal':
-                    this.isDealNewRound = true;
-                    break;
-                case 'free':
-                    //toggle RuleNames.free
-                    if (this.ruleNames.includes(RuleNames.free)) {
-                        this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.free);
-                    } else {
-                        this.ruleNames.push(RuleNames.free);
-                    }
-                    break;
-                case 'klondike':
-                    //toggle RuleNames.klondike
-                    if (this.ruleNames.includes(RuleNames.klondike)) {
-                        this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.klondike);
-                    } else {
-                        this.ruleNames.push(RuleNames.klondike);
-                    }
-                    break;
-                case 'reverse-klondike':
-                    //toggle RuleNames.reverseKlondike
-                    if (this.ruleNames.includes(RuleNames.reverseKlondike)) {
-                        this.ruleNames = this.ruleNames.filter(
-                            rule => rule !== RuleNames.reverseKlondike
-                        );
-                    } else {
-                        this.ruleNames.push(RuleNames.reverseKlondike);
-                    }
-                    break;
-                case 'flush':
-                    //toggle RuleNames.flush
-                    if (this.ruleNames.includes(RuleNames.flush)) {
-                        this.ruleNames = this.ruleNames.filter(rule => rule !== RuleNames.flush);
-                    } else {
-                        this.ruleNames.push(RuleNames.flush);
-                    }
-                    break;
-                case 'same-value':
-                    //toggle RuleNames.sameValue
-                    if (this.ruleNames.includes(RuleNames.sameValue)) {
-                        this.ruleNames = this.ruleNames.filter(
-                            rule => rule !== RuleNames.sameValue
-                        );
-                    } else {
-                        this.ruleNames.push(RuleNames.sameValue);
-                    }
-                    break;
-                case 'hit':
-                    this.hitCard();
-                    break;
-                case 'increment-draw-size':
-                    this.player.incrementPlayPileDrawSize();
-                    break;
-                case 'decrement-draw-size':
-                    this.player.decrementPlayPileDrawSize();
-                    break;
-                case 'increment-shuffles':
-                    this.player.incrementShuffles();
-                    break;
-                case 'decrement-shuffles':
-                    this.player.decrementShuffles();
-                    break;
-                case 'increment-play-pile':
-                    this.player.incrementPlayPileVisibleSize();
-                    break;
-                case 'decrement-play-pile':
-                    this.player.decrementPlayPileVisibleSize();
-                    break;
-                case 'dialog-open':
-                    this.dialog.visible = true;
-                    break;
-                case 'dialog-close':
-                    this.dialog.visible = false;
-                    this.gameComponents = this.gameComponents.filter(
-                        component => !(component instanceof DeckDialog)
-                    );
-                    break;
-                case 'deck-dialog-open':
-                    this.openDeckDialog();
-                    break;
-            }
         }
 
         let hoverCard: Card;
 
-        if (this.player.isHoveredOver(State.getScaledMouseCoordinates())) {
-            hoverCard = this.player.getTopPlayCard();
+        if (State.getPlayer().isHoveredOver()) {
+            hoverCard = State.getPlayer().getTopPlayCard();
         }
 
         if (hoverCard && State.isMouseClick()) {
@@ -372,9 +277,11 @@ export class Game {
         let hoverPileCard: Card;
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             const card = pile.getTopCard();
-            if (pile.isHoveredOver(State.getScaledMouseCoordinates())) {
+            if (pile.isHoveredOver()) {
                 hoverPile = pile;
-                if (doesAnyRulePass(this.ruleNames, this.player.getTopPlayCard(), card)) {
+                if (
+                    doesAnyRulePass(State.getRuleNames(), State.getPlayer().getTopPlayCard(), card)
+                ) {
                     hoverPileCard = card;
                     hoverPile.canPlay = true;
                 }
@@ -392,22 +299,22 @@ export class Game {
 
             hoverPile.addCardAnimation(
                 new CardAnimation(
-                    this.player.getCoordinatesCopy(),
+                    State.getPlayer().getCoordinatesCopy(),
                     hoverPile.getCoordinatesCopy(),
-                    this.player.getTopPlayCard()
+                    State.getPlayer().getTopPlayCard()
                 )
             );
 
             hoverPile.pushCard({
                 ...hoverPileCard,
-                suit: this.player.getTopPlayCard().suit,
-                value: this.player.getTopPlayCard().value
+                suit: State.getPlayer().getTopPlayCard().suit,
+                value: State.getPlayer().getTopPlayCard().value
             });
 
             //get all passing rules
             const passingRules = getAllPassingRules(
-                this.ruleNames,
-                this.player.getTopPlayCard(),
+                State.getRuleNames(),
+                State.getPlayer().getTopPlayCard(),
                 hoverPileCard
             );
 
@@ -417,22 +324,22 @@ export class Game {
             State.setScore(State.getScore() + pointsForMove);
             State.setStreak(State.getStreak() + 1);
 
-            this.player.removeTopPlayCard();
+            State.getPlayer().removeTopPlayCard();
             this.scorebar.setScoreToReach(State.getScore());
 
             // in the middle of the pile
             const scoreX =
                 hoverPile.renderConfig.coordinates.x + hoverPile.renderConfig.size.width / 2;
 
-            this.gameComponents.push(new ScoreGraphic({ x: scoreX, y: 300 }, pointsForMove));
+            State.addGameComponent(new ScoreGraphic({ x: scoreX, y: 300 }, pointsForMove));
         }
     }
 
     public goToNextLevel() {
-        this.player.drawPile = buildAndShuffleDeck(true);
+        State.getPlayer().drawPile = buildAndShuffleDeck(true);
         this.initializePiles();
-        this.player.playPile = [];
-        this.player.hit();
+        State.getPlayer().playPile = [];
+        State.getPlayer().hit();
 
         this.isDealNewRound = false;
         State.setScore(0);
@@ -449,8 +356,8 @@ export class Game {
         }
 
         this.changeTheme(Themes[nextTheme]);
-        this.gameComponents.push(new ScoreGraphic({ x: 540, y: 350 }, 'Next Level!'));
-        this.player.shufflesRemaining = this.player.startingShuffles;
+        State.addGameComponent(new ScoreGraphic({ x: 540, y: 350 }, 'Next Level!'));
+        State.getPlayer().shufflesRemaining = State.getPlayer().startingShuffles;
 
         this.scorebar.reset();
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
@@ -475,8 +382,6 @@ export class Game {
         this.themeButtons.forEach(button => {
             button.reset();
         });
-
-        this.dialogCloseButton.reset();
     }
 
     public render() {
@@ -487,7 +392,7 @@ export class Game {
         this.renderRuleSidebar();
         this.renderPileShadow();
 
-        this.player.render();
+        State.getPlayer().render();
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             pile.render();
         });
@@ -498,7 +403,7 @@ export class Game {
         this.renderLastCardClicked();
         this.buttons.forEach(button => button.render());
 
-        for (const component of this.gameComponents) {
+        for (const component of State.getGameComponents()) {
             component.render();
         }
 
@@ -506,12 +411,6 @@ export class Game {
             this.dialog.render();
             this.themeButtons.forEach(button => button.render());
             this.debugButtons.forEach(button => button.render());
-
-            this.dialogCloseButton.render();
-        }
-
-        if (this.gameComponents.some(component => component instanceof DeckDialog)) {
-            this.dialogCloseButton.render();
         }
     }
 
@@ -582,8 +481,7 @@ export class Game {
 
         let y = 80;
 
-        this.ruleNames.sort();
-        for (const rule of this.ruleNames) {
+        for (const rule of State.getRuleNames()) {
             const ruleInfo = RuleInfo[rule];
             printText(`- ${ruleInfo.name}`, x + 30, y);
             y += 30;
@@ -608,9 +506,9 @@ export class Game {
 
         lines.push(`Time: ${minutes}:${seconds}.${tenths}`);
         lines.push('');
-        lines.push(`Shuffles: ${this.player.shufflesRemaining}`);
-        lines.push(`Play Pile Size: ${this.player.playPileVisibleSize}`);
-        lines.push(`Draw Pile Size: ${this.player.playPileDrawSize}`);
+        lines.push(`Shuffles: ${State.getPlayer().shufflesRemaining}`);
+        lines.push(`Play Pile Size: ${State.getPlayer().playPileVisibleSize}`);
+        lines.push(`Draw Pile Size: ${State.getPlayer().playPileDrawSize}`);
         lines.push(`Score: ${State.getScore()}`);
         lines.push(`Streak: ${State.getStreak()}`);
         lines.push('');
@@ -647,15 +545,10 @@ export class Game {
         this.pile4 = new Pile(PilesRenderConfig.pile4.coordinates, 'pile4');
 
         // Pop the first 4 cards from the deck and add them to the piles
-        this.pile1.pushCard(this.player.drawPile.pop());
-        this.pile2.pushCard(this.player.drawPile.pop());
-        this.pile3.pushCard(this.player.drawPile.pop());
-        this.pile4.pushCard(this.player.drawPile.pop());
-    }
-
-    public hitCard(): void {
-        State.setStreak(0);
-        this.player.hit();
+        this.pile1.pushCard(State.getPlayer().drawPile.pop());
+        this.pile2.pushCard(State.getPlayer().drawPile.pop());
+        this.pile3.pushCard(State.getPlayer().drawPile.pop());
+        this.pile4.pushCard(State.getPlayer().drawPile.pop());
     }
 
     public changeTheme(theme: Theme): void {
@@ -670,8 +563,6 @@ export class Game {
         this.debugButtons.forEach(button => {
             button.theme = State.getTheme();
         });
-
-        this.dialogCloseButton.theme = State.getTheme();
     }
 
     public isActiveAnimations(): boolean {
@@ -684,17 +575,10 @@ export class Game {
             }
         }
 
-        return active || this.gameComponents.some(component => component instanceof CardAnimation);
-    }
-
-    public openDeckDialog(): void {
-        const deckDialog = new DeckDialog(
-            DefaultDialogRenderConfig.coordinates,
-            this.player.drawPile,
-            this.player.playPile
+        return (
+            active ||
+            State.getGameComponents().some(component => component instanceof CardAnimation)
         );
-
-        this.gameComponents.push(deckDialog);
     }
 
     /* USER ACTION FUNCTIONS */

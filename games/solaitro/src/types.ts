@@ -1,3 +1,4 @@
+import { State } from './state';
 import { Theme } from './theme';
 
 export interface Coordinates {
@@ -82,7 +83,9 @@ export abstract class GameComponent {
 
     constructor(public coordinates: Coordinates) {}
 
-    isHoveredOver(scaledMouseCoordinates: Coordinates): boolean {
+    isHoveredOver(): boolean {
+        const scaledMouseCoordinates = State.getScaledMouseCoordinates();
+
         return (
             scaledMouseCoordinates?.x >= this.renderConfig.coordinates.x &&
             scaledMouseCoordinates?.x <=
@@ -93,6 +96,10 @@ export abstract class GameComponent {
                 this.renderConfig.coordinates.y +
                     this.renderConfig.size.height * this.renderConfig.scale
         );
+    }
+
+    isClicked(): boolean {
+        return this.isHoveredOver() && State.isMouseClick();
     }
 
     getCoordinatesCopy(): Coordinates {

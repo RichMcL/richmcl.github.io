@@ -1,3 +1,6 @@
+import { DeckDialog } from './deck-dialog';
+import { DefaultDialogRenderConfig } from './dialog';
+import { RuleNames } from './rules';
 import { State } from './state';
 import { Theme, Themes } from './theme';
 import { Coordinates, GameComponent, RenderConfig, Size } from './types';
@@ -23,7 +26,72 @@ export class GameButton extends GameComponent {
         };
     }
 
-    update(): void {}
+    update(): void {
+        if (this.isClicked()) {
+            console.log('Button clicked:', this.id);
+            switch (this.id) {
+                case 'reload':
+                    window.location.reload();
+                    break;
+                // case 'deal':
+                //     this.isDealNewRound = true;
+                //     break;
+                case 'free':
+                    State.toggleRule(RuleNames.free);
+                    break;
+                case 'klondike':
+                    State.toggleRule(RuleNames.klondike);
+                    break;
+                case 'reverse-klondike':
+                    State.toggleRule(RuleNames.reverseKlondike);
+                    break;
+                case 'flush':
+                    State.toggleRule(RuleNames.flush);
+                    break;
+                case 'same-value':
+                    State.toggleRule(RuleNames.sameValue);
+                    break;
+                case 'hit':
+                    this.hitCard();
+                    break;
+                case 'increment-draw-size':
+                    State.getPlayer().incrementPlayPileDrawSize();
+                    break;
+                case 'decrement-draw-size':
+                    State.getPlayer().decrementPlayPileDrawSize();
+                    break;
+                case 'increment-shuffles':
+                    State.getPlayer().incrementShuffles();
+                    break;
+                case 'decrement-shuffles':
+                    State.getPlayer().decrementShuffles();
+                    break;
+                case 'increment-play-pile':
+                    State.getPlayer().incrementPlayPileVisibleSize();
+                    break;
+                case 'decrement-play-pile':
+                    State.getPlayer().decrementPlayPileVisibleSize();
+                    break;
+                // case 'dialog-open':
+                //     this.dialog.visible = true;
+                //     break;
+                case 'dialog-close':
+                    State.removeGameComponentByType(DeckDialog.name);
+                    State.removeGameButtonById('dialog-close');
+
+                    break;
+                case 'deck-dialog-open':
+                    const deckDialog = new DeckDialog(
+                        DefaultDialogRenderConfig.coordinates,
+                        State.getPlayer().drawPile,
+                        State.getPlayer().playPile
+                    );
+
+                    State.addGameComponent(deckDialog);
+                    break;
+            }
+        }
+    }
 
     render(): void {
         this.renderDropShadow();
@@ -51,7 +119,7 @@ export class GameButton extends GameComponent {
         );
 
         // Draw a border around the button if it's hovered
-        if (this.isHovered) {
+        if (this.isHoveredOver()) {
             this.renderOutline();
         }
     }
@@ -112,6 +180,11 @@ export class GameButton extends GameComponent {
 
     setTheme(theme: Theme): void {
         this.theme = theme;
+    }
+
+    private hitCard(): void {
+        State.setStreak(0);
+        State.getPlayer().hit();
     }
 }
 

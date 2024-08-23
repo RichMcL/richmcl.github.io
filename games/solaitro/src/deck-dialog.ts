@@ -1,3 +1,4 @@
+import { createCloseDialogButton } from './button';
 import { CardComponent } from './card-component';
 import { DefaultDialogRenderConfig } from './dialog';
 import { State } from './state';
@@ -26,6 +27,8 @@ export class DeckDialog extends GameComponent {
         });
 
         this.createCardComponents();
+
+        State.addGameComponent(createCloseDialogButton());
     }
 
     update(): void {

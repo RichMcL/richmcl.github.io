@@ -1,5 +1,9 @@
+import { GameButton } from './button';
+import { DeckDialog } from './deck-dialog';
+import { Player } from './player';
+import { RuleNames } from './rules';
 import { Theme, Themes } from './theme';
-import { Coordinates } from './types';
+import { Coordinates, GameComponent } from './types';
 
 export class State {
     private static readonly gameAspectRatio = 1280 / 800;
@@ -11,6 +15,10 @@ export class State {
     private static gameRunning: boolean = false;
 
     private static theme: Theme = Themes.default;
+
+    private static ruleNames: RuleNames[] = [];
+
+    private static player: Player;
 
     private static score = 0;
     private static streak = 0;
@@ -27,6 +35,8 @@ export class State {
     private static cardFaceSpriteSheet: HTMLImageElement;
     private static cardBackSpriteSheet: HTMLImageElement;
     private static iconSpriteSheet: HTMLImageElement;
+
+    private static gameComponents: GameComponent[] = [];
 
     static getGameAspectRatio(): number {
         return State.gameAspectRatio;
@@ -86,6 +96,37 @@ export class State {
 
     static setTheme(theme: Theme): void {
         State.theme = theme;
+    }
+
+    static getRuleNames(): RuleNames[] {
+        return State.ruleNames;
+    }
+
+    static addRule(ruleName: RuleNames): void {
+        State.ruleNames.push(ruleName);
+        State.getRuleNames().sort();
+    }
+
+    static removeRule(ruleName: RuleNames): void {
+        State.ruleNames = State.ruleNames.filter(name => name !== ruleName);
+        State.getRuleNames().sort();
+    }
+
+    static toggleRule(ruleName: RuleNames): void {
+        if (State.ruleNames.includes(ruleName)) {
+            State.removeRule(ruleName);
+        } else {
+            State.addRule(ruleName);
+        }
+        State.getRuleNames().sort();
+    }
+
+    static setPlayer(player: Player): void {
+        State.player = player;
+    }
+
+    static getPlayer(): Player {
+        return State.player;
     }
 
     static setMouseCoordinates(coordinates: Coordinates): void {
@@ -163,5 +204,33 @@ export class State {
 
     static getIconSpriteSheet(): HTMLImageElement {
         return State.iconSpriteSheet;
+    }
+
+    static addGameComponent(gameComponent: GameComponent): void {
+        State.gameComponents.push(gameComponent);
+    }
+
+    static removeGameComponent(gameComponent: GameComponent): void {
+        State.gameComponents = State.gameComponents.filter(gc => gc !== gameComponent);
+    }
+
+    static removeGameComponentByType(type: string): void {
+        State.gameComponents = State.gameComponents.filter(gc => gc.constructor.name !== type);
+    }
+
+    static removeGameButtonById(id: string): void {
+        State.gameComponents = State.gameComponents.filter(gc => {
+            if (gc.constructor.name === 'GameButton') {
+                return (gc as GameButton).id !== id;
+            }
+        });
+    }
+
+    static getGameComponents(): GameComponent[] {
+        return State.gameComponents;
+    }
+
+    static removeAllDeletedGameComponents(): void {
+        State.gameComponents = State.gameComponents.filter(gc => !gc.deleteMe);
     }
 }
