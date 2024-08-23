@@ -28,13 +28,6 @@ export class ScoreGraphic extends GameComponent {
     }
 
     render(): void {
-        printText(
-            State.getCtx(),
-            `+${this.score}`,
-            this.coordinates.x,
-            this.coordinates.y,
-            30,
-            this.color
-        );
+        printText(`+${this.score}`, this.coordinates.x, this.coordinates.y, 30, this.color);
     }
 }

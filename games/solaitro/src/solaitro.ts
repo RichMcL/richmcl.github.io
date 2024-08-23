@@ -58,7 +58,6 @@ export class Game {
     public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike, RuleNames.free];
     public gameComponents: GameComponent[] = [];
 
-    public gameRunning: boolean = true;
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
@@ -149,7 +148,7 @@ export class Game {
             });
         });
 
-        this.gameRunning = true;
+        State.setGameRunning(true);
         this.lastTimestamp = performance.now();
 
         this.isDealNewRound = false;
@@ -190,7 +189,7 @@ export class Game {
     }
 
     public gameLoop(timestamp: number = 0) {
-        if (!this.gameRunning) return;
+        if (!State.isGameRunning()) return;
 
         const elapsed = timestamp - this.lastTimestamp;
         this.lastTimestamp = timestamp;
@@ -577,7 +576,7 @@ export class Game {
         State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(x + 250, 0, 3, 800);
 
-        printText(State.getCtx(), 'Rules', x + 30, 40);
+        printText('Rules', x + 30, 40);
 
         //iterate over the riles an print their descriptions
 
@@ -586,9 +585,9 @@ export class Game {
         this.ruleNames.sort();
         for (const rule of this.ruleNames) {
             const ruleInfo = RuleInfo[rule];
-            printText(State.getCtx(), `- ${ruleInfo.name}`, x + 30, y);
+            printText(`- ${ruleInfo.name}`, x + 30, y);
             y += 30;
-            printText(State.getCtx(), `  ${ruleInfo.description}`, x + 30, y, 15);
+            printText(`  ${ruleInfo.description}`, x + 30, y, 15);
             y += 40;
         }
     }
@@ -620,7 +619,7 @@ export class Game {
 
         let y = 40;
         lines.forEach(line => {
-            printText(State.getCtx(), line, 30, y);
+            printText(line, 30, y);
             y += 40;
         });
     }
@@ -628,19 +627,15 @@ export class Game {
     public renderMousePosition(): void {
         const x = parseFloat(State.getScaledMouseCoordinates().x.toFixed(0));
         const y = parseFloat(State.getScaledMouseCoordinates().y.toFixed(0));
-        printText(State.getCtx(), `Cursor: X ${x} | Y ${y}`, 30, 780);
+        printText(`Cursor: X ${x} | Y ${y}`, 30, 780);
     }
 
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
-            printText(State.getCtx(), `Card: ${card.value}`, 30, 740);
-            drawIcon(State.getCtx(), State.getIconSpriteSheet(), card.suit, 120, 723);
+            printText(`Card: ${card.value}`, 30, 740);
+            drawIcon(State.getIconSpriteSheet(), card.suit, 120, 723);
         }
-    }
-
-    public pauseGame() {
-        this.gameRunning = false;
     }
 
     /* LOGIC FUNCTIONS */
@@ -713,7 +708,7 @@ export class Game {
         State.setWindowAspectRatio(currentWidth / currentHeight);
 
         // Determine the scale factor
-        if (State.getWindowAspectRatio() > State.gameAspectRatio) {
+        if (State.getWindowAspectRatio() > State.getGameAspectRatio()) {
             // Window is wider than game aspect ratio
             State.setScaleFactor(currentHeight / 800);
         } else {

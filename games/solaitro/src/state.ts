@@ -2,11 +2,13 @@ import { Theme, Themes } from './theme';
 import { Coordinates } from './types';
 
 export class State {
-    public static readonly gameAspectRatio = 1280 / 800;
+    private static readonly gameAspectRatio = 1280 / 800;
     private static windowAspectRatio: number;
 
     private static canvas: HTMLCanvasElement;
     private static ctx: CanvasRenderingContext2D;
+
+    private static gameRunning: boolean = false;
 
     private static theme: Theme = Themes.default;
 
@@ -25,6 +27,10 @@ export class State {
     private static cardFaceSpriteSheet: HTMLImageElement;
     private static cardBackSpriteSheet: HTMLImageElement;
     private static iconSpriteSheet: HTMLImageElement;
+
+    static getGameAspectRatio(): number {
+        return State.gameAspectRatio;
+    }
 
     static setWindowAspectRatio(aspectRatio: number): void {
         State.windowAspectRatio = aspectRatio;
@@ -48,6 +54,14 @@ export class State {
 
     static getCtx(): CanvasRenderingContext2D {
         return State.ctx;
+    }
+
+    static setGameRunning(gameRunning: boolean): void {
+        State.gameRunning = gameRunning;
+    }
+
+    static isGameRunning(): boolean {
+        return State.gameRunning;
     }
 
     static getScore(): number {

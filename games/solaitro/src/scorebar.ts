@@ -83,7 +83,6 @@ export class Scorebar extends GameComponent {
         }
 
         printText(
-            State.getCtx(),
             `${Math.floor(this.renderedScore)}`,
             this.coordinates.x + this.renderConfig.size.width + 10,
             textY,

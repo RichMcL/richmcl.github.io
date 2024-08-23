@@ -99,7 +99,6 @@ export class Pile extends GameComponent {
         }
 
         printText(
-            State.getCtx(),
             `[ ${this.cards.length} ]`,
             this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
             this.renderConfig.coordinates.y +

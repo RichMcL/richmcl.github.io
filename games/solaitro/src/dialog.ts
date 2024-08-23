@@ -42,6 +42,6 @@ export class Dialog extends GameComponent {
 
         State.getCtx().restore();
 
-        printText(State.getCtx(), this.text, this.coordinates.x + 20, this.coordinates.y + 50, 30);
+        printText(this.text, this.coordinates.x + 20, this.coordinates.y + 50, 30);
     }
 }

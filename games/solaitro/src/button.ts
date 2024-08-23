@@ -45,7 +45,6 @@ export class GameButton extends GameComponent {
         State.getCtx().fill();
 
         printText(
-            State.getCtx(),
             this.text,
             this.coordinates.x + this.padding / 2,
             this.coordinates.y + this.padding * 1.75

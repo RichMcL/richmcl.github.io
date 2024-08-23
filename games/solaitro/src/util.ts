@@ -203,13 +203,13 @@ export const drawCardOutline = (
 };
 
 export const printText = (
-    ctx: CanvasRenderingContext2D,
     text: string,
     x: number,
     y: number,
     fontSize = 20,
     color = 'white'
 ): void => {
+    const ctx = State.getCtx();
     ctx.font = `${fontSize}px Balatro`;
     ctx.fillStyle = color;
 
@@ -229,12 +229,12 @@ export const printText = (
 };
 
 export const drawIcon = (
-    ctx: CanvasRenderingContext2D,
     iconSpriteSheet: HTMLImageElement,
     suit: Suit,
     x: number,
     y: number
 ): void => {
+    const ctx = State.getCtx();
     const iconWidth = 72 / 4;
     const iconHeight = 74 / 4;
 

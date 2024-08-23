@@ -103,7 +103,7 @@ export class Player extends GameComponent {
         const textWidth = State.getCtx().measureText(text).width;
         const x = 495 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        printText(State.getCtx(), text, x, 745);
+        printText(text, x, 745);
     }
 
     public renderDrawPileSize(): void {
@@ -112,7 +112,7 @@ export class Player extends GameComponent {
         const textWidth = State.getCtx().measureText(text).width;
         const x = 685 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        printText(State.getCtx(), text, x, 745);
+        printText(text, x, 745);
     }
 
     getTopPlayCard(): Card {
