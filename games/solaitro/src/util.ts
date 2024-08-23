@@ -55,13 +55,8 @@ export const buildAndShuffleDeck = (shuffle = false): Card[] => {
     return deck;
 };
 
-export const drawCard = (
-    ctx: CanvasRenderingContext2D,
-    card: Card,
-    x: number,
-    y: number,
-    cardScale = 1
-): void => {
+export const drawCard = (card: Card, x: number, y: number, cardScale = 1): void => {
+    const ctx = State.getCtx();
     const cardWidth = 71; // Width of a single card in the sprite sheet
     const cardHeight = 95; // Height of a single card in the sprite sheet
 
@@ -150,18 +145,13 @@ export const drawCard = (
     );
 };
 
-export const drawCardBack = (
-    ctx: CanvasRenderingContext2D,
-    cardBackSpriteSheet: HTMLImageElement,
-    x: number,
-    y: number,
-    cardScale = 1
-): void => {
+export const drawCardBack = (x: number, y: number, cardScale = 1): void => {
+    const ctx = State.getCtx();
     const cardWidth = 71; // Width of a single card in the sprite sheet
     const cardHeight = 95; // Height of a single card in the sprite sheet
 
     ctx.drawImage(
-        cardBackSpriteSheet,
+        State.getCardBackSpriteSheet(),
         0,
         0,
         cardWidth,
@@ -174,12 +164,12 @@ export const drawCardBack = (
 };
 
 export const drawCardOutline = (
-    ctx: CanvasRenderingContext2D,
     cardX: number,
     cardY: number,
     cardScaledWidth: number,
     cardScaledHeight: number
 ) => {
+    const ctx = State.getCtx();
     const padding = 3;
     const radius = 5; // Adjust the radius as needed
 
@@ -256,19 +246,19 @@ export const drawIcon = (
             break;
     }
 
-    drawRoundedRect(ctx, x - 2.5, y - 2.5, iconWidth + 5, iconHeight + 5, 5);
+    drawRoundedRect(x - 2.5, y - 2.5, iconWidth + 5, iconHeight + 5, 5);
 
     ctx.drawImage(iconSpriteSheet, sx, sy, iconWidth, iconHeight, x, y, iconWidth, iconHeight);
 };
 
 export const drawRoundedRect = (
-    ctx: CanvasRenderingContext2D,
     x: number,
     y: number,
     width: number,
     height: number,
     radius: number
 ): void => {
+    const ctx = State.getCtx();
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius, y);

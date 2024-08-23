@@ -161,26 +161,26 @@ export class Game {
         this.player = new Player();
 
         this.initializePiles();
-        this.debugButtons.push(createDecrementDrawSizeButton(State.getCtx()));
-        this.debugButtons.push(createIncrementDrawSizeButton(State.getCtx()));
-        this.debugButtons.push(createDecrementShufflesButton(State.getCtx()));
-        this.debugButtons.push(createIncrementShufflesButton(State.getCtx()));
-        this.debugButtons.push(createDecrementPlayPileButton(State.getCtx()));
-        this.debugButtons.push(createIncrementPlayPileButton(State.getCtx()));
-        this.debugButtons.push(createSameValueButton(State.getCtx()));
-        this.debugButtons.push(createFlushButton(State.getCtx()));
-        this.debugButtons.push(createKlondikeButton(State.getCtx()));
-        this.debugButtons.push(createReverseKlondikeButton(State.getCtx()));
-        this.debugButtons.push(createReloadButton(State.getCtx()));
-        this.debugButtons.push(createFreeButtton(State.getCtx()));
-        this.debugButtons.push(createDealButton(State.getCtx()));
-        this.buttons.push(createHitButton(State.getCtx()));
-        this.buttons.push(createDeckButton(State.getCtx()));
-        this.buttons.push(createOpenDialogButton(State.getCtx()));
-        this.themeButtons = createThemeButtons(State.getCtx());
+        this.debugButtons.push(createDecrementDrawSizeButton());
+        this.debugButtons.push(createIncrementDrawSizeButton());
+        this.debugButtons.push(createDecrementShufflesButton());
+        this.debugButtons.push(createIncrementShufflesButton());
+        this.debugButtons.push(createDecrementPlayPileButton());
+        this.debugButtons.push(createIncrementPlayPileButton());
+        this.debugButtons.push(createSameValueButton());
+        this.debugButtons.push(createFlushButton());
+        this.debugButtons.push(createKlondikeButton());
+        this.debugButtons.push(createReverseKlondikeButton());
+        this.debugButtons.push(createReloadButton());
+        this.debugButtons.push(createFreeButtton());
+        this.debugButtons.push(createDealButton());
+        this.buttons.push(createHitButton());
+        this.buttons.push(createDeckButton());
+        this.buttons.push(createOpenDialogButton());
+        this.themeButtons = createThemeButtons();
 
         this.dialog = new Dialog(DefaultDialogRenderConfig.coordinates);
-        this.dialogCloseButton = createCloseDialogButton(State.getCtx());
+        this.dialogCloseButton = createCloseDialogButton();
 
         this.scorebar = new Scorebar(State.getTheme());
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);

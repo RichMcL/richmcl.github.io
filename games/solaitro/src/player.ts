@@ -59,8 +59,6 @@ export class Player extends GameComponent {
         // Render deck to represent draw pile
         for (let i = 3; i > 0; i--) {
             drawCardBack(
-                State.getCtx(),
-                State.getCardBackSpriteSheet(),
                 DrawPileRenderConfig.coordinates.x + i * 5,
                 DrawPileRenderConfig.coordinates.y + 5 * (i - 1),
                 DrawPileRenderConfig.scale
@@ -83,7 +81,6 @@ export class Player extends GameComponent {
             }
 
             drawCard(
-                State.getCtx(),
                 this.playPile[i],
                 this.renderConfig.coordinates.x - (i - this.cardAnimations.length) * 45,
                 this.renderConfig.coordinates.y,

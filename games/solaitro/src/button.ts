@@ -155,7 +155,8 @@ export class ThemeButton extends GameButton {
     }
 }
 
-export const createDecrementPlayPileButton = (ctx: CanvasRenderingContext2D) => {
+export const createDecrementPlayPileButton = () => {
+    const ctx = State.getCtx();
     const text = 'Play Pile -';
     const padding = 20; // Padding for the button
 
@@ -176,7 +177,8 @@ export const createDecrementPlayPileButton = (ctx: CanvasRenderingContext2D) => 
     );
 };
 
-export const createIncrementPlayPileButton = (ctx: CanvasRenderingContext2D) => {
+export const createIncrementPlayPileButton = () => {
+    const ctx = State.getCtx();
     const text = 'Play Pile +';
     const padding = 20; // Padding for the button
 
@@ -197,7 +199,8 @@ export const createIncrementPlayPileButton = (ctx: CanvasRenderingContext2D) => 
     );
 };
 
-export const createDecrementDrawSizeButton = (ctx: CanvasRenderingContext2D) => {
+export const createDecrementDrawSizeButton = () => {
+    const ctx = State.getCtx();
     const text = 'Draw Size -';
     const padding = 20; // Padding for the button
 
@@ -218,7 +221,8 @@ export const createDecrementDrawSizeButton = (ctx: CanvasRenderingContext2D) => 
     );
 };
 
-export const createIncrementDrawSizeButton = (ctx: CanvasRenderingContext2D) => {
+export const createIncrementDrawSizeButton = () => {
+    const ctx = State.getCtx();
     const text = 'Draw Size +';
     const padding = 20; // Padding for the button
 
@@ -239,7 +243,8 @@ export const createIncrementDrawSizeButton = (ctx: CanvasRenderingContext2D) => 
     );
 };
 
-export const createDecrementShufflesButton = (ctx: CanvasRenderingContext2D) => {
+export const createDecrementShufflesButton = () => {
+    const ctx = State.getCtx();
     const text = 'Shuffles -';
     const padding = 20; // Padding for the button
 
@@ -260,7 +265,8 @@ export const createDecrementShufflesButton = (ctx: CanvasRenderingContext2D) => 
     );
 };
 
-export const createIncrementShufflesButton = (ctx: CanvasRenderingContext2D) => {
+export const createIncrementShufflesButton = () => {
+    const ctx = State.getCtx();
     const text = 'Shuffles +';
     const padding = 20; // Padding for the button
 
@@ -281,7 +287,8 @@ export const createIncrementShufflesButton = (ctx: CanvasRenderingContext2D) => 
     );
 };
 
-export const createReloadButton = (ctx: CanvasRenderingContext2D) => {
+export const createReloadButton = () => {
+    const ctx = State.getCtx();
     const text = 'RELOAD';
     const padding = 20; // Padding for the button
 
@@ -302,7 +309,8 @@ export const createReloadButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createDealButton = (ctx: CanvasRenderingContext2D) => {
+export const createDealButton = () => {
+    const ctx = State.getCtx();
     const text = 'DEAL';
     const padding = 20; // Padding for the button
 
@@ -323,7 +331,8 @@ export const createDealButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createHitButton = (ctx: CanvasRenderingContext2D) => {
+export const createHitButton = () => {
+    const ctx = State.getCtx();
     const text = 'HIT';
     const padding = 20; // Padding for the button
 
@@ -344,7 +353,8 @@ export const createHitButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createDeckButton = (ctx: CanvasRenderingContext2D) => {
+export const createDeckButton = () => {
+    const ctx = State.getCtx();
     const text = 'DECK';
     const padding = 20; // Padding for the button
 
@@ -365,7 +375,8 @@ export const createDeckButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createSameValueButton = (ctx: CanvasRenderingContext2D) => {
+export const createSameValueButton = () => {
+    const ctx = State.getCtx();
     const text = 'SAME VALUE';
     const padding = 20; // Padding for the button
 
@@ -386,7 +397,8 @@ export const createSameValueButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createFlushButton = (ctx: CanvasRenderingContext2D) => {
+export const createFlushButton = () => {
+    const ctx = State.getCtx();
     const text = 'FLUSH';
     const padding = 20; // Padding for the button
 
@@ -407,7 +419,8 @@ export const createFlushButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createReverseKlondikeButton = (ctx: CanvasRenderingContext2D) => {
+export const createReverseKlondikeButton = () => {
+    const ctx = State.getCtx();
     const text = 'REV. KLONDIKE';
     const padding = 20; // Padding for the button
 
@@ -428,7 +441,8 @@ export const createReverseKlondikeButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createKlondikeButton = (ctx: CanvasRenderingContext2D) => {
+export const createKlondikeButton = () => {
+    const ctx = State.getCtx();
     const text = 'KLONDIKE';
     const padding = 20; // Padding for the button
 
@@ -449,7 +463,8 @@ export const createKlondikeButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createFreeButtton = (ctx: CanvasRenderingContext2D) => {
+export const createFreeButtton = () => {
+    const ctx = State.getCtx();
     const text = 'FREE';
     const padding = 20; // Padding for the button
 
@@ -470,7 +485,8 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createOpenDialogButton = (ctx: CanvasRenderingContext2D) => {
+export const createOpenDialogButton = () => {
+    const ctx = State.getCtx();
     const text = 'DEBUG';
     const padding = 20; // Padding for the button
 
@@ -491,7 +507,8 @@ export const createOpenDialogButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createCloseDialogButton = (ctx: CanvasRenderingContext2D) => {
+export const createCloseDialogButton = () => {
+    const ctx = State.getCtx();
     const text = 'CLOSE';
     const padding = 20; // Padding for the button
 
@@ -512,7 +529,7 @@ export const createCloseDialogButton = (ctx: CanvasRenderingContext2D) => {
     );
 };
 
-export const createThemeButtons = (ctx: CanvasRenderingContext2D): ThemeButton[] => {
+export const createThemeButtons = (): ThemeButton[] => {
     const themeButtons: ThemeButton[] = [];
     let i = 0;
 

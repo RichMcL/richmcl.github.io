@@ -149,12 +149,11 @@ export class Pile extends GameComponent {
         // Don't render the actual top card until it "lands"
         const card = this.getCardFromTop(this.cardAnimations.length);
 
-        drawCard(State.getCtx(), card, this.renderConfig.coordinates.x, yPos, scale);
+        drawCard(card, this.renderConfig.coordinates.x, yPos, scale);
 
         // Draw a border around the pile if it can play
         if (this.canPlay) {
             drawCardOutline(
-                State.getCtx(),
                 this.renderConfig.coordinates.x,
                 yPos,
                 this.renderConfig.size.width * scale,

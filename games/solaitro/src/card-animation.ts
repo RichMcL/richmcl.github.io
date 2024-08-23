@@ -40,7 +40,6 @@ export class CardAnimation extends GameComponent {
 
     render(): void {
         drawCard(
-            State.getCtx(),
             this.card,
             this.renderConfig.coordinates.x,
             this.renderConfig.coordinates.y,
