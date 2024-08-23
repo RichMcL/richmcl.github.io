@@ -42,8 +42,6 @@ import { Card, GameComponent } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
-    public canvas: HTMLCanvasElement;
-    public ctx: CanvasRenderingContext2D;
     public gameAspectRatio: number = 1280 / 800;
     public windowAspectRatio: number;
     public theme: Theme = Themes.default;
@@ -68,9 +66,6 @@ export class Game {
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
-    public score = 0;
-    public streak = 0;
-
     public buttons: GameButton[] = [];
     public debugButtons: GameButton[] = [];
     public themeButtons: ThemeButton[] = [];
@@ -81,8 +76,8 @@ export class Game {
     public isDealNewRound: boolean = true;
 
     constructor() {
-        this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
-        this.ctx = this.canvas.getContext('2d');
+        State.setCanvas(document.getElementById('game-canvas') as HTMLCanvasElement);
+        State.setCtx(State.getCanvas().getContext('2d'));
 
         const cardFaceSpriteSheet = new Image();
         cardFaceSpriteSheet.src = 'img/deck-sprite-sheet.png';
@@ -138,8 +133,8 @@ export class Game {
         console.log('Game started', this);
 
         // Add click event listener
-        this.canvas.addEventListener('click', event => {
-            const rect = this.canvas.getBoundingClientRect();
+        State.getCanvas().addEventListener('click', event => {
+            const rect = State.getCanvas().getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
@@ -150,7 +145,7 @@ export class Game {
         });
 
         document.addEventListener('mousemove', event => {
-            const rect = this.canvas.getBoundingClientRect();
+            const rect = State.getCanvas().getBoundingClientRect();
 
             State.setMouseCoordinates({
                 x: event.clientX - rect.left,
@@ -169,34 +164,34 @@ export class Game {
 
     public initializeGameObjects(): void {
         this.player = new Player(
-            this.ctx,
+            State.getCtx(),
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet()
         );
 
         this.initializePiles();
-        this.debugButtons.push(createDecrementDrawSizeButton(this.ctx, this.theme));
-        this.debugButtons.push(createIncrementDrawSizeButton(this.ctx, this.theme));
-        this.debugButtons.push(createDecrementShufflesButton(this.ctx, this.theme));
-        this.debugButtons.push(createIncrementShufflesButton(this.ctx, this.theme));
-        this.debugButtons.push(createDecrementPlayPileButton(this.ctx, this.theme));
-        this.debugButtons.push(createIncrementPlayPileButton(this.ctx, this.theme));
-        this.debugButtons.push(createSameValueButton(this.ctx, this.theme));
-        this.debugButtons.push(createFlushButton(this.ctx, this.theme));
-        this.debugButtons.push(createKlondikeButton(this.ctx, this.theme));
-        this.debugButtons.push(createReverseKlondikeButton(this.ctx, this.theme));
-        this.debugButtons.push(createReloadButton(this.ctx, this.theme));
-        this.debugButtons.push(createFreeButtton(this.ctx, this.theme));
-        this.debugButtons.push(createDealButton(this.ctx, this.theme));
-        this.buttons.push(createHitButton(this.ctx, this.theme));
-        this.buttons.push(createDeckButton(this.ctx, this.theme));
-        this.buttons.push(createOpenDialogButton(this.ctx, this.theme));
-        this.themeButtons = createThemeButtons(this.ctx);
+        this.debugButtons.push(createDecrementDrawSizeButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createIncrementDrawSizeButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createDecrementShufflesButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createIncrementShufflesButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createDecrementPlayPileButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createIncrementPlayPileButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createSameValueButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createFlushButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createKlondikeButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createReverseKlondikeButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createReloadButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createFreeButtton(State.getCtx(), this.theme));
+        this.debugButtons.push(createDealButton(State.getCtx(), this.theme));
+        this.buttons.push(createHitButton(State.getCtx(), this.theme));
+        this.buttons.push(createDeckButton(State.getCtx(), this.theme));
+        this.buttons.push(createOpenDialogButton(State.getCtx(), this.theme));
+        this.themeButtons = createThemeButtons(State.getCtx());
 
-        this.dialog = new Dialog(this.ctx, DefaultDialogRenderConfig.coordinates);
-        this.dialogCloseButton = createCloseDialogButton(this.ctx, this.theme);
+        this.dialog = new Dialog(State.getCtx(), DefaultDialogRenderConfig.coordinates);
+        this.dialogCloseButton = createCloseDialogButton(State.getCtx(), this.theme);
 
-        this.scorebar = new Scorebar(this.ctx, this.theme);
+        this.scorebar = new Scorebar(State.getCtx(), this.theme);
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
 
         this.gameComponents.push(this.scorebar);
@@ -225,7 +220,7 @@ export class Game {
 
     public updateGameState() {
         if (
-            this.score >= Levels[this.currentLevel].scoreToBeat &&
+            State.getScore() >= Levels[this.currentLevel].scoreToBeat &&
             !this.isActiveAnimations() &&
             this.scorebar.isAnimationComplete()
         ) {
@@ -406,7 +401,7 @@ export class Game {
 
             hoverPile.addCardAnimation(
                 new CardAnimation(
-                    this.ctx,
+                    State.getCtx(),
                     this.player.getCoordinatesCopy(),
                     hoverPile.getCoordinatesCopy(),
                     State.getCardFaceSpriteSheet(),
@@ -430,19 +425,19 @@ export class Game {
 
             console.log('Passing rules', passingRules);
 
-            const pointsForMove = calculateScoreForRules(passingRules, this.streak);
-            this.score += pointsForMove;
-            this.streak++;
+            const pointsForMove = calculateScoreForRules(passingRules, State.getStreak());
+            State.setScore(State.getScore() + pointsForMove);
+            State.setStreak(State.getStreak() + 1);
 
             this.player.removeTopPlayCard();
-            this.scorebar.setScoreToReach(this.score);
+            this.scorebar.setScoreToReach(State.getScore());
 
             // in the middle of the pile
             const scoreX =
                 hoverPile.renderConfig.coordinates.x + hoverPile.renderConfig.size.width / 2;
 
             this.gameComponents.push(
-                new ScoreGraphic(this.ctx, { x: scoreX, y: 300 }, pointsForMove)
+                new ScoreGraphic(State.getCtx(), { x: scoreX, y: 300 }, pointsForMove)
             );
         }
     }
@@ -454,7 +449,7 @@ export class Game {
         this.player.hit();
 
         this.isDealNewRound = false;
-        this.score = 0;
+        State.setScore(0);
         this.currentLevel++;
 
         //increment the theme the next object in the map
@@ -468,7 +463,9 @@ export class Game {
         }
 
         this.changeTheme(Themes[nextTheme]);
-        this.gameComponents.push(new ScoreGraphic(this.ctx, { x: 540, y: 350 }, 'Next Level!'));
+        this.gameComponents.push(
+            new ScoreGraphic(State.getCtx(), { x: 540, y: 350 }, 'Next Level!')
+        );
         this.player.shufflesRemaining = this.player.startingShuffles;
 
         this.scorebar.reset();
@@ -499,7 +496,7 @@ export class Game {
     }
 
     public render() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
+        State.getCtx().clearRect(0, 0, State.getCanvas().width, State.getCanvas().height); // Clear canvas
 
         this.renderTheme();
         this.renderSidebar();
@@ -540,9 +537,9 @@ export class Game {
     }
 
     public renderPileShadow(): void {
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-        this.drawRoundedRect(this.ctx, 330, 70, 620, 180, 10);
-        this.ctx.fill();
+        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.1)';
+        this.drawRoundedRect(State.getCtx(), 330, 70, 620, 180, 10);
+        State.getCtx().fill();
     }
 
     // Function to draw a rounded rectangle
@@ -571,32 +568,32 @@ export class Game {
         const x = 20;
 
         // Left border
-        this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(x - 3, 0, 3, 800);
+        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillRect(x - 3, 0, 3, 800);
 
-        this.ctx.fillStyle = '#293a3a';
-        this.ctx.fillRect(x, 0, 250, 800);
+        State.getCtx().fillStyle = '#293a3a';
+        State.getCtx().fillRect(x, 0, 250, 800);
 
         // Right border
-        this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(x + 250, 0, 3, 800);
+        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillRect(x + 250, 0, 3, 800);
     }
 
     public renderRuleSidebar() {
         const x = 1007;
 
         // Left border
-        this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(x - 3, 0, 3, 800);
+        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillRect(x - 3, 0, 3, 800);
 
-        this.ctx.fillStyle = '#293a3a';
-        this.ctx.fillRect(x, 0, 250, 800);
+        State.getCtx().fillStyle = '#293a3a';
+        State.getCtx().fillRect(x, 0, 250, 800);
 
         // Right border
-        this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(x + 250, 0, 3, 800);
+        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillRect(x + 250, 0, 3, 800);
 
-        printText(this.ctx, 'Rules', x + 30, 40);
+        printText(State.getCtx(), 'Rules', x + 30, 40);
 
         //iterate over the riles an print their descriptions
 
@@ -605,9 +602,9 @@ export class Game {
         this.ruleNames.sort();
         for (const rule of this.ruleNames) {
             const ruleInfo = RuleInfo[rule];
-            printText(this.ctx, `- ${ruleInfo.name}`, x + 30, y);
+            printText(State.getCtx(), `- ${ruleInfo.name}`, x + 30, y);
             y += 30;
-            printText(this.ctx, `  ${ruleInfo.description}`, x + 30, y, 15);
+            printText(State.getCtx(), `  ${ruleInfo.description}`, x + 30, y, 15);
             y += 40;
         }
     }
@@ -631,15 +628,15 @@ export class Game {
         lines.push(`Shuffles: ${this.player.shufflesRemaining}`);
         lines.push(`Play Pile Size: ${this.player.playPileVisibleSize}`);
         lines.push(`Draw Pile Size: ${this.player.playPileDrawSize}`);
-        lines.push(`Score: ${this.score}`);
-        lines.push(`Streak: ${this.streak}`);
+        lines.push(`Score: ${State.getScore()}`);
+        lines.push(`Streak: ${State.getStreak()}`);
         lines.push('');
         lines.push(`Level: ${level.name}`);
         lines.push(`Score to Beat: ${level.scoreToBeat}`);
 
         let y = 40;
         lines.forEach(line => {
-            printText(this.ctx, line, 30, y);
+            printText(State.getCtx(), line, 30, y);
             y += 40;
         });
     }
@@ -647,14 +644,14 @@ export class Game {
     public renderMousePosition(): void {
         const x = parseFloat(State.getScaledMouseCoordinates().x.toFixed(0));
         const y = parseFloat(State.getScaledMouseCoordinates().y.toFixed(0));
-        printText(this.ctx, `Cursor: X ${x} | Y ${y}`, 30, 780);
+        printText(State.getCtx(), `Cursor: X ${x} | Y ${y}`, 30, 780);
     }
 
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
-            printText(this.ctx, `Card: ${card.value}`, 30, 740);
-            drawIcon(this.ctx, State.getIconSpriteSheet(), card.suit, 120, 723);
+            printText(State.getCtx(), `Card: ${card.value}`, 30, 740);
+            drawIcon(State.getCtx(), State.getIconSpriteSheet(), card.suit, 120, 723);
         }
     }
 
@@ -666,28 +663,28 @@ export class Game {
 
     public initializePiles(): void {
         this.pile1 = new Pile(
-            this.ctx,
+            State.getCtx(),
             PilesRenderConfig.pile1.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
             'pile1'
         );
         this.pile2 = new Pile(
-            this.ctx,
+            State.getCtx(),
             PilesRenderConfig.pile2.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
             'pile2'
         );
         this.pile3 = new Pile(
-            this.ctx,
+            State.getCtx(),
             PilesRenderConfig.pile3.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
             'pile3'
         );
         this.pile4 = new Pile(
-            this.ctx,
+            State.getCtx(),
             PilesRenderConfig.pile4.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
@@ -702,7 +699,7 @@ export class Game {
     }
 
     public hitCard(): void {
-        this.streak = 0;
+        State.setStreak(0);
         this.player.hit();
     }
 
@@ -737,7 +734,7 @@ export class Game {
 
     public openDeckDialog(): void {
         const deckDialog = new DeckDialog(
-            this.ctx,
+            State.getCtx(),
             DefaultDialogRenderConfig.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),

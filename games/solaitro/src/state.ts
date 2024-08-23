@@ -1,6 +1,11 @@
 import { Coordinates } from './types';
 
 export class State {
+    private static canvas: HTMLCanvasElement;
+    private static ctx: CanvasRenderingContext2D;
+    private static score = 0;
+    private static streak = 0;
+
     private static mouseClick = false;
     private static scaleFactor = 1;
 
@@ -13,6 +18,38 @@ export class State {
     private static cardFaceSpriteSheet: HTMLImageElement;
     private static cardBackSpriteSheet: HTMLImageElement;
     private static iconSpriteSheet: HTMLImageElement;
+
+    static setCanvas(canvas: HTMLCanvasElement): void {
+        State.canvas = canvas;
+    }
+
+    static getCanvas(): HTMLCanvasElement {
+        return State.canvas;
+    }
+
+    static setCtx(ctx: CanvasRenderingContext2D): void {
+        State.ctx = ctx;
+    }
+
+    static getCtx(): CanvasRenderingContext2D {
+        return State.ctx;
+    }
+
+    static getScore(): number {
+        return State.score;
+    }
+
+    static setScore(score: number): void {
+        State.score = score;
+    }
+
+    static getStreak(): number {
+        return State.streak;
+    }
+
+    static setStreak(streak: number): void {
+        State.streak = streak;
+    }
 
     static setMouseCoordinates(coordinates: Coordinates): void {
         State.mouseCoordinates = coordinates;
