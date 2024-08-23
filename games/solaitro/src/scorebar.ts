@@ -1,7 +1,7 @@
-import { text } from 'stream/consumers';
-import { Coordinates, GameComponent } from './types';
+import { GameComponent } from './types';
 import { printText } from './util';
 import { Theme } from './theme';
+import { State } from './state';
 
 export class Scorebar extends GameComponent {
     private scoreToReach = 0;
@@ -9,9 +9,9 @@ export class Scorebar extends GameComponent {
     private maxScore = 100;
     private incrementer = 1;
 
-    constructor(ctx: CanvasRenderingContext2D, private theme: Theme) {
+    constructor(private theme: Theme) {
         const coordinates = { x: 290, y: 10 };
-        super(ctx, coordinates);
+        super(coordinates);
 
         this.renderConfig = {
             coordinates,
@@ -34,8 +34,8 @@ export class Scorebar extends GameComponent {
 
     render(): void {
         // Left border
-        this.ctx.fillStyle = '#eeeeee';
-        this.ctx.fillRect(
+        State.getCtx().fillStyle = '#eeeeee';
+        State.getCtx().fillRect(
             this.coordinates.x - 3,
             this.coordinates.y,
             3,
@@ -50,16 +50,16 @@ export class Scorebar extends GameComponent {
 
         const scoreHeight = completedRatio * 780;
 
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(
+        State.getCtx().fillStyle = 'white';
+        State.getCtx().fillRect(
             this.coordinates.x,
             this.coordinates.y,
             this.renderConfig.size.width,
             this.renderConfig.size.height
         );
 
-        this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(
+        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillRect(
             this.coordinates.x,
             this.coordinates.y + this.renderConfig.size.height,
             this.renderConfig.size.width,
@@ -67,8 +67,8 @@ export class Scorebar extends GameComponent {
         );
 
         // Right border
-        this.ctx.fillStyle = '#eeeeee';
-        this.ctx.fillRect(
+        State.getCtx().fillStyle = '#eeeeee';
+        State.getCtx().fillRect(
             this.coordinates.x + this.renderConfig.size.width,
             this.coordinates.y,
             3,
@@ -83,7 +83,7 @@ export class Scorebar extends GameComponent {
         }
 
         printText(
-            this.ctx,
+            State.getCtx(),
             `${Math.floor(this.renderedScore)}`,
             this.coordinates.x + this.renderConfig.size.width + 10,
             textY,

@@ -1,6 +1,9 @@
 import { Coordinates } from './types';
 
 export class State {
+    public static readonly gameAspectRatio = 1280 / 800;
+    private static windowAspectRatio: number;
+
     private static canvas: HTMLCanvasElement;
     private static ctx: CanvasRenderingContext2D;
     private static score = 0;
@@ -18,6 +21,14 @@ export class State {
     private static cardFaceSpriteSheet: HTMLImageElement;
     private static cardBackSpriteSheet: HTMLImageElement;
     private static iconSpriteSheet: HTMLImageElement;
+
+    static setWindowAspectRatio(aspectRatio: number): void {
+        State.windowAspectRatio = aspectRatio;
+    }
+
+    static getWindowAspectRatio(): number {
+        return State.windowAspectRatio;
+    }
 
     static setCanvas(canvas: HTMLCanvasElement): void {
         State.canvas = canvas;

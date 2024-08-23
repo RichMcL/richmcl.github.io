@@ -1,3 +1,4 @@
+import { State } from './state';
 import { Coordinates, GameComponent, RenderConfig } from './types';
 import { printText } from './util';
 
@@ -17,8 +18,8 @@ export class Dialog extends GameComponent {
     text: string = 'This is a test dialog, this is a game in progress obviously...';
     visible: boolean = false;
 
-    constructor(ctx: CanvasRenderingContext2D, coordinates: Coordinates) {
-        super(ctx, coordinates);
+    constructor(coordinates: Coordinates) {
+        super(coordinates);
     }
 
     update(): void {}
@@ -29,18 +30,18 @@ export class Dialog extends GameComponent {
         }
 
         // Save the current context state
-        this.ctx.save();
+        State.getCtx().save();
 
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
-        this.ctx.fillRect(
+        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.9)';
+        State.getCtx().fillRect(
             this.coordinates.x,
             this.coordinates.y,
             DefaultDialogRenderConfig.size.width,
             DefaultDialogRenderConfig.size.height
         );
 
-        this.ctx.restore();
+        State.getCtx().restore();
 
-        printText(this.ctx, this.text, this.coordinates.x + 20, this.coordinates.y + 50, 30);
+        printText(State.getCtx(), this.text, this.coordinates.x + 20, this.coordinates.y + 50, 30);
     }
 }

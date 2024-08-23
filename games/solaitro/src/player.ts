@@ -1,4 +1,5 @@
 import { CardAnimation } from './card-animation';
+import { State } from './state';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
 import { buildAndShuffleDeck, drawCard, drawCardBack, printText } from './util';
 
@@ -38,12 +39,9 @@ export class Player extends GameComponent {
 
     renderConfig: RenderConfig;
 
-    constructor(
-        ctx: CanvasRenderingContext2D,
-        private cardFaceSpriteSheet: HTMLImageElement,
-        private cardBackSpriteSheet: HTMLImageElement
-    ) {
-        super(ctx, PlayerRenderConfig.coordinates);
+    constructor() // private cardBackSpriteSheet: HTMLImageElement // private cardFaceSpriteSheet: HTMLImageElement, // ctx: CanvasRenderingContext2D,
+    {
+        super(PlayerRenderConfig.coordinates);
         this.drawPile = buildAndShuffleDeck(true);
         this.hit();
 
@@ -62,8 +60,8 @@ export class Player extends GameComponent {
         // Render deck to represent draw pile
         for (let i = 3; i > 0; i--) {
             drawCardBack(
-                this.ctx,
-                this.cardBackSpriteSheet,
+                State.getCtx(),
+                State.getCardBackSpriteSheet(),
                 DrawPileRenderConfig.coordinates.x + i * 5,
                 DrawPileRenderConfig.coordinates.y + 5 * (i - 1),
                 DrawPileRenderConfig.scale
@@ -86,9 +84,9 @@ export class Player extends GameComponent {
             }
 
             drawCard(
-                this.ctx,
-                this.cardFaceSpriteSheet,
-                this.cardBackSpriteSheet,
+                State.getCtx(),
+                State.getCardFaceSpriteSheet(),
+                State.getCardBackSpriteSheet(),
                 this.playPile[i],
                 this.renderConfig.coordinates.x - (i - this.cardAnimations.length) * 45,
                 this.renderConfig.coordinates.y,
@@ -105,19 +103,19 @@ export class Player extends GameComponent {
     public renderPlayPileSize(): void {
         const fixedWidth = 71 * 1.5; // Define the fixed width
         const text = `[ ${this.playPile?.length} ]`;
-        const textWidth = this.ctx.measureText(text).width;
+        const textWidth = State.getCtx().measureText(text).width;
         const x = 495 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        printText(this.ctx, text, x, 745);
+        printText(State.getCtx(), text, x, 745);
     }
 
     public renderDrawPileSize(): void {
         const fixedWidth = 71 * 1.5; // Define the fixed width
         const text = `[ ${this.drawPile?.length} ] `;
-        const textWidth = this.ctx.measureText(text).width;
+        const textWidth = State.getCtx().measureText(text).width;
         const x = 685 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
-        printText(this.ctx, text, x, 745);
+        printText(State.getCtx(), text, x, 745);
     }
 
     getTopPlayCard(): Card {
@@ -145,7 +143,6 @@ export class Player extends GameComponent {
 
                 this.addCardAnimation(
                     new CardAnimation(
-                        this.ctx,
                         {
                             x: DrawPileRenderConfig.coordinates.x,
                             y: DrawPileRenderConfig.coordinates.y
@@ -154,8 +151,8 @@ export class Player extends GameComponent {
                             x: PlayerRenderConfig.coordinates.x - animationIndex * 45,
                             y: PlayerRenderConfig.coordinates.y
                         },
-                        this.cardFaceSpriteSheet,
-                        this.cardBackSpriteSheet,
+                        State.getCardFaceSpriteSheet(),
+                        State.getCardBackSpriteSheet(),
                         topOfDrawPile,
                         15
                     )

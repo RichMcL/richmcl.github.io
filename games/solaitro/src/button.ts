@@ -1,3 +1,4 @@
+import { State } from './state';
 import { Theme, Themes } from './theme';
 import { Coordinates, GameComponent, RenderConfig, Size } from './types';
 import { printText } from './util';
@@ -7,7 +8,6 @@ export class GameButton extends GameComponent {
     borderRadius = 5;
 
     constructor(
-        ctx: CanvasRenderingContext2D,
         coordinates: Coordinates,
         public size: Size,
         public id: string,
@@ -15,7 +15,7 @@ export class GameButton extends GameComponent {
         public padding: number,
         public theme: Theme
     ) {
-        super(ctx, coordinates);
+        super(coordinates);
         this.renderConfig = {
             coordinates,
             size,
@@ -27,7 +27,7 @@ export class GameButton extends GameComponent {
 
     render(): void {
         this.renderDropShadow();
-        this.ctx.fillStyle = this.theme.base;
+        State.getCtx().fillStyle = this.theme.base;
 
         const x = this.coordinates.x;
         const y = this.coordinates.y;
@@ -35,17 +35,17 @@ export class GameButton extends GameComponent {
         const height = this.size.height;
         const radius = this.borderRadius; // Adjust the radius as needed
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(x + radius, y);
-        this.ctx.arcTo(x + width, y, x + width, y + height, radius);
-        this.ctx.arcTo(x + width, y + height, x, y + height, radius);
-        this.ctx.arcTo(x, y + height, x, y, radius);
-        this.ctx.arcTo(x, y, x + width, y, radius);
-        this.ctx.closePath();
-        this.ctx.fill();
+        State.getCtx().beginPath();
+        State.getCtx().moveTo(x + radius, y);
+        State.getCtx().arcTo(x + width, y, x + width, y + height, radius);
+        State.getCtx().arcTo(x + width, y + height, x, y + height, radius);
+        State.getCtx().arcTo(x, y + height, x, y, radius);
+        State.getCtx().arcTo(x, y, x + width, y, radius);
+        State.getCtx().closePath();
+        State.getCtx().fill();
 
         printText(
-            this.ctx,
+            State.getCtx(),
             this.text,
             this.coordinates.x + this.padding / 2,
             this.coordinates.y + this.padding * 1.75
@@ -58,8 +58,8 @@ export class GameButton extends GameComponent {
     }
 
     renderDropShadow(): void {
-        this.ctx.save();
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        State.getCtx().save();
+        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.3)';
 
         const x = this.renderConfig.coordinates.x;
         const y = this.renderConfig.coordinates.y;
@@ -75,16 +75,16 @@ export class GameButton extends GameComponent {
         const shadowX = x + shadowOffsetX;
         const shadowY = y + shadowOffsetY;
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(shadowX + radius, shadowY);
-        this.ctx.arcTo(shadowX + width, shadowY, shadowX + width, shadowY + height, radius);
-        this.ctx.arcTo(shadowX + width, shadowY + height, shadowX, shadowY + height, radius);
-        this.ctx.arcTo(shadowX, shadowY + height, shadowX, shadowY, radius);
-        this.ctx.arcTo(shadowX, shadowY, shadowX + width, shadowY, radius);
-        this.ctx.closePath();
-        this.ctx.fill();
+        State.getCtx().beginPath();
+        State.getCtx().moveTo(shadowX + radius, shadowY);
+        State.getCtx().arcTo(shadowX + width, shadowY, shadowX + width, shadowY + height, radius);
+        State.getCtx().arcTo(shadowX + width, shadowY + height, shadowX, shadowY + height, radius);
+        State.getCtx().arcTo(shadowX, shadowY + height, shadowX, shadowY, radius);
+        State.getCtx().arcTo(shadowX, shadowY, shadowX + width, shadowY, radius);
+        State.getCtx().closePath();
+        State.getCtx().fill();
 
-        this.ctx.restore();
+        State.getCtx().restore();
     }
 
     renderOutline(): void {
@@ -95,16 +95,16 @@ export class GameButton extends GameComponent {
         const radius = this.borderRadius; // Use the same border radius as the element
 
         // Draw the outline with the same rounded corners
-        this.ctx.strokeStyle = 'white';
-        this.ctx.lineWidth = 3;
-        this.ctx.beginPath();
-        this.ctx.moveTo(x + radius, y);
-        this.ctx.arcTo(x + width, y, x + width, y + height, radius);
-        this.ctx.arcTo(x + width, y + height, x, y + height, radius);
-        this.ctx.arcTo(x, y + height, x, y, radius);
-        this.ctx.arcTo(x, y, x + width, y, radius);
-        this.ctx.closePath();
-        this.ctx.stroke();
+        State.getCtx().strokeStyle = 'white';
+        State.getCtx().lineWidth = 3;
+        State.getCtx().beginPath();
+        State.getCtx().moveTo(x + radius, y);
+        State.getCtx().arcTo(x + width, y, x + width, y + height, radius);
+        State.getCtx().arcTo(x + width, y + height, x, y + height, radius);
+        State.getCtx().arcTo(x, y + height, x, y, radius);
+        State.getCtx().arcTo(x, y, x + width, y, radius);
+        State.getCtx().closePath();
+        State.getCtx().stroke();
     }
 
     reset(): void {
@@ -118,13 +118,12 @@ export class GameButton extends GameComponent {
 
 export class ThemeButton extends GameButton {
     constructor(
-        ctx: CanvasRenderingContext2D,
         coordinates: Coordinates,
         public size: Size,
         public padding: number,
         public theme: Theme
     ) {
-        super(ctx, coordinates, size, 'theme', '', padding, null);
+        super(coordinates, size, 'theme', '', padding, null);
         this.renderConfig = {
             coordinates,
             size,
@@ -135,8 +134,8 @@ export class ThemeButton extends GameButton {
     update(): void {}
 
     render(): void {
-        this.ctx.fillStyle = this.theme.base;
-        this.ctx.fillRect(
+        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillRect(
             this.coordinates.x,
             this.coordinates.y,
             this.size.width,
@@ -145,9 +144,9 @@ export class ThemeButton extends GameButton {
 
         // Draw a border around the button if it's hovered
         if (this.isHovered) {
-            this.ctx.strokeStyle = 'white';
-            this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(
+            State.getCtx().strokeStyle = 'white';
+            State.getCtx().lineWidth = 2;
+            State.getCtx().strokeRect(
                 this.coordinates.x,
                 this.coordinates.y,
                 this.size.width,
@@ -170,7 +169,6 @@ export const createDecrementPlayPileButton = (ctx: CanvasRenderingContext2D, the
     const y = 410;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'decrement-play-pile',
@@ -193,7 +191,6 @@ export const createIncrementPlayPileButton = (ctx: CanvasRenderingContext2D, the
     const y = 410;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'increment-play-pile',
@@ -216,7 +213,6 @@ export const createDecrementDrawSizeButton = (ctx: CanvasRenderingContext2D, the
     const y = 270;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'decrement-draw-size',
@@ -239,7 +235,6 @@ export const createIncrementDrawSizeButton = (ctx: CanvasRenderingContext2D, the
     const y = 270;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'increment-draw-size',
@@ -262,7 +257,6 @@ export const createDecrementShufflesButton = (ctx: CanvasRenderingContext2D, the
     const y = 340;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'decrement-shuffles',
@@ -285,7 +279,6 @@ export const createIncrementShufflesButton = (ctx: CanvasRenderingContext2D, the
     const y = 340;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'increment-shuffles',
@@ -308,7 +301,6 @@ export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) 
     const y = 480;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'reload',
@@ -331,7 +323,6 @@ export const createDealButton = (ctx: CanvasRenderingContext2D, theme: Theme) =>
     const y = 480;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'deal',
@@ -354,7 +345,6 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
     const y = 570;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'hit',
@@ -377,7 +367,6 @@ export const createDeckButton = (ctx: CanvasRenderingContext2D, theme: Theme) =>
     const y = 640;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'deck-dialog-open',
@@ -400,7 +389,6 @@ export const createSameValueButton = (ctx: CanvasRenderingContext2D, theme: Them
     const y = 240;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'same-value',
@@ -423,7 +411,6 @@ export const createFlushButton = (ctx: CanvasRenderingContext2D, theme: Theme) =
     const y = 300;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'flush',
@@ -446,7 +433,6 @@ export const createReverseKlondikeButton = (ctx: CanvasRenderingContext2D, theme
     const y = 360;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'reverse-klondike',
@@ -469,7 +455,6 @@ export const createKlondikeButton = (ctx: CanvasRenderingContext2D, theme: Theme
     const y = 420;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'klondike',
@@ -492,7 +477,6 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
     const y = 480;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'free',
@@ -515,7 +499,6 @@ export const createOpenDialogButton = (ctx: CanvasRenderingContext2D, theme: The
     const y = 720;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'dialog-open',
@@ -538,7 +521,6 @@ export const createCloseDialogButton = (ctx: CanvasRenderingContext2D, theme: Th
     const y = 570;
 
     return new GameButton(
-        ctx,
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'dialog-close',
@@ -560,7 +542,6 @@ export const createThemeButtons = (ctx: CanvasRenderingContext2D): ThemeButton[]
         const y = 570;
 
         const themeButton = new ThemeButton(
-            ctx,
             { x, y },
             { width: buttonWidth, height: buttonHeight },
             padding,

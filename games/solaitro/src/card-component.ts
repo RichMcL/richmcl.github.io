@@ -1,3 +1,4 @@
+import { State } from './state';
 import { Card, Coordinates, GameComponent } from './types';
 import { drawCard } from './util';
 
@@ -12,13 +13,12 @@ export class CardComponent extends GameComponent {
     private time = 0;
 
     constructor(
-        ctx: CanvasRenderingContext2D,
         coordinates: Coordinates,
         private cardFaceSpriteSheet: HTMLImageElement,
         private cardBackSpriteSheet: HTMLImageElement,
         private card: Card
     ) {
-        super(ctx, coordinates);
+        super(coordinates);
         this.renderConfig = {
             coordinates,
             size: {
@@ -44,7 +44,7 @@ export class CardComponent extends GameComponent {
 
     staticRender(): void {
         drawCard(
-            this.ctx,
+            State.getCtx(),
             this.cardFaceSpriteSheet,
             this.cardBackSpriteSheet,
             this.card,
@@ -56,10 +56,10 @@ export class CardComponent extends GameComponent {
 
     animationRender(): void {
         // Save the current context state
-        this.ctx.save();
+        State.getCtx().save();
 
         // Move the origin to the card's center
-        this.ctx.translate(
+        State.getCtx().translate(
             this.renderConfig.coordinates.x +
                 (this.renderConfig.size.width * this.renderConfig.scale) / 2,
             this.renderConfig.coordinates.y +
@@ -67,10 +67,10 @@ export class CardComponent extends GameComponent {
         );
 
         // Rotate the context
-        this.ctx.rotate(this.rotationAngle);
+        State.getCtx().rotate(this.rotationAngle);
 
         // Move the origin back
-        this.ctx.translate(
+        State.getCtx().translate(
             -this.renderConfig.coordinates.x -
                 (this.renderConfig.size.width * this.renderConfig.scale) / 2,
             -this.renderConfig.coordinates.y -
@@ -80,6 +80,6 @@ export class CardComponent extends GameComponent {
         this.staticRender();
 
         // Restore the context state
-        this.ctx.restore();
+        State.getCtx().restore();
     }
 }

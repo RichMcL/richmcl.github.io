@@ -1,3 +1,4 @@
+import { State } from './state';
 import { Card, Coordinates, GameComponent } from './types';
 import { drawCard } from './util';
 
@@ -6,7 +7,6 @@ export class CardAnimation extends GameComponent {
     public yRateOfChange: number = 0;
 
     constructor(
-        ctx: CanvasRenderingContext2D,
         coordinates: Coordinates,
         private endingCoordinates: Coordinates,
         private cardFaceSpriteSheet: HTMLImageElement,
@@ -14,7 +14,7 @@ export class CardAnimation extends GameComponent {
         private card: Card,
         private ttl: number = 15
     ) {
-        super(ctx, coordinates);
+        super(coordinates);
 
         this.renderConfig = {
             coordinates,
@@ -42,7 +42,7 @@ export class CardAnimation extends GameComponent {
 
     render(): void {
         drawCard(
-            this.ctx,
+            State.getCtx(),
             this.cardFaceSpriteSheet,
             this.cardBackSpriteSheet,
             this.card,

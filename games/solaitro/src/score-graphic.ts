@@ -1,3 +1,4 @@
+import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 import { printText } from './util';
 
@@ -5,12 +6,8 @@ export class ScoreGraphic extends GameComponent {
     public ttl: number = 90;
     public color = 'white';
 
-    constructor(
-        ctx: CanvasRenderingContext2D,
-        coordinates: Coordinates,
-        public score: string | number
-    ) {
-        super(ctx, coordinates);
+    constructor(coordinates: Coordinates, public score: string | number) {
+        super(coordinates);
     }
 
     update(): void {
@@ -32,7 +29,7 @@ export class ScoreGraphic extends GameComponent {
 
     render(): void {
         printText(
-            this.ctx,
+            State.getCtx(),
             `+${this.score}`,
             this.coordinates.x,
             this.coordinates.y,

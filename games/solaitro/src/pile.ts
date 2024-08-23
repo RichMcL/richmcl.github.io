@@ -1,4 +1,5 @@
 import { CardAnimation } from './card-animation';
+import { State } from './state';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
 import { drawCard, drawCardOutline, printText } from './util';
 
@@ -70,13 +71,12 @@ export class Pile extends GameComponent {
     private time = 0;
 
     constructor(
-        ctx: CanvasRenderingContext2D,
         coordinates: Coordinates,
         private cardFaceSpriteSheet: HTMLImageElement,
         private cardBackSpriteSheet: HTMLImageElement,
         private pileName: string
     ) {
-        super(ctx, coordinates);
+        super(coordinates);
         this.cards = [];
         this.renderConfig = PilesRenderConfig[pileName];
     }
@@ -104,7 +104,7 @@ export class Pile extends GameComponent {
         }
 
         printText(
-            this.ctx,
+            State.getCtx(),
             `[ ${this.cards.length} ]`,
             this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
             this.renderConfig.coordinates.y +
@@ -117,10 +117,10 @@ export class Pile extends GameComponent {
 
     animationRender(): void {
         // Save the current context state
-        this.ctx.save();
+        State.getCtx().save();
 
         // Move the origin to the card's center
-        this.ctx.translate(
+        State.getCtx().translate(
             this.renderConfig.coordinates.x +
                 (this.renderConfig.size.width * this.renderConfig.scale) / 2,
             this.renderConfig.coordinates.y +
@@ -128,10 +128,10 @@ export class Pile extends GameComponent {
         );
 
         // Rotate the context
-        this.ctx.rotate(this.rotationAngle);
+        State.getCtx().rotate(this.rotationAngle);
 
         // Move the origin back
-        this.ctx.translate(
+        State.getCtx().translate(
             -this.renderConfig.coordinates.x -
                 (this.renderConfig.size.width * this.renderConfig.scale) / 2,
             -this.renderConfig.coordinates.y -
@@ -141,7 +141,7 @@ export class Pile extends GameComponent {
         this.staticRender();
 
         // Restore the context state
-        this.ctx.restore();
+        State.getCtx().restore();
     }
 
     staticRender(): void {
@@ -156,7 +156,7 @@ export class Pile extends GameComponent {
         const card = this.getCardFromTop(this.cardAnimations.length);
 
         drawCard(
-            this.ctx,
+            State.getCtx(),
             this.cardFaceSpriteSheet,
             this.cardBackSpriteSheet,
             card,
@@ -168,7 +168,7 @@ export class Pile extends GameComponent {
         // Draw a border around the pile if it can play
         if (this.canPlay) {
             drawCardOutline(
-                this.ctx,
+                State.getCtx(),
                 this.renderConfig.coordinates.x,
                 yPos,
                 this.renderConfig.size.width * scale,
@@ -178,8 +178,8 @@ export class Pile extends GameComponent {
     }
 
     renderDropShadow(): void {
-        this.ctx.save();
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        State.getCtx().save();
+        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.3)';
 
         const x = this.renderConfig.coordinates.x;
         const y = this.renderConfig.coordinates.y;
@@ -188,7 +188,7 @@ export class Pile extends GameComponent {
         const radius = 10; // Adjust the radius as needed
 
         // Calculate the center of the canvas
-        const canvasCenterX = this.ctx.canvas.width / 2;
+        const canvasCenterX = State.getCtx().canvas.width / 2;
 
         // Determine the shadow offset based on the element's position relative to the center
         const shadowOffsetX = (x + width / 2 - canvasCenterX) * -0.03; // Reduced horizontal offset
@@ -203,21 +203,21 @@ export class Pile extends GameComponent {
         const elementCenterY = y + height / 2;
 
         // Apply rotation
-        this.ctx.translate(elementCenterX, elementCenterY);
-        this.ctx.rotate(this.rotationAngle);
+        State.getCtx().translate(elementCenterX, elementCenterY);
+        State.getCtx().rotate(this.rotationAngle);
 
-        this.ctx.translate(-elementCenterX, -elementCenterY);
+        State.getCtx().translate(-elementCenterX, -elementCenterY);
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(shadowX + radius, shadowY);
-        this.ctx.arcTo(shadowX + width, shadowY, shadowX + width, shadowY + height, radius);
-        this.ctx.arcTo(shadowX + width, shadowY + height, shadowX, shadowY + height, radius);
-        this.ctx.arcTo(shadowX, shadowY + height, shadowX, shadowY, radius);
-        this.ctx.arcTo(shadowX, shadowY, shadowX + width, shadowY, radius);
-        this.ctx.closePath();
-        this.ctx.fill();
+        State.getCtx().beginPath();
+        State.getCtx().moveTo(shadowX + radius, shadowY);
+        State.getCtx().arcTo(shadowX + width, shadowY, shadowX + width, shadowY + height, radius);
+        State.getCtx().arcTo(shadowX + width, shadowY + height, shadowX, shadowY + height, radius);
+        State.getCtx().arcTo(shadowX, shadowY + height, shadowX, shadowY, radius);
+        State.getCtx().arcTo(shadowX, shadowY, shadowX + width, shadowY, radius);
+        State.getCtx().closePath();
+        State.getCtx().fill();
 
-        this.ctx.restore();
+        State.getCtx().restore();
     }
 
     reset(): void {

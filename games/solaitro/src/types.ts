@@ -80,7 +80,7 @@ export abstract class GameComponent {
     deleteMe = false;
     isHovered = false;
 
-    constructor(public ctx: CanvasRenderingContext2D, public coordinates: Coordinates) {}
+    constructor(public coordinates: Coordinates) {}
 
     isHoveredOver(scaledMouseCoordinates: Coordinates): boolean {
         return (

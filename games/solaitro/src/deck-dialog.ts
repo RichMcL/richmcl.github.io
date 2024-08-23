@@ -1,5 +1,6 @@
 import { CardComponent } from './card-component';
 import { DefaultDialogRenderConfig } from './dialog';
+import { State } from './state';
 import { Card, CardNumericValue, Coordinates, GameComponent } from './types';
 
 export class DeckDialog extends GameComponent {
@@ -7,14 +8,13 @@ export class DeckDialog extends GameComponent {
     allCards: Card[] = [];
 
     constructor(
-        ctx: CanvasRenderingContext2D,
         coordinates: Coordinates,
         private cardFaceSpriteSheet: HTMLImageElement,
         private cardBackSpriteSheet: HTMLImageElement,
         private playPile: Card[],
         private drawPile: Card[]
     ) {
-        super(ctx, coordinates);
+        super(coordinates);
 
         //clone deck
         this.drawPile = JSON.parse(JSON.stringify(this.drawPile));
@@ -50,17 +50,17 @@ export class DeckDialog extends GameComponent {
     }
 
     private renderDialogBackground(): void {
-        this.ctx.save();
+        State.getCtx().save();
 
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
-        this.ctx.fillRect(
+        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.9)';
+        State.getCtx().fillRect(
             this.coordinates.x,
             this.coordinates.y,
             DefaultDialogRenderConfig.size.width,
             DefaultDialogRenderConfig.size.height
         );
 
-        this.ctx.restore();
+        State.getCtx().restore();
     }
 
     private createCardComponents(): void {
@@ -91,7 +91,6 @@ export class DeckDialog extends GameComponent {
             cards.forEach(card => {
                 this.cardComponents.push(
                     new CardComponent(
-                        this.ctx,
                         { x, y },
                         this.cardFaceSpriteSheet,
                         this.cardBackSpriteSheet,

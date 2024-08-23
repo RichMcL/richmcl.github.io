@@ -42,8 +42,6 @@ import { Card, GameComponent } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
-    public gameAspectRatio: number = 1280 / 800;
-    public windowAspectRatio: number;
     public theme: Theme = Themes.default;
 
     public swirl = new Swirl();
@@ -163,11 +161,7 @@ export class Game {
     }
 
     public initializeGameObjects(): void {
-        this.player = new Player(
-            State.getCtx(),
-            State.getCardFaceSpriteSheet(),
-            State.getCardBackSpriteSheet()
-        );
+        this.player = new Player();
 
         this.initializePiles();
         this.debugButtons.push(createDecrementDrawSizeButton(State.getCtx(), this.theme));
@@ -188,10 +182,10 @@ export class Game {
         this.buttons.push(createOpenDialogButton(State.getCtx(), this.theme));
         this.themeButtons = createThemeButtons(State.getCtx());
 
-        this.dialog = new Dialog(State.getCtx(), DefaultDialogRenderConfig.coordinates);
+        this.dialog = new Dialog(DefaultDialogRenderConfig.coordinates);
         this.dialogCloseButton = createCloseDialogButton(State.getCtx(), this.theme);
 
-        this.scorebar = new Scorebar(State.getCtx(), this.theme);
+        this.scorebar = new Scorebar(this.theme);
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
 
         this.gameComponents.push(this.scorebar);
@@ -401,7 +395,6 @@ export class Game {
 
             hoverPile.addCardAnimation(
                 new CardAnimation(
-                    State.getCtx(),
                     this.player.getCoordinatesCopy(),
                     hoverPile.getCoordinatesCopy(),
                     State.getCardFaceSpriteSheet(),
@@ -436,9 +429,7 @@ export class Game {
             const scoreX =
                 hoverPile.renderConfig.coordinates.x + hoverPile.renderConfig.size.width / 2;
 
-            this.gameComponents.push(
-                new ScoreGraphic(State.getCtx(), { x: scoreX, y: 300 }, pointsForMove)
-            );
+            this.gameComponents.push(new ScoreGraphic({ x: scoreX, y: 300 }, pointsForMove));
         }
     }
 
@@ -463,9 +454,7 @@ export class Game {
         }
 
         this.changeTheme(Themes[nextTheme]);
-        this.gameComponents.push(
-            new ScoreGraphic(State.getCtx(), { x: 540, y: 350 }, 'Next Level!')
-        );
+        this.gameComponents.push(new ScoreGraphic({ x: 540, y: 350 }, 'Next Level!'));
         this.player.shufflesRemaining = this.player.startingShuffles;
 
         this.scorebar.reset();
@@ -663,28 +652,24 @@ export class Game {
 
     public initializePiles(): void {
         this.pile1 = new Pile(
-            State.getCtx(),
             PilesRenderConfig.pile1.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
             'pile1'
         );
         this.pile2 = new Pile(
-            State.getCtx(),
             PilesRenderConfig.pile2.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
             'pile2'
         );
         this.pile3 = new Pile(
-            State.getCtx(),
             PilesRenderConfig.pile3.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
             'pile3'
         );
         this.pile4 = new Pile(
-            State.getCtx(),
             PilesRenderConfig.pile4.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
@@ -734,7 +719,6 @@ export class Game {
 
     public openDeckDialog(): void {
         const deckDialog = new DeckDialog(
-            State.getCtx(),
             DefaultDialogRenderConfig.coordinates,
             State.getCardFaceSpriteSheet(),
             State.getCardBackSpriteSheet(),
@@ -753,10 +737,10 @@ export class Game {
         console.log('Scaling game');
         const currentWidth = window.innerWidth;
         const currentHeight = window.innerHeight;
-        this.windowAspectRatio = currentWidth / currentHeight;
+        State.setWindowAspectRatio(currentWidth / currentHeight);
 
         // Determine the scale factor
-        if (this.windowAspectRatio > this.gameAspectRatio) {
+        if (State.getWindowAspectRatio() > State.gameAspectRatio) {
             // Window is wider than game aspect ratio
             State.setScaleFactor(currentHeight / 800);
         } else {
