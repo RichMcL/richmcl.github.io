@@ -40,8 +40,6 @@ export class CardComponent extends GameComponent {
     staticRender(): void {
         drawCard(
             State.getCtx(),
-            State.getCardFaceSpriteSheet(),
-            State.getCardBackSpriteSheet(),
             this.card,
             this.renderConfig.coordinates.x,
             this.renderConfig.coordinates.y,

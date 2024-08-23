@@ -84,8 +84,6 @@ export class Player extends GameComponent {
 
             drawCard(
                 State.getCtx(),
-                State.getCardFaceSpriteSheet(),
-                State.getCardBackSpriteSheet(),
                 this.playPile[i],
                 this.renderConfig.coordinates.x - (i - this.cardAnimations.length) * 45,
                 this.renderConfig.coordinates.y,

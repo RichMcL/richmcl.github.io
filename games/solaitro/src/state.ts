@@ -1,3 +1,4 @@
+import { Theme, Themes } from './theme';
 import { Coordinates } from './types';
 
 export class State {
@@ -6,6 +7,9 @@ export class State {
 
     private static canvas: HTMLCanvasElement;
     private static ctx: CanvasRenderingContext2D;
+
+    private static theme: Theme = Themes.default;
+
     private static score = 0;
     private static streak = 0;
 
@@ -60,6 +64,14 @@ export class State {
 
     static setStreak(streak: number): void {
         State.streak = streak;
+    }
+
+    static getTheme(): Theme {
+        return State.theme;
+    }
+
+    static setTheme(theme: Theme): void {
+        State.theme = theme;
     }
 
     static setMouseCoordinates(coordinates: Coordinates): void {

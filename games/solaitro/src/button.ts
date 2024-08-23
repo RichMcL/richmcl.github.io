@@ -6,14 +6,14 @@ import { printText } from './util';
 export class GameButton extends GameComponent {
     renderConfig: RenderConfig;
     borderRadius = 5;
+    theme = State.getTheme();
 
     constructor(
         coordinates: Coordinates,
         public size: Size,
         public id: string,
         public text: string,
-        public padding: number,
-        public theme: Theme
+        public padding: number
     ) {
         super(coordinates);
         this.renderConfig = {
@@ -123,7 +123,7 @@ export class ThemeButton extends GameButton {
         public padding: number,
         public theme: Theme
     ) {
-        super(coordinates, size, 'theme', '', padding, null);
+        super(coordinates, size, 'theme', '', padding);
         this.renderConfig = {
             coordinates,
             size,
@@ -156,7 +156,7 @@ export class ThemeButton extends GameButton {
     }
 }
 
-export const createDecrementPlayPileButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createDecrementPlayPileButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'Play Pile -';
     const padding = 20; // Padding for the button
 
@@ -173,12 +173,11 @@ export const createDecrementPlayPileButton = (ctx: CanvasRenderingContext2D, the
         { width: buttonWidth, height: buttonHeight },
         'decrement-play-pile',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createIncrementPlayPileButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createIncrementPlayPileButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'Play Pile +';
     const padding = 20; // Padding for the button
 
@@ -195,12 +194,11 @@ export const createIncrementPlayPileButton = (ctx: CanvasRenderingContext2D, the
         { width: buttonWidth, height: buttonHeight },
         'increment-play-pile',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createDecrementDrawSizeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createDecrementDrawSizeButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'Draw Size -';
     const padding = 20; // Padding for the button
 
@@ -217,12 +215,11 @@ export const createDecrementDrawSizeButton = (ctx: CanvasRenderingContext2D, the
         { width: buttonWidth, height: buttonHeight },
         'decrement-draw-size',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createIncrementDrawSizeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createIncrementDrawSizeButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'Draw Size +';
     const padding = 20; // Padding for the button
 
@@ -239,12 +236,11 @@ export const createIncrementDrawSizeButton = (ctx: CanvasRenderingContext2D, the
         { width: buttonWidth, height: buttonHeight },
         'increment-draw-size',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createDecrementShufflesButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createDecrementShufflesButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'Shuffles -';
     const padding = 20; // Padding for the button
 
@@ -261,12 +257,11 @@ export const createDecrementShufflesButton = (ctx: CanvasRenderingContext2D, the
         { width: buttonWidth, height: buttonHeight },
         'decrement-shuffles',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createIncrementShufflesButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createIncrementShufflesButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'Shuffles +';
     const padding = 20; // Padding for the button
 
@@ -283,12 +278,11 @@ export const createIncrementShufflesButton = (ctx: CanvasRenderingContext2D, the
         { width: buttonWidth, height: buttonHeight },
         'increment-shuffles',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createReloadButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'RELOAD';
     const padding = 20; // Padding for the button
 
@@ -305,12 +299,11 @@ export const createReloadButton = (ctx: CanvasRenderingContext2D, theme: Theme) 
         { width: buttonWidth, height: buttonHeight },
         'reload',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createDealButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createDealButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'DEAL';
     const padding = 20; // Padding for the button
 
@@ -327,12 +320,11 @@ export const createDealButton = (ctx: CanvasRenderingContext2D, theme: Theme) =>
         { width: buttonWidth, height: buttonHeight },
         'deal',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createHitButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'HIT';
     const padding = 20; // Padding for the button
 
@@ -349,12 +341,11 @@ export const createHitButton = (ctx: CanvasRenderingContext2D, theme: Theme) => 
         { width: buttonWidth, height: buttonHeight },
         'hit',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createDeckButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createDeckButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'DECK';
     const padding = 20; // Padding for the button
 
@@ -371,12 +362,11 @@ export const createDeckButton = (ctx: CanvasRenderingContext2D, theme: Theme) =>
         { width: buttonWidth, height: buttonHeight },
         'deck-dialog-open',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createSameValueButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createSameValueButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'SAME VALUE';
     const padding = 20; // Padding for the button
 
@@ -393,12 +383,11 @@ export const createSameValueButton = (ctx: CanvasRenderingContext2D, theme: Them
         { width: buttonWidth, height: buttonHeight },
         'same-value',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createFlushButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createFlushButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'FLUSH';
     const padding = 20; // Padding for the button
 
@@ -415,12 +404,11 @@ export const createFlushButton = (ctx: CanvasRenderingContext2D, theme: Theme) =
         { width: buttonWidth, height: buttonHeight },
         'flush',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createReverseKlondikeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createReverseKlondikeButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'REV. KLONDIKE';
     const padding = 20; // Padding for the button
 
@@ -437,12 +425,11 @@ export const createReverseKlondikeButton = (ctx: CanvasRenderingContext2D, theme
         { width: buttonWidth, height: buttonHeight },
         'reverse-klondike',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createKlondikeButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createKlondikeButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'KLONDIKE';
     const padding = 20; // Padding for the button
 
@@ -459,12 +446,11 @@ export const createKlondikeButton = (ctx: CanvasRenderingContext2D, theme: Theme
         { width: buttonWidth, height: buttonHeight },
         'klondike',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createFreeButtton = (ctx: CanvasRenderingContext2D) => {
     const text = 'FREE';
     const padding = 20; // Padding for the button
 
@@ -481,12 +467,11 @@ export const createFreeButtton = (ctx: CanvasRenderingContext2D, theme: Theme) =
         { width: buttonWidth, height: buttonHeight },
         'free',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createOpenDialogButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createOpenDialogButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'DEBUG';
     const padding = 20; // Padding for the button
 
@@ -503,12 +488,11 @@ export const createOpenDialogButton = (ctx: CanvasRenderingContext2D, theme: The
         { width: buttonWidth, height: buttonHeight },
         'dialog-open',
         text,
-        padding,
-        theme
+        padding
     );
 };
 
-export const createCloseDialogButton = (ctx: CanvasRenderingContext2D, theme: Theme) => {
+export const createCloseDialogButton = (ctx: CanvasRenderingContext2D) => {
     const text = 'CLOSE';
     const padding = 20; // Padding for the button
 
@@ -525,8 +509,7 @@ export const createCloseDialogButton = (ctx: CanvasRenderingContext2D, theme: Th
         { width: buttonWidth, height: buttonHeight },
         'dialog-close',
         text,
-        padding,
-        theme
+        padding
     );
 };
 

@@ -42,8 +42,6 @@ import { Card, GameComponent } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
-    public theme: Theme = Themes.default;
-
     public swirl = new Swirl();
 
     public currentLevel = 0;
@@ -164,28 +162,28 @@ export class Game {
         this.player = new Player();
 
         this.initializePiles();
-        this.debugButtons.push(createDecrementDrawSizeButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createIncrementDrawSizeButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createDecrementShufflesButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createIncrementShufflesButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createDecrementPlayPileButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createIncrementPlayPileButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createSameValueButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createFlushButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createKlondikeButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createReverseKlondikeButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createReloadButton(State.getCtx(), this.theme));
-        this.debugButtons.push(createFreeButtton(State.getCtx(), this.theme));
-        this.debugButtons.push(createDealButton(State.getCtx(), this.theme));
-        this.buttons.push(createHitButton(State.getCtx(), this.theme));
-        this.buttons.push(createDeckButton(State.getCtx(), this.theme));
-        this.buttons.push(createOpenDialogButton(State.getCtx(), this.theme));
+        this.debugButtons.push(createDecrementDrawSizeButton(State.getCtx()));
+        this.debugButtons.push(createIncrementDrawSizeButton(State.getCtx()));
+        this.debugButtons.push(createDecrementShufflesButton(State.getCtx()));
+        this.debugButtons.push(createIncrementShufflesButton(State.getCtx()));
+        this.debugButtons.push(createDecrementPlayPileButton(State.getCtx()));
+        this.debugButtons.push(createIncrementPlayPileButton(State.getCtx()));
+        this.debugButtons.push(createSameValueButton(State.getCtx()));
+        this.debugButtons.push(createFlushButton(State.getCtx()));
+        this.debugButtons.push(createKlondikeButton(State.getCtx()));
+        this.debugButtons.push(createReverseKlondikeButton(State.getCtx()));
+        this.debugButtons.push(createReloadButton(State.getCtx()));
+        this.debugButtons.push(createFreeButtton(State.getCtx()));
+        this.debugButtons.push(createDealButton(State.getCtx()));
+        this.buttons.push(createHitButton(State.getCtx()));
+        this.buttons.push(createDeckButton(State.getCtx()));
+        this.buttons.push(createOpenDialogButton(State.getCtx()));
         this.themeButtons = createThemeButtons(State.getCtx());
 
         this.dialog = new Dialog(DefaultDialogRenderConfig.coordinates);
-        this.dialogCloseButton = createCloseDialogButton(State.getCtx(), this.theme);
+        this.dialogCloseButton = createCloseDialogButton(State.getCtx());
 
-        this.scorebar = new Scorebar(this.theme);
+        this.scorebar = new Scorebar(State.getTheme());
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
 
         this.gameComponents.push(this.scorebar);
@@ -443,12 +441,12 @@ export class Game {
 
         //increment the theme the next object in the map
         const themeKeys = Object.keys(Themes);
-        const currentThemeIndex = themeKeys.indexOf(this.theme.name);
+        const currentThemeIndex = themeKeys.indexOf(State.getTheme().name);
         const nextThemeIndex = currentThemeIndex + 1;
         const nextTheme = themeKeys[nextThemeIndex % themeKeys.length];
 
         if (nextThemeIndex > themeKeys.length - 1) {
-            this.theme = Themes.default;
+            State.setTheme(Themes.default);
         }
 
         this.changeTheme(Themes[nextTheme]);
@@ -519,8 +517,7 @@ export class Game {
     }
 
     public renderTheme() {
-        // this.canvas.style.backgroundColor = this.theme.background;
-        document.body.style.backgroundColor = this.theme.black;
+        document.body.style.backgroundColor = State.getTheme().black;
     }
 
     public renderPileShadow(): void {
@@ -555,14 +552,14 @@ export class Game {
         const x = 20;
 
         // Left border
-        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(x - 3, 0, 3, 800);
 
         State.getCtx().fillStyle = '#293a3a';
         State.getCtx().fillRect(x, 0, 250, 800);
 
         // Right border
-        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(x + 250, 0, 3, 800);
     }
 
@@ -570,14 +567,14 @@ export class Game {
         const x = 1007;
 
         // Left border
-        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(x - 3, 0, 3, 800);
 
         State.getCtx().fillStyle = '#293a3a';
         State.getCtx().fillRect(x, 0, 250, 800);
 
         // Right border
-        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(x + 250, 0, 3, 800);
 
         printText(State.getCtx(), 'Rules', x + 30, 40);
@@ -667,19 +664,19 @@ export class Game {
     }
 
     public changeTheme(theme: Theme): void {
-        this.theme = theme;
+        State.setTheme(theme);
         this.swirl.doSwirl(SwirlThemes[theme.name]);
         this.scorebar.setTheme(theme);
 
         this.buttons.forEach(button => {
-            button.theme = this.theme;
+            button.theme = State.getTheme();
         });
 
         this.debugButtons.forEach(button => {
-            button.theme = this.theme;
+            button.theme = State.getTheme();
         });
 
-        this.dialogCloseButton.theme = this.theme;
+        this.dialogCloseButton.theme = State.getTheme();
     }
 
     public isActiveAnimations(): boolean {

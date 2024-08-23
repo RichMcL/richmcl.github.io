@@ -1,3 +1,4 @@
+import { State } from './state';
 import { Card, CardValue, Suit } from './types';
 
 export const cardValueToKey = (value: CardValue): string => {
@@ -56,8 +57,6 @@ export const buildAndShuffleDeck = (shuffle = false): Card[] => {
 
 export const drawCard = (
     ctx: CanvasRenderingContext2D,
-    cardFaceSpriteSheet: HTMLImageElement,
-    cardBackSpriteSheet: HTMLImageElement,
     card: Card,
     x: number,
     y: number,
@@ -127,7 +126,7 @@ export const drawCard = (
     }
 
     ctx.drawImage(
-        cardBackSpriteSheet,
+        State.getCardBackSpriteSheet(),
         71,
         0,
         cardWidth,
@@ -139,7 +138,7 @@ export const drawCard = (
     );
 
     ctx.drawImage(
-        cardFaceSpriteSheet,
+        State.getCardFaceSpriteSheet(),
         sx,
         sy,
         cardWidth,
