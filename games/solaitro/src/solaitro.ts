@@ -35,9 +35,10 @@ import {
 } from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Scorebar } from './scorebar';
+import { State } from './state';
 import { Swirl } from './swirl';
 import { SwirlThemes, Theme, Themes } from './theme';
-import { Card, Coordinates, GameComponent } from './types';
+import { Card, GameComponent } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
@@ -45,7 +46,6 @@ export class Game {
     public ctx: CanvasRenderingContext2D;
     public gameAspectRatio: number = 1280 / 800;
     public windowAspectRatio: number;
-    public scaleFactor: number;
     public theme: Theme = Themes.default;
 
     public swirl = new Swirl();
@@ -67,12 +67,6 @@ export class Game {
     public cardFaceSpriteSheet: HTMLImageElement;
     public cardBackSpriteSheet: HTMLImageElement;
     public iconSpriteSheet: HTMLImageElement;
-    public clickCoordinates: Coordinates = { x: 0, y: 0 };
-    public scaledClickCoordinates: Coordinates = { x: 0, y: 0 };
-
-    public mouseCoordinates: Coordinates = { x: 0, y: 0 };
-    public scaledMouseCoordinates: Coordinates = { x: 0, y: 0 };
-    public isMouseClicked: boolean = false;
 
     public gameRunning: boolean = true;
     public timerInMs: number = 0;
@@ -147,24 +141,19 @@ export class Game {
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
-            this.clickCoordinates = { x, y };
-            this.scaledClickCoordinates = { x: x / this.scaleFactor, y: y / this.scaleFactor };
+            State.setClickCoordinates({ x, y });
 
-            this.isMouseClicked = true;
+            // this.isMouseClicked = true;
+            State.setMouseClick(true);
         });
 
         document.addEventListener('mousemove', event => {
             const rect = this.canvas.getBoundingClientRect();
 
-            this.mouseCoordinates = {
+            State.setMouseCoordinates({
                 x: event.clientX - rect.left,
                 y: event.clientY - rect.top
-            };
-
-            this.scaledMouseCoordinates = {
-                x: this.mouseCoordinates.x / this.scaleFactor,
-                y: this.mouseCoordinates.y / this.scaleFactor
-            };
+            });
         });
 
         this.gameRunning = true;
@@ -256,7 +245,7 @@ export class Game {
 
         if (this.dialog.visible) {
             this.debugButtons.forEach(button => {
-                if (button.isHoveredOver(this.scaledMouseCoordinates)) {
+                if (button.isHoveredOver(State.getScaledMouseCoordinates())) {
                     hoverButton = button;
                     hoverButton.isHovered = true;
                 }
@@ -265,30 +254,30 @@ export class Game {
             let hoverThemeButton: ThemeButton;
 
             this.themeButtons.forEach(button => {
-                if (button.isHoveredOver(this.scaledMouseCoordinates)) {
+                if (button.isHoveredOver(State.getScaledMouseCoordinates())) {
                     hoverThemeButton = button;
                     hoverThemeButton.isHovered = true;
                 }
             });
 
-            if (hoverThemeButton && this.isMouseClicked) {
+            if (hoverThemeButton && State.isMouseClick()) {
                 this.changeTheme(hoverThemeButton.theme);
             }
         } else {
             this.buttons.forEach(button => {
-                if (button.isHoveredOver(this.scaledMouseCoordinates)) {
+                if (button.isHoveredOver(State.getScaledMouseCoordinates())) {
                     hoverButton = button;
                     hoverButton.isHovered = true;
                 }
             });
         }
 
-        if (this.dialogCloseButton.isHoveredOver(this.scaledMouseCoordinates)) {
+        if (this.dialogCloseButton.isHoveredOver(State.getScaledMouseCoordinates())) {
             hoverButton = this.dialogCloseButton;
             this.dialogCloseButton.isHovered = true;
         }
 
-        if (hoverButton && this.isMouseClicked) {
+        if (hoverButton && State.isMouseClick()) {
             switch (hoverButton.id) {
                 case 'reload':
                     window.location.reload();
@@ -378,11 +367,11 @@ export class Game {
 
         let hoverCard: Card;
 
-        if (this.player.isHoveredOver(this.scaledMouseCoordinates)) {
+        if (this.player.isHoveredOver(State.getScaledMouseCoordinates())) {
             hoverCard = this.player.getTopPlayCard();
         }
 
-        if (hoverCard && this.isMouseClicked) {
+        if (hoverCard && State.isMouseClick()) {
             this.lastCardClicked = hoverCard;
             console.log('Play pile clicked', hoverCard);
         }
@@ -391,7 +380,7 @@ export class Game {
         let hoverPileCard: Card;
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             const card = pile.getTopCard();
-            if (pile.isHoveredOver(this.scaledMouseCoordinates)) {
+            if (pile.isHoveredOver(State.getScaledMouseCoordinates())) {
                 hoverPile = pile;
                 if (doesAnyRulePass(this.ruleNames, this.player.getTopPlayCard(), card)) {
                     hoverPileCard = card;
@@ -404,7 +393,7 @@ export class Game {
             hoverPile.isHovered = true;
         }
 
-        if (hoverPileCard && this.isMouseClicked) {
+        if (hoverPileCard && State.isMouseClick()) {
             console.log('Pile click card', hoverPileCard);
 
             hoverPile.coordinates;
@@ -481,9 +470,8 @@ export class Game {
     }
 
     public resetGameState(): void {
-        this.clickCoordinates = null;
-        this.scaledClickCoordinates = null;
-        this.isMouseClicked = false;
+        State.setClickCoordinates(null);
+        State.setMouseClick(false);
 
         [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
             pile.reset();
@@ -651,8 +639,8 @@ export class Game {
     }
 
     public renderMousePosition(): void {
-        const x = parseFloat(this.scaledMouseCoordinates.x.toFixed(0));
-        const y = parseFloat(this.scaledMouseCoordinates.y.toFixed(0));
+        const x = parseFloat(State.getScaledMouseCoordinates().x.toFixed(0));
+        const y = parseFloat(State.getScaledMouseCoordinates().y.toFixed(0));
         printText(this.ctx, `Cursor: X ${x} | Y ${y}`, 30, 780);
     }
 
@@ -767,21 +755,21 @@ export class Game {
         // Determine the scale factor
         if (this.windowAspectRatio > this.gameAspectRatio) {
             // Window is wider than game aspect ratio
-            this.scaleFactor = currentHeight / 800;
+            State.setScaleFactor(currentHeight / 800);
         } else {
             // Window is narrower than game aspect ratio
-            this.scaleFactor = currentWidth / 1280;
+            State.setScaleFactor(currentWidth / 1280);
         }
 
         // Apply the scale factor to the game container
         const gameContainer = document.getElementById('game-canvas');
-        gameContainer.style.transform = `scale(${this.scaleFactor})`;
+        gameContainer.style.transform = `scale(${State.getScaleFactor()})`;
         gameContainer.style.width = `${1280}px`;
         gameContainer.style.height = `${800}px`;
 
         // Apply the scale factor to the game container
         const bgontainer = document.getElementById('bg-canvas');
-        bgontainer.style.transform = `scale(${this.scaleFactor})`;
+        bgontainer.style.transform = `scale(${State.getScaleFactor()})`;
         bgontainer.style.width = `${1280}px`;
         bgontainer.style.height = `${800}px`;
     }
