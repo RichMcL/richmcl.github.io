@@ -397,8 +397,6 @@ export class Game {
                 new CardAnimation(
                     this.player.getCoordinatesCopy(),
                     hoverPile.getCoordinatesCopy(),
-                    State.getCardFaceSpriteSheet(),
-                    State.getCardBackSpriteSheet(),
                     this.player.getTopPlayCard()
                 )
             );
@@ -651,30 +649,10 @@ export class Game {
     /* LOGIC FUNCTIONS */
 
     public initializePiles(): void {
-        this.pile1 = new Pile(
-            PilesRenderConfig.pile1.coordinates,
-            State.getCardFaceSpriteSheet(),
-            State.getCardBackSpriteSheet(),
-            'pile1'
-        );
-        this.pile2 = new Pile(
-            PilesRenderConfig.pile2.coordinates,
-            State.getCardFaceSpriteSheet(),
-            State.getCardBackSpriteSheet(),
-            'pile2'
-        );
-        this.pile3 = new Pile(
-            PilesRenderConfig.pile3.coordinates,
-            State.getCardFaceSpriteSheet(),
-            State.getCardBackSpriteSheet(),
-            'pile3'
-        );
-        this.pile4 = new Pile(
-            PilesRenderConfig.pile4.coordinates,
-            State.getCardFaceSpriteSheet(),
-            State.getCardBackSpriteSheet(),
-            'pile4'
-        );
+        this.pile1 = new Pile(PilesRenderConfig.pile1.coordinates, 'pile1');
+        this.pile2 = new Pile(PilesRenderConfig.pile2.coordinates, 'pile2');
+        this.pile3 = new Pile(PilesRenderConfig.pile3.coordinates, 'pile3');
+        this.pile4 = new Pile(PilesRenderConfig.pile4.coordinates, 'pile4');
 
         // Pop the first 4 cards from the deck and add them to the piles
         this.pile1.pushCard(this.player.drawPile.pop());
@@ -720,8 +698,6 @@ export class Game {
     public openDeckDialog(): void {
         const deckDialog = new DeckDialog(
             DefaultDialogRenderConfig.coordinates,
-            State.getCardFaceSpriteSheet(),
-            State.getCardBackSpriteSheet(),
             this.player.drawPile,
             this.player.playPile
         );

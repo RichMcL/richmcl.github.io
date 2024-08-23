@@ -39,8 +39,7 @@ export class Player extends GameComponent {
 
     renderConfig: RenderConfig;
 
-    constructor() // private cardBackSpriteSheet: HTMLImageElement // private cardFaceSpriteSheet: HTMLImageElement, // ctx: CanvasRenderingContext2D,
-    {
+    constructor() {
         super(PlayerRenderConfig.coordinates);
         this.drawPile = buildAndShuffleDeck(true);
         this.hit();
@@ -151,8 +150,6 @@ export class Player extends GameComponent {
                             x: PlayerRenderConfig.coordinates.x - animationIndex * 45,
                             y: PlayerRenderConfig.coordinates.y
                         },
-                        State.getCardFaceSpriteSheet(),
-                        State.getCardBackSpriteSheet(),
                         topOfDrawPile,
                         15
                     )

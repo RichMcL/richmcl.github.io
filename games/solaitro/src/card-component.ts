@@ -12,12 +12,7 @@ export class CardComponent extends GameComponent {
 
     private time = 0;
 
-    constructor(
-        coordinates: Coordinates,
-        private cardFaceSpriteSheet: HTMLImageElement,
-        private cardBackSpriteSheet: HTMLImageElement,
-        private card: Card
-    ) {
+    constructor(coordinates: Coordinates, private card: Card) {
         super(coordinates);
         this.renderConfig = {
             coordinates,
@@ -45,8 +40,8 @@ export class CardComponent extends GameComponent {
     staticRender(): void {
         drawCard(
             State.getCtx(),
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             this.card,
             this.renderConfig.coordinates.x,
             this.renderConfig.coordinates.y,

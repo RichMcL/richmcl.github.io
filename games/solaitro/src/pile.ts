@@ -70,12 +70,7 @@ export class Pile extends GameComponent {
 
     private time = 0;
 
-    constructor(
-        coordinates: Coordinates,
-        private cardFaceSpriteSheet: HTMLImageElement,
-        private cardBackSpriteSheet: HTMLImageElement,
-        private pileName: string
-    ) {
+    constructor(coordinates: Coordinates, private pileName: string) {
         super(coordinates);
         this.cards = [];
         this.renderConfig = PilesRenderConfig[pileName];
@@ -157,8 +152,8 @@ export class Pile extends GameComponent {
 
         drawCard(
             State.getCtx(),
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             card,
             this.renderConfig.coordinates.x,
             yPos,

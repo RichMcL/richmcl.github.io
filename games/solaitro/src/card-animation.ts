@@ -9,8 +9,6 @@ export class CardAnimation extends GameComponent {
     constructor(
         coordinates: Coordinates,
         private endingCoordinates: Coordinates,
-        private cardFaceSpriteSheet: HTMLImageElement,
-        private cardBackSpriteSheet: HTMLImageElement,
         private card: Card,
         private ttl: number = 15
     ) {
@@ -43,8 +41,8 @@ export class CardAnimation extends GameComponent {
     render(): void {
         drawCard(
             State.getCtx(),
-            this.cardFaceSpriteSheet,
-            this.cardBackSpriteSheet,
+            State.getCardFaceSpriteSheet(),
+            State.getCardBackSpriteSheet(),
             this.card,
             this.renderConfig.coordinates.x,
             this.renderConfig.coordinates.y,

@@ -7,13 +7,7 @@ export class DeckDialog extends GameComponent {
     cardComponents: CardComponent[] = [];
     allCards: Card[] = [];
 
-    constructor(
-        coordinates: Coordinates,
-        private cardFaceSpriteSheet: HTMLImageElement,
-        private cardBackSpriteSheet: HTMLImageElement,
-        private playPile: Card[],
-        private drawPile: Card[]
-    ) {
+    constructor(coordinates: Coordinates, private playPile: Card[], private drawPile: Card[]) {
         super(coordinates);
 
         //clone deck
@@ -89,14 +83,7 @@ export class DeckDialog extends GameComponent {
             x = this.coordinates.x + 10;
 
             cards.forEach(card => {
-                this.cardComponents.push(
-                    new CardComponent(
-                        { x, y },
-                        this.cardFaceSpriteSheet,
-                        this.cardBackSpriteSheet,
-                        card
-                    )
-                );
+                this.cardComponents.push(new CardComponent({ x, y }, card));
 
                 x += cardWidth + spacing;
             });
