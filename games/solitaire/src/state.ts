@@ -2,7 +2,8 @@ import { GameButton } from './button';
 import { DeckDialog } from './deck-dialog';
 import { Player } from './player';
 import { RuleNames } from './rules';
-import { Theme, Themes } from './theme';
+import { Swirl } from './swirl';
+import { SwirlThemes, Theme, Themes } from './theme';
 import { Coordinates, GameComponent } from './types';
 
 export class State {
@@ -15,6 +16,7 @@ export class State {
     private static gameRunning: boolean = false;
 
     private static theme: Theme = Themes.default;
+    private static swirl: Swirl;
 
     private static ruleNames: RuleNames[] = [];
 
@@ -98,6 +100,16 @@ export class State {
 
     static setTheme(theme: Theme): void {
         State.theme = theme;
+
+        State.swirl.doSwirl(SwirlThemes[theme.name]);
+    }
+
+    static getSwirl(): Swirl {
+        return State.swirl;
+    }
+
+    static setSwirl(swirl: Swirl): void {
+        State.swirl = swirl;
     }
 
     static getRuleNames(): RuleNames[] {

@@ -10,7 +10,6 @@ import { printText } from './util';
 export class GameButton extends GameComponent {
     renderConfig: RenderConfig;
     borderRadius = 5;
-    theme = State.getTheme();
 
     constructor(
         coordinates: Coordinates,
@@ -97,7 +96,7 @@ export class GameButton extends GameComponent {
 
     render(): void {
         this.renderDropShadow();
-        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillStyle = State.getTheme().base;
 
         const x = this.coordinates.x;
         const y = this.coordinates.y;
@@ -178,10 +177,6 @@ export class GameButton extends GameComponent {
 
     reset(): void {
         this.isHovered = false;
-    }
-
-    setTheme(theme: Theme): void {
-        this.theme = theme;
     }
 
     private hitCard(): void {

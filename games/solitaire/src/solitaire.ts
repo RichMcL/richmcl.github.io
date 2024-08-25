@@ -24,7 +24,7 @@ import { Card } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
-    public swirl = new Swirl();
+    // public swirl = new Swirl();
 
     public currentLevel = 0;
 
@@ -72,7 +72,8 @@ export class Game {
             this.startGame();
         });
 
-        this.swirl.doSwirl(SwirlThemes.default);
+        State.setSwirl(new Swirl());
+        State.getSwirl().doSwirl(SwirlThemes.default);
     }
 
     private loadImage(image: HTMLImageElement): Promise<void> {
@@ -470,12 +471,7 @@ export class Game {
 
     public changeTheme(theme: Theme): void {
         State.setTheme(theme);
-        this.swirl.doSwirl(SwirlThemes[theme.name]);
         this.scorebar.setTheme(theme);
-
-        this.buttons.forEach(button => {
-            button.theme = State.getTheme();
-        });
     }
 
     public isActiveAnimations(): boolean {
