@@ -1,7 +1,14 @@
 import { CardAnimation } from './card-animation';
 import { State } from './state';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
-import { buildAndShuffleDeck, drawCard, drawCardBack, printText } from './util';
+import {
+    buildAndShuffleDeck,
+    CARD_HEIGHT,
+    CARD_WIDTH,
+    drawCard,
+    drawCardBack,
+    printText
+} from './util';
 
 const PlayerRenderConfig: RenderConfig = {
     coordinates: {
@@ -9,8 +16,8 @@ const PlayerRenderConfig: RenderConfig = {
         y: 560
     },
     size: {
-        width: 71,
-        height: 95
+        width: CARD_WIDTH,
+        height: CARD_HEIGHT
     },
     scale: 1.5
 };
@@ -21,8 +28,8 @@ const DrawPileRenderConfig: RenderConfig = {
         y: 560
     },
     size: {
-        width: 71,
-        height: 95
+        width: CARD_WIDTH,
+        height: CARD_HEIGHT
     },
     scale: 1.5
 };
@@ -95,7 +102,7 @@ export class Player extends GameComponent {
     }
 
     public renderPlayPileSize(): void {
-        const fixedWidth = 71 * 1.5; // Define the fixed width
+        const fixedWidth = CARD_WIDTH * 1.5; // Define the fixed width
         const text = `[ ${this.playPile?.length} ]`;
         const textWidth = State.getCtx().measureText(text).width;
         const x = 495 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
@@ -104,7 +111,7 @@ export class Player extends GameComponent {
     }
 
     public renderDrawPileSize(): void {
-        const fixedWidth = 71 * 1.5; // Define the fixed width
+        const fixedWidth = CARD_WIDTH * 1.5; // Define the fixed width
         const text = `[ ${this.drawPile?.length} ] `;
         const textWidth = State.getCtx().measureText(text).width;
         const x = 685 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text

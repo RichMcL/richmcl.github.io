@@ -1,6 +1,5 @@
-import { State } from './state';
 import { Card, Coordinates, GameComponent } from './types';
-import { drawCard } from './util';
+import { CARD_HEIGHT, CARD_WIDTH, drawCard } from './util';
 
 export class CardAnimation extends GameComponent {
     public xRateOfChange: number = 0;
@@ -17,8 +16,8 @@ export class CardAnimation extends GameComponent {
         this.renderConfig = {
             coordinates,
             size: {
-                width: 71,
-                height: 95
+                width: CARD_WIDTH,
+                height: CARD_HEIGHT
             },
             scale: 1.5
         };

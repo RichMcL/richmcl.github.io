@@ -1,6 +1,9 @@
 import { State } from './state';
 import { Card, CardValue, Suit } from './types';
 
+export const CARD_WIDTH = 71;
+export const CARD_HEIGHT = 95;
+
 export const cardValueToKey = (value: CardValue): string => {
     switch (value) {
         case CardValue.Two:
@@ -57,8 +60,8 @@ export const buildAndShuffleDeck = (shuffle = false): Card[] => {
 
 export const drawCard = (card: Card, x: number, y: number, cardScale = 1): void => {
     const ctx = State.getCtx();
-    const cardWidth = 71; // Width of a single card in the sprite sheet
-    const cardHeight = 95; // Height of a single card in the sprite sheet
+    const cardWidth = CARD_WIDTH; // Width of a single card in the sprite sheet
+    const cardHeight = CARD_HEIGHT; // Height of a single card in the sprite sheet
 
     let sy = 0;
     let sx = 0;
@@ -122,7 +125,7 @@ export const drawCard = (card: Card, x: number, y: number, cardScale = 1): void 
 
     ctx.drawImage(
         State.getCardBackSpriteSheet(),
-        71,
+        CARD_WIDTH,
         0,
         cardWidth,
         cardHeight,
@@ -147,8 +150,8 @@ export const drawCard = (card: Card, x: number, y: number, cardScale = 1): void 
 
 export const drawCardBack = (x: number, y: number, cardScale = 1): void => {
     const ctx = State.getCtx();
-    const cardWidth = 71; // Width of a single card in the sprite sheet
-    const cardHeight = 95; // Height of a single card in the sprite sheet
+    const cardWidth = CARD_WIDTH; // Width of a single card in the sprite sheet
+    const cardHeight = CARD_HEIGHT; // Height of a single card in the sprite sheet
 
     ctx.drawImage(
         State.getCardBackSpriteSheet(),
