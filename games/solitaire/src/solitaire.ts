@@ -142,7 +142,7 @@ export class Game {
         this.buttons.push(createDeckButton());
         this.buttons.push(createOpenDebugDialogButton());
 
-        this.scorebar = new Scorebar(State.getTheme());
+        this.scorebar = new Scorebar();
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
 
         State.addGameComponent(this.scorebar);
@@ -471,7 +471,6 @@ export class Game {
 
     public changeTheme(theme: Theme): void {
         State.setTheme(theme);
-        this.scorebar.setTheme(theme);
     }
 
     public isActiveAnimations(): boolean {

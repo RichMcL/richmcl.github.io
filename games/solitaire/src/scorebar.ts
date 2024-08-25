@@ -9,7 +9,7 @@ export class Scorebar extends GameComponent {
     private maxScore = 100;
     private incrementer = 1;
 
-    constructor(private theme: Theme) {
+    constructor() {
         const coordinates = { x: 290, y: 10 };
         super(coordinates);
 
@@ -58,7 +58,7 @@ export class Scorebar extends GameComponent {
             this.renderConfig.size.height
         );
 
-        State.getCtx().fillStyle = this.theme.base;
+        State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(
             this.coordinates.x,
             this.coordinates.y + this.renderConfig.size.height,
@@ -111,9 +111,5 @@ export class Scorebar extends GameComponent {
 
     isAnimationComplete(): boolean {
         return this.renderedScore >= this.scoreToReach;
-    }
-
-    setTheme(theme: Theme): void {
-        this.theme = theme;
     }
 }
