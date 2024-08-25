@@ -76,6 +76,7 @@ export class GameButton extends GameComponent {
                 case 'dialog-close':
                     State.removeGameComponentByType(DeckDialog.name);
                     State.removeGameButtonById('dialog-close');
+                    State.setDialogOpen(false);
                     break;
                 case 'debug-dialog-open':
                     const debugDialog = new DebugDialog(DefaultDialogRenderConfig.coordinates);
@@ -238,7 +239,7 @@ export const createDecrementPlayPileButton = () => {
     const text = 'Play Pile -';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -260,7 +261,7 @@ export const createIncrementPlayPileButton = () => {
     const text = 'Play Pile +';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -282,7 +283,7 @@ export const createDecrementDrawSizeButton = () => {
     const text = 'Draw Size -';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -304,7 +305,7 @@ export const createIncrementDrawSizeButton = () => {
     const text = 'Draw Size +';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -326,7 +327,7 @@ export const createDecrementShufflesButton = () => {
     const text = 'Shuffles -';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -348,7 +349,7 @@ export const createIncrementShufflesButton = () => {
     const text = 'Shuffles +';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -370,7 +371,7 @@ export const createReloadButton = () => {
     const text = 'RELOAD';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -392,7 +393,7 @@ export const createDealButton = () => {
     const text = 'DEAL';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -414,7 +415,7 @@ export const createHitButton = () => {
     const text = 'HIT';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -436,7 +437,7 @@ export const createDeckButton = () => {
     const text = 'DECK';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -458,7 +459,7 @@ export const createSameValueButton = () => {
     const text = 'SAME VALUE';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -480,7 +481,7 @@ export const createFlushButton = () => {
     const text = 'FLUSH';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -502,7 +503,7 @@ export const createReverseKlondikeButton = () => {
     const text = 'REV. KLONDIKE';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -524,7 +525,7 @@ export const createKlondikeButton = () => {
     const text = 'KLONDIKE';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -546,7 +547,7 @@ export const createFreeButtton = () => {
     const text = 'FREE';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -568,7 +569,7 @@ export const createOpenDebugDialogButton = () => {
     const text = 'DEBUG';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
@@ -590,7 +591,7 @@ export const createCloseDialogButton = () => {
     const text = 'CLOSE';
     const padding = 20; // Padding for the button
 
-    ctx.font = '20px Balatro';
+    ctx.font = '30px New-Amsterdam';
     const textMetrics = ctx.measureText(text);
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;

@@ -86,7 +86,7 @@ export class Scorebar extends GameComponent {
             `${Math.floor(this.renderedScore)}`,
             this.coordinates.x + this.renderConfig.size.width + 10,
             textY,
-            20,
+            30,
             'white'
         );
     }

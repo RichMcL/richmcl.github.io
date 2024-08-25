@@ -38,6 +38,8 @@ export class State {
 
     private static gameComponents: GameComponent[] = [];
 
+    private static dialogOpen = false;
+
     static getGameAspectRatio(): number {
         return State.gameAspectRatio;
     }
@@ -232,5 +234,13 @@ export class State {
 
     static removeAllDeletedGameComponents(): void {
         State.gameComponents = State.gameComponents.filter(gc => !gc.deleteMe);
+    }
+
+    static setDialogOpen(dialogOpen: boolean): void {
+        State.dialogOpen = dialogOpen;
+    }
+
+    static isDialogOpen(): boolean {
+        return State.dialogOpen;
     }
 }

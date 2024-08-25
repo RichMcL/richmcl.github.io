@@ -45,6 +45,8 @@ export class DebugDialog extends GameComponent {
         this.buttons.push(createCloseDialogButton());
 
         this.themeButtons = createThemeButtons();
+
+        State.setDialogOpen(true);
     }
 
     update(): void {

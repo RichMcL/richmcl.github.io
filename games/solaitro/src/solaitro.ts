@@ -67,7 +67,7 @@ export class Game {
             this.loadImage(cardFaceSpriteSheet),
             this.loadImage(cardBackSpriteSheet),
             this.loadImage(iconSpriteSheet),
-            this.loadFont('Balatro', 'fonts/balatro/balatro.ttf')
+            this.loadFont('New-Amsterdam', 'fonts/new-amsterdam/new-amsterdam.ttf')
         ]).then(() => {
             this.startGame();
         });
@@ -402,7 +402,7 @@ export class Game {
             const ruleInfo = RuleInfo[rule];
             printText(`- ${ruleInfo.name}`, x + 30, y);
             y += 30;
-            printText(`  ${ruleInfo.description}`, x + 30, y, 15);
+            printText(`  ${ruleInfo.description}`, x + 30, y, 20);
             y += 40;
         }
     }

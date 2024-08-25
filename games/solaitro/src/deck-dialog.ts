@@ -30,6 +30,8 @@ export class DeckDialog extends GameComponent {
         this.createCardComponents();
 
         this.buttonComponents.push(createCloseDialogButton());
+
+        State.setDialogOpen(true);
     }
 
     update(): void {
