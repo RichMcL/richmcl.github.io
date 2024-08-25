@@ -48,12 +48,12 @@ export class Game {
         State.setCtx(State.getCanvas().getContext('2d'));
 
         const cardFaceSpriteSheet = new Image();
-        cardFaceSpriteSheet.src = 'img/deck-sprite-sheet.png';
+        cardFaceSpriteSheet.src = 'img/deck-sprite-sheet-placeholder.png';
 
         State.setCardFaceSpriteSheet(cardFaceSpriteSheet);
 
         const cardBackSpriteSheet = new Image();
-        cardBackSpriteSheet.src = 'img/card-backs-seals.png';
+        cardBackSpriteSheet.src = 'img/card-backs-seals-placeholder.png';
 
         State.setCardBackSpriteSheet(cardBackSpriteSheet);
 
