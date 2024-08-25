@@ -75,6 +75,7 @@ export class GameButton extends GameComponent {
                     break;
                 case 'dialog-close':
                     State.removeGameComponentByType(DeckDialog.name);
+                    State.removeGameComponentByType(DebugDialog.name);
                     State.removeGameButtonById('dialog-close');
                     State.setDialogOpen(false);
                     break;

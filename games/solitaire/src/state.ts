@@ -222,8 +222,11 @@ export class State {
 
     static removeGameButtonById(id: string): void {
         State.gameComponents = State.gameComponents.filter(gc => {
+            console.log('gc.constructor.name', gc.constructor.name);
             if (gc.constructor.name === 'GameButton') {
                 return (gc as GameButton).id !== id;
+            } else {
+                return true;
             }
         });
     }
