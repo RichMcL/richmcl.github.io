@@ -1,4 +1,4 @@
-import { Game } from './solaitro';
+import { Game } from './solitaire';
 
 (() => {
     document.addEventListener('DOMContentLoaded', () => {
