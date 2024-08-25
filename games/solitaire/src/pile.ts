@@ -92,8 +92,14 @@ export class Pile extends GameComponent {
         this.canPlay = false;
         let hoverPileCard = null;
 
-        if (this.isHoveredOver()) {
+        if (this.isHoveredOver() && State.getPlayer().getTopPlayCard()) {
             hoverPileCard = this.getTopCard();
+
+            if (!hoverPileCard) {
+                this.canPlay = false;
+                return;
+            }
+
             if (doesAnyRulePass(State.getRuleNames(), hoverPileCard, this.getTopCard())) {
                 this.canPlay = true;
             }
