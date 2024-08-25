@@ -1,3 +1,4 @@
+import { DebugDialog } from './debug-dialog';
 import { DeckDialog } from './deck-dialog';
 import { DefaultDialogRenderConfig } from './dialog';
 import { RuleNames } from './rules';
@@ -72,13 +73,13 @@ export class GameButton extends GameComponent {
                 case 'decrement-play-pile':
                     State.getPlayer().decrementPlayPileVisibleSize();
                     break;
-                // case 'dialog-open':
-                //     this.dialog.visible = true;
-                //     break;
                 case 'dialog-close':
                     State.removeGameComponentByType(DeckDialog.name);
                     State.removeGameButtonById('dialog-close');
-
+                    break;
+                case 'debug-dialog-open':
+                    const debugDialog = new DebugDialog(DefaultDialogRenderConfig.coordinates);
+                    State.addGameComponent(debugDialog);
                     break;
                 case 'deck-dialog-open':
                     const deckDialog = new DeckDialog(
@@ -86,7 +87,6 @@ export class GameButton extends GameComponent {
                         State.getPlayer().drawPile,
                         State.getPlayer().playPile
                     );
-
                     State.addGameComponent(deckDialog);
                     break;
             }
@@ -203,7 +203,12 @@ export class ThemeButton extends GameButton {
         };
     }
 
-    update(): void {}
+    update(): void {
+        if (this.isClicked()) {
+            console.log('Button clicked:', this.id);
+            State.setTheme(this.theme);
+        }
+    }
 
     render(): void {
         State.getCtx().fillStyle = this.theme.base;
@@ -215,7 +220,7 @@ export class ThemeButton extends GameButton {
         );
 
         // Draw a border around the button if it's hovered
-        if (this.isHovered) {
+        if (this.isHoveredOver()) {
             State.getCtx().strokeStyle = 'white';
             State.getCtx().lineWidth = 2;
             State.getCtx().strokeRect(
@@ -558,7 +563,7 @@ export const createFreeButtton = () => {
     );
 };
 
-export const createOpenDialogButton = () => {
+export const createOpenDebugDialogButton = () => {
     const ctx = State.getCtx();
     const text = 'DEBUG';
     const padding = 20; // Padding for the button
@@ -574,7 +579,7 @@ export const createOpenDialogButton = () => {
     return new GameButton(
         { x, y },
         { width: buttonWidth, height: buttonHeight },
-        'dialog-open',
+        'debug-dialog-open',
         text,
         padding
     );

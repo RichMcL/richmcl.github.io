@@ -7,6 +7,7 @@ import { Card, CardNumericValue, Coordinates, GameComponent } from './types';
 export class DeckDialog extends GameComponent {
     cardComponents: CardComponent[] = [];
     allCards: Card[] = [];
+    buttonComponents: GameComponent[] = [];
 
     constructor(coordinates: Coordinates, private playPile: Card[], private drawPile: Card[]) {
         super(coordinates);
@@ -28,12 +29,16 @@ export class DeckDialog extends GameComponent {
 
         this.createCardComponents();
 
-        State.addGameComponent(createCloseDialogButton());
+        this.buttonComponents.push(createCloseDialogButton());
     }
 
     update(): void {
         this.cardComponents.forEach(cardComponent => {
             cardComponent.update();
+        });
+
+        this.buttonComponents.forEach(buttonComponent => {
+            buttonComponent.update();
         });
     }
 
@@ -43,6 +48,11 @@ export class DeckDialog extends GameComponent {
         //render the cards in a grid
         this.cardComponents.forEach(cardComponent => {
             cardComponent.render();
+        });
+
+        //render the buttons
+        this.buttonComponents.forEach(buttonComponent => {
+            buttonComponent.render();
         });
     }
 

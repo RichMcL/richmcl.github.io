@@ -1,28 +1,10 @@
 import {
-    createCloseDialogButton,
-    createDealButton,
     createDeckButton,
-    createDecrementDrawSizeButton,
-    createDecrementPlayPileButton,
-    createDecrementShufflesButton,
-    createFlushButton,
-    createFreeButtton,
     createHitButton,
-    createIncrementDrawSizeButton,
-    createIncrementPlayPileButton,
-    createIncrementShufflesButton,
-    createKlondikeButton,
-    createOpenDialogButton,
-    createReloadButton,
-    createReverseKlondikeButton,
-    createSameValueButton,
-    createThemeButtons,
-    GameButton,
-    ThemeButton
+    createOpenDebugDialogButton,
+    GameButton
 } from './button';
 import { CardAnimation } from './card-animation';
-import { DeckDialog } from './deck-dialog';
-import { DefaultDialogRenderConfig, Dialog } from './dialog';
 import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
@@ -38,15 +20,13 @@ import { Scorebar } from './scorebar';
 import { State } from './state';
 import { Swirl } from './swirl';
 import { SwirlThemes, Theme, Themes } from './theme';
-import { Card, GameComponent } from './types';
+import { Card } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
     public swirl = new Swirl();
 
     public currentLevel = 0;
-
-    // public player: Player;
 
     public pile1: Pile;
     public pile2: Pile;
@@ -55,16 +35,10 @@ export class Game {
 
     public scorebar: Scorebar;
 
-    // public ruleNames: RuleNames[] = [RuleNames.klondike, RuleNames.reverseKlondike, RuleNames.free];
-    // public gameComponents: GameComponent[] = [];
-
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
     public buttons: GameButton[] = [];
-    public debugButtons: GameButton[] = [];
-    public themeButtons: ThemeButton[] = [];
-    public dialog: Dialog;
 
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
@@ -163,25 +137,9 @@ export class Game {
         State.setPlayer(new Player());
 
         this.initializePiles();
-        this.debugButtons.push(createDecrementDrawSizeButton());
-        this.debugButtons.push(createIncrementDrawSizeButton());
-        this.debugButtons.push(createDecrementShufflesButton());
-        this.debugButtons.push(createIncrementShufflesButton());
-        this.debugButtons.push(createDecrementPlayPileButton());
-        this.debugButtons.push(createIncrementPlayPileButton());
-        this.debugButtons.push(createSameValueButton());
-        this.debugButtons.push(createFlushButton());
-        this.debugButtons.push(createKlondikeButton());
-        this.debugButtons.push(createReverseKlondikeButton());
-        this.debugButtons.push(createReloadButton());
-        this.debugButtons.push(createFreeButtton());
-        this.debugButtons.push(createDealButton());
         this.buttons.push(createHitButton());
         this.buttons.push(createDeckButton());
-        this.buttons.push(createOpenDialogButton());
-        this.themeButtons = createThemeButtons();
-
-        this.dialog = new Dialog(DefaultDialogRenderConfig.coordinates);
+        this.buttons.push(createOpenDebugDialogButton());
 
         this.scorebar = new Scorebar(State.getTheme());
         this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
@@ -234,33 +192,6 @@ export class Game {
         this.buttons.forEach(button => {
             button.update();
         });
-
-        // Update the game state logic
-        let hoverButton: GameButton;
-
-        //loop through objects and check if click is within the boundaries
-
-        if (this.dialog.visible) {
-            this.debugButtons.forEach(button => {
-                if (button.isHoveredOver()) {
-                    hoverButton = button;
-                    hoverButton.isHovered = true;
-                }
-            });
-
-            let hoverThemeButton: ThemeButton;
-
-            this.themeButtons.forEach(button => {
-                if (button.isHoveredOver()) {
-                    hoverThemeButton = button;
-                    hoverThemeButton.isHovered = true;
-                }
-            });
-
-            if (hoverThemeButton && State.isMouseClick()) {
-                this.changeTheme(hoverThemeButton.theme);
-            }
-        }
 
         let hoverCard: Card;
 
@@ -374,14 +305,6 @@ export class Game {
         this.buttons.forEach(button => {
             button.reset();
         });
-
-        this.debugButtons.forEach(button => {
-            button.reset();
-        });
-
-        this.themeButtons.forEach(button => {
-            button.reset();
-        });
     }
 
     public render() {
@@ -405,12 +328,6 @@ export class Game {
 
         for (const component of State.getGameComponents()) {
             component.render();
-        }
-
-        if (this.dialog.visible) {
-            this.dialog.render();
-            this.themeButtons.forEach(button => button.render());
-            this.debugButtons.forEach(button => button.render());
         }
     }
 
@@ -557,10 +474,6 @@ export class Game {
         this.scorebar.setTheme(theme);
 
         this.buttons.forEach(button => {
-            button.theme = State.getTheme();
-        });
-
-        this.debugButtons.forEach(button => {
             button.theme = State.getTheme();
         });
     }
