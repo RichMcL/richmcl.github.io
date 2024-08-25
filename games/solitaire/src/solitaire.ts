@@ -53,7 +53,7 @@ export class Game {
         State.setCardFaceSpriteSheet(cardFaceSpriteSheet);
 
         const cardBackSpriteSheet = new Image();
-        cardBackSpriteSheet.src = 'img/card-backs-seals-placeholder.png';
+        cardBackSpriteSheet.src = 'img/card-backs-seals-new.png';
 
         State.setCardBackSpriteSheet(cardBackSpriteSheet);
 
