@@ -1,5 +1,5 @@
 import { Card, Coordinates, GameComponent } from './types';
-import { CARD_HEIGHT, CARD_WIDTH, drawCard } from './util';
+import { BASE_CARD_SCALE, CARD_HEIGHT, CARD_WIDTH, drawCard } from './util';
 
 export class CardAnimation extends GameComponent {
     public xRateOfChange: number = 0;
@@ -19,7 +19,7 @@ export class CardAnimation extends GameComponent {
                 width: CARD_WIDTH,
                 height: CARD_HEIGHT
             },
-            scale: 1.5
+            scale: BASE_CARD_SCALE
         };
         // determine rate of change for x and y based no ttl
         this.xRateOfChange = (this.coordinates.x - this.endingCoordinates.x) / this.ttl;

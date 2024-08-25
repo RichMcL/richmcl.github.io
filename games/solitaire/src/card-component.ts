@@ -1,6 +1,6 @@
 import { State } from './state';
 import { Card, Coordinates, GameComponent } from './types';
-import { CARD_HEIGHT, CARD_WIDTH, drawCard } from './util';
+import { BASE_CARD_SCALE, CARD_HEIGHT, CARD_WIDTH, drawCard } from './util';
 
 export class CardComponent extends GameComponent {
     // Random angle between -3 and 3 degrees in radians
@@ -20,7 +20,7 @@ export class CardComponent extends GameComponent {
                 width: CARD_WIDTH,
                 height: CARD_HEIGHT
             },
-            scale: 1.5
+            scale: BASE_CARD_SCALE
         };
     }
 

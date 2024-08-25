@@ -3,7 +3,7 @@ import { CardComponent } from './card-component';
 import { DefaultDialogRenderConfig } from './dialog';
 import { State } from './state';
 import { Card, CardNumericValue, Coordinates, GameComponent } from './types';
-import { CARD_WIDTH } from './util';
+import { BASE_CARD_SCALE, CARD_WIDTH } from './util';
 
 export class DeckDialog extends GameComponent {
     cardComponents: CardComponent[] = [];
@@ -90,7 +90,7 @@ export class DeckDialog extends GameComponent {
 
         Object.keys(suits).forEach(suit => {
             const cards = suits[suit];
-            const cardWidth = CARD_WIDTH * 1.5; // Card width * scale
+            const cardWidth = CARD_WIDTH * BASE_CARD_SCALE; // Card width * scale
             const dialogWidth = DefaultDialogRenderConfig.size.width - 20; // Adjust for padding
             const totalCardWidth = cards.length * cardWidth;
             const totalSpacing = dialogWidth - totalCardWidth;

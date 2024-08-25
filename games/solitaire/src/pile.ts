@@ -1,7 +1,14 @@
 import { CardAnimation } from './card-animation';
 import { State } from './state';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
-import { CARD_HEIGHT, CARD_WIDTH, drawCard, drawCardOutline, printText } from './util';
+import {
+    BASE_CARD_SCALE,
+    CARD_HEIGHT,
+    CARD_WIDTH,
+    drawCard,
+    drawCardOutline,
+    printText
+} from './util';
 
 export const PilesRenderConfig: { [key: string]: RenderConfig } = {
     pile1: {
@@ -13,7 +20,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
             width: CARD_WIDTH,
             height: CARD_HEIGHT
         },
-        scale: 1.5
+        scale: BASE_CARD_SCALE
     },
 
     pile2: {
@@ -25,7 +32,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
             width: CARD_WIDTH,
             height: CARD_HEIGHT
         },
-        scale: 1.5
+        scale: BASE_CARD_SCALE
     },
 
     pile3: {
@@ -37,7 +44,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
             width: CARD_WIDTH,
             height: CARD_HEIGHT
         },
-        scale: 1.5
+        scale: BASE_CARD_SCALE
     },
 
     pile4: {
@@ -49,7 +56,7 @@ export const PilesRenderConfig: { [key: string]: RenderConfig } = {
             width: CARD_WIDTH,
             height: CARD_HEIGHT
         },
-        scale: 1.5
+        scale: BASE_CARD_SCALE
     }
 };
 

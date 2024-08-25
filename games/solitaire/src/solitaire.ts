@@ -48,7 +48,7 @@ export class Game {
         State.setCtx(State.getCanvas().getContext('2d'));
 
         const cardFaceSpriteSheet = new Image();
-        cardFaceSpriteSheet.src = 'img/deck-sprite-sheet-placeholder.png';
+        cardFaceSpriteSheet.src = 'img/deck-sprite-sheet-new.png';
 
         State.setCardFaceSpriteSheet(cardFaceSpriteSheet);
 
