@@ -1,4 +1,6 @@
 import { CardAnimation } from './card-animation';
+import { calculateScoreForRules, doesAnyRulePass, getAllPassingRules } from './rules';
+import { ScoreGraphic } from './score-graphic';
 import { State } from './state';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
 import {
@@ -86,6 +88,53 @@ export class Pile extends GameComponent {
     update(): void {
         // Increment the time
         this.time += this.rotationSpeed;
+
+        this.canPlay = false;
+        let hoverPileCard = null;
+
+        if (this.isHoveredOver()) {
+            hoverPileCard = this.getTopCard();
+            if (doesAnyRulePass(State.getRuleNames(), hoverPileCard, this.getTopCard())) {
+                this.canPlay = true;
+            }
+
+            if (this.canPlay && State.isMouseClick()) {
+                this.addCardAnimation(
+                    new CardAnimation(
+                        State.getPlayer().getCoordinatesCopy(),
+                        this.getCoordinatesCopy(),
+                        State.getPlayer().getTopPlayCard()
+                    )
+                );
+
+                this.pushCard({
+                    ...State.getPlayer().getTopPlayCard(),
+                    suit: State.getPlayer().getTopPlayCard().suit,
+                    value: State.getPlayer().getTopPlayCard().value
+                });
+
+                //get all passing rules
+                const passingRules = getAllPassingRules(
+                    State.getRuleNames(),
+                    State.getPlayer().getTopPlayCard(),
+                    hoverPileCard
+                );
+
+                console.log('Passing rules', passingRules);
+
+                const pointsForMove = calculateScoreForRules(passingRules, State.getStreak());
+                State.setScore(State.getScore() + pointsForMove);
+                State.setStreak(State.getStreak() + 1);
+
+                State.getPlayer().removeTopPlayCard();
+                State.getScorebar().setScoreToReach(State.getScore());
+
+                // in the middle of the pile
+                const scoreX = this.renderConfig.coordinates.x + this.renderConfig.size.width / 2;
+
+                State.addGameComponent(new ScoreGraphic({ x: scoreX, y: 300 }, pointsForMove));
+            }
+        }
 
         // Calculate the oscillating angle using a sine wave and add the initial angle
         const oscillatingAngle = Math.sin(this.time) * (3 * (Math.PI / 180)); // Convert degrees to radians

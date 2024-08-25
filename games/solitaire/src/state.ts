@@ -2,6 +2,7 @@ import { GameButton } from './button';
 import { DeckDialog } from './deck-dialog';
 import { Player } from './player';
 import { RuleNames } from './rules';
+import { Scorebar } from './scorebar';
 import { Swirl } from './swirl';
 import { SwirlThemes, Theme, Themes } from './theme';
 import { Coordinates, GameComponent } from './types';
@@ -21,6 +22,7 @@ export class State {
     private static ruleNames: RuleNames[] = [];
 
     private static player: Player;
+    private static scorebar: Scorebar;
 
     private static score = 0;
     private static streak = 0;
@@ -141,6 +143,14 @@ export class State {
 
     static getPlayer(): Player {
         return State.player;
+    }
+
+    static setScorebar(scorebar: Scorebar): void {
+        State.scorebar = scorebar;
+    }
+
+    static getScorebar(): Scorebar {
+        return State.scorebar;
     }
 
     static setMouseCoordinates(coordinates: Coordinates): void {

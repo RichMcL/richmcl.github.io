@@ -8,13 +8,7 @@ import { CardAnimation } from './card-animation';
 import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
-import {
-    calculateScoreForRules,
-    doesAnyRulePass,
-    getAllPassingRules,
-    RuleInfo,
-    RuleNames
-} from './rules';
+import { RuleInfo, RuleNames } from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Scorebar } from './scorebar';
 import { State } from './state';
@@ -24,16 +18,12 @@ import { Card } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
-    // public swirl = new Swirl();
-
     public currentLevel = 0;
 
     public pile1: Pile;
     public pile2: Pile;
     public pile3: Pile;
     public pile4: Pile;
-
-    public scorebar: Scorebar;
 
     public timerInMs: number = 0;
     public lastTimestamp: number = 0;
@@ -142,10 +132,11 @@ export class Game {
         this.buttons.push(createDeckButton());
         this.buttons.push(createOpenDebugDialogButton());
 
-        this.scorebar = new Scorebar();
-        this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
+        const scorebar = new Scorebar();
 
-        State.addGameComponent(this.scorebar);
+        State.setScorebar(scorebar);
+        State.getScorebar().setMaxScore(Levels[this.currentLevel].scoreToBeat);
+        State.addGameComponent(scorebar);
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -173,7 +164,7 @@ export class Game {
         if (
             State.getScore() >= Levels[this.currentLevel].scoreToBeat &&
             !this.isActiveAnimations() &&
-            this.scorebar.isAnimationComplete()
+            State.getScorebar().isAnimationComplete()
         ) {
             this.goToNextLevel();
         }
@@ -204,67 +195,6 @@ export class Game {
             this.lastCardClicked = hoverCard;
             console.log('Play pile clicked', hoverCard);
         }
-
-        let hoverPile: Pile;
-        let hoverPileCard: Card;
-        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            const card = pile.getTopCard();
-            if (pile.isHoveredOver()) {
-                hoverPile = pile;
-                if (
-                    doesAnyRulePass(State.getRuleNames(), State.getPlayer().getTopPlayCard(), card)
-                ) {
-                    hoverPileCard = card;
-                    hoverPile.canPlay = true;
-                }
-            }
-        });
-
-        if (hoverPile) {
-            hoverPile.isHovered = true;
-        }
-
-        if (hoverPileCard && State.isMouseClick()) {
-            console.log('Pile click card', hoverPileCard);
-
-            hoverPile.coordinates;
-
-            hoverPile.addCardAnimation(
-                new CardAnimation(
-                    State.getPlayer().getCoordinatesCopy(),
-                    hoverPile.getCoordinatesCopy(),
-                    State.getPlayer().getTopPlayCard()
-                )
-            );
-
-            hoverPile.pushCard({
-                ...hoverPileCard,
-                suit: State.getPlayer().getTopPlayCard().suit,
-                value: State.getPlayer().getTopPlayCard().value
-            });
-
-            //get all passing rules
-            const passingRules = getAllPassingRules(
-                State.getRuleNames(),
-                State.getPlayer().getTopPlayCard(),
-                hoverPileCard
-            );
-
-            console.log('Passing rules', passingRules);
-
-            const pointsForMove = calculateScoreForRules(passingRules, State.getStreak());
-            State.setScore(State.getScore() + pointsForMove);
-            State.setStreak(State.getStreak() + 1);
-
-            State.getPlayer().removeTopPlayCard();
-            this.scorebar.setScoreToReach(State.getScore());
-
-            // in the middle of the pile
-            const scoreX =
-                hoverPile.renderConfig.coordinates.x + hoverPile.renderConfig.size.width / 2;
-
-            State.addGameComponent(new ScoreGraphic({ x: scoreX, y: 300 }, pointsForMove));
-        }
     }
 
     public goToNextLevel() {
@@ -291,8 +221,8 @@ export class Game {
         State.addGameComponent(new ScoreGraphic({ x: 540, y: 350 }, 'Next Level!'));
         State.getPlayer().shufflesRemaining = State.getPlayer().startingShuffles;
 
-        this.scorebar.reset();
-        this.scorebar.setMaxScore(Levels[this.currentLevel].scoreToBeat);
+        State.getScorebar().reset();
+        State.getScorebar().setMaxScore(Levels[this.currentLevel].scoreToBeat);
     }
 
     public resetGameState(): void {
