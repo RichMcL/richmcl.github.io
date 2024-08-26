@@ -15,7 +15,7 @@ import { State } from './state';
 import { Swirl } from './swirl';
 import { SwirlThemes, Theme, Themes } from './theme';
 import { Card } from './types';
-import { buildAndShuffleDeck, drawIcon, printText } from './util';
+import { buildAndShuffleDeck, drawIcon, drawRule, printText } from './util';
 
 export class Game {
     public currentLevel = 0;
@@ -52,11 +52,17 @@ export class Game {
 
         State.setIconSpriteSheet(iconSpriteSheet);
 
+        const ruleIconSpriteSheet = new Image();
+        ruleIconSpriteSheet.src = 'img/rule-icons.png';
+
+        State.setRuleIconSpriteSheet(ruleIconSpriteSheet);
+
         // Wait for both images to load before starting the game
         Promise.all([
             this.loadImage(cardFaceSpriteSheet),
             this.loadImage(cardBackSpriteSheet),
             this.loadImage(iconSpriteSheet),
+            this.loadImage(ruleIconSpriteSheet),
             this.loadFont('New-Amsterdam', 'fonts/new-amsterdam/new-amsterdam.ttf')
         ]).then(() => {
             this.startGame();
@@ -330,11 +336,13 @@ export class Game {
         let y = 80;
 
         for (const rule of State.getRuleNames()) {
+            drawRule(rule, x + 30, y);
+            y += 90;
             const ruleInfo = RuleInfo[rule];
             printText(`- ${ruleInfo.name}`, x + 30, y);
             y += 30;
             printText(`  ${ruleInfo.description}`, x + 30, y, 20);
-            y += 40;
+            y += 20;
         }
     }
 

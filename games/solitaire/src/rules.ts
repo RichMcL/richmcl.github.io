@@ -11,6 +11,8 @@ export interface Rule {
     baseScore?: number;
     plusMultiplier?: number;
     timesMultiplier?: number;
+    spriteXIndex?: number;
+    spriteYIndex?: number;
 }
 
 export enum SingleRuleKey {
@@ -112,7 +114,9 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         rules: [SingleRuleKey.free],
         baseScore: 10,
         plusMultiplier: 1,
-        timesMultiplier: 2
+        timesMultiplier: 2,
+        spriteXIndex: 2,
+        spriteYIndex: 0
     },
 
     [RuleNames.flush]: {
@@ -121,7 +125,9 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         rules: [SingleRuleKey.sameSuit],
         baseScore: 5,
         plusMultiplier: 1,
-        timesMultiplier: 1
+        timesMultiplier: 1,
+        spriteXIndex: 3,
+        spriteYIndex: 0
     },
 
     [RuleNames.klondike]: {
@@ -130,7 +136,9 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneLower],
         baseScore: 10,
         plusMultiplier: 1,
-        timesMultiplier: 1
+        timesMultiplier: 1,
+        spriteXIndex: 1,
+        spriteYIndex: 0
     },
 
     [RuleNames.reverseKlondike]: {
@@ -139,7 +147,9 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         rules: [SingleRuleKey.oppositeColor, SingleRuleKey.oneHigher],
         baseScore: 10,
         plusMultiplier: 1,
-        timesMultiplier: 1
+        timesMultiplier: 1,
+        spriteXIndex: 0,
+        spriteYIndex: 0
     },
 
     [RuleNames.sameValue]: {
@@ -148,7 +158,9 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         rules: [SingleRuleKey.sameValue],
         baseScore: 10,
         plusMultiplier: 1,
-        timesMultiplier: 1
+        timesMultiplier: 1,
+        spriteXIndex: 4,
+        spriteYIndex: 0
     }
 };
 

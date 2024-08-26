@@ -39,6 +39,7 @@ export class State {
     private static cardFaceSpriteSheet: HTMLImageElement;
     private static cardBackSpriteSheet: HTMLImageElement;
     private static iconSpriteSheet: HTMLImageElement;
+    private static ruleIconSpriteSheet: HTMLImageElement;
 
     private static gameComponents: GameComponent[] = [];
 
@@ -228,6 +229,14 @@ export class State {
 
     static getIconSpriteSheet(): HTMLImageElement {
         return State.iconSpriteSheet;
+    }
+
+    static setRuleIconSpriteSheet(ruleIconSpriteSheet: HTMLImageElement): void {
+        State.ruleIconSpriteSheet = ruleIconSpriteSheet;
+    }
+
+    static getRuleIconSpriteSheet(): HTMLImageElement {
+        return State.ruleIconSpriteSheet;
     }
 
     static addGameComponent(gameComponent: GameComponent): void {

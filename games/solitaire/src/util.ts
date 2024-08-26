@@ -1,9 +1,14 @@
+import { RuleInfo, RuleNames } from './rules';
 import { State } from './state';
 import { Card, CardValue, Suit } from './types';
 
 export const CARD_WIDTH = 68;
 export const CARD_HEIGHT = 96;
 export const BASE_CARD_SCALE = 1.5;
+
+export const RULE_WIDTH = 68;
+export const RULE_HEIGHT = 48;
+export const RULE_SCALE = 1.25;
 
 export const cardValueToKey = (value: CardValue): string => {
     switch (value) {
@@ -220,6 +225,29 @@ export const printText = (
     ctx.shadowBlur = 0;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
+};
+
+export const drawRule = (ruleName: RuleNames, x: number, y: number): void => {
+    const ctx = State.getCtx();
+    const ruleWidth = RULE_WIDTH;
+    const ruleHeight = RULE_HEIGHT;
+
+    const ruleInfo = RuleInfo[ruleName];
+
+    let sx = ruleInfo.spriteXIndex * ruleWidth;
+    let sy = ruleInfo.spriteYIndex * ruleHeight;
+
+    ctx.drawImage(
+        State.getRuleIconSpriteSheet(),
+        sx,
+        sy,
+        ruleWidth,
+        ruleHeight,
+        x,
+        y,
+        ruleWidth * RULE_SCALE,
+        ruleHeight * RULE_SCALE
+    );
 };
 
 export const drawIcon = (
