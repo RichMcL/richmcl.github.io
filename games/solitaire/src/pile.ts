@@ -90,17 +90,11 @@ export class Pile extends GameComponent {
         this.time += this.rotationSpeed;
 
         this.canPlay = false;
-        let hoverPileCard = null;
+        let hoverPileCard = this.getTopCard();
+        const topPlayerCard = State.getPlayer().getTopPlayCard();
 
-        if (this.isHoveredOver() && State.getPlayer().getTopPlayCard()) {
-            hoverPileCard = this.getTopCard();
-
-            if (!hoverPileCard) {
-                this.canPlay = false;
-                return;
-            }
-
-            if (doesAnyRulePass(State.getRuleNames(), hoverPileCard, this.getTopCard())) {
+        if (this.isHoveredOver() && topPlayerCard) {
+            if (doesAnyRulePass(State.getRuleNames(), topPlayerCard, hoverPileCard)) {
                 this.canPlay = true;
             }
 
@@ -122,7 +116,7 @@ export class Pile extends GameComponent {
                 //get all passing rules
                 const passingRules = getAllPassingRules(
                     State.getRuleNames(),
-                    State.getPlayer().getTopPlayCard(),
+                    topPlayerCard,
                     hoverPileCard
                 );
 
