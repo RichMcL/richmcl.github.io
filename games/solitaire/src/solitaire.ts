@@ -1,14 +1,10 @@
-import {
-    createDeckButton,
-    createHitButton,
-    createOpenDebugDialogButton,
-    GameButton
-} from './button';
+import { createDeckButton, createHitButton, GameButton } from './button';
 import { CardAnimation } from './card-animation';
 import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
-import { RuleInfo, RuleNames } from './rules';
+import { RuleSidebar } from './rule-sidebar';
+import { RuleNames } from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Scorebar } from './scorebar';
 import { State } from './state';
@@ -136,13 +132,14 @@ export class Game {
         this.initializePiles();
         this.buttons.push(createHitButton());
         this.buttons.push(createDeckButton());
-        this.buttons.push(createOpenDebugDialogButton());
 
         const scorebar = new Scorebar();
+        const ruleSidebar = new RuleSidebar();
 
         State.setScorebar(scorebar);
         State.getScorebar().setMaxScore(Levels[this.currentLevel].scoreToBeat);
         State.addGameComponent(scorebar);
+        State.addGameComponent(ruleSidebar);
     }
 
     public gameLoop(timestamp: number = 0) {
@@ -249,7 +246,6 @@ export class Game {
 
         this.renderTheme();
         this.renderSidebar();
-        this.renderRuleSidebar();
         this.renderPileShadow();
 
         State.getPlayer().render();
@@ -313,37 +309,6 @@ export class Game {
         // Right border
         State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(x + 250, 0, 3, 800);
-    }
-
-    public renderRuleSidebar() {
-        const x = 1007;
-
-        // Left border
-        State.getCtx().fillStyle = State.getTheme().base;
-        State.getCtx().fillRect(x - 3, 0, 3, 800);
-
-        State.getCtx().fillStyle = '#293a3a';
-        State.getCtx().fillRect(x, 0, 250, 800);
-
-        // Right border
-        State.getCtx().fillStyle = State.getTheme().base;
-        State.getCtx().fillRect(x + 250, 0, 3, 800);
-
-        printText('Rules', x + 30, 40);
-
-        //iterate over the riles an print their descriptions
-
-        let y = 80;
-
-        for (const rule of State.getRuleNames()) {
-            drawRule(rule, x + 30, y);
-            y += 90;
-            const ruleInfo = RuleInfo[rule];
-            printText(`- ${ruleInfo.name}`, x + 30, y);
-            y += 30;
-            printText(`  ${ruleInfo.description}`, x + 30, y, 20);
-            y += 20;
-        }
     }
 
     public renderSidebarStats(): void {
