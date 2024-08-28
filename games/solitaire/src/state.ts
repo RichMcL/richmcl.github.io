@@ -15,6 +15,7 @@ export class State {
     private static ctx: CanvasRenderingContext2D;
 
     private static gameRunning: boolean = false;
+    private static timerInMs: number = 0;
 
     private static theme: Theme = Themes.default;
     private static swirl: Swirl;
@@ -26,6 +27,7 @@ export class State {
 
     private static score = 0;
     private static streak = 0;
+    private static currentLevel = 0;
 
     private static mouseClick = false;
     private static scaleFactor = 1;
@@ -81,6 +83,18 @@ export class State {
         return State.gameRunning;
     }
 
+    static setTimerInMs(timerInMs: number): void {
+        State.timerInMs = timerInMs;
+    }
+
+    static getTimerInMs(): number {
+        return State.timerInMs;
+    }
+
+    static incrementTimerInMs(elapsed: number): void {
+        State.timerInMs += elapsed;
+    }
+
     static getScore(): number {
         return State.score;
     }
@@ -95,6 +109,18 @@ export class State {
 
     static setStreak(streak: number): void {
         State.streak = streak;
+    }
+
+    static getCurrentLevel(): number {
+        return State.currentLevel;
+    }
+
+    static setCurrentLevel(level: number): void {
+        State.currentLevel = level;
+    }
+
+    static incrementCurrentLevel(): void {
+        State.currentLevel++;
     }
 
     static getTheme(): Theme {

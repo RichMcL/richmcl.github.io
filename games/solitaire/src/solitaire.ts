@@ -4,24 +4,21 @@ import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
 import { Player } from './player';
 import { RuleSidebar } from './rule-sidebar';
-import { RuleNames } from './rules';
 import { ScoreGraphic } from './score-graphic';
 import { Scorebar } from './scorebar';
 import { State } from './state';
+import { StatsSidebar } from './stats-sidebar';
 import { Swirl } from './swirl';
 import { SwirlThemes, Theme, Themes } from './theme';
 import { Card } from './types';
-import { buildAndShuffleDeck, drawIcon, drawRule, printText } from './util';
+import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
-    public currentLevel = 0;
-
     public pile1: Pile;
     public pile2: Pile;
     public pile3: Pile;
     public pile4: Pile;
 
-    public timerInMs: number = 0;
     public lastTimestamp: number = 0;
 
     public buttons: GameButton[] = [];
@@ -123,10 +120,6 @@ export class Game {
     }
 
     public initializeGameObjects(): void {
-        State.addRule(RuleNames.klondike);
-        State.addRule(RuleNames.reverseKlondike);
-        State.addRule(RuleNames.free);
-
         State.setPlayer(new Player());
 
         this.initializePiles();
@@ -134,11 +127,14 @@ export class Game {
         this.buttons.push(createDeckButton());
 
         const scorebar = new Scorebar();
+        const statsSidebar = new StatsSidebar();
         const ruleSidebar = new RuleSidebar();
 
         State.setScorebar(scorebar);
-        State.getScorebar().setMaxScore(Levels[this.currentLevel].scoreToBeat);
+        State.getScorebar().setMaxScore(Levels[State.getCurrentLevel()].scoreToBeat);
+
         State.addGameComponent(scorebar);
+        State.addGameComponent(statsSidebar);
         State.addGameComponent(ruleSidebar);
     }
 
@@ -148,8 +144,7 @@ export class Game {
         const elapsed = timestamp - this.lastTimestamp;
         this.lastTimestamp = timestamp;
 
-        // Increment the timer by the elapsed time
-        this.timerInMs += elapsed;
+        State.incrementTimerInMs(elapsed);
 
         // Update game state
         this.updateGameState();
@@ -165,7 +160,7 @@ export class Game {
 
     public updateGameState() {
         if (
-            State.getScore() >= Levels[this.currentLevel].scoreToBeat &&
+            State.getScore() >= Levels[State.getCurrentLevel()].scoreToBeat &&
             !this.isActiveAnimations() &&
             State.getScorebar().isAnimationComplete()
         ) {
@@ -208,7 +203,7 @@ export class Game {
 
         this.isDealNewRound = false;
         State.setScore(0);
-        this.currentLevel++;
+        State.incrementCurrentLevel();
 
         //increment the theme the next object in the map
         const themeKeys = Object.keys(Themes);
@@ -225,7 +220,7 @@ export class Game {
         State.getPlayer().shufflesRemaining = State.getPlayer().startingShuffles;
 
         State.getScorebar().reset();
-        State.getScorebar().setMaxScore(Levels[this.currentLevel].scoreToBeat);
+        State.getScorebar().setMaxScore(Levels[State.getCurrentLevel()].scoreToBeat);
     }
 
     public resetGameState(): void {
@@ -245,7 +240,6 @@ export class Game {
         State.getCtx().clearRect(0, 0, State.getCanvas().width, State.getCanvas().height); // Clear canvas
 
         this.renderTheme();
-        this.renderSidebar();
         this.renderPileShadow();
 
         State.getPlayer().render();
@@ -253,9 +247,6 @@ export class Game {
             pile.render();
         });
 
-        this.renderSidebarStats();
-
-        this.renderMousePosition();
         this.renderLastCardClicked();
         this.buttons.forEach(button => button.render());
 
@@ -294,59 +285,6 @@ export class Game {
         ctx.lineTo(x, y + radius);
         ctx.quadraticCurveTo(x, y, x + radius, y);
         ctx.closePath();
-    }
-
-    public renderSidebar() {
-        const x = 20;
-
-        // Left border
-        State.getCtx().fillStyle = State.getTheme().base;
-        State.getCtx().fillRect(x - 3, 0, 3, 800);
-
-        State.getCtx().fillStyle = '#293a3a';
-        State.getCtx().fillRect(x, 0, 250, 800);
-
-        // Right border
-        State.getCtx().fillStyle = State.getTheme().base;
-        State.getCtx().fillRect(x + 250, 0, 3, 800);
-    }
-
-    public renderSidebarStats(): void {
-        const level = Levels[this.currentLevel];
-        const lines = [];
-
-        const minutes = Math.floor(this.timerInMs / 60000)
-            .toString()
-            .padStart(2, '0');
-        const seconds = Math.floor((this.timerInMs % 60000) / 1000)
-            .toString()
-            .padStart(2, '0');
-        const tenths = Math.floor((this.timerInMs % 1000) / 100)
-            .toString()
-            .padStart(1, '0');
-
-        lines.push(`Time: ${minutes}:${seconds}.${tenths}`);
-        lines.push('');
-        lines.push(`Shuffles: ${State.getPlayer().shufflesRemaining}`);
-        lines.push(`Play Pile Size: ${State.getPlayer().playPileVisibleSize}`);
-        lines.push(`Draw Pile Size: ${State.getPlayer().playPileDrawSize}`);
-        lines.push(`Score: ${State.getScore()}`);
-        lines.push(`Streak: ${State.getStreak()}`);
-        lines.push('');
-        lines.push(`Level: ${level.name}`);
-        lines.push(`Score to Beat: ${level.scoreToBeat}`);
-
-        let y = 40;
-        lines.forEach(line => {
-            printText(line, 30, y);
-            y += 40;
-        });
-    }
-
-    public renderMousePosition(): void {
-        const x = parseFloat(State.getScaledMouseCoordinates().x.toFixed(0));
-        const y = parseFloat(State.getScaledMouseCoordinates().y.toFixed(0));
-        printText(`Cursor: X ${x} | Y ${y}`, 30, 780);
     }
 
     public renderLastCardClicked(): void {

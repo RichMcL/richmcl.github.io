@@ -1,5 +1,5 @@
 import { createOpenDebugDialogButton, GameButton } from './button';
-import { RuleInfo } from './rules';
+import { RuleInfo, RuleNames } from './rules';
 import { State } from './state';
 import { GameComponent } from './types';
 import { drawRule, printText } from './util';
@@ -11,6 +11,10 @@ export class RuleSidebar extends GameComponent {
         super(coordinates);
 
         this.buttons.push(createOpenDebugDialogButton());
+
+        State.addRule(RuleNames.klondike);
+        State.addRule(RuleNames.reverseKlondike);
+        State.addRule(RuleNames.free);
     }
 
     update(): void {
