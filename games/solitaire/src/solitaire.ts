@@ -1,4 +1,3 @@
-import { createDeckButton, createHitButton, GameButton } from './button';
 import { CardAnimation } from './card-animation';
 import { Levels } from './level';
 import { Pile, PilesRenderConfig } from './pile';
@@ -20,8 +19,6 @@ export class Game {
     public pile4: Pile;
 
     public lastTimestamp: number = 0;
-
-    public buttons: GameButton[] = [];
 
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
@@ -123,8 +120,6 @@ export class Game {
         State.setPlayer(new Player());
 
         this.initializePiles();
-        this.buttons.push(createHitButton());
-        this.buttons.push(createDeckButton());
 
         const scorebar = new Scorebar();
         const statsSidebar = new StatsSidebar();
@@ -178,21 +173,6 @@ export class Game {
         });
 
         State.getPlayer().update();
-
-        this.buttons.forEach(button => {
-            button.update();
-        });
-
-        let hoverCard: Card;
-
-        if (State.getPlayer().isHoveredOver()) {
-            hoverCard = State.getPlayer().getTopPlayCard();
-        }
-
-        if (hoverCard && State.isMouseClick()) {
-            this.lastCardClicked = hoverCard;
-            console.log('Play pile clicked', hoverCard);
-        }
     }
 
     public goToNextLevel() {
@@ -226,14 +206,6 @@ export class Game {
     public resetGameState(): void {
         State.setClickCoordinates(null);
         State.setMouseClick(false);
-
-        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            pile.reset();
-        });
-
-        this.buttons.forEach(button => {
-            button.reset();
-        });
     }
 
     public render() {
@@ -248,7 +220,6 @@ export class Game {
         });
 
         this.renderLastCardClicked();
-        this.buttons.forEach(button => button.render());
 
         for (const component of State.getGameComponents()) {
             component.render();

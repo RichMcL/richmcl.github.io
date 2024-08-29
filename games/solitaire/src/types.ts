@@ -79,7 +79,6 @@ export abstract class GameComponent {
     renderConfig: RenderConfig;
 
     deleteMe = false;
-    isHovered = false;
 
     constructor(public coordinates: Coordinates) {}
 

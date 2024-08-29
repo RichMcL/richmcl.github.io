@@ -195,10 +195,12 @@ export class Pile extends GameComponent {
     }
 
     staticRender(): void {
-        const scale = this.isHovered ? this.renderConfig.scale * 1.025 : this.renderConfig.scale;
+        const scale = this.isHoveredOver()
+            ? this.renderConfig.scale * 1.025
+            : this.renderConfig.scale;
 
         // bump cards up on hover
-        const yPos = this.isHovered
+        const yPos = this.isHoveredOver()
             ? this.renderConfig.coordinates.y - 5
             : this.renderConfig.coordinates.y;
 
@@ -259,11 +261,6 @@ export class Pile extends GameComponent {
         State.getCtx().fill();
 
         State.getCtx().restore();
-    }
-
-    reset(): void {
-        this.isHovered = false;
-        this.canPlay = false;
     }
 
     getTopCard(): Card {

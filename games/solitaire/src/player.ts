@@ -1,3 +1,4 @@
+import { createDeckButton, createHitButton, GameButton } from './button';
 import { CardAnimation } from './card-animation';
 import { State } from './state';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
@@ -47,6 +48,8 @@ export class Player extends GameComponent {
 
     renderConfig: RenderConfig;
 
+    buttons: GameButton[] = [];
+
     constructor() {
         super(PlayerRenderConfig.coordinates);
         this.drawPile = buildAndShuffleDeck(true);
@@ -55,10 +58,14 @@ export class Player extends GameComponent {
         console.log('player pile', this.playPile);
 
         this.renderConfig = PlayerRenderConfig;
+
+        this.buttons.push(createHitButton());
+        this.buttons.push(createDeckButton());
     }
 
     update(): void {
         this.cardAnimations.forEach(animation => animation.update());
+        this.buttons.forEach(button => button.update());
 
         this.deleteDeadCardAnimations();
     }
@@ -100,6 +107,7 @@ export class Player extends GameComponent {
         this.renderPlayPileSize();
 
         this.cardAnimations.forEach(animation => animation.render());
+        this.buttons.forEach(button => button.render());
     }
 
     public renderPlayPileSize(): void {
