@@ -121,7 +121,7 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
 
     [RuleNames.flush]: {
         name: 'Flush',
-        description: 'Same suit',
+        description: 'Can be played on same suit',
         rules: [SingleRuleKey.sameSuit],
         baseScore: 5,
         plusMultiplier: 1,
@@ -154,7 +154,7 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
 
     [RuleNames.sameValue]: {
         name: 'Same Value',
-        description: 'Same value',
+        description: 'Can be played on same value',
         rules: [SingleRuleKey.sameValue],
         baseScore: 10,
         plusMultiplier: 1,
