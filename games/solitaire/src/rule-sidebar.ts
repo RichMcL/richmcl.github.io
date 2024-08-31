@@ -3,7 +3,7 @@ import { RuleComponent } from './rule-component';
 import { RuleNames } from './rules';
 import { State } from './state';
 import { GameComponent } from './types';
-import { printText } from './util';
+import { printText, RULE_HEIGHT, RULE_SCALE } from './util';
 
 export class RuleSidebar extends GameComponent {
     buttons: GameButton[] = [];
@@ -42,14 +42,21 @@ export class RuleSidebar extends GameComponent {
 
         printText('Rules', x + 30, 40);
 
-        let y = 80;
+        let y = 70;
 
         for (const rc of State.getRuleComponents()) {
-            rc.render({ x, y });
-            y += 140;
+            rc.render({ x: x + 30, y });
+            y += RULE_HEIGHT * RULE_SCALE + 20;
         }
 
         // Draw buttons
         this.buttons.forEach(button => button.render());
+
+        State.getRuleComponents().forEach(rc => {
+            if (rc.isHoveredOver()) {
+                rc.renderOutline(rc.renderConfig.coordinates);
+                rc.renderRuleDescription();
+            }
+        });
     }
 }
