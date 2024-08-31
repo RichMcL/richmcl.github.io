@@ -73,7 +73,7 @@ export interface RenderConfig {
 
 export abstract class GameComponent {
     update(): void {}
-    render(): void {}
+    render(coordinates?: Coordinates): void {}
     reset(): void {}
 
     renderConfig: RenderConfig;

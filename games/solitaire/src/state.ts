@@ -1,6 +1,7 @@
 import { GameButton } from './button';
 import { DeckDialog } from './deck-dialog';
 import { Player } from './player';
+import { RuleComponent } from './rule-component';
 import { RuleNames } from './rules';
 import { Scorebar } from './scorebar';
 import { Swirl } from './swirl';
@@ -21,6 +22,7 @@ export class State {
     private static swirl: Swirl;
 
     private static ruleNames: RuleNames[] = [];
+    private static ruleComponents: RuleComponent[] = [];
 
     private static player: Player;
     private static scorebar: Scorebar;
@@ -153,6 +155,22 @@ export class State {
     static removeRule(ruleName: RuleNames): void {
         State.ruleNames = State.ruleNames.filter(name => name !== ruleName);
         State.getRuleNames().sort();
+    }
+
+    static addRuleComponent(ruleComponent: RuleComponent): void {
+        State.ruleComponents.push(ruleComponent);
+
+        State.ruleComponents.sort((a, b) => {
+            return a.rule.localeCompare(b.rule);
+        });
+    }
+
+    static removeRuleComponent(ruleComponent: RuleComponent): void {
+        State.ruleComponents = State.ruleComponents.filter(rc => rc !== ruleComponent);
+    }
+
+    static getRuleComponents(): RuleComponent[] {
+        return State.ruleComponents;
     }
 
     static toggleRule(ruleName: RuleNames): void {

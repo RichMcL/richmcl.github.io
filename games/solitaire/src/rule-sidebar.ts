@@ -1,8 +1,9 @@
 import { createOpenDebugDialogButton, GameButton } from './button';
-import { RuleInfo, RuleNames } from './rules';
+import { RuleComponent } from './rule-component';
+import { RuleNames } from './rules';
 import { State } from './state';
 import { GameComponent } from './types';
-import { drawRule, printText } from './util';
+import { printText } from './util';
 
 export class RuleSidebar extends GameComponent {
     buttons: GameButton[] = [];
@@ -15,6 +16,10 @@ export class RuleSidebar extends GameComponent {
         State.addRule(RuleNames.klondike);
         State.addRule(RuleNames.reverseKlondike);
         State.addRule(RuleNames.free);
+
+        State.addRuleComponent(new RuleComponent({ rule: RuleNames.klondike }));
+        State.addRuleComponent(new RuleComponent({ rule: RuleNames.reverseKlondike }));
+        State.addRuleComponent(new RuleComponent({ rule: RuleNames.free }));
     }
 
     update(): void {
@@ -37,17 +42,11 @@ export class RuleSidebar extends GameComponent {
 
         printText('Rules', x + 30, 40);
 
-        //iterate over the riles an print their descriptions
         let y = 80;
 
-        for (const rule of State.getRuleNames()) {
-            drawRule(rule, x + 30, y);
-            y += 90;
-            const ruleInfo = RuleInfo[rule];
-            printText(`- ${ruleInfo.name}`, x + 30, y);
-            y += 30;
-            printText(`  ${ruleInfo.description}`, x + 30, y, 20);
-            y += 20;
+        for (const rc of State.getRuleComponents()) {
+            rc.render({ x, y });
+            y += 140;
         }
 
         // Draw buttons

@@ -1,6 +1,7 @@
 import { DebugDialog } from './debug-dialog';
 import { DeckDialog } from './deck-dialog';
 import { DefaultDialogRenderConfig } from './dialog';
+import { RuleComponent } from './rule-component';
 import { RuleNames } from './rules';
 import { State } from './state';
 import { Theme, Themes } from './theme';
@@ -38,18 +39,23 @@ export class GameButton extends GameComponent {
                 //     break;
                 case 'free':
                     State.toggleRule(RuleNames.free);
+                    this.toggleRuleComponent(RuleNames.free);
                     break;
                 case 'klondike':
                     State.toggleRule(RuleNames.klondike);
+                    this.toggleRuleComponent(RuleNames.klondike);
                     break;
                 case 'reverse-klondike':
                     State.toggleRule(RuleNames.reverseKlondike);
+                    this.toggleRuleComponent(RuleNames.reverseKlondike);
                     break;
                 case 'flush':
                     State.toggleRule(RuleNames.flush);
+                    this.toggleRuleComponent(RuleNames.flush);
                     break;
                 case 'same-value':
                     State.toggleRule(RuleNames.sameValue);
+                    this.toggleRuleComponent(RuleNames.sameValue);
                     break;
                 case 'hit':
                     this.hitCard();
@@ -175,13 +181,22 @@ export class GameButton extends GameComponent {
         State.getCtx().stroke();
     }
 
-    reset(): void {
-        this.isHovered = false;
-    }
+    reset(): void {}
 
     private hitCard(): void {
         State.setStreak(0);
         State.getPlayer().hit();
+    }
+
+    private toggleRuleComponent(ruleName: RuleNames): void {
+        const ruleComponents = State.getRuleComponents();
+        const rc = ruleComponents.find(r => r.rule === ruleName);
+
+        if (rc) {
+            State.removeRuleComponent(rc);
+        } else {
+            State.addRuleComponent(new RuleComponent({ rule: ruleName }));
+        }
     }
 }
 
