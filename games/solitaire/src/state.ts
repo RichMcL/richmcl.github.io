@@ -32,6 +32,7 @@ export class State {
     private static currentLevel = 0;
 
     private static mouseClick = false;
+    private static gamepadButtonClick = false;
     private static scaleFactor = 1;
 
     private static mouseCoordinates = { x: 0, y: 0 } as Coordinates;
@@ -249,6 +250,14 @@ export class State {
 
     static isMouseClick(): boolean {
         return State.mouseClick;
+    }
+
+    static setGamepadButtonClick(isGamepadButtonClick: boolean): void {
+        State.gamepadButtonClick = isGamepadButtonClick;
+    }
+
+    static isGamepadButtonClick(): boolean {
+        return State.gamepadButtonClick;
     }
 
     static setCardFaceSpriteSheet(cardFaceSpriteSheet: HTMLImageElement): void {

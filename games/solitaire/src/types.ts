@@ -98,7 +98,7 @@ export abstract class GameComponent {
     }
 
     isClicked(): boolean {
-        return this.isHoveredOver() && State.isMouseClick();
+        return this.isHoveredOver() && (State.isMouseClick() || State.isGamepadButtonClick());
     }
 
     getCoordinatesCopy(): Coordinates {

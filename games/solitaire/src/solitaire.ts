@@ -23,6 +23,10 @@ export class Game {
     public lastCardClicked: Card;
     public isDealNewRound: boolean = true;
 
+    // Add a property to track the previous state of the gamepad buttons
+    private previousButtonStates: boolean[] = [];
+    public hasGamepad: boolean = false;
+
     constructor() {
         State.setCanvas(document.getElementById('game-canvas') as HTMLCanvasElement);
         State.setCtx(State.getCanvas().getContext('2d'));
@@ -107,6 +111,16 @@ export class Game {
             });
         });
 
+        window.addEventListener('gamepadconnected', event => {
+            console.log('Gamepad connected:', event.gamepad);
+            this.hasGamepad = true;
+        });
+
+        window.addEventListener('gamepaddisconnected', event => {
+            console.log('Gamepad disconnected:', event.gamepad);
+            this.hasGamepad = false;
+        });
+
         State.setGameRunning(true);
         this.lastTimestamp = performance.now();
 
@@ -149,8 +163,60 @@ export class Game {
 
         this.resetGameState();
 
+        const gamepads = navigator.getGamepads();
+        for (const gamepad of gamepads) {
+            if (gamepad) {
+                this.handleGamepadInput(gamepad);
+            }
+        }
+
         // Request the next frame
         requestAnimationFrame(ts => this.gameLoop(ts));
+    }
+
+    private handleGamepadInput(gamepad: Gamepad) {
+        if (this.previousButtonStates.length === 0) {
+            this.initializePreviousButtonStates(gamepad);
+        }
+
+        for (let i = 0; i < gamepad.buttons.length; i++) {
+            if (gamepad.buttons[i].pressed && !this.previousButtonStates[i]) {
+                console.log(`Button ${i} pressed`);
+                State.setGamepadButtonClick(true);
+            }
+            this.previousButtonStates[i] = gamepad.buttons[i].pressed;
+        }
+
+        // Example: Map gamepad axes to game actions
+        const xAxis = gamepad.axes[0];
+        const yAxis = gamepad.axes[1];
+        if (xAxis !== 0 || yAxis !== 0) {
+            console.log(`Joystick moved: x=${xAxis}, y=${yAxis}`);
+
+            // Get the current mouse position
+            const rect = State.getCanvas().getBoundingClientRect();
+            let mouseX = State.getMouseCoordinates().x;
+            let mouseY = State.getMouseCoordinates().y;
+
+            // Update the mouse position based on joystick input
+            const speed = 10; // Adjust the speed as needed
+            mouseX += xAxis * speed;
+            mouseY += yAxis * speed;
+
+            // Ensure the mouse position stays within the canvas bounds
+            mouseX = Math.max(0, Math.min(rect.width, mouseX));
+            mouseY = Math.max(0, Math.min(rect.height, mouseY));
+
+            // Set the new mouse position
+            State.setMouseCoordinates({ x: mouseX, y: mouseY });
+
+            // Optionally, you can trigger a mouse move event if needed
+            const mouseMoveEvent = new MouseEvent('mousemove', {
+                clientX: mouseX + rect.left,
+                clientY: mouseY + rect.top
+            });
+            State.getCanvas().dispatchEvent(mouseMoveEvent);
+        }
     }
 
     public updateGameState() {
@@ -206,6 +272,7 @@ export class Game {
     public resetGameState(): void {
         State.setClickCoordinates(null);
         State.setMouseClick(false);
+        State.setGamepadButtonClick(false);
     }
 
     public render() {
@@ -224,6 +291,10 @@ export class Game {
         for (const component of State.getGameComponents()) {
             component.render();
         }
+
+        if (this.hasGamepad) {
+            this.renderGamepadCursor();
+        }
     }
 
     public renderTheme() {
@@ -234,6 +305,21 @@ export class Game {
         State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.1)';
         this.drawRoundedRect(State.getCtx(), 330, 70, 620, 180, 10);
         State.getCtx().fill();
+    }
+
+    public renderGamepadCursor(): void {
+        State.getCtx().save();
+        State.getCtx().fillStyle = 'white';
+        State.getCtx().beginPath();
+        State.getCtx().arc(
+            State.getScaledMouseCoordinates().x,
+            State.getScaledMouseCoordinates().y,
+            5,
+            0,
+            2 * Math.PI
+        );
+        State.getCtx().fill();
+        State.getCtx().restore();
     }
 
     // Function to draw a rounded rectangle
@@ -299,6 +385,10 @@ export class Game {
             active ||
             State.getGameComponents().some(component => component instanceof CardAnimation)
         );
+    }
+
+    private initializePreviousButtonStates(gamepad: Gamepad) {
+        this.previousButtonStates = new Array(gamepad.buttons.length).fill(false);
     }
 
     /* USER ACTION FUNCTIONS */

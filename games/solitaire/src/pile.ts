@@ -98,7 +98,7 @@ export class Pile extends GameComponent {
                 this.canPlay = true;
             }
 
-            if (this.canPlay && State.isMouseClick()) {
+            if (this.canPlay && (State.isMouseClick() || State.isGamepadButtonClick())) {
                 this.addCardAnimation(
                     new CardAnimation(
                         State.getPlayer().getCoordinatesCopy(),
