@@ -59,6 +59,7 @@ export class RuleComponent extends GameComponent {
      */
     renderRuleDescription(): void {
         const ctx = State.getCtx();
+        ctx.save();
         const scaledMouseCoordinates = State.getScaledMouseCoordinates();
         const x = scaledMouseCoordinates.x + 5;
         const y = scaledMouseCoordinates.y;
@@ -79,5 +80,6 @@ export class RuleComponent extends GameComponent {
 
         printText(ruleInfo.name, x + padding, y + 45 + padding / 2);
         printText(ruleInfo.description, x + padding, y + 45 + padding / 2 + textHeight, 20);
+        ctx.restore();
     }
 }

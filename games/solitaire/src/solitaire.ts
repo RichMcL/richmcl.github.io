@@ -102,6 +102,8 @@ export class Game {
             State.setMouseClick(true);
         });
 
+        document.body.classList.add('hide-cursor');
+
         document.addEventListener('mousemove', event => {
             const rect = State.getCanvas().getBoundingClientRect();
 
@@ -114,13 +116,11 @@ export class Game {
         window.addEventListener('gamepadconnected', event => {
             console.log('Gamepad connected:', event.gamepad);
             this.hasGamepad = true;
-            document.body.classList.add('hide-cursor');
         });
 
         window.addEventListener('gamepaddisconnected', event => {
             console.log('Gamepad disconnected:', event.gamepad);
             this.hasGamepad = false;
-            document.body.classList.remove('hide-cursor');
         });
 
         State.setGameRunning(true);
@@ -294,9 +294,7 @@ export class Game {
             component.render();
         }
 
-        if (this.hasGamepad) {
-            this.renderGamepadCursor();
-        }
+        this.renderGamepadCursor();
     }
 
     public renderTheme() {
@@ -314,14 +312,14 @@ export class Game {
 
         // Draw the pixelated hand cursor
         const cursor = [
-            [0, 0, 1, 1, 0, 0, 0, 0],
-            [0, 0, 1, 1, 0, 0, 0, 0],
-            [0, 0, 1, 1, 0, 0, 0, 0],
-            [1, 0, 1, 1, 1, 1, 0, 0],
-            [1, 1, 1, 1, 1, 1, 1, 0],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [0, 1, 1, 1, 1, 1, 1, 0],
-            [0, 0, 1, 1, 1, 1, 0, 0]
+            [1, 1, 0, 0, 0, 0, 0],
+            [1, 1, 1, 0, 0, 0, 0],
+            [1, 1, 1, 1, 0, 0, 0],
+            [1, 1, 1, 1, 1, 0, 0],
+            [1, 1, 1, 1, 0, 1, 0],
+            [1, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0]
         ];
 
         const pixelSize = 3;
