@@ -114,11 +114,13 @@ export class Game {
         window.addEventListener('gamepadconnected', event => {
             console.log('Gamepad connected:', event.gamepad);
             this.hasGamepad = true;
+            document.body.classList.add('hide-cursor');
         });
 
         window.addEventListener('gamepaddisconnected', event => {
             console.log('Gamepad disconnected:', event.gamepad);
             this.hasGamepad = false;
+            document.body.classList.remove('hide-cursor');
         });
 
         State.setGameRunning(true);
@@ -199,7 +201,7 @@ export class Game {
             let mouseY = State.getMouseCoordinates().y;
 
             // Update the mouse position based on joystick input
-            const speed = 10; // Adjust the speed as needed
+            const speed = 15; // Adjust the speed as needed
             mouseX += xAxis * speed;
             mouseY += yAxis * speed;
 
@@ -309,16 +311,53 @@ export class Game {
 
     public renderGamepadCursor(): void {
         State.getCtx().save();
+
+        // Draw the pixelated hand cursor
+        const cursor = [
+            [0, 0, 1, 1, 0, 0, 0, 0],
+            [0, 0, 1, 1, 0, 0, 0, 0],
+            [0, 0, 1, 1, 0, 0, 0, 0],
+            [1, 0, 1, 1, 1, 1, 0, 0],
+            [1, 1, 1, 1, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 0, 0]
+        ];
+
+        const pixelSize = 3;
+        const mouseX = State.getScaledMouseCoordinates().x;
+        const mouseY = State.getScaledMouseCoordinates().y;
+
+        // Draw the outline
+        State.getCtx().fillStyle = 'black';
+        cursor.forEach((row, rowIndex) => {
+            row.forEach((pixel, colIndex) => {
+                if (pixel) {
+                    State.getCtx().fillRect(
+                        mouseX + colIndex * pixelSize - 1,
+                        mouseY + rowIndex * pixelSize - 1,
+                        pixelSize + 2,
+                        pixelSize + 2
+                    );
+                }
+            });
+        });
+
+        // Draw the filled cursor
         State.getCtx().fillStyle = 'white';
-        State.getCtx().beginPath();
-        State.getCtx().arc(
-            State.getScaledMouseCoordinates().x,
-            State.getScaledMouseCoordinates().y,
-            5,
-            0,
-            2 * Math.PI
-        );
-        State.getCtx().fill();
+        cursor.forEach((row, rowIndex) => {
+            row.forEach((pixel, colIndex) => {
+                if (pixel) {
+                    State.getCtx().fillRect(
+                        mouseX + colIndex * pixelSize,
+                        mouseY + rowIndex * pixelSize,
+                        pixelSize,
+                        pixelSize
+                    );
+                }
+            });
+        });
+
         State.getCtx().restore();
     }
 
