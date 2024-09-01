@@ -3,7 +3,7 @@ import { CardComponent } from './card-component';
 import { DefaultDialogRenderConfig } from './dialog';
 import { State } from './state';
 import { Card, CardNumericValue, Coordinates, GameComponent } from './types';
-import { BASE_CARD_SCALE, CARD_WIDTH } from './util';
+import { BASE_CARD_SCALE, CARD_WIDTH, printText } from './util';
 
 export class DeckDialog extends GameComponent {
     cardComponents: CardComponent[] = [];
@@ -47,6 +47,13 @@ export class DeckDialog extends GameComponent {
 
     render(): void {
         this.renderDialogBackground();
+
+        printText(
+            'All cards remaining in deck and hand',
+            this.coordinates.x + 40,
+            this.coordinates.y + 40,
+            30
+        );
 
         //render the cards in a grid
         this.cardComponents.forEach(cardComponent => {
@@ -96,7 +103,7 @@ export class DeckDialog extends GameComponent {
     private createCardComponents(): void {
         // Create card components, rendering each suit in a row
         let x = this.coordinates.x + 10;
-        let y = this.coordinates.y + 10;
+        let y = this.coordinates.y + 70;
         let currentSuit = this.drawPile[0].suit;
 
         // Group cards by suit
@@ -124,7 +131,7 @@ export class DeckDialog extends GameComponent {
                 x += cardWidth + spacing;
             });
 
-            y += 90;
+            y += 80;
         });
     }
 }
