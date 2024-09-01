@@ -209,6 +209,7 @@ export const printText = (
     color = 'white'
 ): void => {
     const ctx = State.getCtx();
+    ctx.save();
     ctx.font = `${fontSize}px New-Amsterdam`;
     ctx.fillStyle = color;
 
@@ -225,6 +226,7 @@ export const printText = (
     ctx.shadowBlur = 0;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
+    ctx.restore();
 };
 
 export const drawRule = (ruleName: RuleNames, x: number, y: number): void => {
