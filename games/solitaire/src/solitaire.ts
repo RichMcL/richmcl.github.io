@@ -1,6 +1,6 @@
 import { CardAnimation } from './card-animation';
 import { Levels } from './level';
-import { Pile, PilesRenderConfig } from './pile';
+import { PileContainer } from './pile-container';
 import { Player } from './player';
 import { RuleSidebar } from './rule-sidebar';
 import { ScoreGraphic } from './score-graphic';
@@ -13,11 +13,6 @@ import { Card } from './types';
 import { buildAndShuffleDeck, drawIcon, printText } from './util';
 
 export class Game {
-    public pile1: Pile;
-    public pile2: Pile;
-    public pile3: Pile;
-    public pile4: Pile;
-
     public lastTimestamp: number = 0;
 
     public lastCardClicked: Card;
@@ -134,8 +129,9 @@ export class Game {
 
     public initializeGameObjects(): void {
         State.setPlayer(new Player());
+        State.setPileContainer(new PileContainer());
 
-        this.initializePiles();
+        State.getPileContainer().initializePiles();
 
         const scorebar = new Scorebar();
         const statsSidebar = new StatsSidebar();
@@ -236,16 +232,14 @@ export class Game {
         //update each gameComponent
         State.getGameComponents().forEach(component => component.update());
 
-        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            pile.update();
-        });
-
         State.getPlayer().update();
+        State.getPileContainer().update();
     }
 
     public goToNextLevel() {
         State.getPlayer().drawPile = buildAndShuffleDeck(true);
-        this.initializePiles();
+        State.getPileContainer().initializePiles();
+
         State.getPlayer().playPile = [];
         State.getPlayer().hit();
 
@@ -281,12 +275,8 @@ export class Game {
         State.getCtx().clearRect(0, 0, State.getCanvas().width, State.getCanvas().height); // Clear canvas
 
         this.renderTheme();
-        this.renderPileShadow();
-
         State.getPlayer().render();
-        [this.pile1, this.pile2, this.pile3, this.pile4].forEach(pile => {
-            pile.render();
-        });
+        State.getPileContainer().render();
 
         this.renderLastCardClicked();
 
@@ -299,12 +289,6 @@ export class Game {
 
     public renderTheme() {
         document.body.style.backgroundColor = State.getTheme().black;
-    }
-
-    public renderPileShadow(): void {
-        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.1)';
-        this.drawRoundedRect(State.getCtx(), 330, 70, 620, 180, 10);
-        State.getCtx().fill();
     }
 
     public renderGamepadCursor(): void {
@@ -359,28 +343,6 @@ export class Game {
         State.getCtx().restore();
     }
 
-    // Function to draw a rounded rectangle
-    public drawRoundedRect(
-        ctx: CanvasRenderingContext2D,
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        radius: number
-    ) {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-    }
-
     public renderLastCardClicked(): void {
         const card = this.lastCardClicked;
         if (card) {
@@ -391,19 +353,6 @@ export class Game {
 
     /* LOGIC FUNCTIONS */
 
-    public initializePiles(): void {
-        this.pile1 = new Pile(PilesRenderConfig.pile1.coordinates, 'pile1');
-        this.pile2 = new Pile(PilesRenderConfig.pile2.coordinates, 'pile2');
-        this.pile3 = new Pile(PilesRenderConfig.pile3.coordinates, 'pile3');
-        this.pile4 = new Pile(PilesRenderConfig.pile4.coordinates, 'pile4');
-
-        // Pop the first 4 cards from the deck and add them to the piles
-        this.pile1.pushCard(State.getPlayer().drawPile.pop());
-        this.pile2.pushCard(State.getPlayer().drawPile.pop());
-        this.pile3.pushCard(State.getPlayer().drawPile.pop());
-        this.pile4.pushCard(State.getPlayer().drawPile.pop());
-    }
-
     public changeTheme(theme: Theme): void {
         State.setTheme(theme);
     }
@@ -411,11 +360,8 @@ export class Game {
     public isActiveAnimations(): boolean {
         let active = false;
 
-        for (const pile of [this.pile1, this.pile2, this.pile3, this.pile4]) {
-            if (pile.cardAnimations.length > 0) {
-                active = true;
-                break;
-            }
+        if (State.getPileContainer().doesAnyPileHaveAnimations()) {
+            active = true;
         }
 
         return (

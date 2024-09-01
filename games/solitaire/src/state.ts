@@ -1,5 +1,6 @@
 import { GameButton } from './button';
 import { DeckDialog } from './deck-dialog';
+import { PileContainer } from './pile-container';
 import { Player } from './player';
 import { RuleComponent } from './rule-component';
 import { RuleNames } from './rules';
@@ -25,6 +26,7 @@ export class State {
     private static ruleComponents: RuleComponent[] = [];
 
     private static player: Player;
+    private static pileContainer: PileContainer;
     private static scorebar: Scorebar;
 
     private static score = 0;
@@ -189,6 +191,14 @@ export class State {
 
     static getPlayer(): Player {
         return State.player;
+    }
+
+    static setPileContainer(pileContainer: PileContainer): void {
+        State.pileContainer = pileContainer;
+    }
+
+    static getPileContainer(): PileContainer {
+        return State.pileContainer;
     }
 
     static setScorebar(scorebar: Scorebar): void {

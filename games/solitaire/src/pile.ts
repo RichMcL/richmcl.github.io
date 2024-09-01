@@ -145,7 +145,10 @@ export class Pile extends GameComponent {
         this.deleteDeadCardAnimations();
     }
 
-    render(): void {
+    render(coordinates?: Coordinates): void {
+        if (coordinates) {
+            this.renderConfig.coordinates = coordinates;
+        }
         this.renderDropShadow();
 
         if (Pile.ANIMATION_ENABLED) {
