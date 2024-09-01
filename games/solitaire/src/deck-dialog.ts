@@ -60,17 +60,37 @@ export class DeckDialog extends GameComponent {
     }
 
     private renderDialogBackground(): void {
-        State.getCtx().save();
+        const ctx = State.getCtx();
+        ctx.save();
 
-        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.9)';
-        State.getCtx().fillRect(
-            this.coordinates.x,
-            this.coordinates.y,
-            DefaultDialogRenderConfig.size.width,
-            DefaultDialogRenderConfig.size.height
-        );
+        const x = this.coordinates.x;
+        const y = this.coordinates.y;
+        const width = DefaultDialogRenderConfig.size.width;
+        const height = DefaultDialogRenderConfig.size.height;
+        const radius = 10; // Radius for rounded corners
 
-        State.getCtx().restore();
+        // Draw the filled rectangle with rounded corners
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.arcTo(x + width, y, x + width, y + radius, radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+        ctx.lineTo(x + radius, y + height);
+        ctx.arcTo(x, y + height, x, y + height - radius, radius);
+        ctx.lineTo(x, y + radius);
+        ctx.arcTo(x, y, x + radius, y, radius);
+        ctx.closePath();
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+        ctx.fill();
+
+        // Draw the green outline
+        ctx.strokeStyle = State.getTheme().base;
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        ctx.restore();
     }
 
     private createCardComponents(): void {

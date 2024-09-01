@@ -1,8 +1,6 @@
 import { DebugDialog } from './debug-dialog';
 import { DeckDialog } from './deck-dialog';
 import { DefaultDialogRenderConfig } from './dialog';
-import { RuleComponent } from './rule-component';
-import { RuleNames } from './rules';
 import { State } from './state';
 import { Theme, Themes } from './theme';
 import { Coordinates, GameComponent, RenderConfig, Size } from './types';
@@ -152,17 +150,6 @@ export class GameButton extends GameComponent {
         State.setStreak(0);
         State.getPlayer().hit();
     }
-
-    private toggleRuleComponent(ruleName: RuleNames): void {
-        const ruleComponents = State.getRuleComponents();
-        const rc = ruleComponents.find(r => r.rule === ruleName);
-
-        if (rc) {
-            State.removeRuleComponent(rc);
-        } else {
-            State.addRuleComponent(new RuleComponent({ rule: ruleName }));
-        }
-    }
 }
 
 export class ThemeButton extends GameButton {
@@ -300,7 +287,7 @@ export const createDeckButton = () => {
 
 export const createOpenDebugDialogButton = () => {
     const ctx = State.getCtx();
-    const text = 'DEBUG';
+    const text = 'MENU';
     const padding = 20; // Padding for the button
 
     ctx.font = '30px New-Amsterdam';
@@ -308,7 +295,7 @@ export const createOpenDebugDialogButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 1140;
+    const x = 1150;
     const y = 720;
 
     return new GameButton(
@@ -330,8 +317,8 @@ export const createCloseDialogButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 1000;
-    const y = 570;
+    const x = 1030;
+    const y = 605;
 
     return new GameButton(
         { x, y },
@@ -350,7 +337,7 @@ export const createThemeButtons = (): ThemeButton[] => {
         const padding = 20; // Padding for the button
         const buttonWidth = 50;
         const buttonHeight = 50;
-        const x = 400 + i * (buttonWidth + padding);
+        const x = 200 + i * (buttonWidth + padding);
         const y = 280;
 
         const themeButton = new ThemeButton(
