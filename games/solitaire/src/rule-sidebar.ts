@@ -8,8 +8,17 @@ import { printText, RULE_HEIGHT, RULE_SCALE } from './util';
 export class RuleSidebar extends GameComponent {
     buttons: GameButton[] = [];
 
-    constructor(coordinates = { x: 1007, y: 0 }) {
+    constructor(coordinates = { x: 1110, y: 0 }) {
         super(coordinates);
+
+        this.renderConfig = {
+            coordinates,
+            size: {
+                width: 150,
+                height: 800
+            },
+            scale: 1
+        };
 
         this.buttons.push(createOpenDebugDialogButton());
 
@@ -27,18 +36,18 @@ export class RuleSidebar extends GameComponent {
     }
 
     render(): void {
-        const x = 1007;
+        const x = this.renderConfig.coordinates.x;
 
         // Left border
         State.getCtx().fillStyle = State.getTheme().base;
         State.getCtx().fillRect(x - 3, 0, 3, 800);
 
         State.getCtx().fillStyle = '#293a3a';
-        State.getCtx().fillRect(x, 0, 250, 800);
+        State.getCtx().fillRect(x, 0, this.renderConfig.size.width, 800);
 
         // Right border
         State.getCtx().fillStyle = State.getTheme().base;
-        State.getCtx().fillRect(x + 250, 0, 3, 800);
+        State.getCtx().fillRect(x + this.renderConfig.size.width, 0, 3, 800);
 
         printText('Rules', x + 30, 40);
 

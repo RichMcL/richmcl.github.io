@@ -13,7 +13,7 @@ export class PileContainer extends GameComponent {
         this.renderConfig = {
             coordinates,
             size: {
-                width: 620,
+                width: 720,
                 height: 180
             },
             scale: 0
@@ -26,8 +26,16 @@ export class PileContainer extends GameComponent {
 
     render() {
         // Draw the pile shadow
+
         State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.1)';
-        this.drawRoundedRect(State.getCtx(), 330, 70, 620, 180, 10);
+        this.drawRoundedRect(
+            State.getCtx(),
+            this.renderConfig.coordinates.x,
+            this.renderConfig.coordinates.y,
+            this.renderConfig.size.width,
+            this.renderConfig.size.height,
+            10
+        );
         State.getCtx().fill();
 
         //render the piles centered on the pile container
@@ -55,12 +63,31 @@ export class PileContainer extends GameComponent {
 
     public initializePiles() {
         this.piles = [];
-        this.piles.push(new Pile('pile1'));
-        this.piles.push(new Pile('pile2'));
-        this.piles.push(new Pile('pile3'));
-        this.piles.push(new Pile('pile4'));
+        this.piles.push(new Pile());
+        this.piles.push(new Pile());
+        this.piles.push(new Pile());
+        this.piles.push(new Pile());
 
         this.piles.forEach(pile => pile.pushCard(State.getPlayer().drawPile.pop()));
+    }
+
+    public createPile() {
+        if (this.piles.length >= 5) return;
+
+        const newPile = new Pile();
+        newPile.pushCard(State.getPlayer().drawPile.pop());
+
+        this.piles.push(newPile);
+    }
+
+    public removePile() {
+        if (this.piles.length <= 1) return;
+
+        //take all the cards from the pile and add them to the draw pile
+        const pile = this.piles.pop();
+        while (pile.cards.length > 0) {
+            State.getPlayer().drawPile.push(pile.popCard());
+        }
     }
 
     public drawRoundedRect(

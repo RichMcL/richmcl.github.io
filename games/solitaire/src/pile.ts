@@ -29,7 +29,7 @@ export class Pile extends GameComponent {
 
     private time = 0;
 
-    constructor(private pileName: string) {
+    constructor() {
         const coordinates = {
             x: 0,
             y: 0

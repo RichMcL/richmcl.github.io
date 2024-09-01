@@ -1,4 +1,5 @@
 import {
+    createAddPileButton,
     createCloseDialogButton,
     createDealButton,
     createDecrementDrawSizeButton,
@@ -11,6 +12,7 @@ import {
     createIncrementShufflesButton,
     createKlondikeButton,
     createReloadButton,
+    createRemovePileButton,
     createReverseKlondikeButton,
     createSameValueButton,
     createThemeButtons,
@@ -29,6 +31,8 @@ export class DebugDialog extends GameComponent {
     constructor(coordinates: Coordinates) {
         super(coordinates);
 
+        this.buttons.push(createRemovePileButton());
+        this.buttons.push(createAddPileButton());
         this.buttons.push(createDecrementDrawSizeButton());
         this.buttons.push(createIncrementDrawSizeButton());
         this.buttons.push(createDecrementShufflesButton());

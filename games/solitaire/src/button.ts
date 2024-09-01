@@ -78,6 +78,12 @@ export class GameButton extends GameComponent {
                 case 'decrement-play-pile':
                     State.getPlayer().decrementPlayPileVisibleSize();
                     break;
+                case 'add-pile':
+                    State.getPileContainer().createPile();
+                    break;
+                case 'remove-pile':
+                    State.getPileContainer().removePile();
+                    break;
                 case 'dialog-close':
                     State.removeGameComponentByType(DeckDialog.name);
                     State.removeGameComponentByType(DebugDialog.name);
@@ -284,6 +290,50 @@ export const createIncrementPlayPileButton = () => {
         { x, y },
         { width: buttonWidth, height: buttonHeight },
         'increment-play-pile',
+        text,
+        padding
+    );
+};
+
+export const createAddPileButton = () => {
+    const ctx = State.getCtx();
+    const text = 'Add Pile';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '30px New-Amsterdam';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 400;
+    const y = 200;
+
+    return new GameButton(
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'add-pile',
+        text,
+        padding
+    );
+};
+
+export const createRemovePileButton = () => {
+    const ctx = State.getCtx();
+    const text = 'Remove Pile';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '30px New-Amsterdam';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 540;
+    const y = 200;
+
+    return new GameButton(
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'remove-pile',
         text,
         padding
     );
@@ -585,7 +635,7 @@ export const createOpenDebugDialogButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 1100;
+    const x = 1140;
     const y = 720;
 
     return new GameButton(
