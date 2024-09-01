@@ -186,7 +186,7 @@ export class ThemeButton extends GameButton {
         // Draw a border around the button if it's hovered
         if (this.isHoveredOver()) {
             State.getCtx().strokeStyle = 'white';
-            State.getCtx().lineWidth = 2;
+            State.getCtx().lineWidth = 3;
             State.getCtx().strokeRect(
                 this.coordinates.x,
                 this.coordinates.y,
@@ -251,7 +251,7 @@ export const createHitButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 835;
+    const x = 885;
     const y = 570;
 
     return new GameButton(
@@ -273,7 +273,7 @@ export const createDeckButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 835;
+    const x = 885;
     const y = 640;
 
     return new GameButton(

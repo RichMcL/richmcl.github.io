@@ -7,7 +7,7 @@ export class PileContainer extends GameComponent {
     piles: Pile[] = [];
 
     constructor() {
-        const coordinates: Coordinates = { x: 330, y: 70 };
+        const coordinates: Coordinates = { x: 350, y: 70 };
         super(coordinates);
 
         this.renderConfig = {

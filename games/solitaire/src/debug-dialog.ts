@@ -4,7 +4,7 @@ import { RuleComponent } from './rule-component';
 import { RuleNames } from './rules';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
-import { printText } from './util';
+import { drawRoundedRect, printText } from './util';
 
 export class DebugDialog extends GameComponent {
     textLines: string[] = [];
@@ -12,6 +12,7 @@ export class DebugDialog extends GameComponent {
     themeButtons: ThemeButton[] = [];
     tabButtons: GameButton[] = [];
     closeDialogButton: GameButton;
+    currentTab: string = 'debug-about-tab';
 
     constructor(coordinates: Coordinates) {
         super(coordinates);
@@ -22,7 +23,7 @@ export class DebugDialog extends GameComponent {
 
         this.createTabs();
 
-        this.onThemeTabButtonClick();
+        this.onAboutTabButtonClick();
 
         State.setDialogOpen(true);
     }
@@ -88,6 +89,7 @@ export class DebugDialog extends GameComponent {
 
             if (b.isClicked()) {
                 this.resetDialog();
+                this.currentTab = b.id;
                 switch (b.id) {
                     case 'debug-themes-tab':
                         this.onThemeTabButtonClick();
@@ -125,6 +127,11 @@ export class DebugDialog extends GameComponent {
 
         this.tabButtons.forEach(b => {
             b.render();
+
+            //draw a white box under the current tab
+            if (b.id === this.currentTab) {
+                this.renderTabHightlight(b);
+            }
         });
 
         //render horizontal white line under tabs
@@ -162,6 +169,33 @@ export class DebugDialog extends GameComponent {
                 printText(line, this.coordinates.x + 40, this.coordinates.y + 140 + index * 40, 30);
             });
         }
+    }
+
+    private renderTabHightlight(b: GameButton) {
+        const ctx = State.getCtx();
+        ctx.save();
+
+        const x = b.coordinates.x;
+        const y = b.coordinates.y + b.size.height + 10;
+        const width = b.size.width;
+        const height = 10;
+        const radius = 5; // Radius for rounded corners
+
+        // Draw the filled rectangle with rounded top corners
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.arcTo(x + width, y, x + width, y + radius, radius);
+        ctx.lineTo(x + width, y + height);
+        ctx.lineTo(x, y + height);
+        ctx.lineTo(x, y + radius);
+        ctx.arcTo(x, y, x + radius, y, radius);
+        ctx.closePath();
+
+        ctx.fillStyle = State.getTheme().base;
+        ctx.fill();
+
+        ctx.restore();
     }
 
     private renderDialogBackground(): void {
@@ -299,7 +333,9 @@ export class DebugDialog extends GameComponent {
         this.textLines = [
             'This game is currently in development by Rich McLaughlin',
             "I don't know what platforms this will be on yet.",
-            'If you stumble upon this game, well good luck!'
+            'If you stumble upon this game, well good luck!',
+            '',
+            'Check out Opposwitch on Xbox!'
         ];
     }
 

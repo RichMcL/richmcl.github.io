@@ -14,7 +14,7 @@ import {
 
 const PlayerRenderConfig: RenderConfig = {
     coordinates: {
-        x: 535,
+        x: 585,
         y: 560
     },
     size: {
@@ -26,7 +26,7 @@ const PlayerRenderConfig: RenderConfig = {
 
 const DrawPileRenderConfig: RenderConfig = {
     coordinates: {
-        x: 675,
+        x: 725,
         y: 560
     },
     size: {
@@ -114,7 +114,7 @@ export class Player extends GameComponent {
         const fixedWidth = CARD_WIDTH * BASE_CARD_SCALE; // Define the fixed width
         const text = `[ ${this.playPile?.length} ]`;
         const textWidth = State.getCtx().measureText(text).width;
-        const x = 495 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
+        const x = 545 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
         printText(text, x, 745);
     }
@@ -123,7 +123,7 @@ export class Player extends GameComponent {
         const fixedWidth = CARD_WIDTH * BASE_CARD_SCALE; // Define the fixed width
         const text = `[ ${this.drawPile?.length} ] `;
         const textWidth = State.getCtx().measureText(text).width;
-        const x = 685 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
+        const x = 735 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
         printText(text, x, 745);
     }
