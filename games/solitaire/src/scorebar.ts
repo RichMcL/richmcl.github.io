@@ -10,7 +10,7 @@ export class Scorebar extends GameComponent {
     private incrementer = 1;
 
     constructor() {
-        const coordinates = { x: 290, y: 10 };
+        const coordinates = { x: 190, y: 10 };
         super(coordinates);
 
         this.renderConfig = {

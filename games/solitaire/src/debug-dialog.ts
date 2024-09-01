@@ -14,6 +14,8 @@ export class DebugDialog extends GameComponent {
     closeDialogButton: GameButton;
     currentTab: string = 'debug-about-tab';
 
+    stats: string[] = [];
+
     constructor(coordinates: Coordinates) {
         super(coordinates);
 
@@ -120,6 +122,15 @@ export class DebugDialog extends GameComponent {
         });
 
         this.closeDialogButton.update();
+
+        if (this.currentTab === 'debug-debug-tab') {
+            this.stats = [
+                `Piles: ${State.getPileContainer().piles.length}`,
+                `Shuffles: ${State.getPlayer().shufflesRemaining}`,
+                `Play Pile Size: ${State.getPlayer().playPileVisibleSize}`,
+                `Draw Pile Size: ${State.getPlayer().playPileDrawSize}`
+            ];
+        }
     }
 
     render(): void {
@@ -145,16 +156,19 @@ export class DebugDialog extends GameComponent {
         );
         State.getCtx().restore();
 
-        let x = this.coordinates.x + 40;
-        let y = this.coordinates.y + 160;
+        let buttonX = this.coordinates.x + 40;
+        let buttonY = this.coordinates.y + 160;
         this.buttons.forEach(b => {
-            b.render({ x, y });
-            x += b.size.width + 20;
+            b.render({ x: buttonX, y: buttonY });
+            buttonX += b.size.width + 20;
 
             // Check if the next button would overflow the container
-            if (x + b.size.width > this.coordinates.x + DefaultDialogRenderConfig.size.width - 20) {
-                x = this.coordinates.x + 40; // Reset x to the start of the next line
-                y += b.size.height + 20; // Move y down by the height of the button plus some gap
+            if (
+                buttonX + b.size.width >
+                this.coordinates.x + DefaultDialogRenderConfig.size.width - 20
+            ) {
+                buttonX = this.coordinates.x + 40; // Reset x to the start of the next line
+                buttonY += b.size.height + 20; // Move y down by the height of the button plus some gap
             }
         });
 
@@ -167,6 +181,17 @@ export class DebugDialog extends GameComponent {
         if (this.textLines?.length > 0) {
             this.textLines.forEach((line, index) => {
                 printText(line, this.coordinates.x + 40, this.coordinates.y + 140 + index * 40, 30);
+            });
+        }
+
+        if (this.stats?.length > 0) {
+            this.stats.forEach((line, index) => {
+                printText(
+                    line,
+                    this.coordinates.x + 40,
+                    buttonY + this.buttons[0].size.height + 40 + index * 40,
+                    30
+                );
             });
         }
     }
@@ -234,6 +259,7 @@ export class DebugDialog extends GameComponent {
 
     private resetDialog(): void {
         this.textLines = [];
+        this.stats = [];
         this.buttons = [];
         this.themeButtons = [];
     }

@@ -251,7 +251,7 @@ export const createHitButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 885;
+    const x = 835;
     const y = 570;
 
     return new GameButton(
@@ -273,7 +273,7 @@ export const createDeckButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 885;
+    const x = 835;
     const y = 640;
 
     return new GameButton(
