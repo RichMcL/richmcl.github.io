@@ -51,6 +51,10 @@ export class Pile extends GameComponent {
         // Increment the time
         this.time += this.rotationSpeed;
 
+        if (State.isDialogOpen()) {
+            return;
+        }
+
         this.canPlay = false;
         let hoverPileCard = this.getTopCard();
         const topPlayerCard = State.getPlayer().getTopPlayCard();
@@ -128,6 +132,14 @@ export class Pile extends GameComponent {
         );
 
         this.cardAnimations.forEach(animation => animation.render());
+    }
+
+    isHoveredOver(): boolean {
+        if (State.isDialogOpen()) {
+            return false;
+        }
+
+        return super.isHoveredOver();
     }
 
     animationRender(): void {

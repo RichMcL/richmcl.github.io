@@ -6,7 +6,7 @@ import {
     createDecrementPlayPileButton,
     createDecrementShufflesButton,
     createFlushButton,
-    createFreeButtton,
+    createFreeButton,
     createIncrementDrawSizeButton,
     createIncrementPlayPileButton,
     createIncrementShufflesButton,
@@ -25,7 +25,7 @@ import { Coordinates, GameComponent } from './types';
 import { printText } from './util';
 
 export class DebugDialog extends GameComponent {
-    text: string;
+    textLines: string[] = [];
     buttons: GameComponent[] = [];
     themeButtons: ThemeButton[] = [];
     tabButtons: GameButton[] = [];
@@ -40,9 +40,7 @@ export class DebugDialog extends GameComponent {
 
         this.createTabs();
 
-        // this.buttons.push(createReloadButton());
-        // this.buttons.push(createFreeButtton());
-        // this.buttons.push(createDealButton());
+        this.onThemeTabButtonClick();
 
         State.setDialogOpen(true);
     }
@@ -69,6 +67,12 @@ export class DebugDialog extends GameComponent {
                         break;
                     case 'debug-about-tab':
                         this.onAboutTabButtonClick();
+                        break;
+                    case 'debug-how-to-play-tab':
+                        this.onHowToPlayTabButtonClick();
+                        break;
+                    case 'debug-reload-tab':
+                        window.location.reload();
                         break;
                     default:
                         break;
@@ -100,8 +104,10 @@ export class DebugDialog extends GameComponent {
 
         this.closeDialogButton.render();
 
-        if (this.text) {
-            printText(this.text, this.coordinates.x + 20, this.coordinates.y + 120, 30);
+        if (this.textLines?.length > 0) {
+            this.textLines.forEach((line, index) => {
+                printText(line, this.coordinates.x + 20, this.coordinates.y + 120 + index * 40, 30);
+            });
         }
     }
 
@@ -120,23 +126,27 @@ export class DebugDialog extends GameComponent {
     }
 
     private resetDialog(): void {
-        this.text = '';
+        this.textLines = [];
         this.buttons = [];
         this.themeButtons = [];
     }
 
     private onThemeTabButtonClick(): void {
+        this.textLines = ['Select a theme'];
         this.themeButtons = createThemeButtons();
     }
 
     private onRulesTabButtonClick(): void {
-        this.buttons.push(createSameValueButton());
+        this.textLines = ['Use this menu to turn rules on and off'];
         this.buttons.push(createFlushButton());
+        this.buttons.push(createFreeButton());
         this.buttons.push(createKlondikeButton());
         this.buttons.push(createReverseKlondikeButton());
+        this.buttons.push(createSameValueButton());
     }
 
     private onDebugTabButtonClick(): void {
+        this.textLines = ['Use this menu to change game state and settings'];
         this.buttons.push(createRemovePileButton());
         this.buttons.push(createAddPileButton());
         this.buttons.push(createDecrementDrawSizeButton());
@@ -148,7 +158,21 @@ export class DebugDialog extends GameComponent {
     }
 
     private onAboutTabButtonClick(): void {
-        this.text = 'This is a test dialog, this is a game in progress obviously...';
+        this.textLines = [
+            'This game is currently in development by Rich McLaughlin',
+            "I don't know what platforms this will be on yet.",
+            'If you stumble upon this game, well good luck!'
+        ];
+    }
+
+    private onHowToPlayTabButtonClick(): void {
+        this.textLines = [
+            'This game is based on solitaire, but the rules can change as you play',
+            'You need to score the minimum points to beat a level',
+            'For each level, the deck is re-shuffled and the points increase',
+            'In between levels, you will get to pick a rule or deck enhancement',
+            'Something something once I have bonuses setup'
+        ];
     }
 
     private createTabs(): void {
@@ -187,6 +211,24 @@ export class DebugDialog extends GameComponent {
         });
 
         this.tabButtons.push(aboutTab);
+
+        const howToPlay = this.createTabButton({
+            text: 'How To Play',
+            id: 'debug-how-to-play-tab',
+            x: aboutTab.coordinates.x + 20 + aboutTab.size.width,
+            y: this.coordinates.y + 20
+        });
+
+        this.tabButtons.push(howToPlay);
+
+        const reloadTab = this.createTabButton({
+            text: 'Reload',
+            id: 'debug-reload-tab',
+            x: howToPlay.coordinates.x + 20 + howToPlay.size.width,
+            y: this.coordinates.y + 20
+        });
+
+        this.tabButtons.push(reloadTab);
     }
 
     private createTabButton(params: {

@@ -58,6 +58,7 @@ export class GameButton extends GameComponent {
                     this.toggleRuleComponent(RuleNames.sameValue);
                     break;
                 case 'hit':
+                    if (State.isDialogOpen()) break;
                     this.hitCard();
                     break;
                 case 'increment-draw-size':
@@ -91,10 +92,14 @@ export class GameButton extends GameComponent {
                     State.setDialogOpen(false);
                     break;
                 case 'debug-dialog-open':
+                    if (State.isDialogOpen()) break;
+
                     const debugDialog = new DebugDialog(DefaultDialogRenderConfig.coordinates);
                     State.addGameComponent(debugDialog);
                     break;
                 case 'deck-dialog-open':
+                    if (State.isDialogOpen()) break;
+
                     const deckDialog = new DeckDialog(
                         DefaultDialogRenderConfig.coordinates,
                         State.getPlayer().drawPile,
@@ -261,8 +266,8 @@ export const createDecrementPlayPileButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 400;
-    const y = 410;
+    const x = 200;
+    const y = 470;
 
     return new GameButton(
         { x, y },
@@ -284,7 +289,7 @@ export const createIncrementPlayPileButton = () => {
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 540;
-    const y = 410;
+    const y = 470;
 
     return new GameButton(
         { x, y },
@@ -305,8 +310,8 @@ export const createAddPileButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 400;
-    const y = 200;
+    const x = 200;
+    const y = 260;
 
     return new GameButton(
         { x, y },
@@ -328,7 +333,7 @@ export const createRemovePileButton = () => {
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 540;
-    const y = 200;
+    const y = 260;
 
     return new GameButton(
         { x, y },
@@ -349,8 +354,8 @@ export const createDecrementDrawSizeButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 400;
-    const y = 270;
+    const x = 200;
+    const y = 330;
 
     return new GameButton(
         { x, y },
@@ -372,7 +377,7 @@ export const createIncrementDrawSizeButton = () => {
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 540;
-    const y = 270;
+    const y = 330;
 
     return new GameButton(
         { x, y },
@@ -393,8 +398,8 @@ export const createDecrementShufflesButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 400;
-    const y = 340;
+    const x = 200;
+    const y = 400;
 
     return new GameButton(
         { x, y },
@@ -416,7 +421,7 @@ export const createIncrementShufflesButton = () => {
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 540;
-    const y = 340;
+    const y = 400;
 
     return new GameButton(
         { x, y },
@@ -437,7 +442,7 @@ export const createReloadButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 400;
+    const x = 200;
     const y = 480;
 
     return new GameButton(
@@ -515,28 +520,6 @@ export const createDeckButton = () => {
     );
 };
 
-export const createSameValueButton = () => {
-    const ctx = State.getCtx();
-    const text = 'SAME VALUE';
-    const padding = 20; // Padding for the button
-
-    ctx.font = '30px New-Amsterdam';
-    const textMetrics = ctx.measureText(text);
-    const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding;
-    const buttonHeight = 50;
-    const x = 800;
-    const y = 240;
-
-    return new GameButton(
-        { x, y },
-        { width: buttonWidth, height: buttonHeight },
-        'same-value',
-        text,
-        padding
-    );
-};
-
 export const createFlushButton = () => {
     const ctx = State.getCtx();
     const text = 'FLUSH';
@@ -547,8 +530,8 @@ export const createFlushButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 800;
-    const y = 300;
+    const x = 200;
+    const y = 260;
 
     return new GameButton(
         { x, y },
@@ -559,9 +542,9 @@ export const createFlushButton = () => {
     );
 };
 
-export const createReverseKlondikeButton = () => {
+export const createFreeButton = () => {
     const ctx = State.getCtx();
-    const text = 'REV. KLONDIKE';
+    const text = 'FREE';
     const padding = 20; // Padding for the button
 
     ctx.font = '30px New-Amsterdam';
@@ -569,13 +552,13 @@ export const createReverseKlondikeButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 800;
-    const y = 360;
+    const x = 200;
+    const y = 320;
 
     return new GameButton(
         { x, y },
         { width: buttonWidth, height: buttonHeight },
-        'reverse-klondike',
+        'free',
         text,
         padding
     );
@@ -591,8 +574,8 @@ export const createKlondikeButton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 800;
-    const y = 420;
+    const x = 200;
+    const y = 380;
 
     return new GameButton(
         { x, y },
@@ -603,9 +586,9 @@ export const createKlondikeButton = () => {
     );
 };
 
-export const createFreeButtton = () => {
+export const createReverseKlondikeButton = () => {
     const ctx = State.getCtx();
-    const text = 'FREE';
+    const text = 'REV. KLONDIKE';
     const padding = 20; // Padding for the button
 
     ctx.font = '30px New-Amsterdam';
@@ -613,13 +596,35 @@ export const createFreeButtton = () => {
     const textWidth = textMetrics.width;
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
-    const x = 800;
-    const y = 480;
+    const x = 200;
+    const y = 440;
 
     return new GameButton(
         { x, y },
         { width: buttonWidth, height: buttonHeight },
-        'free',
+        'reverse-klondike',
+        text,
+        padding
+    );
+};
+
+export const createSameValueButton = () => {
+    const ctx = State.getCtx();
+    const text = 'SAME VALUE';
+    const padding = 20; // Padding for the button
+
+    ctx.font = '30px New-Amsterdam';
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const buttonWidth = textWidth + padding;
+    const buttonHeight = 50;
+    const x = 200;
+    const y = 500;
+
+    return new GameButton(
+        { x, y },
+        { width: buttonWidth, height: buttonHeight },
+        'same-value',
         text,
         padding
     );
@@ -678,7 +683,7 @@ export const createThemeButtons = (): ThemeButton[] => {
         const buttonWidth = 50;
         const buttonHeight = 50;
         const x = 400 + i * (buttonWidth + padding);
-        const y = 570;
+        const y = 280;
 
         const themeButton = new ThemeButton(
             { x, y },
