@@ -69,8 +69,8 @@ export class GameButton extends GameComponent {
         this.renderDropShadow();
         State.getCtx().fillStyle = State.getTheme().base;
 
-        const x = this.coordinates.x;
-        const y = this.coordinates.y;
+        const x = this.renderConfig.coordinates.x;
+        const y = this.renderConfig.coordinates.y;
         const width = this.size.width;
         const height = this.size.height;
         const radius = this.borderRadius; // Adjust the radius as needed
@@ -86,8 +86,8 @@ export class GameButton extends GameComponent {
 
         printText(
             this.text,
-            this.coordinates.x + this.padding / 2,
-            this.coordinates.y + this.padding * 1.75
+            this.renderConfig.coordinates.x + this.padding / 2,
+            this.renderConfig.coordinates.y + this.padding * 1.75
         );
 
         // Draw a border around the button if it's hovered
@@ -127,8 +127,8 @@ export class GameButton extends GameComponent {
     }
 
     renderOutline(): void {
-        const x = this.coordinates.x;
-        const y = this.coordinates.y;
+        const x = this.renderConfig.coordinates.x;
+        const y = this.renderConfig.coordinates.y;
         const width = this.size.width;
         const height = this.size.height;
         const radius = this.borderRadius; // Use the same border radius as the element

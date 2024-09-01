@@ -127,8 +127,28 @@ export class DebugDialog extends GameComponent {
             b.render();
         });
 
+        //render horizontal white line under tabs
+        State.getCtx().save();
+        State.getCtx().fillStyle = State.getTheme().base;
+        State.getCtx().fillRect(
+            this.coordinates.x,
+            this.coordinates.y + 90,
+            DefaultDialogRenderConfig.size.width,
+            5
+        );
+        State.getCtx().restore();
+
+        let x = this.coordinates.x + 40;
+        let y = this.coordinates.y + 160;
         this.buttons.forEach(b => {
-            b.render();
+            b.render({ x, y });
+            x += b.size.width + 20;
+
+            // Check if the next button would overflow the container
+            if (x + b.size.width > this.coordinates.x + DefaultDialogRenderConfig.size.width - 20) {
+                x = this.coordinates.x + 40; // Reset x to the start of the next line
+                y += b.size.height + 20; // Move y down by the height of the button plus some gap
+            }
         });
 
         this.themeButtons.forEach(b => {
@@ -139,7 +159,7 @@ export class DebugDialog extends GameComponent {
 
         if (this.textLines?.length > 0) {
             this.textLines.forEach((line, index) => {
-                printText(line, this.coordinates.x + 20, this.coordinates.y + 120 + index * 40, 30);
+                printText(line, this.coordinates.x + 40, this.coordinates.y + 140 + index * 40, 30);
             });
         }
     }
@@ -171,23 +191,88 @@ export class DebugDialog extends GameComponent {
 
     private onRulesTabButtonClick(): void {
         this.textLines = ['Use this menu to turn rules on and off'];
-        this.buttons.push(this.createFlushButton());
-        this.buttons.push(this.createFreeButton());
-        this.buttons.push(this.createKlondikeButton());
-        this.buttons.push(this.createReverseKlondikeButton());
-        this.buttons.push(this.createSameValueButton());
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Flush',
+                id: 'flush'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Free',
+                id: 'free'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Klondike',
+                id: 'klondike'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Reverse Klondike',
+                id: 'reverse-klondike'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Same Value',
+                id: 'same-value'
+            })
+        );
     }
 
     private onDebugTabButtonClick(): void {
         this.textLines = ['Use this menu to change game state and settings'];
-        this.buttons.push(this.createRemovePileButton());
-        this.buttons.push(this.createAddPileButton());
-        this.buttons.push(this.createDecrementDrawSizeButton());
-        this.buttons.push(this.createIncrementDrawSizeButton());
-        this.buttons.push(this.createDecrementShufflesButton());
-        this.buttons.push(this.createIncrementShufflesButton());
-        this.buttons.push(this.createDecrementPlayPileButton());
-        this.buttons.push(this.createIncrementPlayPileButton());
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Remove Pile',
+                id: 'remove-pile'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Add Pile',
+                id: 'add-pile'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Draw Size -',
+                id: 'decrement-draw-size'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Draw Size +',
+                id: 'increment-draw-size'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Shuffles -',
+                id: 'decrement-shuffles'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Shuffles +',
+                id: 'increment-shuffles'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Play Pile -',
+                id: 'decrement-play-pile'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Play Pile +',
+                id: 'increment-play-pile'
+            })
+        );
     }
 
     private onAboutTabButtonClick(): void {
@@ -297,122 +382,5 @@ export class DebugDialog extends GameComponent {
         } else {
             State.addRuleComponent(new RuleComponent({ rule: ruleName }));
         }
-    }
-
-    private createDecrementPlayPileButton() {
-        return this.createTabButton({
-            text: 'Play Pile -',
-            id: 'decrement-play-pile',
-            x: 200,
-            y: 470
-        });
-    }
-
-    private createIncrementPlayPileButton() {
-        return this.createTabButton({
-            text: 'Play Pile +',
-            id: 'increment-play-pile',
-            x: 540,
-            y: 470
-        });
-    }
-
-    private createAddPileButton() {
-        return this.createTabButton({
-            text: 'Add Pile',
-            id: 'add-pile',
-            x: 200,
-            y: 260
-        });
-    }
-
-    private createRemovePileButton() {
-        return this.createTabButton({
-            text: 'Remove Pile',
-            id: 'remove-pile',
-            x: 540,
-            y: 260
-        });
-    }
-
-    private createDecrementDrawSizeButton() {
-        return this.createTabButton({
-            text: 'Draw Size -',
-            id: 'decrement-draw-size',
-            x: 200,
-            y: 330
-        });
-    }
-
-    private createIncrementDrawSizeButton() {
-        return this.createTabButton({
-            text: 'Draw Size +',
-            id: 'increment-draw-size',
-            x: 540,
-            y: 330
-        });
-    }
-
-    private createDecrementShufflesButton() {
-        return this.createTabButton({
-            text: 'Shuffles -',
-            id: 'decrement-shuffles',
-            x: 200,
-            y: 400
-        });
-    }
-
-    private createIncrementShufflesButton() {
-        return this.createTabButton({
-            text: 'Shuffles +',
-            id: 'increment-shuffles',
-            x: 540,
-            y: 400
-        });
-    }
-
-    private createFlushButton() {
-        return this.createTabButton({
-            text: 'Flush',
-            id: 'flush',
-            x: 200,
-            y: 260
-        });
-    }
-
-    private createFreeButton() {
-        return this.createTabButton({
-            text: 'Free',
-            id: 'free',
-            x: 200,
-            y: 320
-        });
-    }
-
-    private createKlondikeButton() {
-        return this.createTabButton({
-            text: 'Klondike',
-            id: 'klondike',
-            x: 200,
-            y: 380
-        });
-    }
-
-    private createReverseKlondikeButton() {
-        return this.createTabButton({
-            text: 'Reverse Klondike',
-            id: 'reverse-klondike',
-            x: 200,
-            y: 440
-        });
-    }
-
-    private createSameValueButton() {
-        return this.createTabButton({
-            text: 'Same Value',
-            id: 'same-value',
-            x: 200,
-            y: 500
-        });
     }
 }
