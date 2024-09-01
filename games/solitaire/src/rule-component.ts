@@ -60,9 +60,9 @@ export class RuleComponent extends GameComponent {
     renderRuleDescription(): void {
         const ctx = State.getCtx();
         ctx.save();
-        const scaledMouseCoordinates = State.getScaledMouseCoordinates();
-        const x = scaledMouseCoordinates.x + 5;
-        const y = scaledMouseCoordinates.y;
+
+        const x = this.renderConfig.coordinates.x;
+        const y = this.renderConfig.coordinates.y;
 
         const ruleInfo: Rule = RuleInfo[this.rule];
 
@@ -76,10 +76,10 @@ export class RuleComponent extends GameComponent {
         // Draw background rectangle
         ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         // ctx.fillRect(x, y - textHeight, textWidth + padding * 2, textHeight + padding * 2);
-        ctx.fillRect(x, y + textHeight, textWidth + padding * 2, 60);
+        ctx.fillRect(x - textWidth - 25, y, textWidth + padding * 2, 60);
 
-        printText(ruleInfo.name, x + padding, y + 45 + padding / 2);
-        printText(ruleInfo.description, x + padding, y + 45 + padding / 2 + textHeight, 20);
+        printText(ruleInfo.name, x - textWidth + padding - 25, y + 28);
+        printText(ruleInfo.description, x - textWidth + padding - 25, y + 45 + padding / 2, 20);
         ctx.restore();
     }
 }

@@ -20,13 +20,15 @@ import {
     ThemeButton
 } from './button';
 import { DefaultDialogRenderConfig } from './dialog';
+import { RuleComponent } from './rule-component';
+import { RuleNames } from './rules';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 import { printText } from './util';
 
 export class DebugDialog extends GameComponent {
     textLines: string[] = [];
-    buttons: GameComponent[] = [];
+    buttons: GameButton[] = [];
     themeButtons: ThemeButton[] = [];
     tabButtons: GameButton[] = [];
     closeDialogButton: GameButton;
@@ -48,6 +50,57 @@ export class DebugDialog extends GameComponent {
     update(): void {
         this.buttons.forEach(b => {
             b.update();
+
+            if (b.isClicked()) {
+                switch (b.id) {
+                    case 'free':
+                        State.toggleRule(RuleNames.free);
+                        this.toggleRuleComponent(RuleNames.free);
+                        break;
+                    case 'klondike':
+                        State.toggleRule(RuleNames.klondike);
+                        this.toggleRuleComponent(RuleNames.klondike);
+                        break;
+                    case 'reverse-klondike':
+                        State.toggleRule(RuleNames.reverseKlondike);
+                        this.toggleRuleComponent(RuleNames.reverseKlondike);
+                        break;
+                    case 'flush':
+                        State.toggleRule(RuleNames.flush);
+                        this.toggleRuleComponent(RuleNames.flush);
+                        break;
+                    case 'same-value':
+                        State.toggleRule(RuleNames.sameValue);
+                        this.toggleRuleComponent(RuleNames.sameValue);
+                        break;
+                    case 'increment-draw-size':
+                        State.getPlayer().incrementPlayPileDrawSize();
+                        break;
+                    case 'decrement-draw-size':
+                        State.getPlayer().decrementPlayPileDrawSize();
+                        break;
+                    case 'increment-shuffles':
+                        State.getPlayer().incrementShuffles();
+                        break;
+                    case 'decrement-shuffles':
+                        State.getPlayer().decrementShuffles();
+                        break;
+                    case 'increment-play-pile':
+                        State.getPlayer().incrementPlayPileVisibleSize();
+                        break;
+                    case 'decrement-play-pile':
+                        State.getPlayer().decrementPlayPileVisibleSize();
+                        break;
+                    case 'add-pile':
+                        State.getPileContainer().createPile();
+                        break;
+                    case 'remove-pile':
+                        State.getPileContainer().removePile();
+                        break;
+                    default:
+                        break;
+                }
+            }
         });
 
         this.tabButtons.forEach(b => {
@@ -253,5 +306,16 @@ export class DebugDialog extends GameComponent {
             params.text,
             padding
         );
+    }
+
+    private toggleRuleComponent(ruleName: RuleNames): void {
+        const ruleComponents = State.getRuleComponents();
+        const rc = ruleComponents.find(r => r.rule === ruleName);
+
+        if (rc) {
+            State.removeRuleComponent(rc);
+        } else {
+            State.addRuleComponent(new RuleComponent({ rule: ruleName }));
+        }
     }
 }

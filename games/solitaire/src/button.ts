@@ -31,60 +31,11 @@ export class GameButton extends GameComponent {
         if (this.isClicked()) {
             console.log('Button clicked:', this.id);
             switch (this.id) {
-                case 'reload':
-                    window.location.reload();
-                    break;
-                // case 'deal':
-                //     this.isDealNewRound = true;
-                //     break;
-                case 'free':
-                    State.toggleRule(RuleNames.free);
-                    this.toggleRuleComponent(RuleNames.free);
-                    break;
-                case 'klondike':
-                    State.toggleRule(RuleNames.klondike);
-                    this.toggleRuleComponent(RuleNames.klondike);
-                    break;
-                case 'reverse-klondike':
-                    State.toggleRule(RuleNames.reverseKlondike);
-                    this.toggleRuleComponent(RuleNames.reverseKlondike);
-                    break;
-                case 'flush':
-                    State.toggleRule(RuleNames.flush);
-                    this.toggleRuleComponent(RuleNames.flush);
-                    break;
-                case 'same-value':
-                    State.toggleRule(RuleNames.sameValue);
-                    this.toggleRuleComponent(RuleNames.sameValue);
-                    break;
                 case 'hit':
                     if (State.isDialogOpen()) break;
                     this.hitCard();
                     break;
-                case 'increment-draw-size':
-                    State.getPlayer().incrementPlayPileDrawSize();
-                    break;
-                case 'decrement-draw-size':
-                    State.getPlayer().decrementPlayPileDrawSize();
-                    break;
-                case 'increment-shuffles':
-                    State.getPlayer().incrementShuffles();
-                    break;
-                case 'decrement-shuffles':
-                    State.getPlayer().decrementShuffles();
-                    break;
-                case 'increment-play-pile':
-                    State.getPlayer().incrementPlayPileVisibleSize();
-                    break;
-                case 'decrement-play-pile':
-                    State.getPlayer().decrementPlayPileVisibleSize();
-                    break;
-                case 'add-pile':
-                    State.getPileContainer().createPile();
-                    break;
-                case 'remove-pile':
-                    State.getPileContainer().removePile();
-                    break;
+
                 case 'dialog-close':
                     State.removeGameComponentByType(DeckDialog.name);
                     State.removeGameComponentByType(DebugDialog.name);
