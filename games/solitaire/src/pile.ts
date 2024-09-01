@@ -12,56 +12,6 @@ import {
     printText
 } from './util';
 
-export const PilesRenderConfig: { [key: string]: RenderConfig } = {
-    pile1: {
-        coordinates: {
-            x: 366.5,
-            y: 70
-        },
-        size: {
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT
-        },
-        scale: BASE_CARD_SCALE
-    },
-
-    pile2: {
-        coordinates: {
-            x: 513,
-            y: 70
-        },
-        size: {
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT
-        },
-        scale: BASE_CARD_SCALE
-    },
-
-    pile3: {
-        coordinates: {
-            x: 659.5,
-            y: 70
-        },
-        size: {
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT
-        },
-        scale: BASE_CARD_SCALE
-    },
-
-    pile4: {
-        coordinates: {
-            x: 806,
-            y: 70
-        },
-        size: {
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT
-        },
-        scale: BASE_CARD_SCALE
-    }
-};
-
 export class Pile extends GameComponent {
     static ANIMATION_ENABLED = true;
     cards: Card[];
@@ -79,10 +29,22 @@ export class Pile extends GameComponent {
 
     private time = 0;
 
-    constructor(coordinates: Coordinates, private pileName: string) {
+    constructor(private pileName: string) {
+        const coordinates = {
+            x: 0,
+            y: 0
+        };
         super(coordinates);
         this.cards = [];
-        this.renderConfig = PilesRenderConfig[pileName];
+
+        this.renderConfig = {
+            coordinates,
+            size: {
+                width: CARD_WIDTH,
+                height: CARD_HEIGHT
+            },
+            scale: BASE_CARD_SCALE
+        };
     }
 
     update(): void {
@@ -290,6 +252,6 @@ export class Pile extends GameComponent {
     }
 
     getCoordinatesCopy(): Coordinates {
-        return { ...this.coordinates };
+        return { ...this.renderConfig.coordinates };
     }
 }

@@ -1,4 +1,4 @@
-import { Pile, PilesRenderConfig } from './pile';
+import { Pile } from './pile';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 import { BASE_CARD_SCALE, CARD_WIDTH } from './util';
@@ -55,10 +55,10 @@ export class PileContainer extends GameComponent {
 
     public initializePiles() {
         this.piles = [];
-        this.piles.push(new Pile(PilesRenderConfig.pile1.coordinates, 'pile1'));
-        this.piles.push(new Pile(PilesRenderConfig.pile2.coordinates, 'pile2'));
-        this.piles.push(new Pile(PilesRenderConfig.pile3.coordinates, 'pile3'));
-        this.piles.push(new Pile(PilesRenderConfig.pile4.coordinates, 'pile4'));
+        this.piles.push(new Pile('pile1'));
+        this.piles.push(new Pile('pile2'));
+        this.piles.push(new Pile('pile3'));
+        this.piles.push(new Pile('pile4'));
 
         this.piles.forEach(pile => pile.pushCard(State.getPlayer().drawPile.pop()));
     }
