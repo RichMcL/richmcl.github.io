@@ -1,7 +1,7 @@
 import { createDeckButton, createHitButton, GameButton } from './button';
 import { CardAnimation } from './card-animation';
 import { State } from './state';
-import { Card, Coordinates, GameComponent, RenderConfig } from './types';
+import { Card, CardBack, Coordinates, GameComponent, RenderConfig } from './types';
 import {
     BASE_CARD_SCALE,
     buildAndShuffleDeck,
@@ -99,7 +99,8 @@ export class Player extends GameComponent {
                 this.playPile[i],
                 this.renderConfig.coordinates.x - (i - this.cardAnimations.length) * 45,
                 this.renderConfig.coordinates.y,
-                this.renderConfig.scale
+                this.renderConfig.scale,
+                CardBack.White
             );
         }
 

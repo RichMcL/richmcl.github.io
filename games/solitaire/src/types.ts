@@ -57,6 +57,20 @@ export const CardNumericValue = {
     A: 14
 };
 
+export enum CardBack {
+    Red = 'red',
+    White = 'white',
+    Gold = 'gold',
+    Wild = 'wild'
+}
+
+export const CardBackCoordinates = {
+    [CardBack.Red]: { x: 0, y: 0 },
+    [CardBack.Wild]: { x: 1, y: 0 },
+    [CardBack.White]: { x: 0, y: 1 },
+    [CardBack.Gold]: { x: 1, y: 1 }
+};
+
 export interface Card {
     suit: Suit;
     value: CardValue;

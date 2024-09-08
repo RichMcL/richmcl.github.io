@@ -1,6 +1,6 @@
 import { RuleInfo, RuleNames } from './rules';
 import { State } from './state';
-import { Card, CardValue, Suit } from './types';
+import { Card, CardValue, Suit, CardBack, CardBackCoordinates } from './types';
 
 export const CARD_WIDTH = 68;
 export const CARD_HEIGHT = 96;
@@ -64,7 +64,13 @@ export const buildAndShuffleDeck = (shuffle = false): Card[] => {
     return deck;
 };
 
-export const drawCard = (card: Card, x: number, y: number, cardScale = 0.5): void => {
+export const drawCard = (
+    card: Card,
+    x: number,
+    y: number,
+    cardScale = 0.5,
+    cardBack: CardBack = CardBack.White
+): void => {
     const ctx = State.getCtx();
     const cardWidth = CARD_WIDTH; // Width of a single card in the sprite sheet
     const cardHeight = CARD_HEIGHT; // Height of a single card in the sprite sheet
@@ -129,10 +135,12 @@ export const drawCard = (card: Card, x: number, y: number, cardScale = 0.5): voi
             break;
     }
 
+    const cardBackCoordinates = CardBackCoordinates[cardBack];
+
     ctx.drawImage(
         State.getCardBackSpriteSheet(),
-        CARD_WIDTH,
-        0,
+        cardBackCoordinates.x * cardWidth,
+        cardBackCoordinates.y * cardHeight,
         cardWidth,
         cardHeight,
         x,
@@ -154,15 +162,22 @@ export const drawCard = (card: Card, x: number, y: number, cardScale = 0.5): voi
     );
 };
 
-export const drawCardBack = (x: number, y: number, cardScale = 1): void => {
+export const drawCardBack = (
+    x: number,
+    y: number,
+    cardScale = 1,
+    cardBack: CardBack = CardBack.Red
+): void => {
     const ctx = State.getCtx();
     const cardWidth = CARD_WIDTH; // Width of a single card in the sprite sheet
     const cardHeight = CARD_HEIGHT; // Height of a single card in the sprite sheet
 
+    const cardBackCoordinates = CardBackCoordinates[cardBack];
+
     ctx.drawImage(
         State.getCardBackSpriteSheet(),
-        0,
-        0,
+        cardBackCoordinates.x * cardWidth,
+        cardBackCoordinates.y * cardHeight,
         cardWidth,
         cardHeight,
         x,
