@@ -33,7 +33,11 @@ export class CardComponent extends GameComponent {
         this.rotationAngle = this.initialRotationAngle + oscillatingAngle;
     }
 
-    render(): void {
+    render(coordinates?: Coordinates): void {
+        if (coordinates) {
+            this.renderConfig.coordinates = coordinates;
+        }
+
         this.animationRender();
     }
 

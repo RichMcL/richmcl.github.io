@@ -75,7 +75,9 @@ export class Player extends GameComponent {
                             y: DrawPileRenderConfig.coordinates.y
                         },
                         {
-                            x: PlayerRenderConfig.coordinates.x - animationIndex * 45,
+                            x:
+                                PlayerRenderConfig.coordinates.x -
+                                animationIndex * PlayPile.PLAY_PILE_GAP,
                             y: PlayerRenderConfig.coordinates.y
                         },
                         topOfDrawPile,

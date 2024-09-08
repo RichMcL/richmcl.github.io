@@ -23,6 +23,7 @@ export class PlayPile extends GameComponent {
     public shufflesRemaining = this.startingShuffles;
     public playPileVisibleSize = 3;
     public playPileDrawSize = 3;
+    public static PLAY_PILE_GAP = 75;
 
     constructor() {
         super(PlayerRenderConfig.coordinates);
@@ -49,13 +50,12 @@ export class PlayPile extends GameComponent {
                 continue;
             }
 
-            drawCard(
-                this.getRawCards()[i],
-                this.renderConfig.coordinates.x - (i - this.cardAnimations.length) * 45,
-                this.renderConfig.coordinates.y,
-                this.renderConfig.scale,
-                CardBack.White
-            );
+            this.cards[i].render({
+                x:
+                    this.renderConfig.coordinates.x -
+                    (i - this.cardAnimations.length) * PlayPile.PLAY_PILE_GAP,
+                y: this.renderConfig.coordinates.y
+            });
         }
 
         this.cardAnimations.forEach(animation => animation.render());
