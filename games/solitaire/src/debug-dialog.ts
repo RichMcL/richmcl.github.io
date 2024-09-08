@@ -57,10 +57,10 @@ export class DebugDialog extends GameComponent {
                         this.toggleRuleComponent(RuleNames.sameValue);
                         break;
                     case 'increment-draw-size':
-                        State.getPlayer().incrementPlayPileDrawSize();
+                        State.getPlayer().playPile.incrementPlayPileDrawSize();
                         break;
                     case 'decrement-draw-size':
-                        State.getPlayer().decrementPlayPileDrawSize();
+                        State.getPlayer().playPile.decrementPlayPileDrawSize();
                         break;
                     case 'increment-shuffles':
                         State.getPlayer().incrementShuffles();
@@ -69,10 +69,10 @@ export class DebugDialog extends GameComponent {
                         State.getPlayer().decrementShuffles();
                         break;
                     case 'increment-play-pile':
-                        State.getPlayer().incrementPlayPileVisibleSize();
+                        State.getPlayer().playPile.incrementPlayPileVisibleSize();
                         break;
                     case 'decrement-play-pile':
-                        State.getPlayer().decrementPlayPileVisibleSize();
+                        State.getPlayer().playPile.decrementPlayPileVisibleSize();
                         break;
                     case 'add-pile':
                         State.getPileContainer().createPile();
@@ -126,9 +126,9 @@ export class DebugDialog extends GameComponent {
         if (this.currentTab === 'debug-debug-tab') {
             this.stats = [
                 `Piles: ${State.getPileContainer().piles.length}`,
-                `Shuffles: ${State.getPlayer().shufflesRemaining}`,
-                `Play Pile Size: ${State.getPlayer().playPileVisibleSize}`,
-                `Draw Pile Size: ${State.getPlayer().playPileDrawSize}`
+                `Shuffles: ${State.getPlayer().playPile.shufflesRemaining}`,
+                `Play Pile Size: ${State.getPlayer().playPile.playPileVisibleSize}`,
+                `Draw Pile Size: ${State.getPlayer().playPile.playPileDrawSize}`
             ];
         }
     }

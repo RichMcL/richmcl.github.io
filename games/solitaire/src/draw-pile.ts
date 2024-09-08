@@ -67,7 +67,7 @@ export class DrawPile extends GameComponent {
 
     renderDrawPileSize(): void {
         const fixedWidth = CARD_WIDTH * BASE_CARD_SCALE; // Define the fixed width
-        const text = `[ ${State.getPlayer().shufflesRemaining} - ${this.cards?.length} ] `;
+        const text = `[ ${State.getPlayer().playPile.shufflesRemaining} - ${this.cards?.length} ] `;
         const textWidth = State.getCtx().measureText(text).width;
         const x = 690 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
@@ -115,6 +115,6 @@ export class DrawPile extends GameComponent {
     }
 
     pushCard(card: Card) {
-        this.cards.push(new CardComponent({ x: this.coordinates.x, y: this.coordinates.y }, card));
+        this.cards.push(new CardComponent({ x: null, y: null }, card));
     }
 }

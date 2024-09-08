@@ -104,7 +104,6 @@ export class DeckDialog extends GameComponent {
         // Create card components, rendering each suit in a row
         let x = this.coordinates.x + 10;
         let y = this.coordinates.y + 70;
-        let currentSuit = this.drawPile[0].suit;
 
         // Group cards by suit
         const suits = this.allCards.reduce((acc, card) => {

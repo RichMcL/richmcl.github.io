@@ -66,7 +66,7 @@ export class Pile extends GameComponent {
             ) {
                 this.addCardAnimation(
                     new CardAnimation(
-                        State.getPlayer().getCoordinatesCopy(),
+                        State.getPlayer().playPile.getCoordinatesCopy(),
                         this.getCoordinatesCopy(),
                         State.getPlayer().getTopPlayCard()
                     )

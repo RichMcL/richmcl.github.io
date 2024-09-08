@@ -241,7 +241,7 @@ export class Game {
         State.getPlayer().drawPile.setCards(drawPile);
         State.getPileContainer().initializePiles();
 
-        State.getPlayer().playPile = [];
+        State.getPlayer().playPile.setCards([]);
         State.getPlayer().hit();
 
         this.isDealNewRound = false;
@@ -260,7 +260,7 @@ export class Game {
 
         this.changeTheme(Themes[nextTheme]);
         State.addGameComponent(new ScoreGraphic({ x: 540, y: 350 }, 'Next Level!'));
-        State.getPlayer().shufflesRemaining = State.getPlayer().startingShuffles;
+        State.getPlayer().playPile.shufflesRemaining = State.getPlayer().playPile.startingShuffles;
 
         State.getScorebar().reset();
         State.getScorebar().setMaxScore(Levels[State.getCurrentLevel()].scoreToBeat);
