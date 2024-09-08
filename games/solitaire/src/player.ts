@@ -2,13 +2,14 @@ import { createDeckButton, createHitButton, GameButton } from './button';
 import { CardAnimation } from './card-animation';
 import { State } from './state';
 import { Card, CardBack, Coordinates, GameComponent, RenderConfig } from './types';
+import { DrawPile, DrawPileRenderConfig } from './draw-pile';
+
 import {
     BASE_CARD_SCALE,
     buildAndShuffleDeck,
     CARD_HEIGHT,
     CARD_WIDTH,
     drawCard,
-    drawCardBack,
     printText
 } from './util';
 
@@ -24,20 +25,8 @@ const PlayerRenderConfig: RenderConfig = {
     scale: BASE_CARD_SCALE
 };
 
-const DrawPileRenderConfig: RenderConfig = {
-    coordinates: {
-        x: 675,
-        y: 560
-    },
-    size: {
-        width: CARD_WIDTH,
-        height: CARD_HEIGHT
-    },
-    scale: BASE_CARD_SCALE
-};
-
 export class Player extends GameComponent {
-    drawPile: Card[] = [];
+    drawPile: DrawPile;
     playPile: Card[] = [];
     startingShuffles = 3;
     shufflesRemaining = this.startingShuffles;
@@ -52,7 +41,11 @@ export class Player extends GameComponent {
 
     constructor() {
         super(PlayerRenderConfig.coordinates);
-        this.drawPile = buildAndShuffleDeck(true);
+        const drawPile = buildAndShuffleDeck(true);
+
+        this.drawPile = new DrawPile();
+        this.drawPile.setCards(drawPile);
+
         this.hit();
 
         console.log('player pile', this.playPile);
@@ -66,20 +59,12 @@ export class Player extends GameComponent {
     update(): void {
         this.cardAnimations.forEach(animation => animation.update());
         this.buttons.forEach(button => button.update());
+        this.drawPile.update();
 
         this.deleteDeadCardAnimations();
     }
 
     render(): void {
-        // Render deck to represent draw pile
-        for (let i = 3; i > 0; i--) {
-            drawCardBack(
-                DrawPileRenderConfig.coordinates.x + i * 5,
-                DrawPileRenderConfig.coordinates.y + 5 * (i - 1),
-                DrawPileRenderConfig.scale
-            );
-        }
-
         // Don't render the actual cards until they "land"
         let renderStartIndex = this.playPileVisibleSize - 1;
         let renderEndIndex = 0;
@@ -104,7 +89,7 @@ export class Player extends GameComponent {
             );
         }
 
-        this.renderDrawPileSize();
+        this.drawPile.render();
         this.renderPlayPileSize();
 
         this.cardAnimations.forEach(animation => animation.render());
@@ -120,26 +105,17 @@ export class Player extends GameComponent {
         printText(text, x, 745);
     }
 
-    public renderDrawPileSize(): void {
-        const fixedWidth = CARD_WIDTH * BASE_CARD_SCALE; // Define the fixed width
-        const text = `[ ${State.getPlayer().shufflesRemaining} - ${this.drawPile?.length} ] `;
-        const textWidth = State.getCtx().measureText(text).width;
-        const x = 690 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
-
-        printText(text, x, 745);
-    }
-
     getTopPlayCard(): Card {
         return this.playPile[0];
     }
 
     hit(): void {
-        if (this.shufflesRemaining === 0 && this.drawPile.length === 0) {
+        if (this.shufflesRemaining === 0 && this.drawPile.cards.length === 0) {
             return;
         }
 
-        if (this.drawPile.length === 0 && this.shufflesRemaining > 0) {
-            this.drawPile = this.playPile;
+        if (this.drawPile.cards.length === 0 && this.shufflesRemaining > 0) {
+            this.drawPile.setCards(this.playPile);
             this.playPile = [];
             this.shufflesRemaining--;
         }
@@ -147,7 +123,7 @@ export class Player extends GameComponent {
         //pop playPileStartingSize cards of the draw pile and add to the top of the stack
         let animationIndex = this.playPileDrawSize - 1;
         for (let i = 0; i < this.playPileDrawSize; i++) {
-            const topOfDrawPile = this.drawPile.pop();
+            const topOfDrawPile = this.drawPile.popCard().getCard();
 
             if (topOfDrawPile) {
                 this.playPile.unshift(topOfDrawPile);

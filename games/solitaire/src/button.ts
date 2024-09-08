@@ -51,7 +51,7 @@ export class GameButton extends GameComponent {
 
                     const deckDialog = new DeckDialog(
                         DefaultDialogRenderConfig.coordinates,
-                        State.getPlayer().drawPile,
+                        State.getPlayer().drawPile.getRawCards(),
                         State.getPlayer().playPile
                     );
                     State.addGameComponent(deckDialog);

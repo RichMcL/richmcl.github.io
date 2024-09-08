@@ -237,7 +237,8 @@ export class Game {
     }
 
     public goToNextLevel() {
-        State.getPlayer().drawPile = buildAndShuffleDeck(true);
+        const drawPile = buildAndShuffleDeck(true);
+        State.getPlayer().drawPile.setCards(drawPile);
         State.getPileContainer().initializePiles();
 
         State.getPlayer().playPile = [];

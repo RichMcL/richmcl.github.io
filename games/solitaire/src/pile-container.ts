@@ -68,14 +68,14 @@ export class PileContainer extends GameComponent {
         this.piles.push(new Pile());
         this.piles.push(new Pile());
 
-        this.piles.forEach(pile => pile.pushCard(State.getPlayer().drawPile.pop()));
+        this.piles.forEach(pile => pile.pushCard(State.getPlayer().drawPile.popCard().getCard()));
     }
 
     public createPile() {
         if (this.piles.length >= 5) return;
 
         const newPile = new Pile();
-        newPile.pushCard(State.getPlayer().drawPile.pop());
+        newPile.pushCard(State.getPlayer().drawPile.popCard().getCard());
 
         this.piles.push(newPile);
     }
@@ -86,7 +86,7 @@ export class PileContainer extends GameComponent {
         //take all the cards from the pile and add them to the draw pile
         const pile = this.piles.pop();
         while (pile.cards.length > 0) {
-            State.getPlayer().drawPile.push(pile.popCard());
+            State.getPlayer().drawPile.pushCard(pile.popCard());
         }
     }
 

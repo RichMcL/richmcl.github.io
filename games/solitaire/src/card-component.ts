@@ -38,6 +38,11 @@ export class CardComponent extends GameComponent {
     }
 
     staticRender(): void {
+        // Cards can have null coordinates because their parent component is responsible for rendering
+        if (this.renderConfig.coordinates.x === null || this.renderConfig.coordinates.y === null) {
+            return;
+        }
+
         drawCard(
             this.card,
             this.renderConfig.coordinates.x,
@@ -73,5 +78,9 @@ export class CardComponent extends GameComponent {
 
         // Restore the context state
         State.getCtx().restore();
+    }
+
+    getCard(): Card {
+        return this.card;
     }
 }
