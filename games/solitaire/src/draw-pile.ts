@@ -7,6 +7,7 @@ import {
     CARD_WIDTH,
     drawCardBack,
     drawCardOutline,
+    drawRoundedRect,
     printText
 } from './util';
 
@@ -59,6 +60,8 @@ export class DrawPile extends GameComponent {
                 DrawPileRenderConfig.scale * DrawPileRenderConfig.size.width,
                 DrawPileRenderConfig.scale * DrawPileRenderConfig.size.height
             );
+
+            this.renderHit();
         }
     }
 
@@ -69,6 +72,15 @@ export class DrawPile extends GameComponent {
         const x = 690 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
         printText(text, x, 745);
+    }
+
+    renderHit(): void {
+        const ctx = State.getCtx();
+        ctx.save();
+        State.getCtx().fillStyle = 'rgba(0, 0, 0, 0.5)';
+        drawRoundedRect(710, 600, 50, 50, 10);
+        printText('Hit', 720, 635);
+        ctx.restore();
     }
 
     isHoveredOver(): boolean {

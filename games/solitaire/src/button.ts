@@ -231,28 +231,6 @@ export const createDealButton = () => {
     );
 };
 
-// export const createHitButton = () => {
-//     const ctx = State.getCtx();
-//     const text = 'HIT';
-//     const padding = 20; // Padding for the button
-
-//     ctx.font = '30px New-Amsterdam';
-//     const textMetrics = ctx.measureText(text);
-//     const textWidth = textMetrics.width;
-//     const buttonWidth = textWidth + padding;
-//     const buttonHeight = 50;
-//     const x = 835;
-//     const y = 570;
-
-//     return new GameButton(
-//         { x, y },
-//         { width: buttonWidth, height: buttonHeight },
-//         'hit',
-//         text,
-//         padding
-//     );
-// };
-
 export const createDeckButton = () => {
     const ctx = State.getCtx();
     const text = 'DECK';
@@ -264,7 +242,7 @@ export const createDeckButton = () => {
     const buttonWidth = textWidth + padding;
     const buttonHeight = 50;
     const x = 835;
-    const y = 640;
+    const y = 610;
 
     return new GameButton(
         { x, y },
