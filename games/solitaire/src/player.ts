@@ -1,4 +1,4 @@
-import { createDeckButton, createHitButton, GameButton } from './button';
+import { createDeckButton, GameButton } from './button';
 import { CardAnimation } from './card-animation';
 import { State } from './state';
 import { Card, CardBack, Coordinates, GameComponent, RenderConfig } from './types';
@@ -52,7 +52,6 @@ export class Player extends GameComponent {
 
         this.renderConfig = PlayerRenderConfig;
 
-        this.buttons.push(createHitButton());
         this.buttons.push(createDeckButton());
     }
 
@@ -113,6 +112,8 @@ export class Player extends GameComponent {
         if (this.shufflesRemaining === 0 && this.drawPile.cards.length === 0) {
             return;
         }
+
+        State.setStreak(0);
 
         if (this.drawPile.cards.length === 0 && this.shufflesRemaining > 0) {
             this.drawPile.setCards(this.playPile);

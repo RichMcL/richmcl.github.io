@@ -1,7 +1,14 @@
 import { CardComponent } from './card-component';
 import { State } from './state';
 import { Card, Coordinates, GameComponent, RenderConfig } from './types';
-import { BASE_CARD_SCALE, CARD_HEIGHT, CARD_WIDTH, drawCardBack, printText } from './util';
+import {
+    BASE_CARD_SCALE,
+    CARD_HEIGHT,
+    CARD_WIDTH,
+    drawCardBack,
+    drawCardOutline,
+    printText
+} from './util';
 
 export const DrawPileRenderConfig: RenderConfig = {
     coordinates: {
@@ -23,7 +30,15 @@ export class DrawPile extends GameComponent {
         this.renderConfig = DrawPileRenderConfig;
     }
 
-    update(): void {}
+    update(): void {
+        this.renderConfig.scale = this.isHoveredOver() ? BASE_CARD_SCALE * 1.025 : BASE_CARD_SCALE;
+
+        if (this.isClicked()) {
+            if (!State.isDialogOpen()) {
+                State.getPlayer().hit();
+            }
+        }
+    }
 
     render(): void {
         // // Render deck to represent draw pile
@@ -36,6 +51,15 @@ export class DrawPile extends GameComponent {
         }
 
         this.renderDrawPileSize();
+
+        if (this.isHoveredOver()) {
+            drawCardOutline(
+                DrawPileRenderConfig.coordinates.x + 5,
+                DrawPileRenderConfig.coordinates.y,
+                DrawPileRenderConfig.scale * DrawPileRenderConfig.size.width,
+                DrawPileRenderConfig.scale * DrawPileRenderConfig.size.height
+            );
+        }
     }
 
     renderDrawPileSize(): void {
@@ -45,6 +69,14 @@ export class DrawPile extends GameComponent {
         const x = 690 + (fixedWidth - textWidth) / 2; // Calculate the x-coordinate to center the text
 
         printText(text, x, 745);
+    }
+
+    isHoveredOver(): boolean {
+        if (State.isDialogOpen()) {
+            return false;
+        }
+
+        return super.isHoveredOver();
     }
 
     /**

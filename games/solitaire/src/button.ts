@@ -29,11 +29,6 @@ export class GameButton extends GameComponent {
         if (this.isClicked()) {
             console.log('Button clicked:', this.id);
             switch (this.id) {
-                case 'hit':
-                    if (State.isDialogOpen()) break;
-                    this.hitCard();
-                    break;
-
                 case 'dialog-close':
                     State.removeGameComponentByType(DeckDialog.name);
                     State.removeGameComponentByType(DebugDialog.name);
@@ -145,11 +140,6 @@ export class GameButton extends GameComponent {
     }
 
     reset(): void {}
-
-    private hitCard(): void {
-        State.setStreak(0);
-        State.getPlayer().hit();
-    }
 }
 
 export class ThemeButton extends GameButton {
@@ -241,27 +231,27 @@ export const createDealButton = () => {
     );
 };
 
-export const createHitButton = () => {
-    const ctx = State.getCtx();
-    const text = 'HIT';
-    const padding = 20; // Padding for the button
+// export const createHitButton = () => {
+//     const ctx = State.getCtx();
+//     const text = 'HIT';
+//     const padding = 20; // Padding for the button
 
-    ctx.font = '30px New-Amsterdam';
-    const textMetrics = ctx.measureText(text);
-    const textWidth = textMetrics.width;
-    const buttonWidth = textWidth + padding;
-    const buttonHeight = 50;
-    const x = 835;
-    const y = 570;
+//     ctx.font = '30px New-Amsterdam';
+//     const textMetrics = ctx.measureText(text);
+//     const textWidth = textMetrics.width;
+//     const buttonWidth = textWidth + padding;
+//     const buttonHeight = 50;
+//     const x = 835;
+//     const y = 570;
 
-    return new GameButton(
-        { x, y },
-        { width: buttonWidth, height: buttonHeight },
-        'hit',
-        text,
-        padding
-    );
-};
+//     return new GameButton(
+//         { x, y },
+//         { width: buttonWidth, height: buttonHeight },
+//         'hit',
+//         text,
+//         padding
+//     );
+// };
 
 export const createDeckButton = () => {
     const ctx = State.getCtx();
