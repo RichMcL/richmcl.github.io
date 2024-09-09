@@ -1,4 +1,4 @@
-import { Rule, RuleInfo, RuleNames } from './rules';
+import { doesSingleRulePass, Rule, RuleInfo, RuleNames } from './rules';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 import { drawRule, printText, RULE_HEIGHT, RULE_SCALE, RULE_WIDTH } from './util';
@@ -30,9 +30,20 @@ export class RuleComponent extends GameComponent {
         let y = this.renderConfig.coordinates.y;
         let x = this.renderConfig.coordinates.x;
         drawRule(this.rule, x, y);
+
+        //if this rule passes for the hovered pile, render the outline
+        const playerCard = State.getPlayer().getTopPlayCard();
+        State.getPileContainer().piles.forEach(pile => {
+            if (
+                pile.isHoveredOver() &&
+                doesSingleRulePass(RuleInfo[this.rule], playerCard, pile.getTopCard())
+            ) {
+                this.renderOutline(coordinates, 'yellow', 5);
+            }
+        });
     }
 
-    renderOutline(coordinates: Coordinates): void {
+    renderOutline(coordinates: Coordinates, color: string = 'white', lineWidth = 3): void {
         const x = coordinates.x;
         const y = coordinates.y;
         const width = this.renderConfig.size.width * this.renderConfig.scale;
@@ -41,8 +52,9 @@ export class RuleComponent extends GameComponent {
         const ctx = State.getCtx();
 
         // Draw the outline with the same rounded corners
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 3;
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
         ctx.beginPath();
         ctx.moveTo(x + radius, y);
         ctx.arcTo(x + width, y, x + width, y + height, radius);
@@ -51,6 +63,7 @@ export class RuleComponent extends GameComponent {
         ctx.arcTo(x, y, x + width, y, radius);
         ctx.closePath();
         ctx.stroke();
+        ctx.restore();
     }
 
     /**
