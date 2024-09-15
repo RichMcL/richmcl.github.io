@@ -26,10 +26,12 @@ export enum SingleRuleKey {
 }
 
 export enum RuleNames {
-    klondike = 'klondike',
-    reverseKlondike = 'reverseKlondike',
+    colorDown = 'colorDown',
+    colorUp = 'colorUp',
     flush = 'flush',
     free = 'free',
+    klondike = 'klondike',
+    reverseKlondike = 'reverseKlondike',
     sameValue = 'sameValue'
 }
 
@@ -150,6 +152,28 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
         timesMultiplier: 1,
         spriteXIndex: 0,
         spriteYIndex: 0
+    },
+
+    [RuleNames.colorUp]: {
+        name: 'Reverse Klondike',
+        description: 'Same color and one higher',
+        rules: [SingleRuleKey.sameColor, SingleRuleKey.oneHigher],
+        baseScore: 10,
+        plusMultiplier: 1,
+        timesMultiplier: 1,
+        spriteXIndex: 4,
+        spriteYIndex: 1
+    },
+
+    [RuleNames.colorDown]: {
+        name: 'Reverse Klondike',
+        description: 'Same color and one lower',
+        rules: [SingleRuleKey.sameColor, SingleRuleKey.oneLower],
+        baseScore: 10,
+        plusMultiplier: 1,
+        timesMultiplier: 1,
+        spriteXIndex: 3,
+        spriteYIndex: 1
     },
 
     [RuleNames.sameValue]: {

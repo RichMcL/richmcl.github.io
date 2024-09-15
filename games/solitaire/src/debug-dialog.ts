@@ -56,6 +56,14 @@ export class DebugDialog extends GameComponent {
                         State.toggleRule(RuleNames.sameValue);
                         this.toggleRuleComponent(RuleNames.sameValue);
                         break;
+                    case 'color-up':
+                        State.toggleRule(RuleNames.colorUp);
+                        this.toggleRuleComponent(RuleNames.colorUp);
+                        break;
+                    case 'color-down':
+                        State.toggleRule(RuleNames.colorDown);
+                        this.toggleRuleComponent(RuleNames.colorDown);
+                        break;
                     case 'increment-draw-size':
                         State.getPlayer().playPile.incrementPlayPileDrawSize();
                         break;
@@ -299,6 +307,18 @@ export class DebugDialog extends GameComponent {
             this.createTabButton({
                 text: 'Same Value',
                 id: 'same-value'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Color Up',
+                id: 'color-up'
+            })
+        );
+        this.buttons.push(
+            this.createTabButton({
+                text: 'Color Down',
+                id: 'color-down'
             })
         );
     }
