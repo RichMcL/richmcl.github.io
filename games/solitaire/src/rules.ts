@@ -155,7 +155,7 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
     },
 
     [RuleNames.colorUp]: {
-        name: 'Reverse Klondike',
+        name: 'Color Up',
         description: 'Same color and one higher',
         rules: [SingleRuleKey.sameColor, SingleRuleKey.oneHigher],
         baseScore: 10,
@@ -166,7 +166,7 @@ export const RuleInfo: { [key in RuleNames]: Rule } = {
     },
 
     [RuleNames.colorDown]: {
-        name: 'Reverse Klondike',
+        name: 'Color Down',
         description: 'Same color and one lower',
         rules: [SingleRuleKey.sameColor, SingleRuleKey.oneLower],
         baseScore: 10,
