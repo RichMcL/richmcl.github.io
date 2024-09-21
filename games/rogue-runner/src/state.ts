@@ -104,6 +104,10 @@ export class State {
         return State.player;
     }
 
+    static getBullets(): GameComponent[] {
+        return State.gameComponents.filter(gc => gc.constructor.name === 'Bullet');
+    }
+
     static setMouseCoordinates(coordinates: Coordinates): void {
         State.mouseCoordinates = coordinates;
         State.scaledMouseCoordinates = {

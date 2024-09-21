@@ -39,5 +39,7 @@ export class Stats extends GameComponent {
         printText(`${minutes}:${seconds}.${tenths}`, 30, 50);
 
         printText(`(${x}, ${y})`, 30, 90);
+
+        printText(`Shot Level: ${State.getPlayer().shootLevel}`, 30, 130);
     }
 }

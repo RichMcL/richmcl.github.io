@@ -1,9 +1,13 @@
+import { Enemy } from './enemy';
 import { Player } from './player';
 import { State } from './state';
 import { Stats } from './stats';
 
 export class Game {
     public lastTimestamp: number = 0;
+    public enemySpawnTimer: number = 0;
+    public baseEnemySpawnRate: number = 90;
+    public gameOver = false;
 
     constructor() {
         State.setCanvas(document.getElementById('game-canvas') as HTMLCanvasElement);
@@ -92,10 +96,49 @@ export class Game {
     }
 
     public updateGameState() {
+        //remove all gameComponents with deleteMe set to true
+        State.removeAllDeletedGameComponents();
+
+        //if Player collides with an enemy, end the game
+        for (const component of State.getGameComponents()) {
+            if (component.constructor.name === 'Enemy') {
+                if (
+                    State.getPlayer().renderConfig.coordinates.x <
+                        component.renderConfig.coordinates.x + component.renderConfig.size.width &&
+                    State.getPlayer().renderConfig.coordinates.x +
+                        State.getPlayer().renderConfig.size.width >
+                        component.renderConfig.coordinates.x &&
+                    State.getPlayer().renderConfig.coordinates.y <
+                        component.renderConfig.coordinates.y + component.renderConfig.size.height &&
+                    State.getPlayer().renderConfig.coordinates.y +
+                        State.getPlayer().renderConfig.size.height >
+                        component.renderConfig.coordinates.y
+                ) {
+                    State.setGameRunning(false);
+                    this.gameOver = true;
+                }
+            }
+        }
+
         State.getPlayer().update();
 
         for (const component of State.getGameComponents()) {
             component.update();
+        }
+
+        this.enemySpawnTimer++;
+
+        //Spawn enemies every 2 seconds
+        if (this.enemySpawnTimer === this.baseEnemySpawnRate) {
+            const player = State.getPlayer();
+
+            const coords = {
+                x: 640,
+                y: 830
+            };
+            const enemy = new Enemy(coords);
+            State.addGameComponent(enemy);
+            this.enemySpawnTimer = 0;
         }
     }
 

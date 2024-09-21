@@ -21,8 +21,9 @@ export class Player extends GameComponent {
     groundSpeed = 5;
     checkerSize = 50;
 
+    shootLevel = 1;
     shootTimer = 0;
-    baseShootTimer = 60;
+    baseShootTimer = 120;
 
     constructor() {
         super({ x: Player.INITIAL_POSITION.x, y: Player.INITIAL_POSITION.y });
@@ -86,7 +87,7 @@ export class Player extends GameComponent {
         this.shootTimer++;
 
         //Every 60 frames, shoot a new Bullet
-        if (this.shootTimer === this.baseShootTimer) {
+        if (this.shootTimer === this.baseShootTimer / this.shootLevel) {
             //coordinates are the center of the player
             const coords = {
                 x: this.coordinates.x + this.renderConfig.size.width / 2,
