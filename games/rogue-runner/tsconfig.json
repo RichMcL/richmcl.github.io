@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      // Your existing compiler options
+      "target": "es5",
+      "module": "es6",
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "strictPropertyInitialization": false,
+      "strictNullChecks": false,
+      
+    },
+    "exclude": [
+      "node_modules",
+      "scripts" // Add this line to exclude the dist folder
+    ],
+    "include": ["src/**/*.ts"]
+  }
