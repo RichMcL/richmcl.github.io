@@ -90,7 +90,7 @@ export class Player extends GameComponent {
             //coordinates are the center of the player
             const coords = {
                 x: this.coordinates.x + this.renderConfig.size.width / 2,
-                y: this.coordinates.y + this.renderConfig.size.height / 2
+                y: this.coordinates.y + this.renderConfig.size.height / 2 - Bullet.BULLET_SIZE / 2
             };
             State.addGameComponent(new Bullet(coords));
             this.shootTimer = 0;
