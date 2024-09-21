@@ -2,7 +2,7 @@ import { Player } from './player';
 import { Coordinates, GameComponent } from './types';
 
 export class State {
-    private static readonly gameAspectRatio = 640 / 1136;
+    private static readonly gameAspectRatio = 640 / 1000;
     private static windowAspectRatio: number;
 
     private static canvas: HTMLCanvasElement;

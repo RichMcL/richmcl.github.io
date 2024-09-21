@@ -180,7 +180,7 @@ export class Game {
         // Determine the scale factor
         if (State.getWindowAspectRatio() > State.getGameAspectRatio()) {
             // Window is wider than game aspect ratio
-            State.setScaleFactor(currentHeight / 1136);
+            State.setScaleFactor(currentHeight / 1000);
         } else {
             // Window is narrower than game aspect ratio
             State.setScaleFactor(currentWidth / 640);
@@ -190,6 +190,6 @@ export class Game {
         const gameContainer = document.getElementById('game-canvas');
         gameContainer.style.transform = `scale(${State.getScaleFactor()})`;
         gameContainer.style.width = `${640}px`;
-        gameContainer.style.height = `${1136}px`;
+        gameContainer.style.height = `${1000}px`;
     }
 }
