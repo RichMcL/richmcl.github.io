@@ -9,13 +9,16 @@ export class Player extends GameComponent {
     isJumping = false;
 
     jumpVelocity = 0;
-    jumpVelocityIncrement = 0.2;
-    startJumpVelocity = 10;
-    maxJumpVelocity = 10;
+    jumpVelocityIncrement = 0.7; // Increased from 0.2 to 0.5
+    startJumpVelocity = 20;
 
     fallVelocity = 0;
-    fallVelocityIncrement = 0.5;
-    maxFallVelocity = 10;
+    fallVelocityIncrement = 1.1; // Increased from 0.5 to 1.0
+    maxFallVelocity = 15;
+
+    groundOffset = 0;
+    groundSpeed = 5;
+    checkerSize = 50;
 
     constructor() {
         super({ x: Player.INITIAL_POSITION.x, y: Player.INITIAL_POSITION.y });
@@ -28,11 +31,18 @@ export class Player extends GameComponent {
     }
 
     update(): void {
+        // Update ground offset
+        this.groundOffset = (this.groundOffset - this.groundSpeed) % (this.checkerSize * 2);
+
         // if the screen is clicked, the player should jump
         if (State.isMouseClick() || State.isGamepadButtonClick()) {
-            this.isJumping = true;
-            this.jumpVelocity = this.startJumpVelocity;
+            // TODO - double and triple jump as bonus
+            if (!this.isJumping) {
+                this.isJumping = true;
+                this.jumpVelocity = this.startJumpVelocity;
+            }
         }
+
         // if the player is jumping, update the player's position
         if (this.isJumping) {
             this.jumpVelocity -= this.jumpVelocityIncrement;
@@ -65,6 +75,7 @@ export class Player extends GameComponent {
         if (this.coordinates.y > Player.INITIAL_POSITION.y) {
             this.coordinates.y = Player.INITIAL_POSITION.y;
             this.fallVelocity = 0;
+            this.isJumping = false;
         }
     }
 
@@ -88,12 +99,34 @@ export class Player extends GameComponent {
     }
 
     public renderGround(): void {
-        State.getCtx().fillStyle = 'gray';
-        State.getCtx().fillRect(
-            0,
-            Player.INITIAL_POSITION.y + State.getPlayer().renderConfig.size.height,
-            640,
-            1000
-        );
+        // State.getCtx().fillStyle = 'gray';
+        // State.getCtx().fillRect(
+        //     0,
+        //     Player.INITIAL_POSITION.y + State.getPlayer().renderConfig.size.height,
+        //     640,
+        //     1000
+        // );
+
+        const ctx = State.getCtx();
+        const groundY = Player.INITIAL_POSITION.y + State.getPlayer().renderConfig.size.height;
+        const canvasWidth = ctx.canvas.width;
+        const canvasHeight = ctx.canvas.height;
+
+        // Draw the checkerboard pattern
+        for (let y = groundY; y < canvasHeight; y += this.checkerSize) {
+            for (let x = this.groundOffset; x < canvasWidth; x += this.checkerSize * 2) {
+                ctx.fillStyle = 'gray';
+                ctx.fillRect(x, y, this.checkerSize, this.checkerSize);
+                ctx.fillRect(
+                    x + this.checkerSize,
+                    y + this.checkerSize,
+                    this.checkerSize,
+                    this.checkerSize
+                );
+                ctx.fillStyle = 'darkgray';
+                ctx.fillRect(x + this.checkerSize, y, this.checkerSize, this.checkerSize);
+                ctx.fillRect(x, y + this.checkerSize, this.checkerSize, this.checkerSize);
+            }
+        }
     }
 }
