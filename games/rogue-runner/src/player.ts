@@ -3,13 +3,14 @@ import { GameComponent, RenderConfig } from './types';
 
 export class Player extends GameComponent {
     static INITIAL_POSITION = { x: 100, y: 830 };
-    static JUMP_HEIGHT = 200;
+    static JUMP_HEIGHT = 400;
 
     renderConfig: RenderConfig;
     isJumping = false;
 
     jumpVelocity = 0;
-    jumpVelocityIncrement = 0.5;
+    jumpVelocityIncrement = 0.2;
+    startJumpVelocity = 10;
     maxJumpVelocity = 10;
 
     fallVelocity = 0;
@@ -30,15 +31,18 @@ export class Player extends GameComponent {
         // if the screen is clicked, the player should jump
         if (State.isMouseClick() || State.isGamepadButtonClick()) {
             this.isJumping = true;
+            this.jumpVelocity = this.startJumpVelocity;
         }
-
         // if the player is jumping, update the player's position
         if (this.isJumping) {
-            this.jumpVelocity += this.jumpVelocityIncrement;
+            this.jumpVelocity -= this.jumpVelocityIncrement;
             this.coordinates.y -= this.jumpVelocity;
 
             // if the player has reached the max jump height, start falling
-            if (this.coordinates.y <= Player.INITIAL_POSITION.y - Player.JUMP_HEIGHT) {
+            if (
+                this.jumpVelocity <= 0 &&
+                this.coordinates.y <= Player.INITIAL_POSITION.y - Player.JUMP_HEIGHT
+            ) {
                 this.isJumping = false;
                 this.jumpVelocity = 0;
             }
@@ -46,11 +50,21 @@ export class Player extends GameComponent {
 
         if (!this.isJumping) {
             if (this.coordinates.y >= Player.INITIAL_POSITION.y) {
+                this.coordinates.y = Player.INITIAL_POSITION.y; // Reset to initial position
                 this.fallVelocity = 0;
             } else {
-                this.fallVelocity += this.fallVelocityIncrement;
+                this.fallVelocity = Math.min(
+                    this.fallVelocity + this.fallVelocityIncrement,
+                    this.maxFallVelocity
+                );
                 this.coordinates.y += this.fallVelocity;
             }
+        }
+
+        // Ensure player does not fall below the initial position
+        if (this.coordinates.y > Player.INITIAL_POSITION.y) {
+            this.coordinates.y = Player.INITIAL_POSITION.y;
+            this.fallVelocity = 0;
         }
     }
 
