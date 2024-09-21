@@ -1,5 +1,6 @@
 import { Player } from './player';
 import { State } from './state';
+import { Stats } from './stats';
 
 export class Game {
     public lastTimestamp: number = 0;
@@ -9,11 +10,9 @@ export class Game {
         State.setCtx(State.getCanvas().getContext('2d'));
 
         // Wait for both images to load before starting the game
-        Promise.all([this.loadFont('New-Amsterdam', 'fonts/new-amsterdam/new-amsterdam.ttf')]).then(
-            () => {
-                this.startGame();
-            }
-        );
+        Promise.all([this.loadFont('Base-Font', 'fonts/PressStart2P-Regular.ttf')]).then(() => {
+            this.startGame();
+        });
     }
 
     // Function to load the custom font
@@ -66,6 +65,10 @@ export class Game {
 
     public initializeGameObjects(): void {
         State.setPlayer(new Player());
+
+        const statsSidebar = new Stats();
+
+        State.addGameComponent(statsSidebar);
     }
 
     public gameLoop(timestamp: number = 0) {

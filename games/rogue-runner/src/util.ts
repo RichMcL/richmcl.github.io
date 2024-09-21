@@ -17,7 +17,7 @@ export const printText = (
 ): void => {
     const ctx = State.getCtx();
     ctx.save();
-    ctx.font = `${fontSize}px New-Amsterdam`;
+    ctx.font = `${fontSize}px Base-Font`;
     ctx.fillStyle = color;
 
     // Set shadow properties
