@@ -2,9 +2,19 @@ import { State } from './state';
 import { GameComponent, RenderConfig } from './types';
 
 export class Player extends GameComponent {
-    renderConfig: RenderConfig;
-
     static INITIAL_POSITION = { x: 100, y: 830 };
+    static JUMP_HEIGHT = 200;
+
+    renderConfig: RenderConfig;
+    isJumping = false;
+
+    jumpVelocity = 0;
+    jumpVelocityIncrement = 0.5;
+    maxJumpVelocity = 10;
+
+    fallVelocity = 0;
+    fallVelocityIncrement = 0.5;
+    maxFallVelocity = 10;
 
     constructor() {
         super({ x: Player.INITIAL_POSITION.x, y: Player.INITIAL_POSITION.y });
@@ -16,7 +26,33 @@ export class Player extends GameComponent {
         };
     }
 
-    update(): void {}
+    update(): void {
+        // if the screen is clicked, the player should jump
+        if (State.isMouseClick() || State.isGamepadButtonClick()) {
+            this.isJumping = true;
+        }
+
+        // if the player is jumping, update the player's position
+        if (this.isJumping) {
+            this.jumpVelocity += this.jumpVelocityIncrement;
+            this.coordinates.y -= this.jumpVelocity;
+
+            // if the player has reached the max jump height, start falling
+            if (this.coordinates.y <= Player.INITIAL_POSITION.y - Player.JUMP_HEIGHT) {
+                this.isJumping = false;
+                this.jumpVelocity = 0;
+            }
+        }
+
+        if (!this.isJumping) {
+            if (this.coordinates.y >= Player.INITIAL_POSITION.y) {
+                this.fallVelocity = 0;
+            } else {
+                this.fallVelocity += this.fallVelocityIncrement;
+                this.coordinates.y += this.fallVelocity;
+            }
+        }
+    }
 
     render(): void {
         this.renderGround();
