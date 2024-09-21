@@ -93,6 +93,10 @@ export class Game {
 
     public updateGameState() {
         State.getPlayer().update();
+
+        for (const component of State.getGameComponents()) {
+            component.update();
+        }
     }
 
     public resetGameState(): void {

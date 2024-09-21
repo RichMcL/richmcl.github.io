@@ -1,3 +1,4 @@
+import { Bullet } from './bullet';
 import { State } from './state';
 import { GameComponent, RenderConfig } from './types';
 
@@ -19,6 +20,9 @@ export class Player extends GameComponent {
     groundOffset = 0;
     groundSpeed = 5;
     checkerSize = 50;
+
+    shootTimer = 0;
+    baseShootTimer = 60;
 
     constructor() {
         super({ x: Player.INITIAL_POSITION.x, y: Player.INITIAL_POSITION.y });
@@ -76,6 +80,20 @@ export class Player extends GameComponent {
             this.coordinates.y = Player.INITIAL_POSITION.y;
             this.fallVelocity = 0;
             this.isJumping = false;
+        }
+
+        // Update shoot timer
+        this.shootTimer++;
+
+        //Every 60 frames, shoot a new Bullet
+        if (this.shootTimer === this.baseShootTimer) {
+            //coordinates are the center of the player
+            const coords = {
+                x: this.coordinates.x + this.renderConfig.size.width / 2,
+                y: this.coordinates.y + this.renderConfig.size.height / 2
+            };
+            State.addGameComponent(new Bullet(coords));
+            this.shootTimer = 0;
         }
     }
 
