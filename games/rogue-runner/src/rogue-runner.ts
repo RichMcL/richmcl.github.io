@@ -1,4 +1,4 @@
-import { DefaultDialogRenderConfig, Dialog } from './dialog';
+import { DefaultDialogRenderConfig, GameOverDialog } from './game-over-dialog';
 import { Enemy } from './enemy';
 import { Player } from './player';
 import { State } from './state';
@@ -50,7 +50,7 @@ export class Game {
             State.setMouseClick(true);
         });
 
-        document.body.classList.add('hide-cursor');
+        // document.body.classList.add('hide-cursor');
 
         document.addEventListener('mousemove', event => {
             const rect = State.getCanvas().getBoundingClientRect();
@@ -82,7 +82,9 @@ export class Game {
         const elapsed = timestamp - this.lastTimestamp;
         this.lastTimestamp = timestamp;
 
-        State.incrementTimerInMs(elapsed);
+        if (!State.isGameOver()) {
+            State.incrementTimerInMs(elapsed);
+        }
 
         // Update game state
         this.updateGameState();
@@ -117,15 +119,16 @@ export class Game {
                 ) {
                     // State.setGameRunning(false);
 
-                    if (State.isGameOver()) return;
-                    State.setGameOver(true);
-                    this.gameOver = true;
+                    if (!State.isGameOver()) {
+                        State.setGameOver(true);
+                        this.gameOver = true;
 
-                    const gameOverDialog = new Dialog(DefaultDialogRenderConfig.coordinates);
+                        const gameOverDialog = new GameOverDialog(
+                            DefaultDialogRenderConfig.coordinates
+                        );
 
-                    console.log('gameOverDialog', gameOverDialog);
-
-                    State.addGameComponent(gameOverDialog);
+                        State.addGameComponent(gameOverDialog);
+                    }
                 }
             }
         }
@@ -167,7 +170,7 @@ export class Game {
             component.render();
         }
 
-        this.renderGamepadCursor();
+        // this.renderGamepadCursor();
     }
 
     public renderGamepadCursor(): void {
