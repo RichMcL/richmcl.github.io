@@ -1,7 +1,7 @@
 import { GameButton } from './button';
 import { State } from './state';
 import { Coordinates, GameComponent, RenderConfig } from './types';
-import { GAME_BASE_HEIGHT, GAME_BASE_WIDTH, printText } from './util';
+import { GAME_BASE_WIDTH, printText } from './util';
 
 export const DefaultDialogRenderConfig: RenderConfig = {
     coordinates: {

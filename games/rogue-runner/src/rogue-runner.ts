@@ -7,7 +7,9 @@ import { Stats } from './stats';
 export class Game {
     public lastTimestamp: number = 0;
     public enemySpawnTimer: number = 0;
-    public baseEnemySpawnRate: number = 90;
+    public baseEnemySpawnRate = 4000;
+    public lastEnemySpawnTime = 0;
+    public nextEnemySpawnTime = 0;
     public gameOver = false;
 
     constructor() {
@@ -139,20 +141,60 @@ export class Game {
             component.update();
         }
 
-        this.enemySpawnTimer++;
+        this.doEnemySpawns();
+    }
 
-        //Spawn enemies every 2 seconds
-        if (this.enemySpawnTimer === this.baseEnemySpawnRate) {
-            const player = State.getPlayer();
+    public doEnemySpawns() {
+        // Calculate the time since the last enemy spawn
+        const timeSinceLastSpawn = this.lastTimestamp - this.lastEnemySpawnTime;
 
-            const coords = {
-                x: 640,
-                y: 830
-            };
-            const enemy = new Enemy(coords);
-            State.addGameComponent(enemy);
-            this.enemySpawnTimer = 0;
+        // Check if enough time has passed since the last spawn
+        if (timeSinceLastSpawn >= this.baseEnemySpawnRate) {
+            // Generate a random number between 0 and 1
+            const randomValue = Math.random();
+
+            // Determine the probability threshold for spawning an enemy
+            const spawnProbability = 0.5; // Example probability (50%)
+
+            // Check if the random value is less than the spawn probability
+            if (randomValue < spawnProbability) {
+                const coords = {
+                    x: 640,
+                    y: 830
+                };
+                const enemy = new Enemy(coords);
+                State.addGameComponent(enemy);
+                this.enemySpawnTimer = 0;
+                this.lastEnemySpawnTime = this.lastTimestamp;
+
+                // Calculate a random delay for the next spawn
+                const randomDelay = Math.random() * this.baseEnemySpawnRate;
+                this.nextEnemySpawnTime = this.lastTimestamp + randomDelay;
+            }
+        } else if (this.lastTimestamp >= this.nextEnemySpawnTime) {
+            // Generate a random number between 0 and 1
+            const randomValue = Math.random();
+
+            // Determine the probability threshold for spawning an enemy
+            const spawnProbability = 0.5; // Example probability (50%)
+
+            // Check if the random value is less than the spawn probability
+            if (randomValue < spawnProbability) {
+                const coords = {
+                    x: 640,
+                    y: 830
+                };
+                const enemy = new Enemy(coords);
+                State.addGameComponent(enemy);
+                this.enemySpawnTimer = 0;
+                this.lastEnemySpawnTime = this.lastTimestamp;
+
+                // Calculate a random delay for the next spawn
+                const randomDelay = Math.random() * this.baseEnemySpawnRate;
+                this.nextEnemySpawnTime = this.lastTimestamp + randomDelay;
+            }
         }
+        this.enemySpawnTimer++;
     }
 
     public resetGameState(): void {
@@ -169,60 +211,6 @@ export class Game {
         for (const component of State.getGameComponents()) {
             component.render();
         }
-
-        // this.renderGamepadCursor();
-    }
-
-    public renderGamepadCursor(): void {
-        State.getCtx().save();
-
-        // Draw the pixelated hand cursor
-        const cursor = [
-            [1, 1, 0, 0, 0, 0, 0],
-            [1, 1, 1, 0, 0, 0, 0],
-            [1, 1, 1, 1, 0, 0, 0],
-            [1, 1, 1, 1, 1, 0, 0],
-            [1, 1, 1, 1, 0, 1, 0],
-            [1, 0, 1, 1, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0]
-        ];
-
-        const pixelSize = 3;
-        const mouseX = State.getScaledMouseCoordinates().x;
-        const mouseY = State.getScaledMouseCoordinates().y;
-
-        // Draw the outline
-        State.getCtx().fillStyle = 'black';
-        cursor.forEach((row, rowIndex) => {
-            row.forEach((pixel, colIndex) => {
-                if (pixel) {
-                    State.getCtx().fillRect(
-                        mouseX + colIndex * pixelSize - 1,
-                        mouseY + rowIndex * pixelSize - 1,
-                        pixelSize + 2,
-                        pixelSize + 2
-                    );
-                }
-            });
-        });
-
-        // Draw the filled cursor
-        State.getCtx().fillStyle = 'white';
-        cursor.forEach((row, rowIndex) => {
-            row.forEach((pixel, colIndex) => {
-                if (pixel) {
-                    State.getCtx().fillRect(
-                        mouseX + colIndex * pixelSize,
-                        mouseY + rowIndex * pixelSize,
-                        pixelSize,
-                        pixelSize
-                    );
-                }
-            });
-        });
-
-        State.getCtx().restore();
     }
 
     /* LOGIC FUNCTIONS */
