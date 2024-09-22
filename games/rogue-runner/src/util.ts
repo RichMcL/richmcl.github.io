@@ -1,12 +1,7 @@
 import { State } from './state';
 
-export const CARD_WIDTH = 68;
-export const CARD_HEIGHT = 96;
-export const BASE_CARD_SCALE = 1.5;
-
-export const RULE_WIDTH = 68;
-export const RULE_HEIGHT = 48;
-export const RULE_SCALE = 1.25;
+export const GAME_BASE_WIDTH = 640;
+export const GAME_BASE_HEIGHT = 1000;
 
 export const printText = (
     text: string,

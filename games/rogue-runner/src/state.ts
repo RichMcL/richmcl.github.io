@@ -9,6 +9,7 @@ export class State {
     private static ctx: CanvasRenderingContext2D;
 
     private static gameRunning: boolean = false;
+    private static gameOver: boolean = false;
     private static timerInMs: number = 0;
 
     private static player: Player;
@@ -27,6 +28,8 @@ export class State {
     private static scaledClickCoordinates = { x: 0, y: 0 } as Coordinates;
 
     private static gameComponents: GameComponent[] = [];
+
+    private static dialogOpen = false;
 
     static getGameAspectRatio(): number {
         return State.gameAspectRatio;
@@ -62,6 +65,14 @@ export class State {
 
     static isGameRunning(): boolean {
         return State.gameRunning;
+    }
+
+    static setGameOver(gameOver: boolean): void {
+        State.gameOver = gameOver;
+    }
+
+    static isGameOver(): boolean {
+        return State.gameOver;
     }
 
     static setTimerInMs(timerInMs: number): void {
@@ -105,7 +116,7 @@ export class State {
     }
 
     static getBullets(): GameComponent[] {
-        return State.gameComponents.filter(gc => gc.constructor.name === 'Bullet');
+        return State.gameComponents.filter(gc => 'bulletSize' in gc);
     }
 
     static setMouseCoordinates(coordinates: Coordinates): void {
@@ -187,5 +198,13 @@ export class State {
 
     static removeAllDeletedGameComponents(): void {
         State.gameComponents = State.gameComponents.filter(gc => !gc.deleteMe);
+    }
+
+    static setDialogOpen(dialogOpen: boolean): void {
+        State.dialogOpen = dialogOpen;
+    }
+
+    static isDialogOpen(): boolean {
+        return State.dialogOpen;
     }
 }

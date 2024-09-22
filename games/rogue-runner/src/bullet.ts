@@ -1,22 +1,39 @@
+import { Game } from './rogue-runner';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 
-export class Bullet extends GameComponent {
+export interface Bullet extends GameComponent {
+    bulletSpeed: number;
+    bulletSize: number;
+    damage: number;
+    update(): void;
+    render(): void;
+}
+
+export class SimpleBullet extends GameComponent implements Bullet {
     static BULLET_SPEED = 9;
     static BULLET_SIZE = 10;
+
+    bulletSpeed: number = SimpleBullet.BULLET_SPEED;
+    bulletSize: number = SimpleBullet.BULLET_SIZE;
+    damage = 1;
 
     constructor(coordinates: Coordinates) {
         super(coordinates);
 
         this.renderConfig = {
             coordinates,
-            size: { width: Bullet.BULLET_SIZE, height: Bullet.BULLET_SIZE },
+            size: { width: this.bulletSize, height: this.bulletSize },
             scale: 1
         };
     }
 
     update(): void {
-        this.renderConfig.coordinates.x += Bullet.BULLET_SPEED;
+        if (State.isGameOver()) {
+            return;
+        }
+
+        this.renderConfig.coordinates.x += this.bulletSpeed;
     }
 
     render(): void {
@@ -28,4 +45,12 @@ export class Bullet extends GameComponent {
             this.renderConfig.size.height
         );
     }
+}
+
+export class BigBullet extends SimpleBullet {
+    static BULLET_SIZE = 20;
+
+    damage = 3;
+
+    bulletSize: number = BigBullet.BULLET_SIZE;
 }

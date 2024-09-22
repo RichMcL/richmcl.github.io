@@ -1,3 +1,4 @@
+import { DefaultDialogRenderConfig, Dialog } from './dialog';
 import { Enemy } from './enemy';
 import { Player } from './player';
 import { State } from './state';
@@ -114,8 +115,17 @@ export class Game {
                         State.getPlayer().renderConfig.size.height >
                         component.renderConfig.coordinates.y
                 ) {
-                    State.setGameRunning(false);
+                    // State.setGameRunning(false);
+
+                    if (State.isGameOver()) return;
+                    State.setGameOver(true);
                     this.gameOver = true;
+
+                    const gameOverDialog = new Dialog(DefaultDialogRenderConfig.coordinates);
+
+                    console.log('gameOverDialog', gameOverDialog);
+
+                    State.addGameComponent(gameOverDialog);
                 }
             }
         }

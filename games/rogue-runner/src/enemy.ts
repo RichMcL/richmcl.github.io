@@ -16,6 +16,10 @@ export class Enemy extends GameComponent {
     }
 
     update() {
+        if (State.isGameOver()) {
+            return;
+        }
+
         this.renderConfig.coordinates.x -= Enemy.ENEMY_SPEED;
 
         // If enemy collides with a bullet, delete the enemy

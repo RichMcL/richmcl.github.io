@@ -1,4 +1,4 @@
-import { Bullet } from './bullet';
+import { SimpleBullet } from './bullet';
 import { State } from './state';
 import { GameComponent, RenderConfig } from './types';
 
@@ -36,6 +36,10 @@ export class Player extends GameComponent {
     }
 
     update(): void {
+        if (State.isGameOver()) {
+            return;
+        }
+
         // Update ground offset
         this.groundOffset = (this.groundOffset - this.groundSpeed) % (this.checkerSize * 2);
 
@@ -91,9 +95,12 @@ export class Player extends GameComponent {
             //coordinates are the center of the player
             const coords = {
                 x: this.coordinates.x + this.renderConfig.size.width / 2,
-                y: this.coordinates.y + this.renderConfig.size.height / 2 - Bullet.BULLET_SIZE / 2
+                y:
+                    this.coordinates.y +
+                    this.renderConfig.size.height / 2 -
+                    SimpleBullet.BULLET_SIZE / 2
             };
-            State.addGameComponent(new Bullet(coords));
+            State.addGameComponent(new SimpleBullet(coords));
             this.shootTimer = 0;
         }
     }
