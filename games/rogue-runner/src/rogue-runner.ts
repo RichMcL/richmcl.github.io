@@ -1,5 +1,5 @@
 import { DefaultDialogRenderConfig, GameOverDialog } from './game-over-dialog';
-import { Enemy } from './enemy';
+import { Enemy, SimpleEnemy } from './enemy';
 import { Player } from './player';
 import { State } from './state';
 import { Stats } from './stats';
@@ -130,23 +130,27 @@ export class Game {
         //remove all gameComponents with deleteMe set to true
         State.removeAllDeletedGameComponents();
 
-        //if Player collides with an enemy, end the game
-        for (const component of State.getGameComponents()) {
-            if (component.constructor.name === 'Enemy') {
-                if (
-                    State.getPlayer().renderConfig.coordinates.x <
-                        component.renderConfig.coordinates.x + component.renderConfig.size.width &&
-                    State.getPlayer().renderConfig.coordinates.x +
-                        State.getPlayer().renderConfig.size.width >
-                        component.renderConfig.coordinates.x &&
-                    State.getPlayer().renderConfig.coordinates.y <
-                        component.renderConfig.coordinates.y + component.renderConfig.size.height &&
-                    State.getPlayer().renderConfig.coordinates.y +
-                        State.getPlayer().renderConfig.size.height >
-                        component.renderConfig.coordinates.y
-                ) {
-                    // State.setGameRunning(false);
+        const player = State.getPlayer();
 
+        //if Player collides with an enemy, end the game
+        (State.getEnemies() as Enemy[]).forEach(enemy => {
+            if (
+                player.renderConfig.coordinates.x <
+                    enemy.renderConfig.coordinates.x + enemy.renderConfig.size.width &&
+                player.renderConfig.coordinates.x + player.renderConfig.size.width >
+                    enemy.renderConfig.coordinates.x &&
+                player.renderConfig.coordinates.y <
+                    enemy.renderConfig.coordinates.y + enemy.renderConfig.size.height &&
+                player.renderConfig.coordinates.y + player.renderConfig.size.height >
+                    enemy.renderConfig.coordinates.y
+            ) {
+                // State.setGameRunning(false);
+
+                if (!State.isGameOver()) {
+                    player.hp -= enemy.damage;
+                }
+
+                if (player.hp <= 0) {
                     if (!State.isGameOver()) {
                         State.setGameOver(true);
                         this.gameOver = true;
@@ -157,11 +161,13 @@ export class Game {
 
                         State.addGameComponent(gameOverDialog);
                     }
+                } else {
+                    enemy.deleteMe = true;
                 }
             }
-        }
+        });
 
-        State.getPlayer().update();
+        player.update();
 
         for (const component of State.getGameComponents()) {
             component.update();
@@ -176,7 +182,7 @@ export class Game {
                 x: 640,
                 y: 830
             };
-            const enemy = new Enemy(coords);
+            const enemy = new SimpleEnemy(coords);
             State.addGameComponent(enemy);
 
             //number in between min and max

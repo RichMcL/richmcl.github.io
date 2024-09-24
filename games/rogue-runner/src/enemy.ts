@@ -2,19 +2,34 @@ import { Bullet } from './bullet';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 
-export class Enemy extends GameComponent {
+export interface Enemy extends GameComponent {
+    hp: number;
+    damage: number;
+    size: number;
+    speed: number;
+    update(): void;
+    render(): void;
+    isEnemy: boolean;
+}
+
+export class SimpleEnemy extends GameComponent implements Enemy {
     static ENEMY_SPEED = 8;
     static ENEMY_SIZE = 50;
     static ENEMY_START_HP = 1;
+    static ENEMY_DAMAGE = 1;
 
-    hp = Enemy.ENEMY_START_HP;
+    hp = SimpleEnemy.ENEMY_START_HP;
+    damage = SimpleEnemy.ENEMY_DAMAGE;
+    size = SimpleEnemy.ENEMY_SIZE;
+    speed = SimpleEnemy.ENEMY_SPEED;
+    isEnemy = true;
 
     constructor(coordinates: Coordinates) {
         super(coordinates);
 
         this.renderConfig = {
             coordinates,
-            size: { width: Enemy.ENEMY_SIZE, height: Enemy.ENEMY_SIZE },
+            size: { width: SimpleEnemy.ENEMY_SIZE, height: SimpleEnemy.ENEMY_SIZE },
             scale: 1
         };
     }
@@ -24,7 +39,7 @@ export class Enemy extends GameComponent {
             return;
         }
 
-        this.renderConfig.coordinates.x -= Enemy.ENEMY_SPEED;
+        this.renderConfig.coordinates.x -= SimpleEnemy.ENEMY_SPEED;
 
         // If enemy collides with a bullet, delete the enemy
         (State.getBullets() as Bullet[]).forEach(bullet => {

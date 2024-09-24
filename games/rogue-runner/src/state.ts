@@ -116,7 +116,12 @@ export class State {
     }
 
     static getBullets(): GameComponent[] {
-        return State.gameComponents.filter(gc => 'bulletSize' in gc);
+        debugger;
+        return State.gameComponents.filter(gc => 'isBullet' in gc);
+    }
+
+    static getEnemies(): GameComponent[] {
+        return State.gameComponents.filter(gc => 'isEnemy' in gc);
     }
 
     static setMouseCoordinates(coordinates: Coordinates): void {

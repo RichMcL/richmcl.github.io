@@ -8,6 +8,7 @@ export class Player extends GameComponent {
 
     renderConfig: RenderConfig;
     isJumping = false;
+    hp = 3;
 
     jumpVelocity = 0;
     jumpVelocityIncrement = 1.5; // Increased from 0.2 to 0.5

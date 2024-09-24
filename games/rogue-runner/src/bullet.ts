@@ -6,6 +6,7 @@ export interface Bullet extends GameComponent {
     bulletSpeed: number;
     bulletSize: number;
     damage: number;
+    isBullet: boolean;
     update(): void;
     render(): void;
 }
@@ -17,6 +18,7 @@ export class SimpleBullet extends GameComponent implements Bullet {
     bulletSpeed: number = SimpleBullet.BULLET_SPEED;
     bulletSize: number = SimpleBullet.BULLET_SIZE;
     damage = 1;
+    isBullet = true;
 
     constructor(coordinates: Coordinates) {
         super(coordinates);
