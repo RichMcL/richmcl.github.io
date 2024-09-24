@@ -1,8 +1,9 @@
 import { DefaultDialogRenderConfig, GameOverDialog } from './game-over-dialog';
-import { Enemy, SimpleEnemy } from './enemy';
+import { Enemy, FlyingEnemy, SimpleEnemy } from './enemy';
 import { Player } from './player';
 import { State } from './state';
 import { Stats } from './stats';
+import { Coordinates } from './types';
 
 export class Game {
     public lastTimestamp: number = 0;
@@ -178,11 +179,18 @@ export class Game {
 
     public doEnemySpawns() {
         if (this.timeUntilSpawn < 0) {
-            const coords = {
+            let coords: Coordinates = {
                 x: 640,
                 y: 830
             };
-            const enemy = new SimpleEnemy(coords);
+            let enemy: Enemy;
+
+            if (Math.random() > 0.5) {
+                enemy = new SimpleEnemy(coords);
+            } else {
+                coords.y -= 150;
+                enemy = new FlyingEnemy(coords);
+            }
             State.addGameComponent(enemy);
 
             //number in between min and max
