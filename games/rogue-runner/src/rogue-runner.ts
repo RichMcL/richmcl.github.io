@@ -46,7 +46,7 @@ export class Game {
         console.log('Game started', this);
 
         // Add click event listener
-        State.getCanvas().addEventListener('click', event => {
+        State.getCanvas().addEventListener('mousedown', event => {
             const rect = State.getCanvas().getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;

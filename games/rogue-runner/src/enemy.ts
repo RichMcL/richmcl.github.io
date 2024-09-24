@@ -1,9 +1,13 @@
+import { Bullet } from './bullet';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 
 export class Enemy extends GameComponent {
-    static ENEMY_SPEED = 10;
+    static ENEMY_SPEED = 8;
     static ENEMY_SIZE = 50;
+    static ENEMY_START_HP = 1;
+
+    hp = Enemy.ENEMY_START_HP;
 
     constructor(coordinates: Coordinates) {
         super(coordinates);
@@ -23,7 +27,7 @@ export class Enemy extends GameComponent {
         this.renderConfig.coordinates.x -= Enemy.ENEMY_SPEED;
 
         // If enemy collides with a bullet, delete the enemy
-        State.getBullets().forEach(bullet => {
+        (State.getBullets() as Bullet[]).forEach(bullet => {
             if (
                 this.renderConfig.coordinates.x <
                     bullet.renderConfig.coordinates.x + bullet.renderConfig.size.width &&
@@ -34,6 +38,8 @@ export class Enemy extends GameComponent {
                 this.renderConfig.coordinates.y + this.renderConfig.size.height >
                     bullet.renderConfig.coordinates.y
             ) {
+                this.hp -= bullet.damage;
+
                 this.deleteMe = true;
                 bullet.deleteMe = true;
             }
