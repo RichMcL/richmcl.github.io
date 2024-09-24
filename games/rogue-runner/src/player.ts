@@ -10,12 +10,12 @@ export class Player extends GameComponent {
     isJumping = false;
 
     jumpVelocity = 0;
-    jumpVelocityIncrement = 0.7; // Increased from 0.2 to 0.5
-    startJumpVelocity = 20;
+    jumpVelocityIncrement = 1.5; // Increased from 0.2 to 0.5
+    startJumpVelocity = 25;
 
     fallVelocity = 0;
-    fallVelocityIncrement = 1.1; // Increased from 0.5 to 1.0
-    maxFallVelocity = 15;
+    fallVelocityIncrement = 1.5; // Increased from 0.5 to 1.0
+    maxFallVelocity = 25;
 
     groundOffset = 0;
     groundSpeed = 5;
@@ -125,14 +125,6 @@ export class Player extends GameComponent {
     }
 
     public renderGround(): void {
-        // State.getCtx().fillStyle = 'gray';
-        // State.getCtx().fillRect(
-        //     0,
-        //     Player.INITIAL_POSITION.y + State.getPlayer().renderConfig.size.height,
-        //     640,
-        //     1000
-        // );
-
         const ctx = State.getCtx();
         const groundY = Player.INITIAL_POSITION.y + State.getPlayer().renderConfig.size.height;
         const canvasWidth = ctx.canvas.width;

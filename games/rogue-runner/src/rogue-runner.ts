@@ -21,6 +21,9 @@ export class Game {
         Promise.all([this.loadFont('Base-Font', 'fonts/PressStart2P-Regular.ttf')]).then(() => {
             this.startGame();
         });
+
+        this.timeUntilSpawn =
+            Math.random() * (this.enemySpawnMax - this.enemySpawnMin) + this.enemySpawnMin;
     }
 
     // Function to load the custom font
