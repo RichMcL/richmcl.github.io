@@ -41,8 +41,26 @@ export abstract class GameComponent {
         );
     }
 
+    isClickedOver(): boolean {
+        const scaledClickCoordinates = State.getScaledClickCoordinates();
+
+        return (
+            scaledClickCoordinates?.x >= this.renderConfig.coordinates.x &&
+            scaledClickCoordinates?.x <=
+                this.renderConfig.coordinates.x +
+                    this.renderConfig.size.width * this.renderConfig.scale &&
+            scaledClickCoordinates?.y >= this.renderConfig.coordinates.y &&
+            scaledClickCoordinates?.y <=
+                this.renderConfig.coordinates.y +
+                    this.renderConfig.size.height * this.renderConfig.scale
+        );
+    }
+
     isClicked(): boolean {
-        return this.isHoveredOver() && (State.isMouseClick() || State.isGamepadButtonClick());
+        return (
+            (this.isHoveredOver() && (State.isMouseClick() || State.isGamepadButtonClick())) ||
+            this.isClickedOver()
+        );
     }
 
     getCoordinatesCopy(): Coordinates {
