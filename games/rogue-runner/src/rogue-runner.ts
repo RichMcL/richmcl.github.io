@@ -55,7 +55,9 @@ export class Game {
 
             State.setMouseClick(true);
         });
+
         State.getCanvas().addEventListener('touchstart', event => {
+            event.preventDefault(); // Prevent long-press context menu
             const rect = State.getCanvas().getBoundingClientRect();
             const touch = event.touches[0]; // Get the first touch point
             const x = touch.clientX - rect.left;
@@ -63,6 +65,16 @@ export class Game {
 
             State.setClickCoordinates({ x, y });
             State.setMouseClick(true);
+        });
+
+        // Add touchmove event listener to prevent pinch zoom
+        State.getCanvas().addEventListener('touchmove', event => {
+            event.preventDefault(); // Prevent pinch zoom
+        });
+
+        // Add touchend event listener to prevent default behavior
+        State.getCanvas().addEventListener('touchend', event => {
+            event.preventDefault(); // Prevent default behavior
         });
 
         // document.body.classList.add('hide-cursor');
