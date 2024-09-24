@@ -57,7 +57,6 @@ export class Game {
         });
 
         State.getCanvas().addEventListener('touchstart', event => {
-            console.log('touchstart', event);
             const rect = State.getCanvas().getBoundingClientRect();
             const touch = event.touches[0]; // Get the first touch point
             const x = touch.clientX - rect.left;
