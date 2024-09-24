@@ -55,6 +55,15 @@ export class Game {
 
             State.setMouseClick(true);
         });
+        State.getCanvas().addEventListener('touchstart', event => {
+            const rect = State.getCanvas().getBoundingClientRect();
+            const touch = event.touches[0]; // Get the first touch point
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+
+            State.setClickCoordinates({ x, y });
+            State.setMouseClick(true);
+        });
 
         // document.body.classList.add('hide-cursor');
 
