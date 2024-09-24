@@ -7,9 +7,10 @@ import { Stats } from './stats';
 export class Game {
     public lastTimestamp: number = 0;
     public enemySpawnTimer: number = 0;
-    public baseEnemySpawnRate = 4000;
-    public lastEnemySpawnTime = 0;
-    public nextEnemySpawnTime = 0;
+    public timeUntilSpawn = 0;
+    public enemySpawnMin = 1 * 60; // seconds * fps
+    public enemySpawnMax = 3 * 60; // seconds * fps
+
     public gameOver = false;
 
     constructor() {
@@ -145,56 +146,20 @@ export class Game {
     }
 
     public doEnemySpawns() {
-        // Calculate the time since the last enemy spawn
-        const timeSinceLastSpawn = this.lastTimestamp - this.lastEnemySpawnTime;
+        if (this.timeUntilSpawn < 0) {
+            const coords = {
+                x: 640,
+                y: 830
+            };
+            const enemy = new Enemy(coords);
+            State.addGameComponent(enemy);
 
-        // Check if enough time has passed since the last spawn
-        if (timeSinceLastSpawn >= this.baseEnemySpawnRate) {
-            // Generate a random number between 0 and 1
-            const randomValue = Math.random();
-
-            // Determine the probability threshold for spawning an enemy
-            const spawnProbability = 0.5; // Example probability (50%)
-
-            // Check if the random value is less than the spawn probability
-            if (randomValue < spawnProbability) {
-                const coords = {
-                    x: 640,
-                    y: 830
-                };
-                const enemy = new Enemy(coords);
-                State.addGameComponent(enemy);
-                this.enemySpawnTimer = 0;
-                this.lastEnemySpawnTime = this.lastTimestamp;
-
-                // Calculate a random delay for the next spawn
-                const randomDelay = Math.random() * this.baseEnemySpawnRate;
-                this.nextEnemySpawnTime = this.lastTimestamp + randomDelay;
-            }
-        } else if (this.lastTimestamp >= this.nextEnemySpawnTime) {
-            // Generate a random number between 0 and 1
-            const randomValue = Math.random();
-
-            // Determine the probability threshold for spawning an enemy
-            const spawnProbability = 0.5; // Example probability (50%)
-
-            // Check if the random value is less than the spawn probability
-            if (randomValue < spawnProbability) {
-                const coords = {
-                    x: 640,
-                    y: 830
-                };
-                const enemy = new Enemy(coords);
-                State.addGameComponent(enemy);
-                this.enemySpawnTimer = 0;
-                this.lastEnemySpawnTime = this.lastTimestamp;
-
-                // Calculate a random delay for the next spawn
-                const randomDelay = Math.random() * this.baseEnemySpawnRate;
-                this.nextEnemySpawnTime = this.lastTimestamp + randomDelay;
-            }
+            //number in between min and max
+            this.timeUntilSpawn =
+                Math.random() * (this.enemySpawnMax - this.enemySpawnMin) + this.enemySpawnMin;
+        } else {
+            this.timeUntilSpawn--;
         }
-        this.enemySpawnTimer++;
     }
 
     public resetGameState(): void {
