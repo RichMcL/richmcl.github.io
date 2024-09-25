@@ -62,10 +62,13 @@ export class SimpleEnemy extends GameComponent implements Enemy {
                 if (this.hp <= 0) {
                     this.deleteMe = true;
 
-                    const explosion = new EnemyExplosion({
-                        x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
-                        y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
-                    });
+                    const explosion = new EnemyExplosion(
+                        {
+                            x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
+                            y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
+                        },
+                        this
+                    );
                     State.addGameComponent(explosion);
                 }
             }
@@ -122,10 +125,13 @@ export class FlyingEnemy extends SimpleEnemy {
                 if (this.hp <= 0) {
                     this.deleteMe = true;
 
-                    const explosion = new EnemyExplosion({
-                        x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
-                        y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
-                    });
+                    const explosion = new EnemyExplosion(
+                        {
+                            x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
+                            y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
+                        },
+                        this
+                    );
                     State.addGameComponent(explosion);
                 }
             }

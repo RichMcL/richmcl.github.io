@@ -138,7 +138,7 @@ export class Player extends GameComponent {
         // Check if the player is in an iframe
         if (this.isIframe) {
             // Toggle alpha value for faster flickering effect
-            const alpha = Math.sin(Date.now() / 50) * 0.5 + 0.5; // Flicker between 0.5 and 1, faster
+            const alpha = Math.sin(Date.now() / 25) * 0.5 + 0.5; // Flicker between 0.5 and 1, faster
             ctx.globalAlpha = alpha;
         } else {
             ctx.globalAlpha = 1; // Fully opaque

@@ -167,10 +167,13 @@ export class Game {
                 } else {
                     enemy.deleteMe = true;
 
-                    const explosion = new EnemyExplosion({
-                        x: enemy.renderConfig.coordinates.x + enemy.renderConfig.size.width / 2,
-                        y: enemy.renderConfig.coordinates.y + enemy.renderConfig.size.height / 2
-                    });
+                    const explosion = new EnemyExplosion(
+                        {
+                            x: enemy.renderConfig.coordinates.x + enemy.renderConfig.size.width / 2,
+                            y: enemy.renderConfig.coordinates.y + enemy.renderConfig.size.height / 2
+                        },
+                        enemy
+                    );
                     State.addGameComponent(explosion);
                 }
             }
