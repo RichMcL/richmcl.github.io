@@ -1,4 +1,4 @@
-import { SimpleBullet } from './bullet';
+import { BigBullet, SimpleBullet } from './bullet';
 import { State } from './state';
 import { GameComponent, RenderConfig } from './types';
 
@@ -106,6 +106,7 @@ export class Player extends GameComponent {
                     SimpleBullet.BULLET_SIZE / 2
             };
             State.addGameComponent(new SimpleBullet(coords));
+
             this.shootTimer = 0;
         }
 

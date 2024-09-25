@@ -28,6 +28,8 @@ export class SimpleBullet extends GameComponent implements Bullet {
             size: { width: this.bulletSize, height: this.bulletSize },
             scale: 1
         };
+
+        this.bulletSize = SimpleBullet.BULLET_SIZE;
     }
 
     update(): void {
@@ -54,5 +56,12 @@ export class BigBullet extends SimpleBullet {
 
     damage = 3;
 
-    bulletSize: number = BigBullet.BULLET_SIZE;
+    constructor(coordinates: Coordinates) {
+        super(coordinates);
+
+        this.renderConfig.size.width = BigBullet.BULLET_SIZE;
+        this.renderConfig.size.height = BigBullet.BULLET_SIZE;
+
+        this.bulletSize = BigBullet.BULLET_SIZE;
+    }
 }
