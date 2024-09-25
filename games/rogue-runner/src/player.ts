@@ -211,7 +211,7 @@ export class Player extends GameComponent {
         const totalIndicatorsHeight = this.hp * (indicatorHeight + gap) - gap; // Adjust total height to include gaps
         const startY = this.renderConfig.coordinates.y + (playerHeight - totalIndicatorsHeight) / 2;
 
-        ctx.fillStyle = '#FF033E';
+        ctx.fillStyle = 'white';
         for (let i = 0; i < this.hp; i++) {
             ctx.fillRect(
                 this.renderConfig.coordinates.x - 12,

@@ -11,6 +11,7 @@ export interface Enemy extends GameComponent {
     update(): void;
     render(): void;
     isEnemy: boolean;
+    color: string;
 }
 
 export class SimpleEnemy extends GameComponent implements Enemy {
@@ -24,6 +25,7 @@ export class SimpleEnemy extends GameComponent implements Enemy {
     size = SimpleEnemy.ENEMY_SIZE;
     speed = SimpleEnemy.ENEMY_SPEED;
     isEnemy = true;
+    color = 'red';
 
     constructor(coordinates: Coordinates) {
         super(coordinates);
@@ -71,13 +73,15 @@ export class SimpleEnemy extends GameComponent implements Enemy {
     }
 
     render() {
-        State.getCtx().fillStyle = 'red';
+        State.getCtx().fillStyle = this.color;
         State.getCtx().fillRect(
             this.renderConfig.coordinates.x,
             this.renderConfig.coordinates.y,
             this.renderConfig.size.width,
             this.renderConfig.size.height
         );
+
+        renderEnemyHp(this);
     }
 }
 
@@ -91,6 +95,7 @@ export class FlyingEnemy extends SimpleEnemy {
     damage = FlyingEnemy.ENEMY_DAMAGE;
     size = FlyingEnemy.ENEMY_SIZE;
     speed = FlyingEnemy.ENEMY_SPEED;
+    color = '#7CB9E8';
 
     update() {
         if (State.isGameOver()) {
@@ -128,12 +133,34 @@ export class FlyingEnemy extends SimpleEnemy {
     }
 
     render() {
-        State.getCtx().fillStyle = '#7CB9E8';
+        State.getCtx().fillStyle = this.color;
         State.getCtx().fillRect(
             this.renderConfig.coordinates.x,
             this.renderConfig.coordinates.y,
             this.renderConfig.size.width,
             this.renderConfig.size.height
         );
+
+        renderEnemyHp(this);
     }
 }
+
+const renderEnemyHp = (enemy: Enemy) => {
+    // Render hp as white dots to the left of the player
+    const ctx = State.getCtx();
+    const playerHeight = enemy.renderConfig.size.height;
+    const indicatorHeight = 8;
+    const gap = 5;
+    const totalIndicatorsHeight = enemy.hp * (indicatorHeight + gap) - gap; // Adjust total height to include gaps
+    const startY = enemy.renderConfig.coordinates.y + (playerHeight - totalIndicatorsHeight) / 2;
+
+    ctx.fillStyle = enemy.color;
+    for (let i = 0; i < enemy.hp; i++) {
+        ctx.fillRect(
+            enemy.renderConfig.coordinates.x + enemy.renderConfig.size.width + 4,
+            startY + i * (indicatorHeight + gap),
+            indicatorHeight,
+            indicatorHeight
+        );
+    }
+};
