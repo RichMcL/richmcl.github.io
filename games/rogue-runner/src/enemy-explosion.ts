@@ -35,10 +35,13 @@ export class EnemyExplosion extends GameComponent {
             const dotX = x + Math.cos(angle) * radius;
             const dotY = y + Math.sin(angle) * radius;
 
+            ctx.save(); // Save the current state
+            ctx.globalAlpha = this.ttl / 30; // Fade out as ttl decreases
             ctx.beginPath();
             ctx.arc(dotX, dotY, 3, 0, 2 * Math.PI); // Draw a dot with radius 3
             ctx.fillStyle = 'white';
             ctx.fill();
+            ctx.restore(); // Restore the previous state
         }
     }
 }
