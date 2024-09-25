@@ -39,30 +39,5 @@ export class Stats extends GameComponent {
         printText(`${minutes}:${seconds}.${tenths}`, 30, 50);
 
         printText(`(${x}, ${y})`, 30, 90);
-
-        // printText(`Shot Level: ${State.getPlayer().shootLevel}`, 30, 130);
-        printText(`HP: ${State.getPlayer().hp}`, 30, 170);
-
-        const barWidth = 100;
-        const barHeight = 20;
-        const barX = 30;
-        const barY = 200;
-        const barFillWidth =
-            (State.getPlayer().shootTimer / State.getPlayer().baseShootTimer) * barWidth;
-
-        const ctx = State.getCtx();
-
-        // Draw the black box
-        ctx.fillStyle = '#2c2c2c';
-        ctx.fillRect(barX, barY, barWidth, barHeight);
-
-        // Draw the white outline
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 2; // Set the width of the outline
-        ctx.strokeRect(barX, barY, barWidth, barHeight);
-
-        // Fill the box with white based on the fill width
-        ctx.fillStyle = 'white';
-        ctx.fillRect(barX, barY, barFillWidth, barHeight);
     }
 }

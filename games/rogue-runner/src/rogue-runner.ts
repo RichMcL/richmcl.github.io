@@ -147,8 +147,9 @@ export class Game {
             ) {
                 // State.setGameRunning(false);
 
-                if (!State.isGameOver()) {
+                if (!State.isGameOver() && !player.isIframe) {
                     player.hp -= enemy.damage;
+                    player.doIframes();
                 }
 
                 if (player.hp <= 0) {
@@ -188,7 +189,7 @@ export class Game {
             if (Math.random() > 0.5) {
                 enemy = new SimpleEnemy(coords);
             } else {
-                coords.y -= 150;
+                coords.y -= 180;
                 enemy = new FlyingEnemy(coords);
             }
             State.addGameComponent(enemy);

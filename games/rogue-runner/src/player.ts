@@ -10,6 +10,10 @@ export class Player extends GameComponent {
     isJumping = false;
     hp = 3;
 
+    isIframe = false;
+    iframeTimer = 0;
+    defaultIframeTimer = 120;
+
     jumpVelocity = 0;
     jumpVelocityIncrement = 1.5; // Increased from 0.2 to 0.5
     startJumpVelocity = 25;
@@ -104,17 +108,41 @@ export class Player extends GameComponent {
             State.addGameComponent(new SimpleBullet(coords));
             this.shootTimer = 0;
         }
+
+        if (this.isIframe) {
+            this.iframeTimer--;
+            if (this.iframeTimer <= 0) {
+                this.isIframe = false;
+            }
+        }
     }
 
     render(): void {
         this.renderGround();
         this.renderPlayer();
+        this.renderShotTimer();
+        this.renderHp();
+    }
+
+    public doIframes(): void {
+        this.isIframe = true;
+        this.iframeTimer = this.defaultIframeTimer;
     }
 
     public renderPlayer(): void {
-        // Render a white sqaure to represent the player
+        // Render a white square to represent the player
         const ctx = State.getCtx();
         ctx.save();
+
+        // Check if the player is in an iframe
+        if (this.isIframe) {
+            // Toggle alpha value for faster flickering effect
+            const alpha = Math.sin(Date.now() / 50) * 0.5 + 0.5; // Flicker between 0.5 and 1, faster
+            ctx.globalAlpha = alpha;
+        } else {
+            ctx.globalAlpha = 1; // Fully opaque
+        }
+
         ctx.fillStyle = 'white';
         ctx.fillRect(
             this.renderConfig.coordinates.x,
@@ -122,6 +150,7 @@ export class Player extends GameComponent {
             this.renderConfig.size.width,
             this.renderConfig.size.height
         );
+
         ctx.restore();
     }
 
@@ -146,6 +175,49 @@ export class Player extends GameComponent {
                 ctx.fillRect(x + this.checkerSize, y, this.checkerSize, this.checkerSize);
                 ctx.fillRect(x, y + this.checkerSize, this.checkerSize, this.checkerSize);
             }
+        }
+    }
+
+    public renderShotTimer(): void {
+        //render a shot timer bar above the player
+        const barWidth = this.renderConfig.size.width - 2;
+        const barHeight = 5;
+        const barX = this.renderConfig.coordinates.x + 1;
+        const barY = this.renderConfig.coordinates.y - barHeight - 5;
+        const barFillWidth = (this.shootTimer / this.baseShootTimer) * barWidth;
+
+        const ctx = State.getCtx();
+        // // Draw the black box
+        ctx.fillStyle = '#2c2c2c';
+        ctx.fillRect(barX, barY, barWidth, barHeight);
+
+        // // Draw the white outline
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2; // Set the width of the outline
+        ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+        // // Fill the box with white based on the fill width
+        ctx.fillStyle = 'white';
+        ctx.fillRect(barX, barY, barFillWidth, barHeight);
+    }
+
+    public renderHp(): void {
+        // Render hp as white dots to the left of the player
+        const ctx = State.getCtx();
+        const playerHeight = this.renderConfig.size.height;
+        const indicatorHeight = 8;
+        const gap = 5;
+        const totalIndicatorsHeight = this.hp * (indicatorHeight + gap) - gap; // Adjust total height to include gaps
+        const startY = this.renderConfig.coordinates.y + (playerHeight - totalIndicatorsHeight) / 2;
+
+        ctx.fillStyle = '#FF033E';
+        for (let i = 0; i < this.hp; i++) {
+            ctx.fillRect(
+                this.renderConfig.coordinates.x - 12,
+                startY + i * (indicatorHeight + gap),
+                indicatorHeight,
+                indicatorHeight
+            );
         }
     }
 }
