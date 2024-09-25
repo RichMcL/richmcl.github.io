@@ -4,6 +4,7 @@ import { Player } from './player';
 import { State } from './state';
 import { Stats } from './stats';
 import { Coordinates } from './types';
+import { EnemyExplosion } from './enemy-explosion';
 
 export class Game {
     public lastTimestamp: number = 0;
@@ -165,6 +166,12 @@ export class Game {
                     }
                 } else {
                     enemy.deleteMe = true;
+
+                    const explosion = new EnemyExplosion({
+                        x: enemy.renderConfig.coordinates.x + enemy.renderConfig.size.width / 2,
+                        y: enemy.renderConfig.coordinates.y + enemy.renderConfig.size.height / 2
+                    });
+                    State.addGameComponent(explosion);
                 }
             }
         });

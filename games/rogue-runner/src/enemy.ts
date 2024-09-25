@@ -1,4 +1,5 @@
 import { Bullet } from './bullet';
+import { EnemyExplosion } from './enemy-explosion';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 
@@ -54,10 +55,16 @@ export class SimpleEnemy extends GameComponent implements Enemy {
                     bullet.renderConfig.coordinates.y
             ) {
                 this.hp -= bullet.damage;
+                bullet.deleteMe = true;
 
                 if (this.hp <= 0) {
                     this.deleteMe = true;
-                    bullet.deleteMe = true;
+
+                    const explosion = new EnemyExplosion({
+                        x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
+                        y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
+                    });
+                    State.addGameComponent(explosion);
                 }
             }
         });
@@ -109,6 +116,12 @@ export class FlyingEnemy extends SimpleEnemy {
 
                 if (this.hp <= 0) {
                     this.deleteMe = true;
+
+                    const explosion = new EnemyExplosion({
+                        x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
+                        y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
+                    });
+                    State.addGameComponent(explosion);
                 }
             }
         });
