@@ -116,7 +116,6 @@ export class State {
     }
 
     static getBullets(): GameComponent[] {
-        debugger;
         return State.gameComponents.filter(gc => 'isBullet' in gc);
     }
 

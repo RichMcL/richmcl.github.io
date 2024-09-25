@@ -36,8 +36,11 @@ export class Stats extends GameComponent {
             .toString()
             .padStart(1, '0');
 
-        printText(`${minutes}:${seconds}.${tenths}`, 30, 50);
+        printText('Rogue Runner', 160, 60);
+        printText('--------------------', 20, 100);
 
-        printText(`(${x}, ${y})`, 30, 90);
+        printText(`${minutes}:${seconds}.${tenths}`, 30, 140);
+
+        printText(`(${x}, ${y})`, 300, 140);
     }
 }
