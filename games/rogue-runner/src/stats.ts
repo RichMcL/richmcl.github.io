@@ -1,4 +1,4 @@
-import { FlyingEnemy, SimpleEnemy } from './enemy';
+import { BounceEnemy, FlyingEnemy, SimpleEnemy } from './enemy';
 import { State } from './state';
 import { GameComponent } from './types';
 import { printText } from './util';
@@ -44,9 +44,10 @@ export class Stats extends GameComponent {
 
         printText(`(${x}, ${y})`, 300, 140);
 
-        printText(`FPS: ${State.getFps()}`, 30, 180);
+        printText(`FPS: ${State.getFps() || '-'}`, 30, 180);
 
-        printText(`Simple: ${SimpleEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 220);
-        printText(`Flying: ${FlyingEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 260);
+        printText(`Red: ${SimpleEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 220, 30, 'red');
+        printText(`Blue: ${FlyingEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 260, 30, '#7CB9E8');
+        printText(`Green: ${BounceEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 300, 30, 'green');
     }
 }

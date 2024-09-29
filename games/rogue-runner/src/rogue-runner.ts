@@ -1,5 +1,5 @@
 import { DefaultDialogRenderConfig, GameOverDialog } from './game-over-dialog';
-import { Enemy, FlyingEnemy, SimpleEnemy } from './enemy';
+import { BounceEnemy, Enemy, FlyingEnemy, SimpleEnemy } from './enemy';
 import { Player } from './player';
 import { State } from './state';
 import { Stats } from './stats';
@@ -246,6 +246,24 @@ export class Game {
                 FlyingEnemy.ENEMY_SPAWN_MIN;
         } else {
             FlyingEnemy.TIME_UNTIL_SPAWN--;
+        }
+
+        if (BounceEnemy.TIME_UNTIL_SPAWN < 0) {
+            let coords: Coordinates = {
+                x: 640,
+                y: 750
+            };
+            let enemy: Enemy;
+
+            enemy = new BounceEnemy(coords);
+            State.addGameComponent(enemy);
+
+            //number in between min and max
+            BounceEnemy.TIME_UNTIL_SPAWN =
+                Math.random() * (BounceEnemy.ENEMY_SPAWN_MAX - BounceEnemy.ENEMY_SPAWN_MIN) +
+                BounceEnemy.ENEMY_SPAWN_MIN;
+        } else {
+            BounceEnemy.TIME_UNTIL_SPAWN--;
         }
     }
 
