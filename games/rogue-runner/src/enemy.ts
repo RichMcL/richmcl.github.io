@@ -8,6 +8,8 @@ export interface Enemy extends GameComponent {
     damage: number;
     size: number;
     speed: number;
+    spawnMin: number;
+    spawnMax: number;
     update(): void;
     render(): void;
     isEnemy: boolean;
@@ -20,10 +22,19 @@ export class SimpleEnemy extends GameComponent implements Enemy {
     static ENEMY_START_HP = 1;
     static ENEMY_DAMAGE = 1;
 
+    static ENEMY_SPAWN_MIN = 1 * 60; // 1 second
+    static ENEMY_SPAWN_MAX = 3 * 60; // 3 seconds
+
+    static TIME_UNTIL_SPAWN =
+        Math.random() * (SimpleEnemy.ENEMY_SPAWN_MAX - SimpleEnemy.ENEMY_SPAWN_MIN) +
+        SimpleEnemy.ENEMY_SPAWN_MIN;
+
     hp = SimpleEnemy.ENEMY_START_HP;
     damage = SimpleEnemy.ENEMY_DAMAGE;
     size = SimpleEnemy.ENEMY_SIZE;
     speed = SimpleEnemy.ENEMY_SPEED;
+    spawnMin = SimpleEnemy.ENEMY_SPAWN_MIN;
+    spawnMax = SimpleEnemy.ENEMY_SPAWN_MAX;
     isEnemy = true;
     color = 'red';
 
@@ -94,10 +105,19 @@ export class FlyingEnemy extends SimpleEnemy {
     static ENEMY_START_HP = 1;
     static ENEMY_DAMAGE = 1;
 
+    static ENEMY_SPAWN_MIN = 1.5 * 60; // 1 second
+    static ENEMY_SPAWN_MAX = 3.5 * 60; // 3 seconds
+
+    static TIME_UNTIL_SPAWN =
+        Math.random() * (FlyingEnemy.ENEMY_SPAWN_MAX - FlyingEnemy.ENEMY_SPAWN_MIN) +
+        FlyingEnemy.ENEMY_SPAWN_MIN;
+
     hp = FlyingEnemy.ENEMY_START_HP;
     damage = FlyingEnemy.ENEMY_DAMAGE;
     size = FlyingEnemy.ENEMY_SIZE;
     speed = FlyingEnemy.ENEMY_SPEED;
+    spawnMin = FlyingEnemy.ENEMY_SPAWN_MIN;
+    spawnMax = FlyingEnemy.ENEMY_SPAWN_MAX;
     color = '#7CB9E8';
 
     update() {

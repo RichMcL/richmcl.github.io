@@ -9,15 +9,16 @@ import { EnemyExplosion } from './enemy-explosion';
 export class Game {
     public lastTimestamp: number = 0;
     public enemySpawnTimer: number = 0;
-    public timeUntilSpawn = 0;
-    public enemySpawnMin = 1 * 60; // seconds * fps
-    public enemySpawnMax = 3 * 60; // seconds * fps
+    // public timeUntilSpawn = 0;
+    // public enemySpawnMin = 1 * 60; // seconds * fps
+    // public enemySpawnMax = 3 * 60; // seconds * fps
 
     public gameOver = false;
     public accumulatedTime: number = 0;
     public frameCount: number = 0;
     public fps: number = 0;
     public fpsLastTimestamp: number = 0;
+    public FRAME_DURATION = 1000 / 60; // 60 FPS
 
     constructor() {
         State.setCanvas(document.getElementById('game-canvas') as HTMLCanvasElement);
@@ -28,8 +29,8 @@ export class Game {
             this.startGame();
         });
 
-        this.timeUntilSpawn =
-            Math.random() * (this.enemySpawnMax - this.enemySpawnMin) + this.enemySpawnMin;
+        // this.timeUntilSpawn =
+        //     Math.random() * (this.enemySpawnMax - this.enemySpawnMin) + this.enemySpawnMin;
     }
 
     // Function to load the custom font
@@ -118,11 +119,9 @@ export class Game {
 
         this.accumulatedTime += elapsed;
 
-        const FRAME_DURATION = 1000 / 60; // 60 FPS
-
-        while (this.accumulatedTime >= FRAME_DURATION) {
+        while (this.accumulatedTime >= this.FRAME_DURATION) {
             if (!State.isGameOver()) {
-                State.incrementTimerInMs(FRAME_DURATION);
+                State.incrementTimerInMs(this.FRAME_DURATION);
             }
 
             this.frameCount++;
@@ -139,7 +138,7 @@ export class Game {
             // Update game state
             this.updateGameState();
 
-            this.accumulatedTime -= FRAME_DURATION;
+            this.accumulatedTime -= this.FRAME_DURATION;
             this.resetGameState();
         }
         // Render changes to the DOM
@@ -210,26 +209,43 @@ export class Game {
     }
 
     public doEnemySpawns() {
-        if (this.timeUntilSpawn < 0) {
+        //Simple enemy spawn
+        if (SimpleEnemy.TIME_UNTIL_SPAWN < 0) {
             let coords: Coordinates = {
                 x: 640,
                 y: 830
             };
             let enemy: Enemy;
 
-            if (Math.random() > 0.5) {
-                enemy = new SimpleEnemy(coords);
-            } else {
-                coords.y -= 180;
-                enemy = new FlyingEnemy(coords);
-            }
+            enemy = new SimpleEnemy(coords);
             State.addGameComponent(enemy);
 
             //number in between min and max
-            this.timeUntilSpawn =
-                Math.random() * (this.enemySpawnMax - this.enemySpawnMin) + this.enemySpawnMin;
+            SimpleEnemy.TIME_UNTIL_SPAWN =
+                Math.random() * (SimpleEnemy.ENEMY_SPAWN_MAX - SimpleEnemy.ENEMY_SPAWN_MIN) +
+                SimpleEnemy.ENEMY_SPAWN_MIN;
         } else {
-            this.timeUntilSpawn--;
+            SimpleEnemy.TIME_UNTIL_SPAWN--;
+        }
+
+        //Flying enemy spawn
+        if (FlyingEnemy.TIME_UNTIL_SPAWN < 0) {
+            let coords: Coordinates = {
+                x: 640,
+                y: 650
+            };
+            let enemy: Enemy;
+
+            enemy = new FlyingEnemy(coords);
+
+            State.addGameComponent(enemy);
+
+            //number in between min and max
+            FlyingEnemy.TIME_UNTIL_SPAWN =
+                Math.random() * (FlyingEnemy.ENEMY_SPAWN_MAX - FlyingEnemy.ENEMY_SPAWN_MIN) +
+                FlyingEnemy.ENEMY_SPAWN_MIN;
+        } else {
+            FlyingEnemy.TIME_UNTIL_SPAWN--;
         }
     }
 

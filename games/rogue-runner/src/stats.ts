@@ -1,5 +1,6 @@
+import { FlyingEnemy, SimpleEnemy } from './enemy';
 import { State } from './state';
-import { Coordinates, GameComponent } from './types';
+import { GameComponent } from './types';
 import { printText } from './util';
 
 export class Stats extends GameComponent {
@@ -44,5 +45,8 @@ export class Stats extends GameComponent {
         printText(`(${x}, ${y})`, 300, 140);
 
         printText(`FPS: ${State.getFps()}`, 30, 180);
+
+        printText(`Simple: ${SimpleEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 220);
+        printText(`Flying: ${FlyingEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 260);
     }
 }
