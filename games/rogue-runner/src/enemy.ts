@@ -174,10 +174,10 @@ export class FlyingEnemy extends SimpleEnemy {
 export class BounceEnemy extends GameComponent implements Enemy {
     static ENEMY_SPEED = 8;
     static ENEMY_SIZE = 50;
-    static ENEMY_START_HP = 1;
+    static ENEMY_START_HP = 2;
     static ENEMY_DAMAGE = 1;
 
-    static ENEMY_SPAWN_MIN = 5 * 60; // 1 second
+    static ENEMY_SPAWN_MIN = 7 * 60; // 1 second
     static ENEMY_SPAWN_MAX = 10 * 60; // 3 seconds
 
     static TIME_UNTIL_SPAWN =
