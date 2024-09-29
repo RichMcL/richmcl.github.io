@@ -42,5 +42,7 @@ export class Stats extends GameComponent {
         printText(`${minutes}:${seconds}.${tenths}`, 30, 140);
 
         printText(`(${x}, ${y})`, 300, 140);
+
+        printText(`FPS: ${State.getFps()}`, 30, 180);
     }
 }

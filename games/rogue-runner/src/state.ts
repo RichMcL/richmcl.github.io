@@ -7,6 +7,7 @@ export class State {
 
     private static canvas: HTMLCanvasElement;
     private static ctx: CanvasRenderingContext2D;
+    private static fps: number;
 
     private static gameRunning: boolean = false;
     private static gameOver: boolean = false;
@@ -57,6 +58,14 @@ export class State {
 
     static getCtx(): CanvasRenderingContext2D {
         return State.ctx;
+    }
+
+    static setFps(fps: number): void {
+        State.fps = fps;
+    }
+
+    static getFps(): number {
+        return State.fps;
     }
 
     static setGameRunning(gameRunning: boolean): void {

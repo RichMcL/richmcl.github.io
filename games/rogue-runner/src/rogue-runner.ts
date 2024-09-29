@@ -14,6 +14,10 @@ export class Game {
     public enemySpawnMax = 3 * 60; // seconds * fps
 
     public gameOver = false;
+    public accumulatedTime: number = 0;
+    public frameCount: number = 0;
+    public fps: number = 0;
+    public fpsLastTimestamp: number = 0;
 
     constructor() {
         State.setCanvas(document.getElementById('game-canvas') as HTMLCanvasElement);
@@ -112,17 +116,34 @@ export class Game {
         const elapsed = timestamp - this.lastTimestamp;
         this.lastTimestamp = timestamp;
 
-        if (!State.isGameOver()) {
-            State.incrementTimerInMs(elapsed);
+        this.accumulatedTime += elapsed;
+
+        const FRAME_DURATION = 1000 / 60; // 60 FPS
+
+        while (this.accumulatedTime >= FRAME_DURATION) {
+            if (!State.isGameOver()) {
+                State.incrementTimerInMs(FRAME_DURATION);
+            }
+
+            this.frameCount++;
+            const fpsElapsed = timestamp - this.fpsLastTimestamp;
+            if (fpsElapsed >= 1000) {
+                // Update FPS every second
+                this.fps = this.frameCount / (fpsElapsed / 1000);
+                this.frameCount = 0;
+                this.fpsLastTimestamp = timestamp;
+
+                State.setFps(parseFloat(this.fps.toFixed(2)));
+            }
+
+            // Update game state
+            this.updateGameState();
+
+            this.accumulatedTime -= FRAME_DURATION;
+            this.resetGameState();
         }
-
-        // Update game state
-        this.updateGameState();
-
         // Render changes to the DOM
         this.render();
-
-        this.resetGameState();
 
         // Request the next frame
         requestAnimationFrame(ts => this.gameLoop(ts));
