@@ -249,13 +249,9 @@ export class Game {
         }
 
         if (BounceEnemy.TIME_UNTIL_SPAWN < 0) {
-            let coords: Coordinates = {
-                x: 640,
-                y: 750
-            };
             let enemy: Enemy;
 
-            enemy = new BounceEnemy(coords);
+            enemy = new BounceEnemy();
             State.addGameComponent(enemy);
 
             //number in between min and max

@@ -1,4 +1,3 @@
-import { Game } from './rogue-runner';
 import { State } from './state';
 import { Coordinates, GameComponent } from './types';
 
@@ -14,6 +13,9 @@ export interface Bullet extends GameComponent {
 export class SimpleBullet extends GameComponent implements Bullet {
     static BULLET_SPEED = 9;
     static BULLET_SIZE = 10;
+    static SHOOT_TIMER = 0;
+    static BASE_SHOOT_TIMER = 120;
+    static SHOOT_LEVEL = 1;
 
     bulletSpeed: number = SimpleBullet.BULLET_SPEED;
     bulletSize: number = SimpleBullet.BULLET_SIZE;
@@ -53,6 +55,9 @@ export class SimpleBullet extends GameComponent implements Bullet {
 
 export class BigBullet extends SimpleBullet {
     static BULLET_SIZE = 20;
+    static SHOOT_TIMER = 0;
+    static BASE_SHOOT_TIMER = 360;
+    static SHOOT_LEVEL = 1;
 
     damage = 3;
 
@@ -63,5 +68,14 @@ export class BigBullet extends SimpleBullet {
         this.renderConfig.size.height = BigBullet.BULLET_SIZE;
 
         this.bulletSize = BigBullet.BULLET_SIZE;
+    }
+
+    update(): void {
+        if (State.isGameOver()) {
+            return;
+        }
+
+        this.renderConfig.coordinates.x += this.bulletSpeed / Math.sqrt(2);
+        this.renderConfig.coordinates.y -= this.bulletSpeed / Math.sqrt(2);
     }
 }

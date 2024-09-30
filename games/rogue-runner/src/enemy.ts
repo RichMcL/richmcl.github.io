@@ -172,7 +172,7 @@ export class FlyingEnemy extends SimpleEnemy {
 }
 
 export class BounceEnemy extends GameComponent implements Enemy {
-    static ENEMY_SPEED = 8;
+    static ENEMY_SPEED = 3;
     static ENEMY_SIZE = 50;
     static ENEMY_START_HP = 2;
     static ENEMY_DAMAGE = 1;
@@ -195,10 +195,10 @@ export class BounceEnemy extends GameComponent implements Enemy {
 
     private initialY: number;
     private oscillationSpeed = 0.1;
-    private oscillationAmplitude = 40;
+    private oscillationAmplitude = 50;
     private oscillationTime = 0;
 
-    constructor(coordinates: Coordinates) {
+    constructor(coordinates: Coordinates = { x: 640, y: 650 }) {
         super(coordinates);
 
         this.renderConfig = {

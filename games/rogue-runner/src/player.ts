@@ -26,9 +26,9 @@ export class Player extends GameComponent {
     groundSpeed = 5;
     checkerSize = 50;
 
-    shootLevel = 1;
-    shootTimer = 0;
-    baseShootTimer = 120;
+    // shootLevel = 1;
+    // shootTimer = 0;
+    // baseShootTimer = 120;
 
     constructor() {
         super({ x: Player.INITIAL_POSITION.x, y: Player.INITIAL_POSITION.y });
@@ -93,10 +93,11 @@ export class Player extends GameComponent {
         }
 
         // Update shoot timer
-        this.shootTimer++;
+        SimpleBullet.SHOOT_TIMER++;
+        BigBullet.SHOOT_TIMER++;
 
         //Every 60 frames, shoot a new Bullet
-        if (this.shootTimer === this.baseShootTimer / this.shootLevel) {
+        if (SimpleBullet.SHOOT_TIMER === SimpleBullet.BASE_SHOOT_TIMER / SimpleBullet.SHOOT_LEVEL) {
             //coordinates are the center of the player
             const coords = {
                 x: this.coordinates.x + this.renderConfig.size.width / 2,
@@ -107,7 +108,21 @@ export class Player extends GameComponent {
             };
             State.addGameComponent(new SimpleBullet(coords));
 
-            this.shootTimer = 0;
+            SimpleBullet.SHOOT_TIMER = 0;
+        }
+
+        if (BigBullet.SHOOT_TIMER === BigBullet.BASE_SHOOT_TIMER / BigBullet.SHOOT_LEVEL) {
+            //coordinates are the center of the player
+            const coords = {
+                x: this.coordinates.x + this.renderConfig.size.width / 2,
+                y:
+                    this.coordinates.y +
+                    this.renderConfig.size.height / 2 -
+                    BigBullet.BULLET_SIZE / 2
+            };
+            State.addGameComponent(new BigBullet(coords));
+
+            BigBullet.SHOOT_TIMER = 0;
         }
 
         if (this.isIframe) {
@@ -180,12 +195,12 @@ export class Player extends GameComponent {
     }
 
     public renderShotTimer(): void {
-        //render a shot timer bar above the player
+        //render a shot timer bar above the player for SimpleBulet
         const barWidth = this.renderConfig.size.width - 2;
         const barHeight = 5;
         const barX = this.renderConfig.coordinates.x + 1;
         const barY = this.renderConfig.coordinates.y - barHeight - 5;
-        const barFillWidth = (this.shootTimer / this.baseShootTimer) * barWidth;
+        const barFillWidth = (SimpleBullet.SHOOT_TIMER / SimpleBullet.BASE_SHOOT_TIMER) * barWidth;
 
         const ctx = State.getCtx();
         // // Draw the black box
@@ -200,6 +215,26 @@ export class Player extends GameComponent {
         // // Fill the box with white based on the fill width
         ctx.fillStyle = 'white';
         ctx.fillRect(barX, barY, barFillWidth, barHeight);
+
+        //render a shot timer bar above the player for BigBullet
+        const bigBarWidth = this.renderConfig.size.width - 2;
+        const bigBarHeight = 5;
+        const bigBarX = this.renderConfig.coordinates.x + 1;
+        const bigBarY = this.renderConfig.coordinates.y - bigBarHeight - 13;
+        const bigBarFillWidth = (BigBullet.SHOOT_TIMER / BigBullet.BASE_SHOOT_TIMER) * bigBarWidth;
+
+        // // Draw the black box
+        ctx.fillStyle = '#2c2c2c';
+        ctx.fillRect(bigBarX, bigBarY, bigBarWidth, bigBarHeight);
+
+        // // Draw the white outline
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2; // Set the width of the outline
+        ctx.strokeRect(bigBarX, bigBarY, bigBarWidth, bigBarHeight);
+
+        // // Fill the box with white based on the fill width
+        ctx.fillStyle = 'white';
+        ctx.fillRect(bigBarX, bigBarY, bigBarFillWidth, bigBarHeight);
     }
 
     public renderHp(): void {
