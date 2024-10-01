@@ -1,3 +1,4 @@
+import { BigBullet, SimpleBullet } from './bullet';
 import { BounceEnemy, FlyingEnemy, SimpleEnemy } from './enemy';
 import { State } from './state';
 import { GameComponent } from './types';
@@ -40,14 +41,56 @@ export class Stats extends GameComponent {
         printText('Rogue Runner', 160, 60);
         printText('--------------------', 20, 100);
 
-        printText(`${minutes}:${seconds}.${tenths}`, 30, 140);
+        printText(`${minutes}:${seconds}.${tenths}`, 30, 140, 20);
+        printText(`F: ${State.getFps()?.toFixed(1) || '-'}`, 210, 140, 20);
+        printText(`(${x}, ${y})`, 400, 140, 20);
 
-        printText(`(${x}, ${y})`, 300, 140);
+        printText(
+            `SB ${SimpleBullet.BASE_SHOOT_TIMER}:${
+                SimpleBullet.BASE_SHOOT_TIMER - SimpleBullet.SHOOT_TIMER
+            }`,
+            30,
+            170,
+            20,
+            'white'
+        );
 
-        printText(`FPS: ${State.getFps() || '-'}`, 30, 180);
+        printText(
+            `BB ${BigBullet.BASE_SHOOT_TIMER}:${
+                BigBullet.BASE_SHOOT_TIMER - BigBullet.SHOOT_TIMER
+            }`,
+            260,
+            170,
+            20,
+            'white'
+        );
 
-        printText(`Red: ${SimpleEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 220, 30, 'red');
-        printText(`Blue: ${FlyingEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 260, 30, '#7CB9E8');
-        printText(`Green: ${BounceEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`, 30, 300, 30, 'green');
+        printText(
+            `R ${SimpleEnemy.ENEMY_SPAWN_MIN}-${
+                SimpleEnemy.ENEMY_SPAWN_MAX
+            }:${SimpleEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`,
+            30,
+            200,
+            20,
+            'red'
+        );
+        printText(
+            `B ${FlyingEnemy.ENEMY_SPAWN_MIN}-${
+                FlyingEnemy.ENEMY_SPAWN_MAX
+            }:${FlyingEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`,
+            30,
+            230,
+            20,
+            '#7CB9E8'
+        );
+        printText(
+            `G ${BounceEnemy.ENEMY_SPAWN_MIN}-${
+                BounceEnemy.ENEMY_SPAWN_MAX
+            }:${BounceEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`,
+            30,
+            260,
+            20,
+            'green'
+        );
     }
 }

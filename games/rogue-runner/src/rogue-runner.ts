@@ -8,10 +8,6 @@ import { EnemyExplosion } from './enemy-explosion';
 
 export class Game {
     public lastTimestamp: number = 0;
-    public enemySpawnTimer: number = 0;
-    // public timeUntilSpawn = 0;
-    // public enemySpawnMin = 1 * 60; // seconds * fps
-    // public enemySpawnMax = 3 * 60; // seconds * fps
 
     public gameOver = false;
     public accumulatedTime: number = 0;
@@ -28,9 +24,6 @@ export class Game {
         Promise.all([this.loadFont('Base-Font', 'fonts/PressStart2P-Regular.ttf')]).then(() => {
             this.startGame();
         });
-
-        // this.timeUntilSpawn =
-        //     Math.random() * (this.enemySpawnMax - this.enemySpawnMin) + this.enemySpawnMin;
     }
 
     // Function to load the custom font
