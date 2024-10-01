@@ -45,12 +45,22 @@ export class Stats extends GameComponent {
         printText(`F: ${State.getFps()?.toFixed(1) || '-'}`, 210, 140, 20);
         printText(`(${x}, ${y})`, 400, 140, 20);
 
+        const player = State.getPlayer();
+
+        printText(
+            `P L${player.level} - XP ${player.xp} (${player.xpToNextLevel})`,
+            30,
+            170,
+            20,
+            'white'
+        );
+
         printText(
             `SB ${SimpleBullet.BASE_SHOOT_TIMER}:${
                 SimpleBullet.BASE_SHOOT_TIMER - SimpleBullet.SHOOT_TIMER
             }`,
             30,
-            170,
+            200,
             20,
             'white'
         );
@@ -59,36 +69,36 @@ export class Stats extends GameComponent {
             `BB ${BigBullet.BASE_SHOOT_TIMER}:${
                 BigBullet.BASE_SHOOT_TIMER - BigBullet.SHOOT_TIMER
             }`,
-            260,
-            170,
+            30,
+            230,
             20,
             'white'
         );
 
         printText(
-            `R ${SimpleEnemy.ENEMY_SPAWN_MIN}-${
+            `R ${SimpleEnemy.ENEMY_SPEED}PX | ${SimpleEnemy.ENEMY_SPAWN_MIN}-${
                 SimpleEnemy.ENEMY_SPAWN_MAX
             }:${SimpleEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`,
             30,
-            200,
+            260,
             20,
             'red'
         );
         printText(
-            `B ${FlyingEnemy.ENEMY_SPAWN_MIN}-${
+            `B ${FlyingEnemy.ENEMY_SPEED}PX | ${FlyingEnemy.ENEMY_SPAWN_MIN}-${
                 FlyingEnemy.ENEMY_SPAWN_MAX
             }:${FlyingEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`,
             30,
-            230,
+            290,
             20,
             '#7CB9E8'
         );
         printText(
-            `G ${BounceEnemy.ENEMY_SPAWN_MIN}-${
+            `G ${BounceEnemy.ENEMY_SPEED}PX | ${BounceEnemy.ENEMY_SPAWN_MIN}-${
                 BounceEnemy.ENEMY_SPAWN_MAX
             }:${BounceEnemy.TIME_UNTIL_SPAWN.toFixed(0)}`,
             30,
-            260,
+            320,
             20,
             'green'
         );

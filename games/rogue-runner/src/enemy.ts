@@ -5,24 +5,25 @@ import { Coordinates, GameComponent } from './types';
 
 export interface Enemy extends GameComponent {
     hp: number;
+    xp: number;
     damage: number;
     size: number;
     speed: number;
     spawnMin: number;
     spawnMax: number;
-    update(): void;
-    render(): void;
     isEnemy: boolean;
     color: string;
+    update(): void;
+    render(): void;
 }
 
 export class SimpleEnemy extends GameComponent implements Enemy {
-    static ENEMY_SPEED = 8;
+    static ENEMY_SPEED = 6;
     static ENEMY_SIZE = 50;
     static ENEMY_START_HP = 1;
     static ENEMY_DAMAGE = 1;
 
-    static ENEMY_SPAWN_MIN = 1 * 60; // 1 second
+    static ENEMY_SPAWN_MIN = 1.5 * 60; // 1 second
     static ENEMY_SPAWN_MAX = 3 * 60; // 3 seconds
 
     static TIME_UNTIL_SPAWN =
@@ -35,6 +36,7 @@ export class SimpleEnemy extends GameComponent implements Enemy {
     speed = SimpleEnemy.ENEMY_SPEED;
     spawnMin = SimpleEnemy.ENEMY_SPAWN_MIN;
     spawnMax = SimpleEnemy.ENEMY_SPAWN_MAX;
+    xp = 1;
     isEnemy = true;
     color = 'red';
 
@@ -55,35 +57,7 @@ export class SimpleEnemy extends GameComponent implements Enemy {
 
         this.renderConfig.coordinates.x -= SimpleEnemy.ENEMY_SPEED;
 
-        // If enemy collides with a bullet, delete the enemy
-        (State.getBullets() as Bullet[]).forEach(bullet => {
-            if (
-                this.renderConfig.coordinates.x <
-                    bullet.renderConfig.coordinates.x + bullet.renderConfig.size.width &&
-                this.renderConfig.coordinates.x + this.renderConfig.size.width >
-                    bullet.renderConfig.coordinates.x &&
-                this.renderConfig.coordinates.y <
-                    bullet.renderConfig.coordinates.y + bullet.renderConfig.size.height &&
-                this.renderConfig.coordinates.y + this.renderConfig.size.height >
-                    bullet.renderConfig.coordinates.y
-            ) {
-                this.hp -= bullet.damage;
-                bullet.deleteMe = true;
-
-                if (this.hp <= 0) {
-                    this.deleteMe = true;
-
-                    const explosion = new EnemyExplosion(
-                        {
-                            x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
-                            y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
-                        },
-                        this
-                    );
-                    State.addGameComponent(explosion);
-                }
-            }
-        });
+        checkBulletCollision(this);
     }
 
     render() {
@@ -105,8 +79,8 @@ export class FlyingEnemy extends SimpleEnemy {
     static ENEMY_START_HP = 1;
     static ENEMY_DAMAGE = 1;
 
-    static ENEMY_SPAWN_MIN = 1.5 * 60; // 1 second
-    static ENEMY_SPAWN_MAX = 3.5 * 60; // 3 seconds
+    static ENEMY_SPAWN_MIN = 2 * 60;
+    static ENEMY_SPAWN_MAX = 4 * 60;
 
     static TIME_UNTIL_SPAWN =
         Math.random() * (FlyingEnemy.ENEMY_SPAWN_MAX - FlyingEnemy.ENEMY_SPAWN_MIN) +
@@ -118,6 +92,7 @@ export class FlyingEnemy extends SimpleEnemy {
     speed = FlyingEnemy.ENEMY_SPEED;
     spawnMin = FlyingEnemy.ENEMY_SPAWN_MIN;
     spawnMax = FlyingEnemy.ENEMY_SPAWN_MAX;
+    xp = 2;
     color = '#7CB9E8';
 
     update() {
@@ -127,35 +102,7 @@ export class FlyingEnemy extends SimpleEnemy {
 
         this.renderConfig.coordinates.x -= FlyingEnemy.ENEMY_SPEED;
 
-        // If enemy collides with a bullet, delete the enemy
-        (State.getBullets() as Bullet[]).forEach(bullet => {
-            if (
-                this.renderConfig.coordinates.x <
-                    bullet.renderConfig.coordinates.x + bullet.renderConfig.size.width &&
-                this.renderConfig.coordinates.x + this.renderConfig.size.width >
-                    bullet.renderConfig.coordinates.x &&
-                this.renderConfig.coordinates.y <
-                    bullet.renderConfig.coordinates.y + bullet.renderConfig.size.height &&
-                this.renderConfig.coordinates.y + this.renderConfig.size.height >
-                    bullet.renderConfig.coordinates.y
-            ) {
-                this.hp -= bullet.damage;
-                bullet.deleteMe = true;
-
-                if (this.hp <= 0) {
-                    this.deleteMe = true;
-
-                    const explosion = new EnemyExplosion(
-                        {
-                            x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
-                            y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
-                        },
-                        this
-                    );
-                    State.addGameComponent(explosion);
-                }
-            }
-        });
+        checkBulletCollision(this);
     }
 
     render() {
@@ -190,6 +137,7 @@ export class BounceEnemy extends GameComponent implements Enemy {
     speed = BounceEnemy.ENEMY_SPEED;
     spawnMin = BounceEnemy.ENEMY_SPAWN_MIN;
     spawnMax = BounceEnemy.ENEMY_SPAWN_MAX;
+    xp = 3;
     isEnemy = true;
     color = 'green';
 
@@ -222,35 +170,7 @@ export class BounceEnemy extends GameComponent implements Enemy {
         this.renderConfig.coordinates.y =
             this.initialY + Math.sin(this.oscillationTime) * this.oscillationAmplitude;
 
-        // If enemy collides with a bullet, delete the enemy
-        (State.getBullets() as Bullet[]).forEach(bullet => {
-            if (
-                this.renderConfig.coordinates.x <
-                    bullet.renderConfig.coordinates.x + bullet.renderConfig.size.width &&
-                this.renderConfig.coordinates.x + this.renderConfig.size.width >
-                    bullet.renderConfig.coordinates.x &&
-                this.renderConfig.coordinates.y <
-                    bullet.renderConfig.coordinates.y + bullet.renderConfig.size.height &&
-                this.renderConfig.coordinates.y + this.renderConfig.size.height >
-                    bullet.renderConfig.coordinates.y
-            ) {
-                this.hp -= bullet.damage;
-                bullet.deleteMe = true;
-
-                if (this.hp <= 0) {
-                    this.deleteMe = true;
-
-                    const explosion = new EnemyExplosion(
-                        {
-                            x: this.renderConfig.coordinates.x + this.renderConfig.size.width / 2,
-                            y: this.renderConfig.coordinates.y + this.renderConfig.size.height / 2
-                        },
-                        this
-                    );
-                    State.addGameComponent(explosion);
-                }
-            }
-        });
+        checkBulletCollision(this);
     }
 
     render() {
@@ -284,4 +204,38 @@ const renderEnemyHp = (enemy: Enemy) => {
             indicatorHeight
         );
     }
+};
+
+const checkBulletCollision = (enemy: Enemy) => {
+    // If enemy collides with a bullet, delete the enemy
+    (State.getBullets() as Bullet[]).forEach(bullet => {
+        if (
+            enemy.renderConfig.coordinates.x <
+                bullet.renderConfig.coordinates.x + bullet.renderConfig.size.width &&
+            enemy.renderConfig.coordinates.x + enemy.renderConfig.size.width >
+                bullet.renderConfig.coordinates.x &&
+            enemy.renderConfig.coordinates.y <
+                bullet.renderConfig.coordinates.y + bullet.renderConfig.size.height &&
+            enemy.renderConfig.coordinates.y + enemy.renderConfig.size.height >
+                bullet.renderConfig.coordinates.y
+        ) {
+            enemy.hp -= bullet.damage;
+            bullet.deleteMe = true;
+
+            if (enemy.hp <= 0) {
+                enemy.deleteMe = true;
+
+                State.getPlayer().addXpFromEnemy(enemy.xp);
+
+                const explosion = new EnemyExplosion(
+                    {
+                        x: enemy.renderConfig.coordinates.x + enemy.renderConfig.size.width / 2,
+                        y: enemy.renderConfig.coordinates.y + enemy.renderConfig.size.height / 2
+                    },
+                    enemy
+                );
+                State.addGameComponent(explosion);
+            }
+        }
+    });
 };

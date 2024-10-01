@@ -9,6 +9,9 @@ export class Player extends GameComponent {
     renderConfig: RenderConfig;
     isJumping = false;
     hp = 3;
+    xp = 0;
+    level = 0;
+    xpToNextLevel = 5;
 
     isIframe = false;
     iframeTimer = 0;
@@ -143,6 +146,15 @@ export class Player extends GameComponent {
     public doIframes(): void {
         this.isIframe = true;
         this.iframeTimer = this.defaultIframeTimer;
+    }
+
+    public addXpFromEnemy(xp: number): void {
+        this.xp += xp;
+
+        if (this.xp >= this.xpToNextLevel) {
+            this.level++;
+            this.xpToNextLevel = this.xpToNextLevel * 2;
+        }
     }
 
     public renderPlayer(): void {
