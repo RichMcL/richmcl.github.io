@@ -8,6 +8,7 @@ export class State {
     private static canvas: HTMLCanvasElement;
     private static ctx: CanvasRenderingContext2D;
     private static fps: number;
+    private static unlockedFrameRate = true;
 
     private static gameRunning: boolean = false;
     private static gameOver: boolean = false;
@@ -66,6 +67,14 @@ export class State {
 
     static getFps(): number {
         return State.fps;
+    }
+
+    static setUnlockedFrameRate(unlockedFrameRate: boolean): void {
+        State.unlockedFrameRate = unlockedFrameRate;
+    }
+
+    static isUnlockedFrameRate(): boolean {
+        return State.unlockedFrameRate;
     }
 
     static setGameRunning(gameRunning: boolean): void {

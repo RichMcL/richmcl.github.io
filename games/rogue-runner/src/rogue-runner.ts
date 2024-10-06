@@ -116,7 +116,7 @@ export class Game {
 
         this.accumulatedTime += elapsed;
 
-        while (this.accumulatedTime >= this.FRAME_DURATION) {
+        if (State.isUnlockedFrameRate()) {
             if (!State.isGameOver()) {
                 State.incrementTimerInMs(this.FRAME_DURATION);
             }
@@ -137,7 +137,31 @@ export class Game {
 
             this.accumulatedTime -= this.FRAME_DURATION;
             this.resetGameState();
+        } else {
+            while (this.accumulatedTime >= this.FRAME_DURATION) {
+                if (!State.isGameOver()) {
+                    State.incrementTimerInMs(this.FRAME_DURATION);
+                }
+
+                this.frameCount++;
+                const fpsElapsed = timestamp - this.fpsLastTimestamp;
+                if (fpsElapsed >= 1000) {
+                    // Update FPS every second
+                    this.fps = this.frameCount / (fpsElapsed / 1000);
+                    this.frameCount = 0;
+                    this.fpsLastTimestamp = timestamp;
+
+                    State.setFps(parseFloat(this.fps.toFixed(2)));
+                }
+
+                // Update game state
+                this.updateGameState();
+
+                this.accumulatedTime -= this.FRAME_DURATION;
+                this.resetGameState();
+            }
         }
+
         // Render changes to the DOM
         this.render();
 
