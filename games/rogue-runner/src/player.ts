@@ -144,6 +144,7 @@ export class Player extends GameComponent {
         this.renderPlayer();
         this.renderShotTimer();
         this.renderHp();
+        this.renderJumps();
     }
 
     public doIframes(): void {
@@ -277,6 +278,30 @@ export class Player extends GameComponent {
         for (let i = 0; i < this.hp; i++) {
             ctx.fillRect(
                 this.renderConfig.coordinates.x - 12,
+                startY + i * (indicatorHeight + gap),
+                indicatorHeight,
+                indicatorHeight
+            );
+        }
+    }
+
+    public renderJumps(): void {
+        // Render jumps as black dots at the bottom of the player
+        const ctx = State.getCtx();
+        const playerWidth = this.renderConfig.size.width;
+        const playerHeight = this.renderConfig.size.height;
+        const indicatorHeight = 8;
+        const remainingJumps = this.maxJumps - this.jumpCount;
+        const gap = 5;
+        const totalIndicatorsHeight = remainingJumps * (indicatorHeight + gap) - gap; // Adjust total height to include gaps
+        const startY =
+            this.renderConfig.coordinates.y + playerHeight / 2 - totalIndicatorsHeight / 2;
+        const centerX = this.renderConfig.coordinates.x + playerWidth / 2 - indicatorHeight / 2;
+
+        ctx.fillStyle = '#2c2c2c';
+        for (let i = 0; i < remainingJumps; i++) {
+            ctx.fillRect(
+                centerX,
                 startY + i * (indicatorHeight + gap),
                 indicatorHeight,
                 indicatorHeight
