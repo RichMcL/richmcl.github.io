@@ -56,6 +56,19 @@ export class Game {
             State.setMouseClick(true);
         });
 
+        State.getCanvas().addEventListener('mouseup', event => {
+            console.log('mouseup');
+        });
+
+        document.addEventListener('mousemove', event => {
+            const rect = State.getCanvas().getBoundingClientRect();
+
+            State.setMouseCoordinates({
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            });
+        });
+
         State.getCanvas().addEventListener('touchstart', event => {
             const rect = State.getCanvas().getBoundingClientRect();
             const touch = event.touches[0]; // Get the first touch point
@@ -68,26 +81,17 @@ export class Game {
             event.preventDefault(); // Prevent long-press context menu
         });
 
-        // Add touchmove event listener to prevent pinch zoom
-        State.getCanvas().addEventListener('touchmove', event => {
-            event.preventDefault(); // Prevent pinch zoom
-        });
-
         // Add touchend event listener to prevent default behavior
         State.getCanvas().addEventListener('touchend', event => {
             event.preventDefault(); // Prevent default behavior
         });
 
-        // document.body.classList.add('hide-cursor');
-
-        document.addEventListener('mousemove', event => {
-            const rect = State.getCanvas().getBoundingClientRect();
-
-            State.setMouseCoordinates({
-                x: event.clientX - rect.left,
-                y: event.clientY - rect.top
-            });
+        // Add touchmove event listener to prevent pinch zoom
+        State.getCanvas().addEventListener('touchmove', event => {
+            event.preventDefault(); // Prevent pinch zoom
         });
+
+        // document.body.classList.add('hide-cursor');
 
         State.setGameRunning(true);
         this.lastTimestamp = performance.now();

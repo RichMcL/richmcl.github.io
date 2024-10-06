@@ -10,7 +10,7 @@ export class Player extends GameComponent {
     isJumping = false;
     hp = 3;
     xp = 0;
-    level = 0;
+    level = 1;
     xpToNextLevel = 5;
 
     isIframe = false;
@@ -29,9 +29,9 @@ export class Player extends GameComponent {
     groundSpeed = 5;
     checkerSize = 50;
 
-    // shootLevel = 1;
-    // shootTimer = 0;
-    // baseShootTimer = 120;
+    jumpCount = 0;
+    maxJumps = 1;
+    isInAir: boolean = false; // Track if the player is in the air
 
     constructor() {
         super({ x: Player.INITIAL_POSITION.x, y: Player.INITIAL_POSITION.y });
@@ -53,10 +53,12 @@ export class Player extends GameComponent {
 
         // if the screen is clicked, the player should jump
         if (State.isMouseClick() || State.isGamepadButtonClick()) {
-            // TODO - double and triple jump as bonus
-            if (!this.isJumping) {
+            // Allow jumping if the player hasn't reached the max number of jumps
+            if (this.jumpCount < this.maxJumps) {
                 this.isJumping = true;
                 this.jumpVelocity = this.startJumpVelocity;
+                this.jumpCount++;
+                this.isInAir = true;
             }
         }
 
@@ -73,12 +75,12 @@ export class Player extends GameComponent {
                 this.isJumping = false;
                 this.jumpVelocity = 0;
             }
-        }
-
-        if (!this.isJumping) {
+        } else {
             if (this.coordinates.y >= Player.INITIAL_POSITION.y) {
                 this.coordinates.y = Player.INITIAL_POSITION.y; // Reset to initial position
                 this.fallVelocity = 0;
+                this.jumpCount = 0; // Reset jump count when player lands
+                this.isInAir = false;
             } else {
                 this.fallVelocity = Math.min(
                     this.fallVelocity + this.fallVelocityIncrement,
@@ -93,6 +95,7 @@ export class Player extends GameComponent {
             this.coordinates.y = Player.INITIAL_POSITION.y;
             this.fallVelocity = 0;
             this.isJumping = false;
+            this.isInAir = false;
         }
 
         // Update shoot timer
@@ -152,8 +155,20 @@ export class Player extends GameComponent {
         this.xp += xp;
 
         if (this.xp >= this.xpToNextLevel) {
-            this.level++;
-            this.xpToNextLevel = this.xpToNextLevel * 2;
+            this.doLevelUp();
+        }
+    }
+
+    public doLevelUp(): void {
+        this.level++;
+        this.xpToNextLevel = this.xpToNextLevel * 2;
+
+        switch (this.level) {
+            case 2:
+                this.maxJumps = 2;
+                break;
+            default:
+                break;
         }
     }
 
